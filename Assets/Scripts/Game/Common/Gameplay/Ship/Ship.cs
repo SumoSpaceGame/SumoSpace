@@ -7,5 +7,5 @@ public class Ship : MonoBehaviour {
     public Animator animator;
     
     public bool isPlayer;
-    public short playerMatchID;
+    public ushort playerMatchID;
 }

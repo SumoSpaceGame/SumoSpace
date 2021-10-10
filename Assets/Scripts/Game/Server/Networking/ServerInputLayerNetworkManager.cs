@@ -1,7 +1,10 @@
 ﻿using BeardedManStudios.Forge.Networking.Generated;
 using Game.Common.Instances;
 
-public partial class InputLayerNetworkManager : InputLayerBehavior, IGamePersistantInstance
+namespace Game.Common.Networking
 {
-    
+    public partial class InputLayerNetworkManager : InputLayerBehavior, IGamePersistantInstance
+    {
+
+    }
 }
