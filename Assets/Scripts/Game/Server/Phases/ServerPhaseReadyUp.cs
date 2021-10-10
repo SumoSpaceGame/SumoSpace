@@ -25,17 +25,6 @@ namespace Game.Server.Phases
         {
         }
 
-        public bool PhaseWantsNext()
-        {
-            return readyPlayers.Count == GameNetworkManager.MATCH_PLAYER_SIZE;
-        }
-
-        public bool PhaseWantsSwitch(out Phase phase)
-        {
-            phase = Phase.MATCH_READY_UP;
-            return false;
-        }
-
         public void PhaseCleanUp()
         {
         }
@@ -51,6 +40,12 @@ namespace Game.Server.Phases
                 _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_READY_UP, 
                     new [] {(byte)PhaseReadyUp.UPDATE_PLAYER_COUNT_FLAG, (byte)readyPlayers.Count});
             }
+
+            if (readyPlayers.Count == _phaseNetworkManager.gameMatchSettings.PlayerCount)
+            {
+                _phaseNetworkManager.ServerNextPhase();
+            }
+            
         }
     }
 }

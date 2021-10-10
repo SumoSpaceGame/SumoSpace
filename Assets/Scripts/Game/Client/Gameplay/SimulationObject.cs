@@ -10,11 +10,11 @@ public class SimulationObject : MonoBehaviour {
 
     private void Start() {
         var sim = GetComponentInParent<Simulation>();
-        sim.Add(this);
         if (create) {
             var go = Instantiate(representative, GameObject.Find("GameView").transform, false);
             representative = go;
         }
+        sim.Add(this);
     }
 
     /*private void Update() {

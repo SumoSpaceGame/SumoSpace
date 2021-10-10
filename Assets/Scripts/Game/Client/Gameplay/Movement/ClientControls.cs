@@ -6,36 +6,51 @@ using UnityEngine.InputSystem;
  */
 [RequireComponent(typeof(PlayerInput))]
 public class ClientControls : MonoBehaviour {
-    
-    [SerializeField] private Ship ship;
-    public ShipMovement shipMovement;
-    public ShipAbility primaryAbility;
+    public Ship Ship => ship;
 
-    private Vector2 movementDir = Vector2.zero;
+    public ShipMovement ShipMovement => shipMovement;
+
+    public ShipAbility PrimaryAbility => primaryAbility;
+
+    [SerializeField] private Ship ship;
+    [SerializeField] private  ShipMovement shipMovement;
+    [SerializeField] private  ShipAbility primaryAbility;
+
+    private Vector2 movementVector = Vector2.zero;
     private Vector2 lookDir = Vector2.up;
     
     private Camera camera;
+
+    private const float RotationAngleOffset = -90f;
     
     private void Start() {
         camera = Camera.main;
     }
 
     private void FixedUpdate() {
+        var rotationSend = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg + RotationAngleOffset;
+        var movementSend = movementVector;
+        
+        
+        
+
+        /*
         // Figure out angular stuff
         ship.rotation = shipMovement.GetRotation(lookDir);
+        //atan2(lookDir.y, lookDir.x)
 
-        var desiredVelocity = shipMovement.GetVelocity(movementDir);
+        var desiredVelocity = shipMovement.GetVelocity(movementVector);
         var currentVelocity = ship.rb.velocity;
         var deltaV = desiredVelocity - currentVelocity;
         var force = ship.rb.mass * (deltaV / Time.deltaTime);
-        ship.rb.AddForce(force);
+        ship.rb.AddForce(force);*/
     }
 
     /**
      * WASD or Left Stick
      */
     public void OnMove(InputAction.CallbackContext ctx) {
-        movementDir = ctx.ReadValue<Vector2>();
+        movementVector = ctx.ReadValue<Vector2>();
     }
     
     /**
@@ -58,6 +73,10 @@ public class ClientControls : MonoBehaviour {
      * Shift or A
      */
     public void OnDodge(InputAction.CallbackContext ctx) {
+        
+    }
+    
+    public void OnFire(InputAction.CallbackContext ctx) {
         
     }
 }

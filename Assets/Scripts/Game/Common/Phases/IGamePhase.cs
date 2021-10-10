@@ -16,19 +16,6 @@ namespace Game.Common.Phases
         void PhaseUpdate();
 
         /// <summary>
-        /// Checks if this phase wants to switch to the next phase.
-        /// </summary>
-        /// <returns></returns>
-        bool PhaseWantsNext();
-
-        /// <summary>
-        /// Checks if this phase wants to switch to a different phase.
-        /// </summary>
-        /// <param name="phase">Phase that it wants to switch to</param>
-        /// <returns>If the phase wants to switch</returns>
-        bool PhaseWantsSwitch(out Phase phase);
-        
-        /// <summary>
         /// Cleans up this phase's dependencies for new usage.
         /// </summary>
         void PhaseCleanUp();

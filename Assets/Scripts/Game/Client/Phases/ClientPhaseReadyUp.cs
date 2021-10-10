@@ -54,18 +54,6 @@ namespace Game.Client.Phases
                 new []{(byte)PhaseReadyUp.PLAYER_READY_FLAG});
         }
         
-        public bool PhaseWantsNext()
-        {
-            return false;
-        }
-
-        public bool PhaseWantsSwitch(out Phase phase)
-        {
-            phase = Phase.MATCH_READY_UP;
-            
-            return false;
-        }
-
         public void PhaseCleanUp()
         {
             _masterUIController.ReadyButton.onClick.RemoveListener(onReadyClicked);

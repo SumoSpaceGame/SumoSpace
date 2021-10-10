@@ -1,7 +1,6 @@
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
-using Game.Common.Agents;
 using Game.Common.Instances;
 using Game.Common.Phases;
 using UnityEngine;
@@ -18,6 +17,9 @@ namespace Game.Common.Networking
     
         public GameObject networkManagerPrefab;
 
+        public GameMatchSettings gameMatchSettings;
+        
+        
         private UDPClient _gameClient;
         private UDPServer _gameServer;
     
@@ -52,7 +54,9 @@ namespace Game.Common.Networking
         public void Connect(string address, ushort port)
         {
             Debug.Log("Connecting to game server..");
-        
+
+            gameMatchSettings.Reset();
+
             _gameClient = new UDPClient();
         
             _gameClient.playerConnected += (player, sender) =>
@@ -81,7 +85,7 @@ namespace Game.Common.Networking
         {
             Debug.Log("Starting game server..");
         
-            _gameServer = new UDPServer(GameNetworkManager.MATCH_PLAYER_SIZE + 1);
+            _gameServer = new UDPServer(gameMatchSettings.PlayerCount + 1);
         
 
             _gameServer.playerAccepted += (player, sender) => Debug.Log("Player accepted into server!");
@@ -106,18 +110,8 @@ namespace Game.Common.Networking
             //Debug.Log("Instantiating required objects");
             
             NetworkManager.Instance.InstantiateGameManager();
-            NetworkManager.Instance.InstantiateAgentManager();
             NetworkManager.Instance.InstantiateGamePhase();
         }
 
-        public static void NetworkInstantiate(Scene scene, LoadSceneMode mode)
-        {
-            
-            NetworkManager.Instance.InstantiateGameManager();
-            NetworkManager.Instance.InstantiateAgentManager();
-            NetworkManager.Instance.InstantiateGamePhase();
-
-            SceneManager.sceneLoaded -= NetworkInstantiate;
-        }
     }
 }

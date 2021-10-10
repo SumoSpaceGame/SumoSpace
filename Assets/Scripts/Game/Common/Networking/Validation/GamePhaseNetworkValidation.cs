@@ -16,7 +16,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
             return base.ServerAllowRpc(methodId, receivers, args);
         }
 
-        protected override bool AllowOwnershipChange(NetworkingPlayer newOwner)
+        protected override bool AllowOwnershipChange(NetworkingPlayer newOwner) 
         {
             return false;
         }

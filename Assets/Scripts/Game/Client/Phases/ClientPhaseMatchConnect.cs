@@ -52,6 +52,7 @@ namespace Game.Client.Phases
         /// <returns>If all specified game managers are initialized returns true</returns>
         private bool IsAllInstantiated()
         {
+            // TODO: Clean up instantiated if cancelled or disconnected.
             var waitForTypes = PhaseMatchConnect.GAME_NETWORK_INITIALIZE_TYPES;
             bool allInitialized = true;
             
@@ -65,6 +66,8 @@ namespace Game.Client.Phases
                     break;
                 }
             }
+
+            allInitialized &= _phaseNetworkManager.gameMatchSettings.IsDataSynced;
 
             return allInitialized;
         }
@@ -81,17 +84,6 @@ namespace Game.Client.Phases
                 
             _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_CONNECT, new byte[]{data});
             _waitingForServer = true;
-        }
-
-        public bool PhaseWantsNext()
-        {
-            return false;
-        }
-
-        public bool PhaseWantsSwitch(out Phase phase)
-        {
-            phase = Phase.MATCH_CONNECT;
-            return false;
         }
 
         public void PhaseCleanUp()

@@ -27,17 +27,6 @@ namespace Game.Server.Phases
         {
         }
 
-        public bool PhaseWantsNext()
-        {
-            return _lockedInPlayers.Count == GameNetworkManager.MATCH_PLAYER_SIZE;
-        }
-
-        public bool PhaseWantsSwitch(out Phase phase)
-        {
-            phase = Phase.MATCH_LOBBY;
-            return false;
-        }
-
         public void PhaseCleanUp()
         {
         }
@@ -55,7 +44,7 @@ namespace Game.Server.Phases
                     if (data[0] == PhaseLobby.PLAYER_SELECT_FLAG)
                     {
                         // TODO: Add spam protection
-                        // TODO: Use pure synced client identifier
+                        // TODO: Use pure synced client identifier. An identified that is defined by the server.
                         Debug.Log(info.SendingPlayer.NetworkId + " selected in " + data[1]);
                         _phaseNetworkManager.SendUnreliablePhaseUpdate(Phase.MATCH_LOBBY, 
                             new []{(byte) PhaseLobby.PLAYER_SELECT_FLAG, (byte) info.SendingPlayer.NetworkId, data[1]});
@@ -67,8 +56,15 @@ namespace Game.Server.Phases
                         _lockedInPlayers.Add(info.SendingPlayer.NetworkId);
                         
                         Debug.Log(info.SendingPlayer.NetworkId + " locked in " + data[1]);;
+                        
                         _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_LOBBY, 
                             new []{(byte) PhaseLobby.PLAYER_LOCKED_FLAG, (byte) info.SendingPlayer.NetworkId, data[1]});
+
+
+                        if (_lockedInPlayers.Count == _phaseNetworkManager.gameMatchSettings.PlayerCount)
+                        {
+                            _phaseNetworkManager.ServerNextPhase();
+                        }
                     }
                     
                     break;

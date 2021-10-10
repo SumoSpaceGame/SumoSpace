@@ -72,17 +72,6 @@ namespace Game.Client.Phases
         {
         }
 
-        public bool PhaseWantsNext()
-        {
-            return false;
-        }
-
-        public bool PhaseWantsSwitch(out Phase phase)
-        {
-            phase = Phase.MATCH_LOBBY;
-            return false;
-        }
-
         public void PhaseCleanUp()
         {
             _masterUIController.StopLobby();

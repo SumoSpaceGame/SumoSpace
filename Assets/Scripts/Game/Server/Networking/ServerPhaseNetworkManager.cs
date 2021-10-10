@@ -19,6 +19,10 @@ namespace Game.Common.Networking
             this.gamePhases.Add(Phase.MATCH_CONNECT, new ServerPhaseMatchConnect(this));
             this.gamePhases.Add(Phase.MATCH_READY_UP, new ServerPhaseReadyUp(this));
             this.gamePhases.Add(Phase.MATCH_LOBBY, new ServerPhaseLobby(this));
+            this.gamePhases.Add(Phase.MATCH_SYNC_LOAD_OUTS, new ServerPhaseSyncLoadout(this));
+            //this.gamePhases.Add(Phase.MATCH_LOAD_MAP, new ServerPhaseLoadMap(this));
+            //this.gamePhases.Add(Phase.MATCH_START_COUNTDOWN, new ServerPhaseStartMatch(this));
+            //this.gamePhases.Add(Phase.MATCH_GAME, new ServerPhaseGame(this));
         }
 
         /// <summary>
@@ -27,16 +31,6 @@ namespace Game.Common.Networking
         partial void ServerUpdate()
         {
             var curPhase = GetCurrentPhase();
-
-            if (curPhase.PhaseWantsNext())
-            {
-                this.ServerNextPhase();
-            }
-            
-            if (curPhase.PhaseWantsSwitch(out var switchPhase))
-            {
-                this.ServerSwitchPhase(switchPhase);
-            }
         }
 
 
@@ -58,5 +52,7 @@ namespace Game.Common.Networking
             this._gamePhaseManager.SwitchPhase(phase);
             this.networkObject.SendRpc(RPC_SWITCH_PHASE, Receivers.Others, (int) phase);
         }
+        
+        
     }
 }

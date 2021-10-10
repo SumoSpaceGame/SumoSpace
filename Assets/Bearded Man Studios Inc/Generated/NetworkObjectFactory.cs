@@ -27,10 +27,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new AgentManagerNetworkObject(networker, id, frame);
 						break;
-					case AgentNetworkObject.IDENTITY:
-						availableCallback = true;
-						obj = new AgentNetworkObject(networker, id, frame);
-						break;
 					case GameManagerNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new GameManagerNetworkObject(networker, id, frame);
@@ -38,6 +34,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					case GamePhaseNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new GamePhaseNetworkObject(networker, id, frame);
+						break;
+					case InputLayerNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new InputLayerNetworkObject(networker, id, frame);
 						break;
 				}
 

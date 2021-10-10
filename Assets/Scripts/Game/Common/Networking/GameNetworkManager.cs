@@ -4,7 +4,6 @@ using UnityEngine;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
-using Game.Common.Agents;
 using Game.Common.Instances;
 using Game.Common.Phases;
 using Random = UnityEngine.Random;
@@ -19,15 +18,12 @@ namespace Game.Common.Networking
     public partial class GameNetworkManager : GameManagerBehavior, IGamePersistantInstance
     {
 
-        
+        public GameMatchSettings gameMatchSettings;
         private enum NetworkType {Client, Server}
         
         private NetworkType networkType = NetworkType.Client;
-        
-        public const int MATCH_PLAYER_SIZE = 2;
-        
-        
-            
+
+
         private void Start()
         {
             DontDestroyOnLoad(this);
@@ -95,8 +91,17 @@ namespace Game.Common.Networking
         /// </summary>
         partial void ClientUpdate();
 
-        
-        
-        
+
+        public override void SyncMatchSettings(RpcArgs args)
+        {
+
+            if (networkObject.IsServer)
+            {
+                return;
+            }
+            
+            gameMatchSettings.Sync(args.GetAt<string>(0));
+            
+        }
     }
 }

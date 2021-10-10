@@ -11,6 +11,9 @@ namespace Game.Common.Networking
 {
     public partial class GamePhaseNetworkManager : GamePhaseBehavior, IGamePersistantInstance
     {
+
+
+        public GameMatchSettings gameMatchSettings;
         
         /// <summary>
         /// Data to store while waiting to push into phase from update RPC.

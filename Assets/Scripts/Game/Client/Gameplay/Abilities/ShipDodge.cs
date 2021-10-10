@@ -2,14 +2,23 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "Ship Abilities/Ship Dodge")]
 public class ShipDodge : ShipAbility {
-    [SerializeField] private ShipMovement shipMovement;
 
-    public override void Perform() {
-        shipMovement.SetLocked(true);
-        ship.invulnerable = true;
+    /*public override void Perform() {
         
+        base.Perform();
         
+        //Server v
+        //controls.ShipMovement.SetLocked(true);
+        //controls.Ship.invulnerable = true;
+    }*/
+
+    private static readonly int DODGE = Animator.StringToHash("Dodge");
+
+    protected override void Execute() {
+        throw new System.NotImplementedException();
     }
-    
-    
+
+    protected override void Render() {
+       ship.animator.SetTrigger(DODGE);
+    }
 }

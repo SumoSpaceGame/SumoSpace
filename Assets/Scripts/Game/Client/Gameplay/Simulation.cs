@@ -2,13 +2,14 @@ using UnityEngine;
 using System.Collections.Generic;
 
 public class Simulation : MonoBehaviour {
-    private List<SimulationObjectPair> transforms = new List<SimulationObjectPair>();
+    private readonly List<SimulationObjectPair> transforms = new List<SimulationObjectPair>();
 
     public void Add(SimulationObject simObject) {
         transforms.Add(new SimulationObjectPair(simObject.transform, simObject.representative.transform));
     }
 
     public void Update() {
+        
         for (int i = transforms.Count - 1; i >= 0; i--) {
             var oldLocalPosition = transforms[i].repObjTransform.localPosition;
             var newLocalPosition = transforms[i].simObjTransform.localPosition;
@@ -25,9 +26,9 @@ public class Simulation : MonoBehaviour {
         transforms.RemoveAll(x => x.simObjTransform == simTransform);
     }
 
-    struct SimulationObjectPair {
-        public Transform simObjTransform;
-        public Transform repObjTransform;
+    private readonly struct SimulationObjectPair {
+        public readonly Transform simObjTransform;
+        public readonly Transform repObjTransform;
 
         public SimulationObjectPair(Transform simObjTransform, Transform repObjTransform) {
             this.simObjTransform = simObjTransform;

@@ -22,7 +22,6 @@ namespace Game.Server.Phases
 
         // All variables to cleanup
         private List<uint> readyPlayers = new List<uint>();
-        private bool readyForNext = false;
         public ServerPhaseMatchConnect(GamePhaseNetworkManager phaseNetworkManager)
         {
             this._phaseNetworkManager = phaseNetworkManager;
@@ -45,21 +44,9 @@ namespace Game.Server.Phases
             //Also set timer to 10 seconds. If not everyone is ready by then cancel match.
         }
 
-        public bool PhaseWantsNext()
-        {
-            return readyForNext;
-        }
-
-        public bool PhaseWantsSwitch(out Phase phase)
-        {
-            phase = Phase.MATCH_CONNECT;
-            return false;
-        }
-
 
         public void PhaseCleanUp()
         {
-            readyForNext = false;
             readyPlayers.Clear();
         }
 
@@ -82,9 +69,9 @@ namespace Game.Server.Phases
                     }
                     
                     
-                    if (readyPlayers.Count == GameNetworkManager.MATCH_PLAYER_SIZE)
+                    if (readyPlayers.Count == _phaseNetworkManager.gameMatchSettings.PlayerCount)
                     {
-                        readyForNext = true;
+                        _phaseNetworkManager.ServerNextPhase();
                     }
                     break;
             }

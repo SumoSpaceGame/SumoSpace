@@ -11,9 +11,9 @@ namespace BeardedManStudios.Forge.Networking.Unity
 		protected BMSByte metadata = new BMSByte();
 
 		public GameObject[] AgentManagerNetworkObject = null;
-		public GameObject[] AgentNetworkObject = null;
 		public GameObject[] GameManagerNetworkObject = null;
 		public GameObject[] GamePhaseNetworkObject = null;
+		public GameObject[] InputLayerNetworkObject = null;
 
 		protected virtual void SetupObjectCreatedEvent()
 		{
@@ -42,29 +42,6 @@ namespace BeardedManStudios.Forge.Networking.Unity
 						{
 							var go = Instantiate(AgentManagerNetworkObject[obj.CreateCode]);
 							newObj = go.GetComponent<AgentManagerBehavior>();
-						}
-					}
-
-					if (newObj == null)
-						return;
-						
-					newObj.Initialize(obj);
-
-					if (objectInitialized != null)
-						objectInitialized(newObj, obj);
-				});
-			}
-			else if (obj is AgentNetworkObject)
-			{
-				MainThreadManager.Run(() =>
-				{
-					NetworkBehavior newObj = null;
-					if (!NetworkBehavior.skipAttachIds.TryGetValue(obj.NetworkId, out newObj))
-					{
-						if (AgentNetworkObject.Length > 0 && AgentNetworkObject[obj.CreateCode] != null)
-						{
-							var go = Instantiate(AgentNetworkObject[obj.CreateCode]);
-							newObj = go.GetComponent<AgentBehavior>();
 						}
 					}
 
@@ -123,6 +100,29 @@ namespace BeardedManStudios.Forge.Networking.Unity
 						objectInitialized(newObj, obj);
 				});
 			}
+			else if (obj is InputLayerNetworkObject)
+			{
+				MainThreadManager.Run(() =>
+				{
+					NetworkBehavior newObj = null;
+					if (!NetworkBehavior.skipAttachIds.TryGetValue(obj.NetworkId, out newObj))
+					{
+						if (InputLayerNetworkObject.Length > 0 && InputLayerNetworkObject[obj.CreateCode] != null)
+						{
+							var go = Instantiate(InputLayerNetworkObject[obj.CreateCode]);
+							newObj = go.GetComponent<InputLayerBehavior>();
+						}
+					}
+
+					if (newObj == null)
+						return;
+						
+					newObj.Initialize(obj);
+
+					if (objectInitialized != null)
+						objectInitialized(newObj, obj);
+				});
+			}
 		}
 
 		protected virtual void InitializedObject(INetworkBehavior behavior, NetworkObject obj)
@@ -140,18 +140,6 @@ namespace BeardedManStudios.Forge.Networking.Unity
 			var netBehavior = go.GetComponent<AgentManagerBehavior>();
 			var obj = netBehavior.CreateNetworkObject(Networker, index);
 			go.GetComponent<AgentManagerBehavior>().networkObject = (AgentManagerNetworkObject)obj;
-
-			FinalizeInitialization(go, netBehavior, obj, position, rotation, sendTransform);
-			
-			return netBehavior;
-		}
-		[Obsolete("Use InstantiateAgent instead, its shorter and easier to type out ;)")]
-		public AgentBehavior InstantiateAgentNetworkObject(int index = 0, Vector3? position = null, Quaternion? rotation = null, bool sendTransform = true)
-		{
-			var go = Instantiate(AgentNetworkObject[index]);
-			var netBehavior = go.GetComponent<AgentBehavior>();
-			var obj = netBehavior.CreateNetworkObject(Networker, index);
-			go.GetComponent<AgentBehavior>().networkObject = (AgentNetworkObject)obj;
 
 			FinalizeInitialization(go, netBehavior, obj, position, rotation, sendTransform);
 			
@@ -176,6 +164,18 @@ namespace BeardedManStudios.Forge.Networking.Unity
 			var netBehavior = go.GetComponent<GamePhaseBehavior>();
 			var obj = netBehavior.CreateNetworkObject(Networker, index);
 			go.GetComponent<GamePhaseBehavior>().networkObject = (GamePhaseNetworkObject)obj;
+
+			FinalizeInitialization(go, netBehavior, obj, position, rotation, sendTransform);
+			
+			return netBehavior;
+		}
+		[Obsolete("Use InstantiateInputLayer instead, its shorter and easier to type out ;)")]
+		public InputLayerBehavior InstantiateInputLayerNetworkObject(int index = 0, Vector3? position = null, Quaternion? rotation = null, bool sendTransform = true)
+		{
+			var go = Instantiate(InputLayerNetworkObject[index]);
+			var netBehavior = go.GetComponent<InputLayerBehavior>();
+			var obj = netBehavior.CreateNetworkObject(Networker, index);
+			go.GetComponent<InputLayerBehavior>().networkObject = (InputLayerNetworkObject)obj;
 
 			FinalizeInitialization(go, netBehavior, obj, position, rotation, sendTransform);
 			
@@ -234,63 +234,6 @@ namespace BeardedManStudios.Forge.Networking.Unity
 			}
 
 			go.GetComponent<AgentManagerBehavior>().networkObject = (AgentManagerNetworkObject)obj;
-
-			FinalizeInitialization(go, netBehavior, obj, position, rotation, sendTransform);
-			
-			return netBehavior;
-		}
-		/// <summary>
-		/// Instantiate an instance of Agent
-		/// </summary>
-		/// <returns>
-		/// A local instance of AgentBehavior
-		/// </returns>
-		/// <param name="index">The index of the Agent prefab in the NetworkManager to Instantiate</param>
-		/// <param name="position">Optional parameter which defines the position of the created GameObject</param>
-		/// <param name="rotation">Optional parameter which defines the rotation of the created GameObject</param>
-		/// <param name="sendTransform">Optional Parameter to send transform data to other connected clients on Instantiation</param>
-		public AgentBehavior InstantiateAgent(int index = 0, Vector3? position = null, Quaternion? rotation = null, bool sendTransform = true)
-		{
-			if (AgentNetworkObject.Length <= index)
-			{
-				Debug.Log("Prefab(s) missing for: Agent. Add them at the NetworkManager prefab.");
-				return null;
-			}
-			
-			var go = Instantiate(AgentNetworkObject[index]);
-			var netBehavior = go.GetComponent<AgentBehavior>();
-
-			NetworkObject obj = null;
-			if (!sendTransform && position == null && rotation == null)
-				obj = netBehavior.CreateNetworkObject(Networker, index);
-			else
-			{
-				metadata.Clear();
-
-				if (position == null && rotation == null)
-				{
-					byte transformFlags = 0x1 | 0x2;
-					ObjectMapper.Instance.MapBytes(metadata, transformFlags);
-					ObjectMapper.Instance.MapBytes(metadata, go.transform.position, go.transform.rotation);
-				}
-				else
-				{
-					byte transformFlags = 0x0;
-					transformFlags |= (byte)(position != null ? 0x1 : 0x0);
-					transformFlags |= (byte)(rotation != null ? 0x2 : 0x0);
-					ObjectMapper.Instance.MapBytes(metadata, transformFlags);
-
-					if (position != null)
-						ObjectMapper.Instance.MapBytes(metadata, position.Value);
-
-					if (rotation != null)
-						ObjectMapper.Instance.MapBytes(metadata, rotation.Value);
-				}
-
-				obj = netBehavior.CreateNetworkObject(Networker, index, metadata.CompressBytes());
-			}
-
-			go.GetComponent<AgentBehavior>().networkObject = (AgentNetworkObject)obj;
 
 			FinalizeInitialization(go, netBehavior, obj, position, rotation, sendTransform);
 			
@@ -405,6 +348,63 @@ namespace BeardedManStudios.Forge.Networking.Unity
 			}
 
 			go.GetComponent<GamePhaseBehavior>().networkObject = (GamePhaseNetworkObject)obj;
+
+			FinalizeInitialization(go, netBehavior, obj, position, rotation, sendTransform);
+			
+			return netBehavior;
+		}
+		/// <summary>
+		/// Instantiate an instance of InputLayer
+		/// </summary>
+		/// <returns>
+		/// A local instance of InputLayerBehavior
+		/// </returns>
+		/// <param name="index">The index of the InputLayer prefab in the NetworkManager to Instantiate</param>
+		/// <param name="position">Optional parameter which defines the position of the created GameObject</param>
+		/// <param name="rotation">Optional parameter which defines the rotation of the created GameObject</param>
+		/// <param name="sendTransform">Optional Parameter to send transform data to other connected clients on Instantiation</param>
+		public InputLayerBehavior InstantiateInputLayer(int index = 0, Vector3? position = null, Quaternion? rotation = null, bool sendTransform = true)
+		{
+			if (InputLayerNetworkObject.Length <= index)
+			{
+				Debug.Log("Prefab(s) missing for: InputLayer. Add them at the NetworkManager prefab.");
+				return null;
+			}
+			
+			var go = Instantiate(InputLayerNetworkObject[index]);
+			var netBehavior = go.GetComponent<InputLayerBehavior>();
+
+			NetworkObject obj = null;
+			if (!sendTransform && position == null && rotation == null)
+				obj = netBehavior.CreateNetworkObject(Networker, index);
+			else
+			{
+				metadata.Clear();
+
+				if (position == null && rotation == null)
+				{
+					byte transformFlags = 0x1 | 0x2;
+					ObjectMapper.Instance.MapBytes(metadata, transformFlags);
+					ObjectMapper.Instance.MapBytes(metadata, go.transform.position, go.transform.rotation);
+				}
+				else
+				{
+					byte transformFlags = 0x0;
+					transformFlags |= (byte)(position != null ? 0x1 : 0x0);
+					transformFlags |= (byte)(rotation != null ? 0x2 : 0x0);
+					ObjectMapper.Instance.MapBytes(metadata, transformFlags);
+
+					if (position != null)
+						ObjectMapper.Instance.MapBytes(metadata, position.Value);
+
+					if (rotation != null)
+						ObjectMapper.Instance.MapBytes(metadata, rotation.Value);
+				}
+
+				obj = netBehavior.CreateNetworkObject(Networker, index, metadata.CompressBytes());
+			}
+
+			go.GetComponent<InputLayerBehavior>().networkObject = (InputLayerNetworkObject)obj;
 
 			FinalizeInitialization(go, netBehavior, obj, position, rotation, sendTransform);
 			

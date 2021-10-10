@@ -1,6 +1,5 @@
 ﻿using System;
 using BeardedManStudios.Forge.Networking.Generated;
-using Game.Common.Agents;
 using Game.Common.Networking;
 
 namespace Game.Common.Phases.PhaseData
@@ -16,8 +15,7 @@ namespace Game.Common.Phases.PhaseData
         public static readonly Type[] GAME_NETWORK_INITIALIZE_TYPES =
         {
             typeof(GamePhaseNetworkManager),
-            typeof(GameNetworkManager),
-            typeof(AgentManager)
+            typeof(GameNetworkManager)
         };
     }
 }
