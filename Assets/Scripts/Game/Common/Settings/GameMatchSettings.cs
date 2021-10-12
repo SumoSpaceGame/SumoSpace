@@ -19,9 +19,10 @@ public class GameMatchSettings : ScriptableObject
     /// <summary>
     /// Match id of the player. On server side this is a temp variable that is not used.
     /// </summary>
-    [SerializeField]public int ClientMatchID;
+    [SerializeField]public ushort ClientMatchID;
     [SerializeField] public int ClientTeam;
     [SerializeField] public int ClientTeamPosition;
+    
     public int PlayerCount
     {
         get
