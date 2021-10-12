@@ -4,12 +4,10 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"int\", \"Vector2\"][\"ushort\", \"int\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"PlayerMatchID\", \"Position\"][\"PlayerMatchID\", \"ShipType\"]]")]
+	[GeneratedRPC("{\"types\":[]")]
+	[GeneratedRPCVariableNames("{\"types\":[]")]
 	public abstract partial class AgentManagerBehavior : NetworkBehavior
 	{
-		public const byte RPC_UPDATE_MOVEMENT = 0 + 5;
-		public const byte RPC_CREATE_SHIP = 1 + 5;
 		
 		public AgentManagerNetworkObject networkObject = null;
 
@@ -23,8 +21,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
-			networkObject.RegisterRpc("UpdateMovement", UpdateMovement, typeof(int), typeof(Vector2));
-			networkObject.RegisterRpc("CreateShip", CreateShip, typeof(ushort), typeof(int));
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -101,18 +97,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.SnapInterpolations();
 		}
 
-		/// <summary>
-		/// Arguments:
-		/// int PlayerMatchID
-		/// Vector2 Position
-		/// </summary>
-		public abstract void UpdateMovement(RpcArgs args);
-		/// <summary>
-		/// Arguments:
-		/// ushort PlayerMatchID
-		/// int ShipType
-		/// </summary>
-		public abstract void CreateShip(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}

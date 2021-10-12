@@ -143,7 +143,7 @@ namespace Game.Common.Instances {
 			{
 				foreach(var keyPair in gameServices)
 				{
-					Debug.LogError( keyPair.Key.ToString() + " - Scene loaded with instances still being carried over! Use Main Persistant Instance instead.");
+					//Debug.LogError( keyPair.Key.ToString() + " - Scene loaded with instances still being carried over! Use Main Persistant Instance instead.");
 				}
 			}
 		}

@@ -1,7 +1,25 @@
-﻿namespace Game.Server.Phases
+﻿using BeardedManStudios.Forge.Networking;
+using Game.Common.Phases;
+
+namespace Game.Server.Phases
 {
-    public class ServerPhaseGame
+    public class ServerPhaseGame : IGamePhase
     {
-        
+        public void PhaseStart()
+        {
+            
+        }
+
+        public void PhaseUpdate()
+        {
+        }
+
+        public void PhaseCleanUp()
+        {
+        }
+
+        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        {
+        }
     }
 }

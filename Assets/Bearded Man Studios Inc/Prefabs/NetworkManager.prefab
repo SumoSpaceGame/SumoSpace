@@ -45,10 +45,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AgentManagerNetworkObject:
   - {fileID: 5651400811804052722, guid: 3127fd6490f953c45bbb3831c2bfd0f8, type: 3}
-  AgentNetworkObject:
-  - {fileID: 3684971672179400778, guid: 430dbb1549cb5214d95c3fb41b894748, type: 3}
+  AgentMovementNetworkObject:
+  - {fileID: 3514860369059828021, guid: 363965577d7d2864680a9b1379cf419a, type: 3}
   GameManagerNetworkObject:
   - {fileID: 7723189113815448531, guid: f798fa69677803640ac18d85d3c1a433, type: 3}
   GamePhaseNetworkObject:
   - {fileID: 1638927685970309354, guid: 83d86d3124195e141af07a0fc52ec31e, type: 3}
-  automaticScenes: 1
+  InputLayerNetworkObject:
+  - {fileID: 3014528022160533874, guid: 056b06701b9e2114ea0553772a7459e9, type: 3}
+  automaticScenes: 0

@@ -6,6 +6,7 @@ using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using Game.Common.Instances;
 using Game.Common.Phases;
+using Game.Common.Settings;
 using Random = UnityEngine.Random;
 
 namespace Game.Common.Networking
@@ -19,6 +20,7 @@ namespace Game.Common.Networking
     {
 
         public GameMatchSettings gameMatchSettings;
+        public MasterSettings masterSettings;
         private enum NetworkType {Client, Server}
         
         private NetworkType networkType = NetworkType.Client;
@@ -32,6 +34,9 @@ namespace Game.Common.Networking
         protected override void NetworkStart()
         {
             base.NetworkStart();
+
+            Physics2D.simulationMode = SimulationMode2D.Update;
+            gameMatchSettings.Reset();
             
             MainThreadManager.Run(()=>{ 
                 MainPersistantInstances.TryAdd(this);
@@ -42,7 +47,7 @@ namespace Game.Common.Networking
                 networkType = NetworkType.Server;
                 OnServerNetworkStart();
             }
-
+            
             OnClientNetworkStart();
         }
 

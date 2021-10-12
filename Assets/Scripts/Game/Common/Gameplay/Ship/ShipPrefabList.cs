@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Common.Gameplay.Ship
 {
-    [CreateAssetMenu(fileName = "ShipPrefabList", menuName = "GameSO/ShipPrefabList")]
+    [CreateAssetMenu(fileName = "ShipPrefabList", menuName = "Game/ShipPrefabList")]
     public class ShipPrefabList : ScriptableObject
     {
         [SerializeField]

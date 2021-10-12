@@ -66,15 +66,17 @@ public class ShipMovement : ScriptableObject {
         return targetVel;
     }
     
-    public float GetRotation(Vector2 lookDir) {
+    public float GetRotation(float targetAngle) {
         
         if (locked) return prevRot;
         
         // Get the mouse angle, do some interpolation with the current facing direction, rotate
-        var targetAngle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg + AngleOffset;
+        
         var newAngle = Mathf.MoveTowardsAngle(prevRot, targetAngle,
             maxTheta * 360 * Time.deltaTime);
         prevRot = newAngle;
+        
+        Debug.Log(prevRot);
         return newAngle;
     }
 

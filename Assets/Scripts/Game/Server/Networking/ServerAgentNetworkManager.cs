@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Generated;
+using BeardedManStudios.Forge.Networking.Unity;
+using Game.Common.Instances;
 using UnityEngine;
 
-public class ServerAgentNetworkManager : MonoBehaviour
+namespace Game.Common.Networking
 {
-    // Start is called before the first frame update
-    void Start()
+    public partial class AgentNetworkManager : AgentManagerBehavior, IGamePersistantInstance
     {
-        
-    }
+        partial void ServerCreateShip(ushort ClientMatchID)
+        {
+            var spawnedShip = _shipSpawner.SpawnShip(ClientMatchID, 0, false);
+    
+            _playerShips.Add(ClientMatchID, spawnedShip);
+    
+            var agentMovement = NetworkManager.Instance.InstantiateAgentMovement();
+            var agentMovementScript = agentMovement.gameObject.GetComponent<AgentMovementNetworkManager>();
+            agentMovementScript.attachedShip = spawnedShip;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            spawnedShip.networkMovement = agentMovementScript;
+            spawnedShip.isServer = true;
+        }
     }
 }

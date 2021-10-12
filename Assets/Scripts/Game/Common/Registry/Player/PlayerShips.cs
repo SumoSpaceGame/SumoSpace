@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Game.Common.Registry
 {
-    [CreateAssetMenu(fileName = "CurrentPlayerShips", menuName = "GameSO/CurrentPlayerShips")]
+    [CreateAssetMenu(fileName = "PlayerShipsRegistry", menuName = "Game/Player Ships Registry")]
     public class PlayerShips : ScriptableObject
     {
         private void Awake()

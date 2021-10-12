@@ -1,7 +1,11 @@
-﻿namespace BeardedManStudios.Forge.Networking.Generated
+﻿
+namespace BeardedManStudios.Forge.Networking.Generated
 {
-    public class AgentMovementValidation
+    public partial class AgentMovementNetworkObject : NetworkObject
     {
-        
+        protected override bool AllowOwnershipChange(NetworkingPlayer newOwner)
+        {
+            return false;
+        }
     }
 }

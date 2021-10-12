@@ -15,7 +15,9 @@ namespace Game.Common.Phases.PhaseData
         public static readonly Type[] GAME_NETWORK_INITIALIZE_TYPES =
         {
             typeof(GamePhaseNetworkManager),
-            typeof(GameNetworkManager)
+            typeof(GameNetworkManager),
+            typeof(AgentNetworkManager),
+            typeof(InputLayerNetworkManager)
         };
     }
 }

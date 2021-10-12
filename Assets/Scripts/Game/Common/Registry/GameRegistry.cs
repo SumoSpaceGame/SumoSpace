@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Common.Registry
 {
-    [CreateAssetMenu(menuName = "GameSO/Game Registry", fileName = "GameRegistry")]
+    [CreateAssetMenu(menuName = "Game/Game Registry", fileName = "GameRegistry")]
     public class GameRegistry : ScriptableObject
     {
 

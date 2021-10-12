@@ -15,9 +15,9 @@ namespace Game.Common.Networking
             this.gamePhases.Add(Phase.MATCH_READY_UP, new ClientPhaseReadyUp(this));
             this.gamePhases.Add(Phase.MATCH_LOBBY, new ClientPhaseLobby(this));
             this.gamePhases.Add(Phase.MATCH_SYNC_LOAD_OUTS, new ClientPhaseSyncLoadout(this));
-            //this.gamePhases.Add(Phase.MATCH_LOAD_MAP, new ServerPhaseLoadMap(this));
-            //this.gamePhases.Add(Phase.MATCH_START_COUNTDOWN, new ServerPhaseStartMatch(this));
-            //this.gamePhases.Add(Phase.MATCH_GAME, new ServerPhaseGame(this));
+            this.gamePhases.Add(Phase.MATCH_LOAD_MAP, new ClientPhaseLoadMap(this));
+            this.gamePhases.Add(Phase.MATCH_START_COUNTDOWN, new ClientPhaseStartMatch());
+            this.gamePhases.Add(Phase.MATCH_GAME, new ClientPhaseGame());
         }
     }
 }

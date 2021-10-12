@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
  * This should not be used as instead we want to modify the simulation which runs on the XY plane
  * This class is just being kept as reference, just in case
  */
+[Obsolete]
 [RequireComponent(typeof(PlayerInput))]
 public class ClientMovement3D : MonoBehaviour {
     //[SerializeField] private ClientInput input;

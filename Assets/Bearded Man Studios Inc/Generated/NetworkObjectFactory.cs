@@ -27,6 +27,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new AgentManagerNetworkObject(networker, id, frame);
 						break;
+					case AgentMovementNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new AgentMovementNetworkObject(networker, id, frame);
+						break;
 					case GameManagerNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new GameManagerNetworkObject(networker, id, frame);

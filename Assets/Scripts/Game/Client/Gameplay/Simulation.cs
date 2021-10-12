@@ -1,8 +1,21 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Game.Common.Instances;
 
-public class Simulation : MonoBehaviour {
+public class Simulation : MonoBehaviour, IGameInstance {
     private readonly List<SimulationObjectPair> transforms = new List<SimulationObjectPair>();
+
+    private void Awake()
+    {
+        MainInstances.Add(this);
+    }
+
+    private void OnDestroy()
+    {
+        
+        MainInstances.Remove<Simulation>();
+    }
 
     public void Add(SimulationObject simObject) {
         transforms.Add(new SimulationObjectPair(simObject.transform, simObject.representative.transform));

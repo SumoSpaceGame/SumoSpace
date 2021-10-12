@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 [Serializable]
-[CreateAssetMenu(fileName = "GameMatchSettings", menuName = "GameSO/Game Match Settings")]
+[CreateAssetMenu(fileName = "GameMatchSettings", menuName = "Game/Game Match Settings")]
 public class GameMatchSettings : ScriptableObject
 {
     

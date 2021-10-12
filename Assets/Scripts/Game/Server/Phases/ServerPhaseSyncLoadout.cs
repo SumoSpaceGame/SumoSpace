@@ -15,17 +15,15 @@ namespace Game.Server.Phases
 
         public void PhaseStart()
         {
-            
         }
 
         public void PhaseUpdate()
         {
-            throw new System.NotImplementedException();
+            _phaseNetworkManager.ServerNextPhase();
         }
 
         public void PhaseCleanUp()
         {
-            throw new System.NotImplementedException();
         }
 
         public void OnUpdateReceived(RPCInfo info, byte[] data)

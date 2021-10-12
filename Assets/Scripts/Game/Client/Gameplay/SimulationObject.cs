@@ -1,3 +1,4 @@
+using Game.Common.Instances;
 using UnityEngine;
 
 public class SimulationObject : MonoBehaviour {
@@ -8,12 +9,19 @@ public class SimulationObject : MonoBehaviour {
     
     //private Transform cachedTransform;
 
-    private void Start() {
-        var sim = GetComponentInParent<Simulation>();
-        if (create) {
-            var go = Instantiate(representative, GameObject.Find("GameView").transform, false);
-            representative = go;
+    private void Start()
+    {
+        if (create)
+        {
+            Create();
         }
+    }
+
+    public void Create()
+    {
+        var sim = MainInstances.Get<Simulation>();
+        var go = Instantiate(representative, GameObject.Find("GameView").transform, false);
+        representative = go;
         sim.Add(this);
     }
 

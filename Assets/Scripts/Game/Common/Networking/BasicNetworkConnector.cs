@@ -110,6 +110,8 @@ namespace Game.Common.Networking
             //Debug.Log("Instantiating required objects");
             
             NetworkManager.Instance.InstantiateGameManager();
+            NetworkManager.Instance.InstantiateAgentManager();
+            NetworkManager.Instance.InstantiateInputLayer();
             NetworkManager.Instance.InstantiateGamePhase();
         }
 

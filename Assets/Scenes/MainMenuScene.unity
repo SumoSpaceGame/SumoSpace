@@ -1546,7 +1546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkManagerPrefab: {fileID: 186558, guid: 79adc0da5b6caf74990d862696696ecd, type: 3}
-  gameMatchSettings: {fileID: 0}
+  gameMatchSettings: {fileID: 11400000, guid: 7b7c161bfd2f92949ac964df79581d2a, type: 2}
 --- !u!4 &911928627
 Transform:
   m_ObjectHideFlags: 0

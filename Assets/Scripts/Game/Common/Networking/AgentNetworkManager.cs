@@ -1,53 +1,57 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using Game.Common.Instances;
+using Game.Common.Registry;
+using Game.Common.Settings;
 using UnityEngine;
 
-[RequireComponent(typeof(ShipSpawner))]
-public partial class AgentNetworkManager : AgentManagerBehavior, IGamePersistantInstance
+namespace Game.Common.Networking
 {
+    [RequireComponent(typeof(ShipSpawner))]
+    public partial class AgentNetworkManager : AgentManagerBehavior, IGamePersistantInstance
+    {
 
-    public GameMatchSettings gameMatchSettings;
+        public GameMatchSettings gameMatchSettings;
+        public MasterSettings masterSettings;
+
+        public PlayerShips _playerShips;
+
+        [HideInInspector]
+        public ShipSpawner _shipSpawner;
     
-    public Dictionary<int, Ship> _playerShips = new Dictionary<int, Ship>();
-
-
-    private ShipSpawner _shipSpawner = new ShipSpawner();
-    
-    public void Awake()
-    {
-        MainPersistantInstances.Add(this);
-        _shipSpawner = GetComponent<ShipSpawner>();
-    }
-
-    private void OnDestroy()
-    {
-        MainPersistantInstances.Remove<AgentNetworkManager>();
-    }
-
-
-    public override void UpdateMovement(RpcArgs args)
-    {
-        
-    }
-    
-    public override void CreateShip(RpcArgs args)
-    {
-        if (networkObject.IsServer)
+        public void Awake()
         {
-            // TODO: Makemore compatiable elsewhere
-            Debug.LogError("Server create ship called, server should not create any ships through RSVP");
-            return;
+            MainPersistantInstances.Add(this);
+            DontDestroyOnLoad(this);
+            _shipSpawner = GetComponent<ShipSpawner>();
+        }
+
+        private void OnDestroy()
+        {
+            MainPersistantInstances.Remove<AgentNetworkManager>();
+        }
+
+
+        public void SpawnShip(uint clientID)
+        {
+            if (networkObject.IsServer)
+            {
+                if (masterSettings.playerDataRegistry.Get(masterSettings.playerIDRegistry.Get(clientID), out var data))
+                {
+                    ServerCreateShip(data.PlayerMatchID);
+                }
+                else
+                {
+                    Debug.LogError("Tried to spawn a ship for an invalid player");
+                }
+
+            }
+            else
+            {
+                Debug.LogError("Tried to call spawn ship while a client. Something is wrong");
+            }
         }
         
-        ushort shipPlayerMatchID = args.GetAt<ushort>(0);
-        int shipType = args.GetAt<int>(1); // TODO: Temp
-        
-        _shipSpawner.SpawnShip(shipPlayerMatchID, shipType, gameMatchSettings);
+        partial void ServerCreateShip(ushort ClientMatchID);
     }
-    
-    partial void ClientUpdateMovement();
 }

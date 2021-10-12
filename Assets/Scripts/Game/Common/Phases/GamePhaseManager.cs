@@ -88,6 +88,7 @@ namespace Game.Common.Phases
         /// </summary>
         public void NextPhase()
         {
+            
             var lastPhase = CurrentPhase;
 
             if (lastPhase < 0)
@@ -104,6 +105,7 @@ namespace Game.Common.Phases
             {
                 CurrentPhase = CurrentPhase + 1;
             }
+            Debug.Log("Switching to phase - " + CurrentPhase);
             
             
             OnPhaseSwitch?.Invoke(lastPhase, CurrentPhase);

@@ -1,5 +1,6 @@
 ﻿using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
+using Game.Common.Instances;
 using Game.Common.Phases;
 using Game.Server.Phases;
 using UnityEngine.InputSystem.LowLevel;
@@ -20,9 +21,9 @@ namespace Game.Common.Networking
             this.gamePhases.Add(Phase.MATCH_READY_UP, new ServerPhaseReadyUp(this));
             this.gamePhases.Add(Phase.MATCH_LOBBY, new ServerPhaseLobby(this));
             this.gamePhases.Add(Phase.MATCH_SYNC_LOAD_OUTS, new ServerPhaseSyncLoadout(this));
-            //this.gamePhases.Add(Phase.MATCH_LOAD_MAP, new ServerPhaseLoadMap(this));
-            //this.gamePhases.Add(Phase.MATCH_START_COUNTDOWN, new ServerPhaseStartMatch(this));
-            //this.gamePhases.Add(Phase.MATCH_GAME, new ServerPhaseGame(this));
+            this.gamePhases.Add(Phase.MATCH_LOAD_MAP, new ServerPhaseLoadMap(this));
+            this.gamePhases.Add(Phase.MATCH_START_COUNTDOWN, new ServerPhaseStartMatch());
+            this.gamePhases.Add(Phase.MATCH_GAME, new ServerPhaseGame());
         }
 
         /// <summary>
