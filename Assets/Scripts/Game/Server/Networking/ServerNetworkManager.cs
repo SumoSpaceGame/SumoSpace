@@ -31,6 +31,7 @@ namespace Game.Common.Networking
                 gameMatchSettings.ClientTeamPosition = (serverPlayerCounter+1) % gameMatchSettings.TeamSize;
             
             
+                // Register the player, this only happens in the server side.
                 var playerID = masterSettings.playerIDRegistry.RegisterPlayer(player.NetworkId);
                 masterSettings.playerDataRegistry.Add(playerID, new PlayerData()
                 {

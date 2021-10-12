@@ -12,6 +12,9 @@ namespace Game.Common.Gameplay.Ship
         [HideInInspector]
         public float targetAngle;
 
+        /// <summary>
+        /// The server controls the movement of the ships. This is the code for it
+        /// </summary>
         partial void ServerUpdate()
         {
             ship.rigidbody2D.rotation = targetAngle;

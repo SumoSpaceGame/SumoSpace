@@ -9,6 +9,11 @@ namespace Game.Common.Networking
     public partial class InputLayerNetworkManager : InputLayerBehavior, IGamePersistantInstance
     {
         
+        /// <summary>
+        /// Used for the client to update the server on it's current movements.
+        /// </summary>
+        /// <param name="movementVec"></param>
+        /// <param name="rotation"></param>
         public void SendMovementUpdate(Vector2 movementVec, float rotation)
         {
             if (networkObject.IsServer)

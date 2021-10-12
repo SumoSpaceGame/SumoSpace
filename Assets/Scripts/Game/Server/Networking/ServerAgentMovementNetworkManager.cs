@@ -11,6 +11,11 @@ namespace Game.Common.Networking
             networkObject.rotation = attachedShip.transform.eulerAngles.z;
         }
 
+        /// <summary>
+        /// When the client wants data of the ship, which should happen only on spawn, the server will send it to the player.
+        /// Data should encompass all required data to spawn the ship in one to one.
+        /// </summary>
+        /// <param name="args"></param>
         partial void ServerRequestShipSpawnData(RpcArgs args)
         {
             // TODO: Ship sync

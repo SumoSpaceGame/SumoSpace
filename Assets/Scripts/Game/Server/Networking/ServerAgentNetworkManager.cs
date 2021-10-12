@@ -10,6 +10,10 @@ namespace Game.Common.Networking
 {
     public partial class AgentNetworkManager : AgentManagerBehavior, IGamePersistantInstance
     {
+        /// <summary>
+        /// Server creation of the ships. This sets up the ships to work authoritivaly with the server.
+        /// </summary>
+        /// <param name="ClientMatchID"></param>
         partial void ServerCreateShip(ushort ClientMatchID)
         {
             var spawnedShip = _shipSpawner.SpawnShip(ClientMatchID, 0, false);

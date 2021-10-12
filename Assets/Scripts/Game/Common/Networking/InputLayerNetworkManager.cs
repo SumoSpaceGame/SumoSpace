@@ -23,12 +23,22 @@ namespace Game.Common.Networking
         {
             
         }
-
+        
+        /// <summary>
+        /// Whenever the client wants to activate a command, it sends it to the server
+        /// </summary>
+        /// <param name="args"></param>
+        /// <exception cref="NotImplementedException"></exception>
         public override void CommandUpdate(RpcArgs args)
         {
-            throw new NotImplementedException(); //Handle Command
+            throw new NotImplementedException(); // TODO: Handle Command
         }
 
+       
+        /// <summary>
+        /// Server receives movement updates, so it can update the ships
+        /// </summary>
+        /// <param name="args"></param>
         public override void MovementUpdate(RpcArgs args)
         {
             if (networkObject.IsServer)

@@ -14,6 +14,10 @@ namespace Game.Common.Networking
             attachedShip.transform.rotation  = Quaternion.Euler(0,0,networkObject.rotation);
         }
 
+        /// <summary>
+        /// Spawns the ship in based on server data.
+        /// </summary>
+        /// <param name="args"></param>
         partial void ClientRequestShipSpawnData(RpcArgs args)
         {
             var data = args.GetAt<string>(0);

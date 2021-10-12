@@ -8,6 +8,11 @@ namespace Game.Common.Networking
 {
     public partial class InputLayerNetworkManager : InputLayerBehavior, IGamePersistantInstance
     {
+        
+        /// <summary>
+        /// When the server receives client movement updates, it will assign the values to the ships themselves.
+        /// </summary>
+        /// <param name="args"></param>
         partial void ServerMovementUpdate(RpcArgs args)
         {
             var movementVec = args.GetAt<Vector2>(0);

@@ -1,18 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using BeardedManStudios.Forge.Networking.Generated;
+using Game.Common.Instances;
 using UnityEngine;
 
-public class ClientAgentNetworkManager : MonoBehaviour
+namespace Game.Common.Networking
 {
-    // Start is called before the first frame update
-    void Start()
+    public partial class AgentNetworkManager : AgentManagerBehavior, IGamePersistantInstance
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        // TODO: Move ship spawning data to here
         
     }
 }

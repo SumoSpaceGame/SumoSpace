@@ -32,6 +32,11 @@ namespace Game.Common.Networking
         }
 
 
+        /// <summary>
+        /// Spawns the ship for the server.
+        /// Client ships get spawned when agent movement network manager gets .
+        /// </summary>
+        /// <param name="clientID"></param>
         public void SpawnShip(uint clientID)
         {
             if (networkObject.IsServer)

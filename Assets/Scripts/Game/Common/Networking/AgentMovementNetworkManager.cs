@@ -9,6 +9,9 @@ namespace Game.Common.Networking
     
     public partial class AgentMovementNetworkManager : AgentMovementBehavior
     {
+        /// <summary>
+        /// Ship request data. Should contain all information that will spawn a ship.
+        /// </summary>
         private struct RequestData
         {
             [SerializeField] public ushort clientOwner;
@@ -23,6 +26,8 @@ namespace Game.Common.Networking
                 return JsonUtility.FromJson<RequestData>(data);
             }
         }
+        
+        
         
         public Ship attachedShip;
 
@@ -54,8 +59,11 @@ namespace Game.Common.Networking
             }
         }
         
-        partial void ClientUpdate();
-        partial void ServerUpdate();
+        
+        /// <summary>
+        /// Ship spawn data handler, when the client creates a ship, it will ask the server for the ship data to spawn.
+        /// </summary>
+        /// <param name="args"></param>
         public override void RequestShipSpawnData(RpcArgs args)
         {
             if (networkObject.IsServer)
@@ -69,6 +77,8 @@ namespace Game.Common.Networking
             
         }
 
+        partial void ClientUpdate();
+        partial void ServerUpdate();
         partial void ServerRequestShipSpawnData(RpcArgs args);
         partial void ClientRequestShipSpawnData(RpcArgs args);
     }
