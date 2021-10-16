@@ -41,7 +41,7 @@ namespace Game.Common.Networking
         {
             if (networkObject.IsServer)
             {
-                if (masterSettings.playerDataRegistry.Get(masterSettings.playerIDRegistry.Get(clientID), out var data))
+                if (masterSettings.playerDataRegistry.TryGet(masterSettings.playerIDRegistry.Get(clientID), out var data))
                 {
                     ServerCreateShip(data.PlayerMatchID);
                 }

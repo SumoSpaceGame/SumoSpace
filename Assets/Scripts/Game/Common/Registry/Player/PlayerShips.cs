@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Game.Common.Gameplay.Ship;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,14 +14,14 @@ namespace Game.Common.Registry
             Reset();
         }
 
-        private Dictionary<ushort, Ship> _playerShips = new Dictionary<ushort, Ship>();
+        private Dictionary<ushort, ShipManager> _playerShips = new Dictionary<ushort, ShipManager>();
 
-        public void Add(ushort shipID, Ship ship)
+        public void Add(ushort shipID, ShipManager shipManager)
         {
-            _playerShips.Add(shipID, ship);
+            _playerShips.Add(shipID, shipManager);
         }
 
-        public Ship Get(ushort shipID)
+        public ShipManager Get(ushort shipID)
         {
             return _playerShips[shipID];
         }

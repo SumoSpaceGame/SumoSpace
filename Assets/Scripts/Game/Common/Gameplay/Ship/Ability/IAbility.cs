@@ -1,5 +1,7 @@
 ﻿
+using Game.Common.Gameplay.Ship;
+
 public interface IAbility
 {
-    void Receive(string data);
+    void Receive(ShipManager shipManager, string data);
 }

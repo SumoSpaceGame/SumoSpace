@@ -10,8 +10,8 @@ namespace Game.Common.Networking
     {
         partial void ClientUpdate()
         {
-            attachedShip.rigidbody2D.position = networkObject.position;
-            attachedShip.transform.rotation  = Quaternion.Euler(0,0,networkObject.rotation);
+            attachedShipManager.rigidbody2D.position = networkObject.position;
+            attachedShipManager.transform.rotation  = Quaternion.Euler(0,0,networkObject.rotation);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Game.Common.Networking
                 var agentNetworkManager = MainPersistantInstances.Get<AgentNetworkManager>();
                 var ship = agentNetworkManager._shipSpawner.SpawnShip(requestData.clientOwner, 0,
                     requestData.clientOwner == masterSettings.matchSettings.ClientMatchID);
-                attachedShip = ship;
+                attachedShipManager = ship;
                 ship.rigidbody2D.isKinematic = true;
                 agentNetworkManager._playerShips.Add(requestData.clientOwner, ship);
 

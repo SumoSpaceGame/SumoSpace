@@ -22,7 +22,7 @@ namespace Game.Common.Networking
     
             var agentMovement = NetworkManager.Instance.InstantiateAgentMovement();
             var agentMovementScript = agentMovement.gameObject.GetComponent<AgentMovementNetworkManager>();
-            agentMovementScript.attachedShip = spawnedShip;
+            agentMovementScript.attachedShipManager = spawnedShip;
 
             spawnedShip.networkMovement = agentMovementScript;
             spawnedShip.isServer = true;

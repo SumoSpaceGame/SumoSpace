@@ -2,7 +2,7 @@
 
 namespace Game.Common.Gameplay.Ship
 {
-    [RequireComponent(typeof(global::Ship))]
+    [RequireComponent(typeof(global::Game.Common.Gameplay.Ship.ShipManager))]
     public partial class ShipController : MonoBehaviour
     {
         public ShipMovement shipMovement;
@@ -12,13 +12,18 @@ namespace Game.Common.Gameplay.Ship
         [HideInInspector]
         public float targetAngle;
 
+        partial void ServerStart()
+        {
+        }
+
+
         /// <summary>
         /// The server controls the movement of the ships. This is the code for it
         /// </summary>
         partial void ServerUpdate()
         {
-            ship.rigidbody2D.rotation = targetAngle;
-            ship.rigidbody2D.AddForce( movementVector * 10);
+            _shipManager.rigidbody2D.rotation = targetAngle;
+            _shipManager.rigidbody2D.AddForce( movementVector * 10);
 
             /**
             ship.rigidbody2D.rotation = shipMovement.GetRotation(targetAngle);

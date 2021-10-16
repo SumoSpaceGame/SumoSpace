@@ -23,7 +23,19 @@ namespace Game.Common.UI.DirectConnection
         
         private string ServerAddress = "localhost";
         private ushort ServerPort = 22233;
-        
+
+        public bool isServer = false;
+
+        private void Start()
+        {
+            
+            
+            if (isServer)
+            {
+                connector.Host("localhost", 22233);
+            }
+        }
+
         public void ProcessTextFields()
         {
             ServerAddress = AddressTextField.text;

@@ -19,6 +19,6 @@ public class ShipDodge : ShipAbility {
     }
 
     protected override void Render() {
-       ship.animator.SetTrigger(DODGE);
+       shipManager.animator.SetTrigger(DODGE);
     }
 }

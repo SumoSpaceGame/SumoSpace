@@ -32,7 +32,8 @@ namespace Game.Common.Networking
             
             
                 // Register the player, this only happens in the server side.
-                var playerID = masterSettings.playerIDRegistry.RegisterPlayer(player.NetworkId);
+                masterSettings.playerIDRegistry.RegisterPlayer(player.NetworkId);
+                var playerID = masterSettings.playerIDRegistry.Get(player.NetworkId);
                 masterSettings.playerDataRegistry.Add(playerID, new PlayerData()
                 {
                     PlayerMatchID = gameMatchSettings.ClientMatchID

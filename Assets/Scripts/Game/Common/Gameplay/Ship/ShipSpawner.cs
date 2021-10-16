@@ -9,12 +9,12 @@ public class ShipSpawner : MonoBehaviour
     public ShipPrefabList shipPrefabList;
     
 
-    public Ship SpawnShip(ushort playerMatchID, int shipType, bool isPlayer)
+    public ShipManager SpawnShip(ushort playerMatchID, int shipType, bool isPlayer)
     {
         var prefab = shipPrefabList.GetShip(shipType);
         var shipClone = Instantiate(prefab);
 
-        var shipClass = shipClone.GetComponent<Ship>();
+        var shipClass = shipClone.GetComponent<ShipManager>();
 
         shipClass.isPlayer = isPlayer;
         shipClass.playerMatchID = playerMatchID;

@@ -1,6 +1,8 @@
-﻿using BeardedManStudios.Forge.Networking;
+﻿using System.Collections.Generic;
+using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
+using Game.Common.Gameplay.Commands;
 using Game.Common.Instances;
 using UnityEngine;
 
@@ -8,6 +10,16 @@ namespace Game.Common.Networking
 {
     public partial class InputLayerNetworkManager : InputLayerBehavior, IGamePersistantInstance
     {
+        partial void ServerStart()
+        {
+            var receivers = new List<KeyValuePair<CommandType, ICommand>>();
+            
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_DODGE, null));
+            
+            _commandHandler.InitalizeReceivers(receivers);
+        }
+
+        
         
         /// <summary>
         /// When the server receives client movement updates, it will assign the values to the ships themselves.

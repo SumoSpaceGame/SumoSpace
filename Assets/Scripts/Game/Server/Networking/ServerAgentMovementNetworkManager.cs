@@ -7,8 +7,8 @@ namespace Game.Common.Networking
     {
         partial void ServerUpdate()
         {
-            networkObject.position = attachedShip.transform.position;
-            networkObject.rotation = attachedShip.transform.eulerAngles.z;
+            networkObject.position = attachedShipManager.transform.position;
+            networkObject.rotation = attachedShipManager.transform.eulerAngles.z;
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace Game.Common.Networking
             // TODO: Ship sync
 
             var requestData = new RequestData();
-            requestData.clientOwner = attachedShip.playerMatchID;
+            requestData.clientOwner = attachedShipManager.playerMatchID;
             
             networkObject.SendRpc(args.Info.SendingPlayer, RPC_REQUEST_SHIP_SPAWN_DATA, requestData.Serialize());
         }

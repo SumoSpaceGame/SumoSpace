@@ -2,6 +2,7 @@ using System;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
+using Game.Common.Gameplay.Commands;
 using Game.Common.Instances;
 using Game.Common.Settings;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace Game.Common.Networking
     {
 
         public MasterSettings masterSettings;
+
+        private CommandHandler _commandHandler = new CommandHandler();
         
         private void Awake()
         {
@@ -19,11 +22,20 @@ namespace Game.Common.Networking
             DontDestroyOnLoad(this);
         }
 
-        private void Start()
+        protected override void NetworkStart()
         {
-            
+            base.NetworkStart();
+
+            if (networkObject.IsServer)
+            {
+                ServerStart();
+            }
+            else
+            {
+                ClientStart();
+            }
         }
-        
+
         /// <summary>
         /// Whenever the client wants to activate a command, it sends it to the server
         /// </summary>
@@ -31,7 +43,16 @@ namespace Game.Common.Networking
         /// <exception cref="NotImplementedException"></exception>
         public override void CommandUpdate(RpcArgs args)
         {
-            throw new NotImplementedException(); // TODO: Handle Command
+            // TODO: Handle commands between input layers
+            
+            if (networkObject.IsServer)
+            {
+                //_commandHandler.ReceiveServer();
+            }
+            else
+            {
+                //_commandHandler.ReceiveClient();
+            }
         }
 
        
@@ -59,5 +80,8 @@ namespace Game.Common.Networking
         }
 
         partial void ServerMovementUpdate(RpcArgs args);
+
+        partial void ServerStart();
+        partial void ClientStart();
     }
 }

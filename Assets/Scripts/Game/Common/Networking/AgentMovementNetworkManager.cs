@@ -1,8 +1,10 @@
 ﻿using System;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
+using Game.Common.Gameplay.Ship;
 using Game.Common.Settings;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Game.Common.Networking
 {
@@ -29,7 +31,7 @@ namespace Game.Common.Networking
         
         
         
-        public Ship attachedShip;
+        [FormerlySerializedAs("attachedShip")] public ShipManager attachedShipManager;
 
         public MasterSettings masterSettings;
         
@@ -45,7 +47,7 @@ namespace Game.Common.Networking
         
         public void Update()
         {
-            if (attachedShip == null)
+            if (attachedShipManager == null)
             {
                 return;
             }

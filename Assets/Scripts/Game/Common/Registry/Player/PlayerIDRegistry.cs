@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Common.Registry
@@ -7,18 +8,39 @@ namespace Game.Common.Registry
     public class PlayerIDRegistry : ScriptableObject
     {
         private Dictionary<uint, PlayerID> playerIDs = new Dictionary<uint, PlayerID>();
-        
-        public PlayerID RegisterPlayer(uint clientID)
+
+        public bool RegisterPlayer(uint clientID)
         {
             Debug.Log("Registered client - " + clientID);
+
+            if (playerIDs.ContainsKey(clientID))
+            {
+                return false;
+            }
             
-            playerIDs[clientID] = new PlayerID() {ID = clientID};
-            return playerIDs[clientID];
+            playerIDs.Add(clientID, new PlayerID() {ID = clientID});
+            
+            return true;
         }
 
         public PlayerID Get(uint clientID)
         {
             return playerIDs[clientID];
+        }
+
+        public bool TryGet(uint clientID, out PlayerID data)
+        {
+            return playerIDs.TryGetValue(clientID, out data);
+        }
+        
+        
+        /// <summary>
+        /// Resets the stored data for PlayerIDs. This should never be called unless you are cleaning
+        /// </summary>
+        public void Reset()
+        {
+            Debug.Log("Clearing the PlayerID database");
+            playerIDs.Clear();
         }
     }
 }

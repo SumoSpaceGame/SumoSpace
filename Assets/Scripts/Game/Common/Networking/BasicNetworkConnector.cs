@@ -53,13 +53,13 @@ namespace Game.Common.Networking
     
         public void Connect(string address, ushort port)
         {
-            Debug.Log("Connecting to game server..");
-
+            Debug.Log("Connecting to game server.." + address + " " + port);
+    
             gameMatchSettings.Reset();
 
             _gameClient = new UDPClient();
-        
-            _gameClient.playerConnected += (player, sender) =>
+
+            _gameClient.serverAccepted += (sender) =>
             {
                 Debug.Log("Player Connected!");
                 
@@ -83,11 +83,12 @@ namespace Game.Common.Networking
         
         public void Host(string address, ushort port)
         {
-            Debug.Log("Starting game server..");
+            Debug.Log("Starting game server.. " + address + " : " + port);
         
             _gameServer = new UDPServer(gameMatchSettings.PlayerCount + 1);
-        
-
+            
+            
+            _gameServer.playerConnected += (player, sender) => Debug.Log("Player connected into server!");
             _gameServer.playerAccepted += (player, sender) => Debug.Log("Player accepted into server!");
             _gameServer.playerDisconnected += (player, sender) => Debug.Log("Player disconnected from server!");
 

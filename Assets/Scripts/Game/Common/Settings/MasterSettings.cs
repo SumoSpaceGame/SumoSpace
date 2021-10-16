@@ -21,9 +21,9 @@ namespace Game.Common.Settings
             if(playerShips != null) playerShips.Reset();
         }
 
-        public Ship GetShip(uint networkID)
+        public ShipManager GetShip(uint networkID)
         {
-            if (playerDataRegistry.Get(playerIDRegistry.Get(networkID), out var data))
+            if (playerDataRegistry.TryGet(playerIDRegistry.Get(networkID), out var data))
             {
                 return playerShips.Get(data.PlayerMatchID);
             } 

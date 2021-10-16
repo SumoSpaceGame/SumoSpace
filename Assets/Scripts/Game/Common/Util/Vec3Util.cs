@@ -7,7 +7,7 @@ public class Vec3Util {
         return new Vector3(xyVec.x, 0f, xyVec.y);
     }
 
-    public static Vector3 Vec2ToVec3Z(Vector2 xyVec, float z) {
+    public static Vector3 Vec2ToVec3Z(Vector2 xyVec, float z = 0) {
         return new Vector3(xyVec.x, xyVec.y, z);
     }
 }
