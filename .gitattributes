@@ -28,3 +28,4 @@
 *.wlt filter=lfs diff=lfs merge=lfs -text
 *.DotSettings filter=lfs diff=lfs merge=lfs -text
 *.md filter=lfs diff=lfs merge=lfs -text
+*.asmdef filter=lfs diff=lfs merge=lfs -text
