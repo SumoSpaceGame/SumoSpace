@@ -43,6 +43,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new InputLayerNetworkObject(networker, id, frame);
 						break;
+					case MatchTimerNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new MatchTimerNetworkObject(networker, id, frame);
+						break;
 				}
 
 				if (!availableCallback)
