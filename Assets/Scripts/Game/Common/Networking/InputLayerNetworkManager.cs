@@ -4,6 +4,7 @@ using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using Game.Common.Gameplay.Commands;
 using Game.Common.Instances;
+using Game.Common.Networking.Commands;
 using Game.Common.Settings;
 using UnityEngine;
 
@@ -14,11 +15,10 @@ namespace Game.Common.Networking
 
         public MasterSettings masterSettings;
 
-        private CommandHandler _commandHandler = new CommandHandler();
+        private CommandHandlerNetworkManager _commandHandlerNetworkManager;
         
         private void Awake()
         {
-            MainPersistantInstances.Add(this);
             DontDestroyOnLoad(this);
         }
 
@@ -26,6 +26,10 @@ namespace Game.Common.Networking
         {
             base.NetworkStart();
 
+            MainThreadManager.Run(()=>{ 
+                MainPersistantInstances.TryAdd(this);
+            });
+            
             if (networkObject.IsServer)
             {
                 ServerStart();
@@ -34,7 +38,11 @@ namespace Game.Common.Networking
             {
                 ClientStart();
             }
+            
+            _commandHandlerNetworkManager = new CommandHandlerNetworkManager(networkObject, RPC_COMMAND_UPDATE, masterSettings);
         }
+        
+
 
         /// <summary>
         /// Whenever the client wants to activate a command, it sends it to the server
@@ -43,16 +51,13 @@ namespace Game.Common.Networking
         /// <exception cref="NotImplementedException"></exception>
         public override void CommandUpdate(RpcArgs args)
         {
-            // TODO: Handle commands between input layers
+            if (!networkObject.IsServer && !args.Info.SendingPlayer.IsHost)
+            {
+                Debug.LogError("Received invalid RPC from other client. Clients should only receive server data");
+                return;
+            }
             
-            if (networkObject.IsServer)
-            {
-                //_commandHandler.ReceiveServer();
-            }
-            else
-            {
-                //_commandHandler.ReceiveClient();
-            }
+            _commandHandlerNetworkManager.HandleRPC(args);
         }
 
        

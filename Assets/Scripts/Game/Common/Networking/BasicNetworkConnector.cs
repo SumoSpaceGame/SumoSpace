@@ -24,7 +24,7 @@ namespace Game.Common.Networking
         private UDPServer _gameServer;
     
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             DontDestroyOnLoad(this.gameObject);
         }
@@ -114,6 +114,7 @@ namespace Game.Common.Networking
             NetworkManager.Instance.InstantiateAgentManager();
             NetworkManager.Instance.InstantiateInputLayer();
             NetworkManager.Instance.InstantiateGamePhase();
+            NetworkManager.Instance.InstantiateMatchTimer();
         }
 
     }

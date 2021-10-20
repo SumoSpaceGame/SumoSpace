@@ -1,6 +1,7 @@
 ﻿using System;
 using BeardedManStudios.Forge.Networking.Generated;
 using Game.Common.Networking;
+using Game.Common.Networking.Misc;
 
 namespace Game.Common.Phases.PhaseData
 {
@@ -17,7 +18,8 @@ namespace Game.Common.Phases.PhaseData
             typeof(GamePhaseNetworkManager),
             typeof(GameNetworkManager),
             typeof(AgentNetworkManager),
-            typeof(InputLayerNetworkManager)
+            typeof(InputLayerNetworkManager),
+            typeof(MatchNetworkTimerManager)
         };
     }
 }

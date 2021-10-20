@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
+using BeardedManStudios.Forge.Networking.Unity;
 using Game.Common.Instances;
 using UnityEngine;
 
@@ -15,9 +16,18 @@ namespace Game.Common.Networking.Misc
         
         private void Awake()
         {
-            MainPersistantInstances.Add(this);
+            DontDestroyOnLoad(this);
         }
-        
+
+        protected override void NetworkStart()
+        {
+            base.NetworkStart();
+            MainThreadManager.Run(() =>
+            {
+                MainPersistantInstances.Add(this);
+            });
+        }
+
         /// <summary>
         /// Updates the timers, and when they are destroyed it will destroy them.
         /// </summary>

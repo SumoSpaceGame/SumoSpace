@@ -1,3 +1,4 @@
+using Game.Client.Gameplay.Abilities;
 using Game.Common.Instances;
 using Game.Common.Networking;
 using UnityEngine;
@@ -13,22 +14,22 @@ namespace Game.Client.Gameplay.Movement
 
         public ShipMovement ShipMovement => shipMovement;
 
-        public ShipAbility PrimaryAbility => primaryAbility;
+        public ClientShipAbility PrimaryAbility => primaryAbility;
 
         [SerializeField] private  ShipMovement shipMovement;
-        [SerializeField] private  ShipAbility primaryAbility;
+        [SerializeField] private  ClientShipAbility primaryAbility;
 
         private Vector2 movementVector = Vector2.zero;
         private Vector2 lookDir = Vector2.up;
     
-        private Camera camera;
+        private Camera _camera;
 
         private const float RotationAngleOffset = -90f;
 
         private InputLayerNetworkManager inputLayer;
     
         private void Start() {
-            camera = Camera.main;
+            _camera = Camera.main;
             inputLayer = MainPersistantInstances.Get<InputLayerNetworkManager>();
         }
 
@@ -53,7 +54,7 @@ namespace Game.Client.Gameplay.Movement
      */
         public void OnLookRaw(InputAction.CallbackContext ctx) {
             if(ctx.performed)
-                lookDir = (Vector2)camera.ScreenToViewportPoint(ctx.ReadValue<Vector2>()) - new Vector2(0.5f, 0.5f);
+                lookDir = (Vector2)_camera.ScreenToViewportPoint(ctx.ReadValue<Vector2>()) - new Vector2(0.5f, 0.5f);
         }
     
         /**

@@ -26,7 +26,7 @@ namespace Game.Common.Networking
         private NetworkType networkType = NetworkType.Client;
 
 
-        private void Start()
+        private void Awake()
         {
             DontDestroyOnLoad(this);
         }

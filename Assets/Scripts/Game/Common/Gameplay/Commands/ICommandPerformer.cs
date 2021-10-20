@@ -5,6 +5,6 @@ namespace Game.Common.Gameplay.Commands
 {
     public interface ICommandPerformer : ICommand
     {
-        bool Perform(ShipManager shipManager, ICommandNetworker networker);
+        bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments);
     }
 }

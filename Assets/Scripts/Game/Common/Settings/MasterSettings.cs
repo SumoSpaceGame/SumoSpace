@@ -7,14 +7,27 @@ using UnityEngine.Serialization;
 
 namespace Game.Common.Settings
 {
-    [CreateAssetMenu(fileName = "Settings" ,menuName = "Game/Master Settings", order = 0)]
+    [CreateAssetMenu(fileName = "Settings" ,menuName = "Game Registry/Master Settings", order = 0)]
     public class MasterSettings : ScriptableObject
     {
+        [Header("Main settings")]
         public GameMatchSettings matchSettings;
+        
         public NetworkSettings network;
+        
+        
+        [Space(4)]
+        [Header("Registries")]
         public PlayerShips playerShips;
-        public PlayerDataRegistry playerDataRegistry;
+        
+        public PlayerStaticDataRegistry playerStaticDataRegistry;
+        
         public PlayerIDRegistry playerIDRegistry;
+
+        public PlayerGameDataRegistry playerGameDataRegistry;
+        
+        [Space(4)]
+        [Header("Misc")]
         public ShipPrefabList ShipPrefabList;
         public void Reset()
         {
@@ -23,9 +36,12 @@ namespace Game.Common.Settings
 
         public ShipManager GetShip(uint networkID)
         {
-            if (playerDataRegistry.TryGet(playerIDRegistry.Get(networkID), out var data))
+            if (playerStaticDataRegistry.TryGet(playerIDRegistry.Get(networkID), out var data))
             {
-                return playerShips.Get(data.PlayerMatchID);
+                if (playerShips.TryGet(data.PlayerMatchID, out ShipManager manager))
+                {
+                    return manager;
+                }
             } 
             
             return null;

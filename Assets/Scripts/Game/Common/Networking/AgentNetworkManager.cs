@@ -1,5 +1,6 @@
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
+using BeardedManStudios.Forge.Networking.Unity;
 using Game.Common.Instances;
 using Game.Common.Registry;
 using Game.Common.Settings;
@@ -21,7 +22,6 @@ namespace Game.Common.Networking
     
         public void Awake()
         {
-            MainPersistantInstances.Add(this);
             DontDestroyOnLoad(this);
             _shipSpawner = GetComponent<ShipSpawner>();
         }
@@ -29,6 +29,15 @@ namespace Game.Common.Networking
         private void OnDestroy()
         {
             MainPersistantInstances.Remove<AgentNetworkManager>();
+        }
+
+        protected override void NetworkStart()
+        {
+            base.NetworkStart();
+            
+            MainThreadManager.Run(()=>{ 
+                MainPersistantInstances.TryAdd(this);
+            });
         }
 
 
@@ -41,7 +50,7 @@ namespace Game.Common.Networking
         {
             if (networkObject.IsServer)
             {
-                if (masterSettings.playerDataRegistry.TryGet(masterSettings.playerIDRegistry.Get(clientID), out var data))
+                if (masterSettings.playerStaticDataRegistry.TryGet(masterSettings.playerIDRegistry.Get(clientID), out var data))
                 {
                     ServerCreateShip(data.PlayerMatchID);
                 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Common.Registry
 {
-    [CreateAssetMenu(fileName =  "PlayerIDRegistry", menuName = "Game/Player ID Registry")]
+    [CreateAssetMenu(fileName =  "PlayerIDRegistry", menuName = "Game Registry/Player ID Registry")]
     public class PlayerIDRegistry : ScriptableObject
     {
         private Dictionary<uint, PlayerID> playerIDs = new Dictionary<uint, PlayerID>();

@@ -16,6 +16,7 @@ MonoBehaviour:
   network:
     updateInterval: 9
   playerShips: {fileID: 11400000, guid: a6b5c7b7baef1a64b9618c9fa1668202, type: 2}
-  playerDataRegistry: {fileID: 11400000, guid: 447b3d0d810fbb64f94980ee70a0d21b, type: 2}
+  playerStaticDataRegistry: {fileID: 11400000, guid: 447b3d0d810fbb64f94980ee70a0d21b, type: 2}
   playerIDRegistry: {fileID: 11400000, guid: ccf6ab7f4c32bbe4fbb6385be8026423, type: 2}
+  playerGameDataRegistry: {fileID: 11400000, guid: d0eaad60255339a4ea4ba1de2b3c834c, type: 2}
   ShipPrefabList: {fileID: 11400000, guid: 99853f6f37e063a488943c16da56cfc2, type: 2}
