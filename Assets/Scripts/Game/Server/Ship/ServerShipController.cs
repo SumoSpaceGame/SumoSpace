@@ -22,8 +22,8 @@ namespace Game.Common.Gameplay.Ship
         /// </summary>
         partial void ServerUpdate()
         {
-            _shipManager.rigidbody2D.rotation = targetAngle;
-            _shipManager.rigidbody2D.AddForce( movementVector * 10);
+            _shipManager._rigidbody2D.rotation = targetAngle;
+            _shipManager._rigidbody2D.AddForce( movementVector * 10);
 
             /**
             ship.rigidbody2D.rotation = shipMovement.GetRotation(targetAngle);

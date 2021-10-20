@@ -13,10 +13,10 @@ public class VirtualCursor : MonoBehaviour {
 
     private Vector3 offsetVec = Vector3.forward;
     private Vector3 lookDir;
-    private Camera camera;
+    private Camera _camera;
 
     private void Start() {
-        camera = Camera.main;
+        _camera = Camera.main;
     }
 
     private void Update() {
@@ -29,9 +29,9 @@ public class VirtualCursor : MonoBehaviour {
         transform.position = followTarget.position + offsetVec;
     }
     
-    public void OnLookRaw(InputAction.CallbackContext ctx) {
+    public void OnLookRaw(InputAction.CallbackContext ctx) { 
         lookDir = Vec3Util.Vec2ToXZ(
-            ((Vector2)camera.ScreenToViewportPoint(
+            ((Vector2)_camera.ScreenToViewportPoint(
                 ctx.ReadValue<Vector2>()
             ) - new Vector2(0.5f, 0.5f)).normalized
         );

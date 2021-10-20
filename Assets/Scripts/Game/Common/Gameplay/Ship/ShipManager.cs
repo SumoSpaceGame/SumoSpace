@@ -2,6 +2,7 @@
 using Game.Common.Networking;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Game.Common.Gameplay.Ship
 {
@@ -10,7 +11,7 @@ namespace Game.Common.Gameplay.Ship
         public Vector3 Position => transform.position;
         public bool invulnerable;
         public Animator animator;
-        public Rigidbody2D rigidbody2D;
+        [FormerlySerializedAs("rigidbody2D")] public Rigidbody2D _rigidbody2D;
         public ShipController shipController;
         public ClientControls clientControls;
         public SimulationObject simulationObject;

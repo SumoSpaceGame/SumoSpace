@@ -46,10 +46,10 @@ public class ClientMovement3D : MonoBehaviour {
     private bool stopped = true; // If the ship is not moving
     private float x; // The progress along the acceleration curve
 
-    private Camera camera;
+    private Camera _camera;
 
     private void Start() {
-        camera = Camera.main;
+        _camera = Camera.main;
     }
 
     void Update() {
@@ -93,7 +93,7 @@ public class ClientMovement3D : MonoBehaviour {
     
     public void OnLookRaw(InputAction.CallbackContext ctx) {
         lookDir = Vec3Util.Vec2ToXZ(
-            ((Vector2)camera.ScreenToViewportPoint(
+            ((Vector2)_camera.ScreenToViewportPoint(
                 ctx.ReadValue<Vector2>()
                 ) - new Vector2(0.5f, 0.5f)).normalized
             );
