@@ -283,6 +283,17 @@ namespace Game.Common.Networking.Misc
         {
             IsDestroyed = true;
             DestroyEvent?.Invoke();
+
+            StartEvent = null;
+            PauseEvent = null;
+            ResumeEvent = null;
+            StopEvent = null;
+            DestroyEvent = null;
+
+            NetworkStartEvent = null;
+            NetworkPauseEvent = null;
+            NetworkResumeEvent = null;
+            NetworkStopEvent = null;
         }
     }
 }
