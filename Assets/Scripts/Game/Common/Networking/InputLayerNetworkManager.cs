@@ -30,6 +30,8 @@ namespace Game.Common.Networking
                 MainPersistantInstances.TryAdd(this);
             });
             
+            _commandHandlerNetworkManager = new CommandHandlerNetworkManager(networkObject, RPC_COMMAND_UPDATE, masterSettings);
+            
             if (networkObject.IsServer)
             {
                 ServerStart();
@@ -39,7 +41,6 @@ namespace Game.Common.Networking
                 ClientStart();
             }
             
-            _commandHandlerNetworkManager = new CommandHandlerNetworkManager(networkObject, RPC_COMMAND_UPDATE, masterSettings);
         }
         
 
