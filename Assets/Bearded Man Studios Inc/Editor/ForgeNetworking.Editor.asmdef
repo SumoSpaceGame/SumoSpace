@@ -1,0 +1,19 @@
+{
+    "name": "ForgeNetworking.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5dffb7647aa50d445a65d35cd730e325",
+        "GUID:343deaaf83e0cee4ca978e7df0b80d21"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

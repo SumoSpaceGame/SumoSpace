@@ -15,7 +15,6 @@ namespace Game.Common.Networking
 
         partial void OnServerNetworkStart()
         {
-                
             networkObject.Networker.playerAccepted += ServerOnPlayerConnected ;
         }
         
@@ -39,7 +38,9 @@ namespace Game.Common.Networking
                     PlayerMatchID = gameMatchSettings.ClientMatchID
                 });
             
-            
+                // Create player data
+                masterSettings.playerGameDataRegistry.Add(playerID, new PlayerGameData());
+                
             
                 networkObject.SendRpc(player, RPC_SYNC_MATCH_SETTINGS, gameMatchSettings.GetSerialized());
             });

@@ -27,6 +27,11 @@ namespace Game.Common.Registry
             _registryDictionary.Remove(key);
         }
 
+        public virtual bool Has(K key)
+        {
+            return _registryDictionary.ContainsKey(key);
+        }
+
 
         public virtual bool TryGet(K key, out T value)
         {

@@ -4299,7 +4299,7 @@ MonoBehaviour:
   AddressTextField: {fileID: 1211632728}
   PortTextField: {fileID: 1951142703}
   connector: {fileID: 911928626}
-  isServer: 0
+  masterSettings: {fileID: 11400000, guid: 08b1afc459433574c83931546f497634, type: 2}
 --- !u!1 &2126665101
 GameObject:
   m_ObjectHideFlags: 0

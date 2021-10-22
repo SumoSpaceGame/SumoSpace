@@ -5,6 +5,7 @@ using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using Game.Common.Instances;
 using Game.Common.Phases;
+using Game.Common.Settings;
 using UnityEngine;
 
 namespace Game.Common.Networking
@@ -12,7 +13,7 @@ namespace Game.Common.Networking
     public partial class GamePhaseNetworkManager : GamePhaseBehavior, IGamePersistantInstance
     {
 
-
+        public MasterSettings masterSettings;
         public GameMatchSettings gameMatchSettings;
         
         /// <summary>

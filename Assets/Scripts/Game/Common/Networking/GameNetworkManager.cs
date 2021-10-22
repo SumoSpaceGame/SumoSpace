@@ -30,11 +30,12 @@ namespace Game.Common.Networking
         {
             DontDestroyOnLoad(this);
         }
-
+        
         protected override void NetworkStart()
         {
-            base.NetworkStart();
-
+            
+            masterSettings.Reset();
+            
             Physics2D.simulationMode = SimulationMode2D.Update;
             gameMatchSettings.Reset();
             
@@ -47,8 +48,13 @@ namespace Game.Common.Networking
                 networkType = NetworkType.Server;
                 OnServerNetworkStart();
             }
+            else
+            {
+                OnClientNetworkStart();
+            }
             
-            OnClientNetworkStart();
+            
+            base.NetworkStart();
         }
 
         private void Update()

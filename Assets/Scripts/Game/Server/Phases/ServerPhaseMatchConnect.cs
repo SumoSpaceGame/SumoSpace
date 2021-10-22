@@ -4,6 +4,7 @@ using BeardedManStudios.Forge.Networking;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using Game.Common.Phases.PhaseData;
+using Game.Common.Registry;
 using UnityEngine;
 
 namespace Game.Server.Phases
@@ -14,9 +15,9 @@ namespace Game.Server.Phases
     /// </summary>
     public class ServerPhaseMatchConnect : IGamePhase
     {
-        
-        
 
+        private PlayerStaticDataRegistry _playerStaticDataRegistry;
+        private PlayerIDRegistry _playerIDRegistry;
 
         private readonly GamePhaseNetworkManager _phaseNetworkManager;
 

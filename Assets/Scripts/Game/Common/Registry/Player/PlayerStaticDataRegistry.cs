@@ -25,6 +25,8 @@ namespace Game.Common.Registry
         /// </summary>
         public PlayerID GlobalID;
         public ushort PlayerMatchID;
+
+        public string PlayerName;
     }
     
     

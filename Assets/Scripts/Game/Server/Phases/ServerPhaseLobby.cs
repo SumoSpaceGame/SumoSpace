@@ -60,7 +60,7 @@ namespace Game.Server.Phases
                         _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_LOBBY, 
                             new []{(byte) PhaseLobby.PLAYER_LOCKED_FLAG, (byte) info.SendingPlayer.NetworkId, data[1]});
 
-
+                        
                         if (_lockedInPlayers.Count == _phaseNetworkManager.gameMatchSettings.PlayerCount)
                         {
                             _phaseNetworkManager.ServerNextPhase();

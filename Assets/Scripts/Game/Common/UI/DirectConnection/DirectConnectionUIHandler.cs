@@ -1,5 +1,6 @@
 using System;
 using Game.Common.Networking;
+using Game.Common.Settings;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -15,25 +16,26 @@ namespace Game.Common.UI.DirectConnection
         public TMP_InputField PortTextField;
 
         public BasicNetworkConnector connector;
+        public MasterSettings masterSettings;
         
         private const string DEBUG_ServerAddress = "localhost";
-        private const ushort DEBUG_ServerPort = 22233;
         private const string DEBUG_HostServerAddress = "127.0.0.1";
-        private const ushort DEBUG_HostServerPort = 22233;
         
         private string ServerAddress = "localhost";
         private ushort ServerPort = 22233;
 
-        public bool isServer = false;
 
         private void Start()
         {
-            
-            
-            if (isServer)
+            if (masterSettings.InitServer)
             {
-                connector.Host("localhost", 22233);
+                connector.Host("localhost", masterSettings.ServerPort);
             }
+
+            ServerAddress = masterSettings.ServerAddress;
+            ServerPort = masterSettings.ServerPort;
+            
+            PortTextField.text = "" + masterSettings.ServerPort;
         }
 
         public void ProcessTextFields()
@@ -50,7 +52,7 @@ namespace Game.Common.UI.DirectConnection
 
         public void DebugConnect()
         {
-            connector.Connect(DEBUG_ServerAddress, DEBUG_ServerPort);
+            connector.Connect(DEBUG_ServerAddress, masterSettings.ServerPort);
         }
 
         public void Host()
@@ -61,7 +63,7 @@ namespace Game.Common.UI.DirectConnection
         
         public void DebugHost()
         {
-            connector.Host(DEBUG_HostServerAddress, DEBUG_HostServerPort);
+            connector.Host(DEBUG_HostServerAddress, masterSettings.ServerPort);
         }
     }
 }

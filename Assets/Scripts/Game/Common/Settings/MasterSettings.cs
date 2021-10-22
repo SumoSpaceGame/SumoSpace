@@ -1,7 +1,6 @@
 using System;
 using Game.Common.Gameplay.Ship;
 using Game.Common.Registry;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -14,7 +13,16 @@ namespace Game.Common.Settings
         public GameMatchSettings matchSettings;
         
         public NetworkSettings network;
-        
+
+        /// <summary>
+        /// Used to check if this is a server being initiated
+        /// </summary>
+        public bool InitServer = false;
+
+        [Space(4)] 
+        [Header("Network config")] 
+        public string ServerAddress = "localhost";
+        public ushort ServerPort;
         
         [Space(4)]
         [Header("Registries")]
@@ -32,6 +40,10 @@ namespace Game.Common.Settings
         public void Reset()
         {
             if(playerShips != null) playerShips.Reset();
+            playerStaticDataRegistry.Reset();
+            playerGameDataRegistry.Reset();
+            playerIDRegistry.Reset();
+            
         }
 
         public ShipManager GetShip(uint networkID)
