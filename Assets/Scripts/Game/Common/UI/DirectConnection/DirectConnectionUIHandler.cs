@@ -29,6 +29,7 @@ namespace Game.Common.UI.DirectConnection
         {
             if (masterSettings.InitServer)
             {
+                Debug.Log("Hosting server at localhost:" + masterSettings.ServerPort);
                 connector.Host("localhost", masterSettings.ServerPort);
             }
 

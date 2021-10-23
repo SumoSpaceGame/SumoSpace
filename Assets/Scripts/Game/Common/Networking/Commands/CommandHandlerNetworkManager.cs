@@ -51,7 +51,7 @@ namespace Game.Common.Networking.Commands
         {
             var ship = GetCurrentShip();
 
-            return _commandHandler.Perform(commandType, ship, _commandNetworker, arguments);
+            return _commandHandler.Perform(commandType, ship, _commandNetworker/*, arguments*/);
         }
 
         public void HandleRPC(RpcArgs rpcArgs)

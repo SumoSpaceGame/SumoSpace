@@ -16,7 +16,7 @@ namespace Game.Common.Instances {
 		public static MainInstances main;
 
 
-		private readonly Dictionary<string, IGameInstance> gameServices= new Dictionary<string, IGameInstance>();
+		private readonly Dictionary<string, IGameInstance> gameServices = new Dictionary<string, IGameInstance>();
 
 
 		private void Awake() {
@@ -28,7 +28,7 @@ namespace Game.Common.Instances {
 			
 			DontDestroyOnLoad(this.gameObject);
 
-			SceneManager.sceneLoaded += OnSceneLoaded;
+			SceneManager.sceneUnloaded += OnSceneUnloaded;
 		}
 
 		/// <summary>
@@ -137,7 +137,7 @@ namespace Game.Common.Instances {
 		/// </summary>
 		/// <param name="scene"></param>
 		/// <param name="loadMode"></param>
-		private void OnSceneLoaded(Scene scene, LoadSceneMode loadMode)
+		private void OnSceneUnloaded(Scene scene)
 		{
 			if (this.gameServices.Count > 0)
 			{

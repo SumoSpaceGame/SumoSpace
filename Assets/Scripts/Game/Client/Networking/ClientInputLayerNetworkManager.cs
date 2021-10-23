@@ -14,7 +14,7 @@ namespace Game.Common.Networking
         {
             var performers = new List<KeyValuePair<CommandType, ICommandPerformer>>();
             
-            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_DODGE, null));
+            //performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_DODGE, null));
             
             _commandHandlerNetworkManager.InitializeClientCommands(performers);
         }

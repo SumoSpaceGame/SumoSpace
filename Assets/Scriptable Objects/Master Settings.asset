@@ -15,6 +15,9 @@ MonoBehaviour:
   matchSettings: {fileID: 11400000, guid: 7b7c161bfd2f92949ac964df79581d2a, type: 2}
   network:
     updateInterval: 9
+  InitServer: 0
+  ServerAddress: localhost
+  ServerPort: 22233
   playerShips: {fileID: 11400000, guid: a6b5c7b7baef1a64b9618c9fa1668202, type: 2}
   playerStaticDataRegistry: {fileID: 11400000, guid: 447b3d0d810fbb64f94980ee70a0d21b, type: 2}
   playerIDRegistry: {fileID: 11400000, guid: ccf6ab7f4c32bbe4fbb6385be8026423, type: 2}

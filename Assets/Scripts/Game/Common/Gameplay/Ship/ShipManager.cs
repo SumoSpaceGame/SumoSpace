@@ -15,6 +15,7 @@ namespace Game.Common.Gameplay.Ship
         public ShipController shipController;
         public ClientControls clientControls;
         public SimulationObject simulationObject;
+        public ShipMovement shipMovement;
         public AgentMovementNetworkManager networkMovement;
     
         [Space(2)]
@@ -30,7 +31,6 @@ namespace Game.Common.Gameplay.Ship
     
         private void Start()
         {
-        
             simulationObject.Create();
             if (isPlayer)
             {

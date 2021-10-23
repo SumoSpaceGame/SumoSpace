@@ -3,15 +3,15 @@ using UnityEngine;
 
 namespace Game.Common.Gameplay.Ship
 {
-    [RequireComponent(typeof(global::Game.Common.Gameplay.Ship.ShipManager))]
+    [RequireComponent(typeof(ShipManager))]
     public partial class ShipController : MonoBehaviour
     {
 
-        private global::Game.Common.Gameplay.Ship.ShipManager _shipManager;
+        private ShipManager _shipManager;
     
         private void Awake()
         {
-            _shipManager = GetComponent<global::Game.Common.Gameplay.Ship.ShipManager>();
+            _shipManager = GetComponent<ShipManager>();
             _shipManager.shipController = this;
         }
 

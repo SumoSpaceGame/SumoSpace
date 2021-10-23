@@ -38,6 +38,8 @@ namespace Game.Client.SceneLoader
         /// </summary>
         private void FixedUpdate()
         {
+            if (!IsLoadingScene) return;
+            
             var currentTask = _loadingTasks[currentTaskIndex];
 
             stringScriptableData.value = currentTask.GetLoadingText();
@@ -121,6 +123,8 @@ namespace Game.Client.SceneLoader
             {
                 task.AllFinished();
             }
+            
+            FinishLoadingSceneEvent?.Invoke();
             
             Reset();
         }

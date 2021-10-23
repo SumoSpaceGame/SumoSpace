@@ -14,7 +14,7 @@ namespace Game.Common.Networking
         {
             var receivers = new List<KeyValuePair<CommandType, ICommand>>();
             
-            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_DODGE, null));
+            //receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_DODGE, null));
             
             _commandHandlerNetworkManager.InitializeServerCommands(receivers);
         }

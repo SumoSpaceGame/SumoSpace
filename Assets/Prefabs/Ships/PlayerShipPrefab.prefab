@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b8768229e96d24ea2f52a718f3feaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shipMovement: {fileID: 11400000, guid: a8571598181461c4f9cbf5df3f5262ac, type: 2}
+  shipMovement: {fileID: 0}
   primaryAbility: {fileID: 0}
 --- !u!114 &266858117316837250
 MonoBehaviour:
@@ -211,10 +211,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   invulnerable: 0
   animator: {fileID: 0}
-  rigidbody2D: {fileID: 266858117316837253}
+  _rigidbody2D: {fileID: 266858117316837253}
   shipController: {fileID: 266858117316837255}
   clientControls: {fileID: 266858117316837273}
   simulationObject: {fileID: 266858117316837250}
+  shipMovement: {fileID: 11400000, guid: a533291414ea7e74e871a6887121c8c9, type: 2}
   networkMovement: {fileID: 0}
   isServer: 0
   isPlayer: 0
@@ -231,7 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc13ae929e714807a146eb00fd4ff543, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shipMovement: {fileID: 11400000, guid: a8571598181461c4f9cbf5df3f5262ac, type: 2}
+  sm: {fileID: 0}
   movementVector: {x: 0, y: 0}
   targetAngle: 0
 --- !u!1001 &266858116789690449
