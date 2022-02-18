@@ -22,11 +22,15 @@ namespace Game.Common.Registry
             
             return true;
         }
-
+        
+        
+        
         public PlayerID Get(uint clientID)
         {
+            //Debug.Log(clientID + 1);
             return playerIDs[clientID];
         }
+
 
         public bool TryGet(uint clientID, out PlayerID data)
         {

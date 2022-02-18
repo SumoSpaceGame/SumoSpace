@@ -1,5 +1,6 @@
 ﻿using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
+using BeardedManStudios.Forge.Networking.Unity;
 
 namespace Game.Common.Networking
 {
@@ -24,6 +25,10 @@ namespace Game.Common.Networking
             requestData.clientOwner = attachedShipManager.playerMatchID;
             
             networkObject.SendRpc(args.Info.SendingPlayer, RPC_REQUEST_SHIP_SPAWN_DATA, requestData.Serialize());
+            
+            
+
+
         }
     }
 }

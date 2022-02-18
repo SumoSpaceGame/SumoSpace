@@ -14,6 +14,8 @@ namespace Game.Common.UI
         public Button ReadyButton;
         public TMP_Text ReadyUpText;
 
+        public GameObject WaitingForServerText;
+        
         public Button selectCharacter1;
         public Button selectCharacter2;
         public Button selectCharacter3;
@@ -29,6 +31,18 @@ namespace Game.Common.UI
         // This solution should be managed all in this class, but other classes can edit different types of UI
         // It will return an ID that other classes will use to configure the id's UI
 
+        public void ActivateWaitingForPlayer()
+        {
+            Debug.Log("Activating Waiting UI");
+            WaitingForServerText.SetActive(true);
+        }
+
+        public void StopWaitingForPlayer()
+        {
+            Debug.Log("Stopping Waiting UI");
+            WaitingForServerText.SetActive(false);
+        }
+        
         public void ActivateReady()
         {
             ReadyButton.gameObject.SetActive(true);

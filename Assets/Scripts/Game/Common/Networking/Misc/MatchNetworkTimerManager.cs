@@ -17,15 +17,12 @@ namespace Game.Common.Networking.Misc
         private void Awake()
         {
             DontDestroyOnLoad(this);
+            MainPersistantInstances.Add(this);
         }
-
+        
         protected override void NetworkStart()
         {
             base.NetworkStart();
-            MainThreadManager.Run(() =>
-            {
-                MainPersistantInstances.Add(this);
-            });
         }
 
         /// <summary>

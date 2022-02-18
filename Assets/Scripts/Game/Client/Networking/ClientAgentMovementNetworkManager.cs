@@ -12,6 +12,7 @@ namespace Game.Common.Networking
         {
             attachedShipManager._rigidbody2D.position = networkObject.position;
             attachedShipManager.transform.rotation  = Quaternion.Euler(0,0,networkObject.rotation);
+            
         }
 
         /// <summary>
@@ -31,11 +32,14 @@ namespace Game.Common.Networking
             {
                 var agentNetworkManager = MainPersistantInstances.Get<AgentNetworkManager>();
                 var ship = agentNetworkManager._shipSpawner.SpawnShip(requestData.clientOwner, 0,
-                    requestData.clientOwner == masterSettings.matchSettings.ClientMatchID);
+                    requestData.clientOwner ==  networkObject.MyPlayerId);
+
+                masterSettings.playerShips.Add(requestData.clientOwner, ship);
+                
                 attachedShipManager = ship;
                 ship._rigidbody2D.isKinematic = true;
                 agentNetworkManager._playerShips.Add(requestData.clientOwner, ship);
-
+                    
                 ship.networkMovement = this;
             });
 

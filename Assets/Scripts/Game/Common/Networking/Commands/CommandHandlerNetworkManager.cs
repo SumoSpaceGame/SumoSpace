@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using BeardedManStudios.Forge.Networking;
 using Game.Common.Gameplay.Commands;
@@ -26,7 +27,9 @@ namespace Game.Common.Networking.Commands
             _isServer = networkObject.IsServer;
             _masterSettings = masterSettings;
             _networkerID = networkObject.MyPlayerId;
-
+            
+            Debug.Log(_networkerID);
+            
             if (_isServer)
             {
                 _commandNetworker = new ServerCommandNetworker(networkObject, RPC_COMMAND);
@@ -60,6 +63,8 @@ namespace Game.Common.Networking.Commands
             CommandType commandType = (CommandType) rpcArgs.GetAt<int>(0);
 
             CommandPacketData commandPacketData = CommandPacketData.Create(rpcArgs.GetAt<byte[]>(1));
+
+            ushort shipID = rpcArgs.GetAt<ushort>(2);
             
             if (_isServer)
             {
@@ -68,7 +73,7 @@ namespace Game.Common.Networking.Commands
             }
             else
             {
-                _commandHandler.ReceiveClient(commandType, GetPlayerShip(rpcArgs.Info.SendingPlayer.NetworkId),
+                _commandHandler.ReceiveClient(commandType, GetPlayerShip(shipID),
                     _commandNetworker, commandPacketData);
             }
         }
@@ -76,7 +81,11 @@ namespace Game.Common.Networking.Commands
 
         private ShipManager GetPlayerShip(uint networkerID)
         {
-            return _masterSettings.GetShip(networkerID);
+            // TODO: REPLACE
+            
+            MainPersistantInstances.Get<AgentNetworkManager>()._playerShips.TryGet((ushort)networkerID, out var data);
+            return data;
+            //return _masterSettings.GetShip(networkerID);
         }
         
         private ShipManager GetCurrentShip()
@@ -86,8 +95,13 @@ namespace Game.Common.Networking.Commands
                 Debug.LogError("Can not get currentShip from server");
                 return null;
             }
-
-            return _masterSettings.GetShip(_networkerID);
+            
+            //Debug.Log(_networkerID);
+            // TODO: REPLACE
+            Debug.Log(MainPersistantInstances.Get<AgentNetworkManager>()._playerShips.TryGet((ushort)_networkerID, out var data));
+            Debug.Log(data);
+            return data;
+            //return _masterSettings.GetShip(_networkerID);
         }
         
         

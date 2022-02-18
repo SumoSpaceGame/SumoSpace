@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BeardedManStudios.Forge.Networking;
@@ -42,6 +43,9 @@ namespace Game.Common.Networking
             MainThreadManager.Run(()=>{ 
                 MainPersistantInstances.TryAdd(this);
             });
+
+
+            masterSettings.network.isServer = networkObject.IsServer;
             
             if (networkObject.IsServer)
             {
@@ -51,10 +55,33 @@ namespace Game.Common.Networking
             else
             {
                 OnClientNetworkStart();
+                networkObject.Networker.onPingPong += OnPing;
+                networkObject.Networker.Ping();
+                
             }
+            
+            StartCoroutine(StartDebugMessage());
             
             
             base.NetworkStart();
+        }
+
+        private double ping;
+        
+        private void OnPing(double i, NetWorker networker)
+        {
+            ping = i;
+        }
+        
+        private IEnumerator StartDebugMessage()
+        {
+            while (networkObject.Networker.IsConnected)
+            {
+                yield return new WaitForSeconds(10 + (float)ping);
+                networkObject.Networker.Ping();
+                Debug.Log("Ping: " + ping + " Frame Time: " + Time.deltaTime);
+            }
+            
         }
 
         private void Update()

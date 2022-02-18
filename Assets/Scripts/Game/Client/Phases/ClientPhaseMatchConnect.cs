@@ -6,6 +6,7 @@ using Game.Common.Instances;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using Game.Common.Phases.PhaseData;
+using Game.Common.UI;
 using UnityEngine;
 
 namespace Game.Client.Phases
@@ -17,16 +18,19 @@ namespace Game.Client.Phases
     public class ClientPhaseMatchConnect : IGamePhase
     {
         private readonly GamePhaseNetworkManager _phaseNetworkManager;
-
+        private readonly MasterUIController _masterUIController;
         private bool _waitingForServer = false;
+        
         public ClientPhaseMatchConnect(GamePhaseNetworkManager phaseNetworkManager)
         {
             _phaseNetworkManager = phaseNetworkManager;
+            _masterUIController = MainPersistantInstances.Get<MasterUIController>();
         }
         
         public void PhaseStart()
         {
             // Enable Animated GUI saying waiting for players
+            _masterUIController.ActivateWaitingForPlayer();
         }
 
         public void PhaseUpdate()
@@ -88,11 +92,13 @@ namespace Game.Client.Phases
 
         public void PhaseCleanUp()
         {
+            _masterUIController.StopWaitingForPlayer();
             _waitingForServer = false;
         }
         
         public void OnUpdateReceived(RPCInfo info, byte[] data)
         {
+            
             if (data.Length < 1) return;
             
             var statusByte = data[0];

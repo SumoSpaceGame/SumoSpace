@@ -57,7 +57,7 @@ namespace Game.Common.Networking
                 Debug.LogError("Received invalid RPC from other client. Clients should only receive server data");
                 return;
             }
-            
+
             _commandHandlerNetworkManager.HandleRPC(args);
         }
 
@@ -86,6 +86,7 @@ namespace Game.Common.Networking
         }
 
         partial void ServerMovementUpdate(RpcArgs args);
+        
 
         partial void ServerStart();
         partial void ClientStart();

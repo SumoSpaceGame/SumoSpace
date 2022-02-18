@@ -6,5 +6,7 @@ namespace Game.Common.Settings
     public struct NetworkSettings
     {
         public ulong updateInterval;
+        public bool isServer;
+        
     }
 }

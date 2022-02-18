@@ -52,7 +52,7 @@ namespace Game.Common.Networking
             {
                 if (masterSettings.playerStaticDataRegistry.TryGet(masterSettings.playerIDRegistry.Get(clientID), out var data))
                 {
-                    ServerCreateShip(data.PlayerMatchID);
+                    ServerCreateShip(data);
                 }
                 else
                 {
@@ -66,6 +66,6 @@ namespace Game.Common.Networking
             }
         }
         
-        partial void ServerCreateShip(ushort ClientMatchID);
+        partial void ServerCreateShip(PlayerStaticData data);
     }
 }

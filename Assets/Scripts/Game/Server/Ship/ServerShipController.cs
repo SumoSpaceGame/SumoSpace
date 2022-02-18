@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 
 namespace Game.Common.Gameplay.Ship
 {
@@ -6,6 +8,7 @@ namespace Game.Common.Gameplay.Ship
     public partial class ShipController : MonoBehaviour
     {
         public ShipMovement sm;
+        public ShipDodgeSettings sds;
 
         [HideInInspector]
         public Vector2 movementVector;
@@ -17,11 +20,15 @@ namespace Game.Common.Gameplay.Ship
 
         private float x;
 
+        private float speedMultiplier = 1.0f;
+
         private bool locked;
         private bool stopped = true; // If the ship is not moving
+        private bool dodgeFrame; // true if we can apply unclamped force, i.e. start or end of dodge
 
         partial void ServerStart() {
             sm = _shipManager.shipMovement;
+            sds = _shipManager.sds;
         }
 
         /// <summary>
@@ -31,35 +38,85 @@ namespace Game.Common.Gameplay.Ship
         {
             //_shipManager.rigidbody2D.rotation = GetRotation(targetAngle);
             //_shipManager.rigidbody2D.AddForce( movementVector * 10);
+            //Debug.Log(targetAngle);
+            
+            var theta = GetRotation(targetAngle);
+            _shipManager._rigidbody2D.rotation = theta;
+            var vel = GetVelocity(movementVector);
 
+            // WASD Relative to ship (feels icky to me idk)
+            // For global relative just skip the rotation step use vel directly
+            //var rotX = Mathf.Cos(theta * Mathf.Deg2Rad) * vel.x - Mathf.Sin(theta * Mathf.Deg2Rad) * vel.y;
+            //var rotY = Mathf.Cos(theta * Mathf.Deg2Rad) * vel.y + Mathf.Sin(theta * Mathf.Deg2Rad) * vel.x;
             
-            _shipManager._rigidbody2D.rotation = GetRotation(targetAngle);
-            
-            var desiredVelocity = GetVelocity(movementVector);
+            //var desiredVelocity = new Vector2(rotX, rotY);
+            var desiredVelocity = vel;
             var currentVelocity = _shipManager._rigidbody2D.velocity;
             var deltaV = desiredVelocity - currentVelocity;
             var force = _shipManager._rigidbody2D.mass * (deltaV / Time.deltaTime);
-            _shipManager._rigidbody2D.AddForce(force);
+            if (dodgeFrame) {
+                _shipManager._rigidbody2D.AddForce(force);
+                dodgeFrame = false;
+            } else {
+                _shipManager._rigidbody2D.AddForce(Vector2.ClampMagnitude(force, sm.maxForce));
+            }
+            
             
         }
-        
+
         public void SetLocked(bool l) {
             locked = l;
         }
         
+        public void SetSpeedMultiplier(float multiplier = 1.0f) {
+            speedMultiplier = multiplier;
+        }
+
+        public void Dodge(Vector2 direction) {
+            locked = true;
+            speedMultiplier = sds.speedMultiplier;
+            prevDir = movementVector;
+            dodgeFrame = true;
+        }
+
+        public void StopDodge() {
+            locked = false;
+            speedMultiplier = 1f;
+            dodgeFrame = true;
+            //prevDir = lockedOutDir;
+        }
+
+        public IEnumerator Fire() {
+            while (true) {
+                var hit = Physics2D.Raycast(transform.position + transform.up * 2, transform.up);
+                if (hit.rigidbody) {
+                    hit.rigidbody.AddForceAtPosition(transform.up * 10, hit.point, ForceMode2D.Impulse);
+                }
+                yield return new WaitForSeconds(.1f);
+            }
+        }
+        
         private Vector2 GetVelocity(Vector2 movementDir) {
 
-            if (locked) return prevDir;
+            if (locked) return stopped ? Vector2.zero : prevDir * sm.maxSpeed * speedMultiplier;
         
             if (movementDir != Vector2.zero) { 
-                stopped = false;
+                
                 x += Time.deltaTime;
                 x = Mathf.Clamp(x , 0, sm.accelTime);
-                // Interpolate between 
-                var movDeltaAngle = Mathf.Clamp(Vector2.SignedAngle(prevDir, movementDir) * Mathf.Deg2Rad, -sm.turnRadius * Time.deltaTime, sm.turnRadius * Time.deltaTime);
+                
+                /* Old movement logic, might be good for a "drift"?
+                var movDeltaAngle = Mathf.Clamp(Vector2.SignedAngle(prevDir, movementDir) * Mathf.Deg2Rad, -sm.turnSpeed * Time.deltaTime, sm.turnSpeed * Time.deltaTime);
                 var curMovAngle = Mathf.Atan2(prevDir.y, prevDir.x);
-                var newMovAngle = curMovAngle + movDeltaAngle;
-                prevDir = stopped ? movementDir : new Vector2(Mathf.Cos(newMovAngle), Mathf.Sin(newMovAngle));
+                var newMovAngleDeg = curMovAngle + movDeltaAngle;
+                */ 
+                
+                var newMovAngle = Vector2.MoveTowards(prevDir, movementDir, sm.turnSpeed * Time.deltaTime);
+                
+                prevDir = stopped
+                    ? movementDir
+                    : newMovAngle;
+                stopped = false;
             } else {
                 x -= Time.deltaTime;
                 x = Mathf.Clamp(x, 0, sm.accelTime);
@@ -80,7 +137,7 @@ namespace Game.Common.Gameplay.Ship
                         ) + 1
                     ) / 2
                 );
-            var targetVel = rawVel * correctionFactor;
+            var targetVel = rawVel * correctionFactor * speedMultiplier;
             return targetVel;
         }
         
@@ -93,7 +150,7 @@ namespace Game.Common.Gameplay.Ship
             var newAngle = Mathf.MoveTowardsAngle(prevRot, tAngle,
                 sm.maxTheta * 360 * Time.deltaTime);
             prevRot = newAngle;
-            
+
             return newAngle;
         }
     }

@@ -43,6 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbe5b082a785e7641bf1a62b930a3f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AgentInputNetworkObject:
+  - {fileID: 7692530691223673687, guid: e81cc5a385d30bd47be34c76841db563, type: 3}
   AgentManagerNetworkObject:
   - {fileID: 5651400811804052722, guid: 3127fd6490f953c45bbb3831c2bfd0f8, type: 3}
   AgentMovementNetworkObject:

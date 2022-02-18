@@ -31,9 +31,17 @@
                 },
                 {
                     "name": "Dodge",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "93c29028-de7b-4e8e-97c0-b5c85b7e2c0d",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Fire",
+                    "type": "Button",
+                    "id": "b45102f7-59db-4e94-9b31-a0eef33fd402",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -129,8 +137,19 @@
                 },
                 {
                     "name": "",
-                    "id": "864387af-72d3-48b6-b454-51898c48cdd9",
-                    "path": "<Gamepad>/buttonSouth",
+                    "id": "63924d33-900b-4309-8463-865d54b04871",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mouse and Keyboard",
+                    "action": "Dodge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d63ba6f7-0daf-4b91-889c-565bc0992a26",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -140,12 +159,34 @@
                 },
                 {
                     "name": "",
-                    "id": "63924d33-900b-4309-8463-865d54b04871",
-                    "path": "<Keyboard>/leftShift",
+                    "id": "c7a6c477-2dcc-4f6b-92c2-fb7adfca1b2b",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "af9ca24d-9f22-4c3d-8d8e-7bcecca07d25",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d769c1e3-4b91-4e2c-b257-6e5135f34030",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Mouse and Keyboard",
-                    "action": "Dodge",
+                    "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

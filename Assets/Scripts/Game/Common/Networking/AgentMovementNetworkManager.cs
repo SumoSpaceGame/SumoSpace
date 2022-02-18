@@ -33,6 +33,8 @@ namespace Game.Common.Networking
         
         [FormerlySerializedAs("attachedShip")] public ShipManager attachedShipManager;
 
+        public bool initAgentInput = false;
+        
         public MasterSettings masterSettings;
         
         
@@ -83,6 +85,8 @@ namespace Game.Common.Networking
         partial void ServerUpdate();
         partial void ServerRequestShipSpawnData(RpcArgs args);
         partial void ClientRequestShipSpawnData(RpcArgs args);
+
+
     }
     
     

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
+using Game.Client.SceneLoading;
 using Game.Common.Instances;
 using Game.Common.Networking;
 using Game.Common.Phases;
@@ -17,11 +18,14 @@ namespace Game.Server.Phases
 
         private List<uint> loadedPlayers = new List<uint>();
 
-        private bool sceneLoaded = false; 
+        private bool sceneLoaded = false;
+
+        private SceneLoader _sceneLoader;
         
-        public ServerPhaseLoadMap(GamePhaseNetworkManager phaseNetworkManager)
+        public ServerPhaseLoadMap(GamePhaseNetworkManager phaseNetworkManager, SceneLoader sceneLoader)
         {
             _phaseNetworkManager = phaseNetworkManager;
+            _sceneLoader = sceneLoader;
         }
         
         public void PhaseStart()
@@ -49,6 +53,7 @@ namespace Game.Server.Phases
 
         public void PhaseCleanUp()
         {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
             sceneLoaded = false;
         }
 

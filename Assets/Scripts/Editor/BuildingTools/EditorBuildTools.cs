@@ -39,13 +39,23 @@ namespace Editor.BuildingTools
         }
         
         [MenuItem("Build Debug/Build Linux Server")]
-        static void BuildAndRunLinuxServer()
+        static void BuildLinuxServer()
         {
-            string exeLocation = "Builds/WindowsServer/SumoServer.exe";
+            string exeLocation = "Builds/LinuxServer/SumoServer.exe";
             
             SetInitServer(true);
 
-            BuildAndRun(exeLocation, BuildTarget.StandaloneLinux64, BuildOptions.EnableHeadlessMode | BuildOptions.Development | BuildOptions.AllowDebugging);
+            Build(exeLocation, BuildTarget.StandaloneLinux64, BuildOptions.EnableHeadlessMode | BuildOptions.Development | BuildOptions.AllowDebugging);
+        }
+        
+        [MenuItem("Build Debug/Build Mac Client")]
+        static void BuildMacClient()
+        {
+            string exeLocation = "Builds/MacClient/SumoClient.exe";
+            
+            SetInitServer(true);
+
+            Build(exeLocation, BuildTarget.StandaloneOSX, BuildOptions.Development | BuildOptions.AllowDebugging);
         }
         
         static void BuildAndRun(string exeLocation, BuildTarget target, BuildOptions options)
@@ -87,7 +97,11 @@ namespace Editor.BuildingTools
         {
             var masterSettings = AssetDatabase.LoadAssetAtPath<MasterSettings>("Assets/Scriptable Objects/Master Settings.asset");
             masterSettings.InitServer = serverEnabled;
+            EditorUtility.SetDirty(masterSettings);
+            SerializedObject obj = new SerializedObject(masterSettings);
+            obj.ApplyModifiedProperties();
             AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
 
         static string[] GetSceneNames()

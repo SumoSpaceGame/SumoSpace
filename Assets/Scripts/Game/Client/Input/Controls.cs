@@ -44,9 +44,17 @@ public class @Controls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Dodge"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""93c29028-de7b-4e8e-97c0-b5c85b7e2c0d"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""b45102f7-59db-4e94-9b31-a0eef33fd402"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -142,8 +150,19 @@ public class @Controls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""864387af-72d3-48b6-b454-51898c48cdd9"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""id"": ""63924d33-900b-4309-8463-865d54b04871"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse and Keyboard"",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d63ba6f7-0daf-4b91-889c-565bc0992a26"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -153,12 +172,34 @@ public class @Controls : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""63924d33-900b-4309-8463-865d54b04871"",
-                    ""path"": ""<Keyboard>/leftShift"",
+                    ""id"": ""c7a6c477-2dcc-4f6b-92c2-fb7adfca1b2b"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""af9ca24d-9f22-4c3d-8d8e-7bcecca07d25"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d769c1e3-4b91-4e2c-b257-6e5135f34030"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Mouse and Keyboard"",
-                    ""action"": ""Dodge"",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -201,6 +242,7 @@ public class @Controls : IInputActionCollection, IDisposable
         m_Gameplay_RotateRaw = m_Gameplay.FindAction("Rotate Raw", throwIfNotFound: true);
         m_Gameplay_RotateVec = m_Gameplay.FindAction("Rotate Vec", throwIfNotFound: true);
         m_Gameplay_Dodge = m_Gameplay.FindAction("Dodge", throwIfNotFound: true);
+        m_Gameplay_Fire = m_Gameplay.FindAction("Fire", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -254,6 +296,7 @@ public class @Controls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_RotateRaw;
     private readonly InputAction m_Gameplay_RotateVec;
     private readonly InputAction m_Gameplay_Dodge;
+    private readonly InputAction m_Gameplay_Fire;
     public struct GameplayActions
     {
         private @Controls m_Wrapper;
@@ -262,6 +305,7 @@ public class @Controls : IInputActionCollection, IDisposable
         public InputAction @RotateRaw => m_Wrapper.m_Gameplay_RotateRaw;
         public InputAction @RotateVec => m_Wrapper.m_Gameplay_RotateVec;
         public InputAction @Dodge => m_Wrapper.m_Gameplay_Dodge;
+        public InputAction @Fire => m_Wrapper.m_Gameplay_Fire;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -283,6 +327,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Dodge.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDodge;
                 @Dodge.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDodge;
                 @Dodge.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDodge;
+                @Fire.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFire;
+                @Fire.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFire;
+                @Fire.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFire;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -299,6 +346,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Dodge.started += instance.OnDodge;
                 @Dodge.performed += instance.OnDodge;
                 @Dodge.canceled += instance.OnDodge;
+                @Fire.started += instance.OnFire;
+                @Fire.performed += instance.OnFire;
+                @Fire.canceled += instance.OnFire;
             }
         }
     }
@@ -327,5 +377,6 @@ public class @Controls : IInputActionCollection, IDisposable
         void OnRotateRaw(InputAction.CallbackContext context);
         void OnRotateVec(InputAction.CallbackContext context);
         void OnDodge(InputAction.CallbackContext context);
+        void OnFire(InputAction.CallbackContext context);
     }
 }

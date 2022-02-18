@@ -4,6 +4,7 @@ using Game.Common.Instances;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using Game.Common.Phases.PhaseData;
+using Game.Common.Registry;
 using Game.Common.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -86,7 +87,6 @@ namespace Game.Client.Phases
                 case 1:
                     break;
                 case 3:
-
                     if (data[0] == PhaseLobby.PLAYER_SELECT_FLAG)
                     {
                         Debug.Log(data[1] + " selected " +  data[2]);
@@ -96,14 +96,30 @@ namespace Game.Client.Phases
                             Debug.Log("Server said I am this character");
                         }
                     }
-                    else if (data[0] == PhaseLobby.PLAYER_LOCKED_FLAG)
+                    break;
+                case 4:
+
+                    if (data[0] == PhaseLobby.PLAYER_LOCKED_FLAG)
                     {
-                        Debug.Log(data[1] + " locked in " +  data[2]);
+                        Debug.Log(data[1] + " locked in " +  data[3]);
 
                         if (info.SendingPlayer.NetworkId == this._phaseNetworkManager.networkObject.MyPlayerId)
                         {
                             Debug.Log("Server confirmed I'm locked and loaded");
                             _masterUIController.LockLobby();
+                        }
+                        
+                        // TODO: REPLACE THIS WITH VALID PLAYER SYNCING CODE
+
+                        try
+                        {
+                            _phaseNetworkManager.masterSettings.playerIDRegistry.RegisterPlayer((uint) data[2]);
+                            _phaseNetworkManager.masterSettings.playerStaticDataRegistry.Add(
+                                _phaseNetworkManager.masterSettings.playerIDRegistry.Get(data[2]), new PlayerStaticData(){PlayerMatchID =  data[2]});
+                        }
+                        catch
+                        {
+                            Debug.Log("TEMP MAKE SURE TO REMOVE THIS SECTION OF CODE. This gets printed because its registering a player twice");
                         }
                     }
                     

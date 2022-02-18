@@ -16,7 +16,7 @@ namespace Game.Common.Networking
     {
     
         public GameObject networkManagerPrefab;
-
+        
         public GameMatchSettings gameMatchSettings;
         
         
@@ -110,11 +110,11 @@ namespace Game.Common.Networking
             //SceneManager.sceneLoaded += NetworkInstantiate;
             //Debug.Log("Instantiating required objects");
             
+            NetworkManager.Instance.InstantiateMatchTimer();
             NetworkManager.Instance.InstantiateGameManager();
             NetworkManager.Instance.InstantiateAgentManager();
             NetworkManager.Instance.InstantiateInputLayer();
             NetworkManager.Instance.InstantiateGamePhase();
-            NetworkManager.Instance.InstantiateMatchTimer();
         }
 
     }

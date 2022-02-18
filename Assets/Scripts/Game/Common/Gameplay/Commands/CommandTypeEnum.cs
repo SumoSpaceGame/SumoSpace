@@ -6,6 +6,8 @@
     public enum CommandType
     {
         AGILITY_DODGE,
-        AGILITY_WEAPON
+        AGILITY_WEAPON,
+        START_FIRE,
+        END_FIRE,
     }
 }

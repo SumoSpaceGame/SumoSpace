@@ -4,6 +4,7 @@ using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using Game.Common.Instances;
+using Game.Common.Registry;
 using UnityEngine;
 
 namespace Game.Common.Networking
@@ -14,10 +15,11 @@ namespace Game.Common.Networking
         /// Server creation of the ships. This sets up the ships to work authoritivaly with the server.
         /// </summary>
         /// <param name="ClientMatchID"></param>
-        partial void ServerCreateShip(ushort ClientMatchID)
+        partial void ServerCreateShip(PlayerStaticData data)
         {
-            var spawnedShip = _shipSpawner.SpawnShip(ClientMatchID, 0, false);
-    
+            var ClientMatchID = data.PlayerMatchID;
+            var spawnedShip = _shipSpawner.SpawnShip(data.PlayerMatchID, 0, false);
+            
             _playerShips.Add(ClientMatchID, spawnedShip);
     
             var agentMovement = NetworkManager.Instance.InstantiateAgentMovement();
@@ -26,6 +28,15 @@ namespace Game.Common.Networking
 
             spawnedShip.networkMovement = agentMovementScript;
             spawnedShip.isServer = true;
+            
+            spawnedShip.playerMatchID = data.PlayerMatchID;
+            
+            var agentInput = (AgentInputManager) NetworkManager.Instance.InstantiateAgentInput();
+            
+            agentInput.ServerSendOwnership(networkObject.Networker.FindPlayer(player => data.NetworkID == player.NetworkId));
+            
+            agentInput._shipManager = spawnedShip;
         }
+
     }
 }

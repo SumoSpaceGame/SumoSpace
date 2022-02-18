@@ -35,7 +35,10 @@ namespace Game.Common.Networking
                 var playerID = masterSettings.playerIDRegistry.Get(player.NetworkId);
                 masterSettings.playerStaticDataRegistry.Add(playerID, new PlayerStaticData()
                 {
-                    PlayerMatchID = gameMatchSettings.ClientMatchID
+                    // TODO: FIX
+                    OwnerID = gameMatchSettings.ClientMatchID,
+                    PlayerMatchID = (ushort)player.NetworkId,
+                    NetworkID = player.NetworkId
                 });
             
                 // Create player data

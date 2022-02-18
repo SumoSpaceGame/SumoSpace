@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"int\", \"byte[]\"][\"Vector2\", \"float\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"id\", \"data\"][\"movementVec\", \"rotationAngle\"]]")]
+	[GeneratedRPC("{\"types\":[[\"int\", \"byte[]\", \"ushort\"][\"Vector2\", \"float\"]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"id\", \"data\", \"shipID\"][\"movementVec\", \"rotationAngle\"]]")]
 	public abstract partial class InputLayerBehavior : NetworkBehavior
 	{
 		public const byte RPC_COMMAND_UPDATE = 0 + 5;
@@ -23,7 +23,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
-			networkObject.RegisterRpc("CommandUpdate", CommandUpdate, typeof(int), typeof(byte[]));
+			networkObject.RegisterRpc("CommandUpdate", CommandUpdate, typeof(int), typeof(byte[]), typeof(ushort));
 			networkObject.RegisterRpc("MovementUpdate", MovementUpdate, typeof(Vector2), typeof(float));
 
 			networkObject.onDestroy += DestroyGameObject;
@@ -105,6 +105,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		/// Arguments:
 		/// int id
 		/// byte[] data
+		/// ushort shipID
 		/// </summary>
 		public abstract void CommandUpdate(RpcArgs args);
 		/// <summary>

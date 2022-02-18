@@ -18,6 +18,8 @@ namespace Game.Common.Registry
                 return false;
             }
             
+            Debug.Log("Adding " + value + " with key " + key);
+            
             _registryDictionary.Add(key, value);
             return true;
         }
@@ -42,6 +44,11 @@ namespace Game.Common.Registry
         {
             _registryDictionary.Clear();
         }
-        
+
+
+        public Dictionary<K,T>.ValueCollection GetAll()
+        {
+            return _registryDictionary.Values;
+        }
     }
 }

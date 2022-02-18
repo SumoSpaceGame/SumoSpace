@@ -58,7 +58,7 @@ namespace Game.Server.Phases
                         Debug.Log(info.SendingPlayer.NetworkId + " locked in " + data[1]);;
                         
                         _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_LOBBY, 
-                            new []{(byte) PhaseLobby.PLAYER_LOCKED_FLAG, (byte) info.SendingPlayer.NetworkId, data[1]});
+                            new []{(byte) PhaseLobby.PLAYER_LOCKED_FLAG, (byte) info.SendingPlayer.NetworkId, (byte) _phaseNetworkManager.masterSettings.playerIDRegistry.Get(info.SendingPlayer.NetworkId).ID, data[1]});
 
                         
                         if (_lockedInPlayers.Count == _phaseNetworkManager.gameMatchSettings.PlayerCount)

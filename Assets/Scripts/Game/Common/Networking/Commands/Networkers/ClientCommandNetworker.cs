@@ -14,11 +14,11 @@ namespace Game.Common.Gameplay.Commands.Networkers
             rpcMethodID = RPC_METHOD_ID;
         }
         
-        public bool SendData(CommandPacketData data)
+        public bool SendData(CommandPacketData data, int commandID, ushort shipID)
         {
             if (networker.IsServer || networker == null) return false;
             
-            networker.SendRpc(rpcMethodID, Receivers.Server, data.GetBytes());
+            networker.SendRpc(rpcMethodID, Receivers.Server, commandID, data.GetBytes(), shipID);
 
             return true;
         }

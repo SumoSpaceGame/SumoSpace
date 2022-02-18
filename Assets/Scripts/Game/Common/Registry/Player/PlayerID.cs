@@ -6,10 +6,20 @@ namespace Game.Common.Registry
 {
     public struct PlayerID
     {
+        /// <summary>
+        /// Network ID
+        /// </summary>
         [SerializeField] public uint ID;
 
+        [SerializeField] public uint ClientID;
         public override bool Equals(object obj)
         {
+
+            if (obj.GetType() == typeof(uint))
+            {
+                return (uint) obj == ClientID || (uint) obj == ID;
+            }
+            
             if (obj.GetType() != typeof(PlayerID))
             {
                 return false;

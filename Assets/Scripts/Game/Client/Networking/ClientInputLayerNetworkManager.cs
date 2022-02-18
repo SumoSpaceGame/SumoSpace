@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
@@ -14,9 +15,16 @@ namespace Game.Common.Networking
         {
             var performers = new List<KeyValuePair<CommandType, ICommandPerformer>>();
             
-            //performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_DODGE, null));
+            // TODO: Add client ship dodge to this (replace null)
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_DODGE, new ShipDodge()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.START_FIRE, new StartGun()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.END_FIRE, new EndGun()));
             
             _commandHandlerNetworkManager.InitializeClientCommands(performers);
+        }
+
+        public void PerformCommand(CommandType type, byte[] data) {
+            _commandHandlerNetworkManager.Perform(type, data);
         }
         
         /// <summary>
@@ -33,7 +41,9 @@ namespace Game.Common.Networking
             }
             networkObject.SendRpcUnreliable(RPC_MOVEMENT_UPDATE, Receivers.Server, movementVec, rotation);
         }
-        
-        
+
+        public void SendCommand(CommandType type, byte[] extra) {
+            PerformCommand(type, extra);
+        }
     }
 }

@@ -1,4 +1,7 @@
-﻿using BeardedManStudios.Forge.Networking;
+﻿using System.Collections.Generic;
+using BeardedManStudios.Forge.Networking;
+using Game.Client.SceneLoading;
+using Game.Client.SceneLoading.SceneLoaderTasks;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using UnityEngine.SceneManagement;
@@ -9,15 +12,29 @@ namespace Game.Client.Phases
     {
 
         private GamePhaseNetworkManager _phaseNetworkManager;
-        public ClientPhaseLoadMap(GamePhaseNetworkManager phaseNetworkManager)
+        private SceneLoader _sceneLoader;
+
+        private ActivateEventTask _activateEventTask;
+        
+        public ClientPhaseLoadMap(GamePhaseNetworkManager phaseNetworkManager, SceneLoader sceneLoader)
         {
             _phaseNetworkManager = phaseNetworkManager;
+            _sceneLoader = sceneLoader;
         }
         
         public void PhaseStart()
         {
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.LoadScene("TestMap");
+            _activateEventTask = new ActivateEventTask("Waiting for players..");
+
+            _activateEventTask.OnActivateEvent += OnWaitForPlayers;
+            
+            _sceneLoader.FinishLoadingSceneEvent += OnSceneLoaded;
+            _sceneLoader.Load(new List<ISceneLoaderTask>()
+            {
+                new LoadSceneTask("TestMap"),
+                _activateEventTask
+            });
+            
         }
 
         public void PhaseUpdate()
@@ -26,16 +43,32 @@ namespace Game.Client.Phases
 
         public void PhaseCleanUp()
         {
+            _sceneLoader.FinishLoadingSceneEvent += OnSceneLoaded;
+            _activateEventTask = null;
         }
 
-        public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        private void OnSceneLoaded()
         {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
+            _sceneLoader.FinishLoadingSceneEvent -= OnSceneLoaded;
+            _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_LOAD_MAP, new byte[]{});
+        }
+
+        private void OnWaitForPlayers()
+        {
+            _activateEventTask.OnActivateEvent -= OnWaitForPlayers;
             _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_LOAD_MAP, new byte[]{});
         }
 
         public void OnUpdateReceived(RPCInfo info, byte[] data)
         {
+            if (info.SendingPlayer.IsHost)
+            {
+                if (data[0] == 1)
+                {
+                    _activateEventTask.FinishActivateEvent();
+                }
+            }
+            
         }
     }
 }

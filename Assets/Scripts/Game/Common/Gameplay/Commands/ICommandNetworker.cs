@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        bool SendData(CommandPacketData data);
+        bool SendData(CommandPacketData data, int commandID, ushort shipID);
     }
 }

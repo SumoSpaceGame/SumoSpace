@@ -23,6 +23,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			{
 				switch (identity)
 				{
+					case AgentInputNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new AgentInputNetworkObject(networker, id, frame);
+						break;
 					case AgentManagerNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new AgentManagerNetworkObject(networker, id, frame);

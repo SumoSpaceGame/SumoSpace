@@ -7,5 +7,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
         {
             return false;
         }
+        
     }
 }

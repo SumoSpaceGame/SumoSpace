@@ -53,6 +53,7 @@ namespace Game.Server.Phases
 
         public void OnUpdateReceived(RPCInfo info, byte[] data)
         {
+            Debug.Log("Match connect added an update!");
             
             if (data.Length < 1) return;
             
@@ -69,7 +70,7 @@ namespace Game.Server.Phases
                         readyPlayers.Add(info.SendingPlayer.NetworkId);
                     }
                     
-                    
+                    Debug.Log("Ready players - " + readyPlayers.Count + " Max " + _phaseNetworkManager.gameMatchSettings.PlayerCount);
                     if (readyPlayers.Count == _phaseNetworkManager.gameMatchSettings.PlayerCount)
                     {
                         _phaseNetworkManager.ServerNextPhase();

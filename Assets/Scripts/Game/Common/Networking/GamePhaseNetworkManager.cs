@@ -73,9 +73,10 @@ namespace Game.Common.Networking
             {
                 ClientAddPhases();
             }
-            _gamePhaseManager.SwitchPhase(Phase.MATCH_CONNECT);
             _gamePhaseManager.OnPhaseUpdate += UpdatePhases;
             _gamePhaseManager.OnPhaseSwitch += OnPhaseSwitch;
+            
+            _gamePhaseManager.SwitchPhase(Phase.MATCH_CONNECT);
 
             finishedNetworkStart = true;
         }

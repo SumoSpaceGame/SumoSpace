@@ -5,17 +5,17 @@ using UnityEngine.InputSystem;
 public class VirtualCursor : MonoBehaviour {
 
     [Tooltip("Radius around the target to spin")]
-    [SerializeField] private float radius;
+    public float radius;
     [Tooltip("Transform of the target to follow")]
-    [SerializeField] private Transform followTarget;
+    public Transform followTarget;
     [Tooltip("Max rotations/sec (for smoothness)")]
     [SerializeField] private float maxRotationSpeed = 1f;
 
     private Vector3 offsetVec = Vector3.forward;
     private Vector3 lookDir;
-    private Camera _camera;
+    public Camera _camera;
 
-    private void Start() {
+    private void Awake() {
         _camera = Camera.main;
     }
 
@@ -30,11 +30,13 @@ public class VirtualCursor : MonoBehaviour {
     }
     
     public void OnLookRaw(InputAction.CallbackContext ctx) { 
-        lookDir = Vec3Util.Vec2ToXZ(
-            ((Vector2)_camera.ScreenToViewportPoint(
-                ctx.ReadValue<Vector2>()
-            ) - new Vector2(0.5f, 0.5f)).normalized
-        );
+        
+        if(ctx.performed)
+            lookDir = Vec3Util.Vec2ToXZ(
+                ((Vector2)_camera.ScreenToViewportPoint(
+                    ctx.ReadValue<Vector2>()
+                ) - new Vector2(0.5f, 0.5f)).normalized
+            );
     }
     
     public void OnLookNorm(InputAction.CallbackContext ctx) {
