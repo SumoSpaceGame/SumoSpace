@@ -76,11 +76,9 @@ namespace Game.Client.Gameplay.Movement
             }
 
             if (startShoot) {
-                Debug.Log("PPP");
                 inputLayer.PerformCommand(CommandType.START_FIRE, new byte[] { });
                 startShoot = false;
             } else if (endShoot) {
-                Debug.Log("FF");
                 inputLayer.PerformCommand(CommandType.END_FIRE, new byte[] { });
                 endShoot = false;
             }
@@ -98,8 +96,23 @@ namespace Game.Client.Gameplay.Movement
      * Mouse position
      */
         public void OnLookRaw(InputAction.CallbackContext ctx) {
-            if(ctx.performed)
-                lookDir = (Vector2)_camera.ScreenToViewportPoint(ctx.ReadValue<Vector2>()) - new Vector2(0.5f, 0.5f);
+            if (ctx.performed) {
+                //lookDir = (Vector2)_camera.ScreenToViewportPoint(ctx.ReadValue<Vector2>()) - new Vector2(0.5f, 0.5f);
+                var v3 = MousePosInWorldSpace(ctx.ReadValue<Vector2>()) - MousePosInWorldSpace(_camera.ViewportToScreenPoint(new Vector3(0.5f, 0.5f)));
+                lookDir = new Vector2(v3.x, v3.z);
+            }
+        }
+        
+        private Vector3 MousePosInWorldSpace(Vector2 mousePos) {
+            var plane = new Plane(Vector3.up, 0);
+            float dist;
+            var ray = _camera.ScreenPointToRay(new Vector3(mousePos.x, mousePos.y, _camera.nearClipPlane));
+            Vector3 worldPos = Vector3.zero;
+            if (plane.Raycast(ray, out dist)) {
+                worldPos = ray.GetPoint(dist);
+            }
+
+            return worldPos;
         }
     
         /**
