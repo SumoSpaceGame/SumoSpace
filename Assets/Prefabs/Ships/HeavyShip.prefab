@@ -211,7 +211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementDirection: {x: 0, y: 0}
   movementRotation: 0
-  shipLoadout: {fileID: 11400000, guid: a99ede615317bd0409742db9825b5dc8, type: 2}
+  shipLoadout: {fileID: 11400000, guid: 2b3a35dc5ca329349abc59cb659dfb27, type: 2}
 --- !u!114 &8860599951211358576
 MonoBehaviour:
   m_ObjectHideFlags: 0
