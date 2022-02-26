@@ -15,6 +15,9 @@ namespace Game.Common.Gameplay.Ship
         [FormerlySerializedAs("rigidbody2D")] public Rigidbody2D _rigidbody2D;
         public ShipController shipController;
         public ClientControls clientControls;
+
+        public ShipLoadout shipLoadout;
+        
         public SimulationObject simulationObject;
         public ShipMovement shipMovement;
         public ShipDodgeSettings sds;
@@ -32,9 +35,7 @@ namespace Game.Common.Gameplay.Ship
     
 
         public ushort playerMatchID;
-    
-    
-    
+        
         private void Start()
         {
             simulationObject.Create();
@@ -62,24 +63,6 @@ namespace Game.Common.Gameplay.Ship
                     collider.isTrigger = !enable;
                 }
             }
-        }
-        
-        //TODO Move to controller
-        public void Dodge() {
-            EnableColliders(false);
-            shipController.Dodge(clientControls.movementDirection);
-            StartCoroutine(sds.FinishDodge(this));
-        }
-
-        private Coroutine shootingCoroutine;
-        //TODO Same as above
-        public void StartGun() {
-            shootingCoroutine = StartCoroutine(shipController.Fire());
-        }
-        
-        //TODO Same as above
-        public void StopGun() {
-            StopCoroutine(shootingCoroutine);
         }
         
         public void OnLookRaw(InputAction.CallbackContext ctx) { 

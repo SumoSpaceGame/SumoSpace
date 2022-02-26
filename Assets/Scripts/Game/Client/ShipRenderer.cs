@@ -6,8 +6,7 @@ public class ShipRenderer : MonoBehaviour {
 
     [SerializeField] private TrailRenderer tracerEffect;
     [SerializeField] private Transform gunMuzzle;
-    private Ray ray;
-    private RaycastHit hit;
+    [SerializeField] private float tracerRange;
     private Coroutine shootCoroutine;
 
 
@@ -20,11 +19,7 @@ public class ShipRenderer : MonoBehaviour {
             var tracer = Instantiate(tracerEffect, gunMuzzle);
             Destroy(tracer, 0.08f);
             tracer.AddPosition(gunMuzzle.position);
-            ray.origin = gunMuzzle.position;
-            ray.direction = gunMuzzle.forward;
-            if (Physics.Raycast(ray, out hit)) {
-                tracer.transform.position = hit.point;
-            }
+            tracer.transform.position = gunMuzzle.position + gunMuzzle.forward * tracerRange;
             yield return new WaitForSeconds(0.1f);
         }
     }
