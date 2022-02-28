@@ -24,9 +24,6 @@ namespace Game.Common.Registry
         /// Main ID of the player. This is global game, so even out of this match, it will be unique
         /// </summary>
         public PlayerID GlobalID;
-        public ushort PlayerMatchID;
-        public ushort OwnerID;
-        public uint NetworkID;
         public string PlayerName;
     }
     

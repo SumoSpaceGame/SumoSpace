@@ -4,6 +4,7 @@ using Game.Client.SceneLoading;
 using Game.Common.Instances;
 using Game.Common.Networking.Misc;
 using Game.Common.Phases;
+using Game.Server.Phases;
 
 namespace Game.Common.Networking
 {
@@ -16,6 +17,7 @@ namespace Game.Common.Networking
         {
             this.gamePhases.Add(Phase.MATCH_CONNECT, new ClientPhaseMatchConnect(this));
             this.gamePhases.Add(Phase.MATCH_READY_UP, new ClientPhaseReadyUp(this));
+            this.gamePhases.Add(Phase.MATCH_SYNC_PLAYER_DATA, new ClientPhaseSyncPlayerData(this));
             this.gamePhases.Add(Phase.MATCH_LOBBY, new ClientPhaseLobby(this));
             this.gamePhases.Add(Phase.MATCH_SYNC_LOAD_OUTS, new ClientPhaseSyncLoadout(this, masterSettings.playerGameDataRegistry, masterSettings.playerIDRegistry));
             this.gamePhases.Add(Phase.MATCH_LOAD_MAP, new ClientPhaseLoadMap(this, MainPersistantInstances.Get<SceneLoader>()));

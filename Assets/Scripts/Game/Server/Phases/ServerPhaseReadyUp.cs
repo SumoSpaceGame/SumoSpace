@@ -35,10 +35,9 @@ namespace Game.Server.Phases
 
             if (data[0] == (byte)PhaseReadyUp.PLAYER_READY_FLAG)
             {
-                
                 readyPlayers.Add(info.SendingPlayer.NetworkId);
                 _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_READY_UP, 
-                    new [] {(byte)PhaseReadyUp.UPDATE_PLAYER_COUNT_FLAG, (byte)readyPlayers.Count});
+                    new [] {(byte)PhaseReadyUp.UPDATE_PLAYER_COUNT_FLAG, (byte)readyPlayers.Count, });
             }
 
             if (readyPlayers.Count == _phaseNetworkManager.gameMatchSettings.PlayerCount)

@@ -21,7 +21,6 @@ namespace Game.Common.Map
         public void Start()
         {
             
-            Debug.Log((Vector3.zero - Vector3.one).sqrMagnitude);
             if (!masterSettings.network.isServer)
             {
                 this.enabled = false;

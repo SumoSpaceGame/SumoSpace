@@ -21,13 +21,13 @@ namespace Tests.RegistryTests
             Assert.IsFalse(instance.TryGet(uint.MaxValue, out tempData));
         
         
-            Assert.IsTrue(instance.RegisterPlayer(0));
-            Assert.IsTrue(instance.RegisterPlayer(uint.MaxValue/2));
-            Assert.IsTrue(instance.RegisterPlayer(uint.MaxValue));
+            Assert.IsTrue(instance.RegisterPlayer(0, 1));
+            Assert.IsTrue(instance.RegisterPlayer(uint.MaxValue/2, 2));
+            Assert.IsTrue(instance.RegisterPlayer(uint.MaxValue, 3));
             
-            Assert.IsFalse(instance.RegisterPlayer(0));
-            Assert.IsFalse(instance.RegisterPlayer(uint.MaxValue/2));
-            Assert.IsFalse(instance.RegisterPlayer(uint.MaxValue));
+            Assert.IsFalse(instance.RegisterPlayer(0, 1));
+            Assert.IsFalse(instance.RegisterPlayer(uint.MaxValue/2, 2));
+            Assert.IsFalse(instance.RegisterPlayer(uint.MaxValue, 3));
         
         
             Assert.IsTrue(instance.TryGet(0, out tempData));

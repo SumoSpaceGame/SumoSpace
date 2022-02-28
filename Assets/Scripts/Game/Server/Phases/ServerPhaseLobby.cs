@@ -40,26 +40,41 @@ namespace Game.Server.Phases
                 case 1:
                     break;
                 case 2:
-
-                    if (data[0] == PhaseLobby.PLAYER_SELECT_FLAG)
+                    byte flag = data[0];
+                    byte selection = data[1];
+                    
+                    if (flag == PhaseLobby.PLAYER_SELECT_FLAG)
                     {
                         // TODO: Add spam protection
                         // TODO: Use pure synced client identifier. An identified that is defined by the server.
-                        Debug.Log(info.SendingPlayer.NetworkId + " selected in " + data[1]);
+                        
+                        Debug.Log(info.SendingPlayer.NetworkId + " selected in " + selection);
+                        
                         _phaseNetworkManager.SendUnreliablePhaseUpdate(Phase.MATCH_LOBBY, 
-                            new []{(byte) PhaseLobby.PLAYER_SELECT_FLAG, (byte) info.SendingPlayer.NetworkId, data[1]});
+                            new []{(byte) PhaseLobby.PLAYER_SELECT_FLAG, (byte) info.SendingPlayer.NetworkId, selection});
                     }
-                    else if (data[0] == PhaseLobby.PLAYER_LOCKED_FLAG)
+                    else if (flag == PhaseLobby.PLAYER_LOCKED_FLAG)
                     {
                         if (_lockedInPlayers.Contains(info.SendingPlayer.NetworkId)) return;
                         
                         _lockedInPlayers.Add(info.SendingPlayer.NetworkId);
                         
-                        Debug.Log(info.SendingPlayer.NetworkId + " locked in " + data[1]);;
+                        Debug.Log(info.SendingPlayer.NetworkId + " locked in " + selection);;
                         
                         _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_LOBBY, 
-                            new []{(byte) PhaseLobby.PLAYER_LOCKED_FLAG, (byte) info.SendingPlayer.NetworkId, (byte) _phaseNetworkManager.masterSettings.playerIDRegistry.Get(info.SendingPlayer.NetworkId).ID, data[1]});
+                            new []{(byte) PhaseLobby.PLAYER_LOCKED_FLAG, (byte) info.SendingPlayer.NetworkId, (byte) _phaseNetworkManager.masterSettings.playerIDRegistry.Get(info.SendingPlayer.NetworkId).MatchID, selection});
 
+
+                        if (_phaseNetworkManager.masterSettings.playerGameDataRegistry.TryGet(
+                            _phaseNetworkManager.masterSettings.playerIDRegistry.Get(info.SendingPlayer.NetworkId),
+                            out var gameData))
+                        {
+                            gameData.shipCreationData.shipType = selection;
+                        }
+                        else
+                        {
+                            Debug.LogError($"Could not find game data for player {info.SendingPlayer.NetworkId}");
+                        }
                         
                         if (_lockedInPlayers.Count == _phaseNetworkManager.gameMatchSettings.PlayerCount)
                         {

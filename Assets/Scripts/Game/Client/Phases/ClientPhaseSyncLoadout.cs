@@ -41,10 +41,9 @@ namespace Game.Client.Phases
             for (int i = 0; i < syncData.PlayerCount; i++)
             {
                 
-                int clientID = syncData.PlayerIDs[i];
-                var shipInfo = ShipCreationData.Create(syncData.PlayerSelections[i]);
-
-                PlayerGameData gameData;
+                //var shipInfo = ShipCreationData.Create(syncData.PlayerSelections[i]);
+                
+                //var gameData = _gamePhaseNetworkManager.masterSettings.playerGameDataRegistry.
 
             }
             //Update ui to show syncData

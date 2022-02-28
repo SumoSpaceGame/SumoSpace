@@ -87,6 +87,7 @@ namespace Game.Client.Phases
                 case 1:
                     break;
                 case 3:
+                    
                     if (data[0] == PhaseLobby.PLAYER_SELECT_FLAG)
                     {
                         Debug.Log(data[1] + " selected " +  data[2]);
@@ -109,18 +110,25 @@ namespace Game.Client.Phases
                             _masterUIController.LockLobby();
                         }
                         
+                        
+                        // Save their locked data
+                        var playerLockedIn = _phaseNetworkManager.masterSettings.playerIDRegistry.Get((uint)data[2]);
+                        if (_phaseNetworkManager.masterSettings.playerGameDataRegistry.TryGet(playerLockedIn, out var gameData))
+                        {
+                            gameData.shipCreationData.shipType = data[3];
+                        }
+                        /*
                         // TODO: REPLACE THIS WITH VALID PLAYER SYNCING CODE
-
                         try
                         {
-                            _phaseNetworkManager.masterSettings.playerIDRegistry.RegisterPlayer((uint) data[2]);
+                            _phaseNetworkManager.masterSettings.playerIDRegistry.RegisterPlayer((uint) data[2], data[2]);
                             _phaseNetworkManager.masterSettings.playerStaticDataRegistry.Add(
-                                _phaseNetworkManager.masterSettings.playerIDRegistry.Get(data[2]), new PlayerStaticData(){PlayerMatchID =  data[2]});
+                                _phaseNetworkManager.masterSettings.playerIDRegistry.Get(data[2]), new PlayerStaticData());
                         }
                         catch
                         {
                             Debug.Log("TEMP MAKE SURE TO REMOVE THIS SECTION OF CODE. This gets printed because its registering a player twice");
-                        }
+                        }*/
                     }
                     
                     

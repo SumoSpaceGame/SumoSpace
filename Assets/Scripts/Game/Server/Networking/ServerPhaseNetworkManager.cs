@@ -21,6 +21,7 @@ namespace Game.Common.Networking
         {
             this.gamePhases.Add(Phase.MATCH_CONNECT, new ServerPhaseMatchConnect(this));
             this.gamePhases.Add(Phase.MATCH_READY_UP, new ServerPhaseReadyUp(this));
+            this.gamePhases.Add(Phase.MATCH_SYNC_PLAYER_DATA, new ServerPhaseSyncPlayerData(this));
             this.gamePhases.Add(Phase.MATCH_LOBBY, new ServerPhaseLobby(this));
             this.gamePhases.Add(Phase.MATCH_SYNC_LOAD_OUTS, new ServerPhaseSyncLoadout(this));
             this.gamePhases.Add(Phase.MATCH_LOAD_MAP, new ServerPhaseLoadMap(this, MainPersistantInstances.Get<SceneLoader>()));

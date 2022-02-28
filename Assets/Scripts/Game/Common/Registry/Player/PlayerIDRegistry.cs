@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Game.Common.Registry
@@ -9,26 +10,31 @@ namespace Game.Common.Registry
     {
         private Dictionary<uint, PlayerID> playerIDs = new Dictionary<uint, PlayerID>();
 
-        public bool RegisterPlayer(uint clientID)
+        public bool RegisterPlayer(uint networkID, ushort matchID, string clientid = "")
         {
-            Debug.Log("Registered client - " + clientID);
+            Debug.Log("Registered client - " + networkID + " Match ID - " + matchID);
 
-            if (playerIDs.ContainsKey(clientID))
+            if (playerIDs.ContainsKey(networkID))
             {
                 return false;
             }
             
-            playerIDs.Add(clientID, new PlayerID() {ID = clientID});
+            playerIDs.Add(networkID, new PlayerID() {ID = networkID, MatchID = matchID, ClientID = clientid});
             
             return true;
         }
         
         
         
-        public PlayerID Get(uint clientID)
+        public PlayerID Get(uint networkID)
         {
             //Debug.Log(clientID + 1);
-            return playerIDs[clientID];
+            return playerIDs[networkID];
+        }
+
+        public PlayerID[] GetPlayers()
+        {
+            return playerIDs.Values.ToArray();
         }
 
 

@@ -2,12 +2,16 @@
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using Game.Common.Instances;
+using Game.Common.Registry;
 using UnityEngine;
 
 namespace Game.Common.Networking
 {
     public partial class AgentMovementNetworkManager : AgentMovementBehavior
     {
+
+        public PlayerIDRegistry playerIDRegistry;
+        
         partial void ClientUpdate()
         {
             attachedShipManager._rigidbody2D.position = networkObject.position;
@@ -31,10 +35,13 @@ namespace Game.Common.Networking
             MainThreadManager.Run(() =>
             {
                 var agentNetworkManager = MainPersistantInstances.Get<AgentNetworkManager>();
-                var ship = agentNetworkManager._shipSpawner.SpawnShip(requestData.clientOwner, 0,
-                    requestData.clientOwner ==  networkObject.MyPlayerId);
 
-                masterSettings.playerShips.Add(requestData.clientOwner, ship);
+                var playerID = playerIDRegistry.Get(requestData.clientOwner.ID);
+                
+                var ship = agentNetworkManager._shipSpawner.SpawnShip(playerID, 0,
+                    requestData.clientOwner.ID == networkObject.MyPlayerId);
+
+                masterSettings.playerShips.Add(playerID, ship);
                 
                 attachedShipManager = ship;
                 ship._rigidbody2D.isKinematic = true;

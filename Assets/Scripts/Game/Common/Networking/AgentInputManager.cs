@@ -28,7 +28,7 @@ namespace Game.Common.Networking
                 if (_shipManager == null)
                 {
                     MainPersistantInstances.Get<AgentNetworkManager>()._playerShips
-                        .TryGet((ushort)networkObject.MyPlayerId, out _shipManager);
+                        .TryGet(_shipManager.playerMatchID, out _shipManager);
                     return;
                 }
                 
@@ -51,7 +51,7 @@ namespace Game.Common.Networking
                 return;
             }
             
-            Debug.Log($"Taking control of ship of ship {networkObject.MyPlayerId}");
+            Debug.Log($"Taking control of ship {_shipManager.playerMatchID}");
             
             
             networkObject.TakeOwnership();

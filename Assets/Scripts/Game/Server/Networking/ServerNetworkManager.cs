@@ -24,21 +24,16 @@ namespace Game.Common.Networking
         {
             MainThreadManager.Run(() =>
             {
-                // TODO: Replace serverPlayerCounter to client ID. Map clientMatchID to accountID (Account will be create soon)
                 gameMatchSettings.ClientMatchID = serverPlayerCounter++;
-                gameMatchSettings.ClientTeam = (serverPlayerCounter+1) / gameMatchSettings.TeamSize;
-                gameMatchSettings.ClientTeamPosition = (serverPlayerCounter+1) % gameMatchSettings.TeamSize;
+                gameMatchSettings.ClientTeam = (serverPlayerCounter) / gameMatchSettings.TeamSize;
+                gameMatchSettings.ClientTeamPosition = (serverPlayerCounter) % gameMatchSettings.TeamSize;
             
             
                 // Register the player, this only happens in the server side.
-                masterSettings.playerIDRegistry.RegisterPlayer(player.NetworkId);
+                masterSettings.playerIDRegistry.RegisterPlayer(player.NetworkId, gameMatchSettings.ClientMatchID);
                 var playerID = masterSettings.playerIDRegistry.Get(player.NetworkId);
                 masterSettings.playerStaticDataRegistry.Add(playerID, new PlayerStaticData()
                 {
-                    // TODO: FIX
-                    OwnerID = gameMatchSettings.ClientMatchID,
-                    PlayerMatchID = (ushort)player.NetworkId,
-                    NetworkID = player.NetworkId
                 });
             
                 // Create player data

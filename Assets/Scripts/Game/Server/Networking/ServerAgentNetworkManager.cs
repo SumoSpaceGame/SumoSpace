@@ -17,8 +17,16 @@ namespace Game.Common.Networking
         /// <param name="ClientMatchID"></param>
         partial void ServerCreateShip(PlayerStaticData data)
         {
-            var ClientMatchID = data.PlayerMatchID;
-            var spawnedShip = _shipSpawner.SpawnShip(data.PlayerMatchID, 0, false);
+            PlayerGameData gameData = masterSettings.playerGameDataRegistry.Get(data.GlobalID);
+
+            var shipID = 0;
+            if (gameData != null)
+            {
+                shipID = gameData.shipCreationData.shipType;
+            }
+
+            var ClientMatchID = data.GlobalID;
+            var spawnedShip = _shipSpawner.SpawnShip(ClientMatchID, shipID, false);
             
             _playerShips.Add(ClientMatchID, spawnedShip);
     
@@ -29,11 +37,11 @@ namespace Game.Common.Networking
             spawnedShip.networkMovement = agentMovementScript;
             spawnedShip.isServer = true;
             
-            spawnedShip.playerMatchID = data.PlayerMatchID;
+            spawnedShip.playerMatchID = ClientMatchID;
             
             var agentInput = (AgentInputManager) NetworkManager.Instance.InstantiateAgentInput();
             
-            agentInput.ServerSendOwnership(networkObject.Networker.FindPlayer(player => data.NetworkID == player.NetworkId));
+            agentInput.ServerSendOwnership(networkObject.Networker.FindPlayer(player => data.GlobalID.ID == player.NetworkId));
             
             agentInput._shipManager = spawnedShip;
         }

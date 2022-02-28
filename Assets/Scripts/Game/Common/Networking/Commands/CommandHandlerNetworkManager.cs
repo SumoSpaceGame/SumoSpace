@@ -6,6 +6,7 @@ using Game.Common.Gameplay.Commands;
 using Game.Common.Gameplay.Commands.Networkers;
 using Game.Common.Gameplay.Ship;
 using Game.Common.Instances;
+using Game.Common.Registry;
 using Game.Common.Settings;
 using UnityEngine;
 
@@ -83,7 +84,8 @@ namespace Game.Common.Networking.Commands
         {
             // TODO: REPLACE
             
-            MainPersistantInstances.Get<AgentNetworkManager>()._playerShips.TryGet((ushort)networkerID, out var data);
+            var playerID = _masterSettings.playerIDRegistry.Get(_networkerID);
+            MainPersistantInstances.Get<AgentNetworkManager>()._playerShips.TryGet(playerID, out var data);
             return data;
             //return _masterSettings.GetShip(networkerID);
         }
@@ -97,8 +99,8 @@ namespace Game.Common.Networking.Commands
             }
             
             //Debug.Log(_networkerID);
-            // TODO: REPLACE
-            Debug.Log(MainPersistantInstances.Get<AgentNetworkManager>()._playerShips.TryGet((ushort)_networkerID, out var data));
+            var playerID = _masterSettings.playerIDRegistry.Get(_networkerID);
+            Debug.Log(MainPersistantInstances.Get<AgentNetworkManager>()._playerShips.TryGet(playerID, out var data));
             Debug.Log(data);
             return data;
             //return _masterSettings.GetShip(_networkerID);

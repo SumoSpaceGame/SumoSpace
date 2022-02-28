@@ -1,23 +1,34 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace Game.Common.Registry
 {
+    [Serializable]
     public struct PlayerID
     {
         /// <summary>
         /// Network ID
         /// </summary>
         [SerializeField] public uint ID;
-
-        [SerializeField] public uint ClientID;
+        
+        /// <summary>
+        /// Used in future development 
+        /// </summary>
+        [SerializeField] public string ClientID;
+        
+        /// <summary>
+        /// Match ID - ID that matches across all clients and server
+        /// </summary>
+        [SerializeField] public ushort MatchID;
+        
         public override bool Equals(object obj)
         {
 
             if (obj.GetType() == typeof(uint))
             {
-                return (uint) obj == ClientID || (uint) obj == ID;
+                return (uint) obj == ID || (uint) obj == MatchID;
             }
             
             if (obj.GetType() != typeof(PlayerID))
@@ -25,7 +36,7 @@ namespace Game.Common.Registry
                 return false;
             }
 
-            return ((PlayerID) obj).ID == this.ID;
+            return ((PlayerID) obj).MatchID == this.MatchID;
         }
 
         public override int GetHashCode()
@@ -37,10 +48,15 @@ namespace Game.Common.Registry
         {
             return JsonUtility.ToJson(this);
         }
-
+        
         public static PlayerID Deserialize(string data)
         {
             return JsonUtility.FromJson<PlayerID>(data);
+        }
+
+        public override string ToString()
+        {
+            return $"(NetworkID, ClientID, MatchID) {ID},{ClientID},{MatchID}";
         }
     }
 }

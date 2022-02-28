@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Game.Client.Gameplay.Movement;
 using Game.Common.Networking;
+using Game.Common.Registry;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -31,7 +32,7 @@ namespace Game.Common.Gameplay.Ship
         public bool isPlayer;
     
 
-        public ushort playerMatchID;
+        public PlayerID playerMatchID;
     
     
     

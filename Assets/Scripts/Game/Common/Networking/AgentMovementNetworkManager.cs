@@ -2,6 +2,7 @@
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using Game.Common.Gameplay.Ship;
+using Game.Common.Registry;
 using Game.Common.Settings;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -16,7 +17,7 @@ namespace Game.Common.Networking
         /// </summary>
         private struct RequestData
         {
-            [SerializeField] public ushort clientOwner;
+            [SerializeField] public PlayerID clientOwner;
 
             public string Serialize()
             {

@@ -1,4 +1,5 @@
 ﻿using BeardedManStudios.Forge.Networking;
+using Game.Common.Registry;
 using UnityEngine;
 
 namespace Game.Common.Gameplay.Commands.Networkers
@@ -14,11 +15,11 @@ namespace Game.Common.Gameplay.Commands.Networkers
             rpcMethodID = RPC_METHOD_ID;
         }
         
-        public bool SendData(CommandPacketData data, int commandID, ushort shipID)
+        public bool SendData(CommandPacketData data, int commandID, PlayerID shipID)
         {
             if (networker.IsServer || networker == null) return false;
             
-            networker.SendRpc(rpcMethodID, Receivers.Server, commandID, data.GetBytes(), shipID);
+            networker.SendRpc(rpcMethodID, Receivers.Server, commandID, data.GetBytes(), shipID.ID);
 
             return true;
         }

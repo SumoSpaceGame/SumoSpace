@@ -16,9 +16,9 @@ namespace Tests.RegistryTests
             var instance = ScriptableObject.CreateInstance<PlayerStaticDataRegistry>();
             var idRegistry = ScriptableObject.CreateInstance<PlayerIDRegistry>();
 
-            idRegistry.RegisterPlayer(0);
-            idRegistry.RegisterPlayer(1);
-            idRegistry.RegisterPlayer(2);
+            idRegistry.RegisterPlayer(0,0);
+            idRegistry.RegisterPlayer(1,1);
+            idRegistry.RegisterPlayer(2,2);
 
             var playerOne = idRegistry.Get(0);
             var playerTwo = idRegistry.Get(1);
@@ -35,33 +35,33 @@ namespace Tests.RegistryTests
             
             success = instance.Add(playerOne, new PlayerStaticData()
             {
-                PlayerMatchID = 100
+                GlobalID = new PlayerID(){ID = 100}
             });
             
             Assert.IsTrue(success);
             
             instance.TryGet(playerOne, out staticData);
-            Assert.IsTrue(staticData.PlayerMatchID == 100);
+            Assert.IsTrue(staticData.GlobalID.ID == 100);
             Assert.IsFalse(instance.TryGet(playerTwo, out staticData));
             Assert.IsFalse(instance.TryGet(playerThree, out staticData));
 
             
             success = instance.Add(playerTwo, new PlayerStaticData()
             {
-                PlayerMatchID = 200
+                GlobalID = new PlayerID(){ID = 200}
             });
             
             Assert.IsTrue(success);
             
             Assert.IsTrue(instance.TryGet(playerOne, out staticData));
             instance.TryGet(playerTwo, out staticData);
-            Assert.IsTrue(staticData.PlayerMatchID == 200);
+            Assert.IsTrue(staticData.GlobalID.ID == 200);
             Assert.IsFalse(instance.TryGet(playerThree, out staticData));
             
             
             success = instance.Add(playerThree, new PlayerStaticData()
             {
-                PlayerMatchID = 300
+                GlobalID = new PlayerID(){ID = 300}
             });
             
             Assert.IsTrue(success);
@@ -69,7 +69,7 @@ namespace Tests.RegistryTests
             Assert.IsTrue(instance.TryGet(playerOne, out staticData));
             Assert.IsTrue(instance.TryGet(playerTwo, out staticData));
             instance.TryGet(playerThree, out staticData);
-            Assert.IsTrue(staticData.PlayerMatchID == 300);
+            Assert.IsTrue(staticData.GlobalID.ID == 300);
             
             
             Assert.IsFalse(instance.Add(playerOne, new PlayerStaticData()));

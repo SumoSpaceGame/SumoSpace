@@ -50,7 +50,7 @@ namespace Game.Common.Settings
         {
             if (playerStaticDataRegistry.TryGet(playerIDRegistry.Get(networkID), out var data))
             {
-                if (playerShips.TryGet(data.PlayerMatchID, out ShipManager manager))
+                if (playerShips.TryGet(data.GlobalID, out ShipManager manager))
                 {
                     return manager;
                 }
