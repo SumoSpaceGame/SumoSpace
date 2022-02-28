@@ -16,6 +16,9 @@ namespace Game.Common.Gameplay.Ship
         [FormerlySerializedAs("rigidbody2D")] public Rigidbody2D _rigidbody2D;
         public ShipController shipController;
         public ClientControls clientControls;
+
+        public ShipLoadout shipLoadout;
+        
         public SimulationObject simulationObject;
         public ShipMovement shipMovement;
         public ShipDodgeSettings sds;

@@ -2,10 +2,10 @@
 using Game.Common.Gameplay.Ship;
 using UnityEngine;
 
-public class StartPrimaryFire: ICommand {
+public class ServerAgilityEndPrimaryFire: ICommand {
     public bool Receive(ShipManager manager, ICommandNetworker networker, CommandPacketData packetData) {
-        manager.StartGun();
-        networker.SendData(packetData, (int)CommandType.START_FIRE, manager.playerMatchID);
+        manager.shipLoadout.PrimaryFire.Stop(manager, true);
+        networker.SendData(packetData, (int)CommandType.AGILITY_END_WEAPON, manager.playerMatchID);
         return true;
     }
 }

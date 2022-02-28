@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cbf43dd01dec174b80b4c4601633f3e, type: 3}
-  m_Name: ShipPrefabList
+  m_Script: {fileID: 11500000, guid: 2408115231424966a54a51bdaaf2dfd8, type: 3}
+  m_Name: HeavyLoadout
   m_EditorClassIdentifier: 
-  shipPrefabs:
-  - {fileID: 2025401133792490111, guid: 75241b82d6e19cc4e959d2584e034f49, type: 3}
+  ShipMovement: {fileID: 11400000, guid: 383694b2317473d4383bc09d5d4f7923, type: 2}
+  PrimaryFire: {fileID: 0}
+  PrimaryAbility: {fileID: 0}
+  SecondaryAbility: {fileID: 0}

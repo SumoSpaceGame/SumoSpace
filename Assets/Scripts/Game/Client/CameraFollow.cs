@@ -10,6 +10,9 @@ public class CameraFollow : MonoBehaviour {
     }
 
     void LateUpdate() {
-        if(followTarget != null) transform.position = followTarget.position + offset;
+        if (followTarget != null) {
+            transform.position = followTarget.position + offset;
+            transform.LookAt(followTarget.position);
+        }
     }
 }

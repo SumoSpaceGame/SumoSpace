@@ -6,11 +6,9 @@ using UnityEngine;
 public class EndGun: ICommandPerformer {
     public bool Receive(ShipManager manager, ICommandNetworker networker, CommandPacketData packetData) {
         if (manager.isPlayer) { // Client
-            manager.simulationObject.representative.GetComponent<ShipRenderer>().StopShoot();
-            Debug.Log("I'm no longer shooting");
+            //manager.simulationObject.representative.GetComponent<ShipRenderer>().StopShoot();
         } else { 
             manager.simulationObject.representative.GetComponent<ShipRenderer>().StopShoot();
-            Debug.Log("They're no longer shooting");
         }
 
         return true;
@@ -18,7 +16,7 @@ public class EndGun: ICommandPerformer {
 
     public bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments) {
         Debug.Log("Ceasing Fire");
-        networker.SendData(CommandPacketData.Create(new byte[]{}), (int)CommandType.END_FIRE, shipManager.playerMatchID);
+        networker.SendData(CommandPacketData.Create(new byte[]{}), (int)CommandType.AGILITY_END_WEAPON, shipManager.playerMatchID);
         return true;
     }
 }

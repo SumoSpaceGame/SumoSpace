@@ -1,3 +1,4 @@
+using System.Collections;
 using Game.Client.Gameplay.Abilities;
 using Game.Common.Gameplay.Commands;
 using Game.Common.Instances;
@@ -13,16 +14,15 @@ namespace Game.Client.Gameplay.Movement
     [RequireComponent(typeof(PlayerInput))]
     public class ClientControls : MonoBehaviour {
 
-        public ShipMovement ShipMovement => shipMovement;
-
-        public ClientShipAbility PrimaryAbility => primaryAbility;
+        //public ShipMovement ShipMovement => shipMovement;
+        [SerializeField] private ShipLoadout ShipLoadout => shipLoadout;
 
         public Vector2 movementDirection;
         public float movementRotation;
         
         
-        [SerializeField] private  ShipMovement shipMovement;
-        [SerializeField] private  ClientShipAbility primaryAbility;
+        //[SerializeField] private ShipMovement shipMovement;
+        [SerializeField] private ShipLoadout shipLoadout;
 
         private Vector2 movementVector = Vector2.zero;
 
@@ -39,18 +39,19 @@ namespace Game.Client.Gameplay.Movement
             set
             {
                 _lookDir = value;
-                movementRotation = (Mathf.Atan2(value.y, value.x) * Mathf.Rad2Deg) + RotationAngleOffset;
+                movementRotation = (Mathf.Atan2(value.y, value.x) * Mathf.Rad2Deg) + ROTATION_ANGLE_OFFSET;
             }
         }
         
+        private Coroutine fireCoroutine;
         
-        private bool tryDodge;
-        private bool startShoot;
-        private bool endShoot;
+        
+        private bool sendPrimaryAbility;
+        private bool tryShoot;
     
         private Camera _camera;
 
-        private const float RotationAngleOffset = -90f;
+        private const float ROTATION_ANGLE_OFFSET = -90f;
 
         private InputLayerNetworkManager inputLayer;
     
@@ -65,24 +66,24 @@ namespace Game.Client.Gameplay.Movement
         private void Update() {
             //movementRotation = (Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg) + RotationAngleOffset;
             //var movementSend = movementVector;
-            var sendDodge = tryDodge;
-
-
 
             //inputLayer.SendMovementUpdate(movementSend, rotationSend);
-            if (sendDodge) {
-                inputLayer.PerformCommand(CommandType.AGILITY_DODGE, new byte[] { });
-                tryDodge = false;
+            if (sendPrimaryAbility) {
+                //inputLayer.PerformCommand(CommandType.AGILITY_DODGE, new byte[] { });
+                inputLayer.PerformCommand(ShipLoadout.PrimaryAbility.Command, new byte[] {});
+                sendPrimaryAbility = false;
             }
+        }
 
-            if (startShoot) {
-                Debug.Log("PPP");
-                inputLayer.PerformCommand(CommandType.START_FIRE, new byte[] { });
-                startShoot = false;
-            } else if (endShoot) {
-                Debug.Log("FF");
-                inputLayer.PerformCommand(CommandType.END_FIRE, new byte[] { });
-                endShoot = false;
+        // TODO Render shot here
+        IEnumerator Shoot() {
+            while(true){
+                //inputLayer.PerformCommand(CommandType.AGILITY_DODGE, new byte[] { });
+                //inputLayer.PerformCommand(ShipLoadout.PrimaryFire.Command, new byte[] {});
+                
+                //yield return new WaitForSeconds(ShipMovement.timeBetweenShots);
+                Debug.Log("Shooting");
+                yield return new WaitForSeconds(ShipLoadout.PrimaryFire.Cooldown);
             }
         }
 
@@ -98,8 +99,23 @@ namespace Game.Client.Gameplay.Movement
      * Mouse position
      */
         public void OnLookRaw(InputAction.CallbackContext ctx) {
-            if(ctx.performed)
-                lookDir = (Vector2)_camera.ScreenToViewportPoint(ctx.ReadValue<Vector2>()) - new Vector2(0.5f, 0.5f);
+            if (ctx.performed) {
+                //lookDir = (Vector2)_camera.ScreenToViewportPoint(ctx.ReadValue<Vector2>()) - new Vector2(0.5f, 0.5f);
+                var v3 = MousePosInWorldSpace(ctx.ReadValue<Vector2>()) - MousePosInWorldSpace(_camera.ViewportToScreenPoint(new Vector3(0.5f, 0.5f)));
+                lookDir = new Vector2(v3.x, v3.z);
+            }
+        }
+        
+        private Vector3 MousePosInWorldSpace(Vector2 mousePos) {
+            var plane = new Plane(Vector3.up, 0);
+            float dist;
+            var ray = _camera.ScreenPointToRay(new Vector3(mousePos.x, mousePos.y, _camera.nearClipPlane));
+            Vector3 worldPos = Vector3.zero;
+            if (plane.Raycast(ray, out dist)) {
+                worldPos = ray.GetPoint(dist);
+            }
+
+            return worldPos;
         }
     
         /**
@@ -113,22 +129,19 @@ namespace Game.Client.Gameplay.Movement
         /**
      * Shift or A
      */
-        public void OnDodge(InputAction.CallbackContext ctx) {
+        public void OnPrimaryAbility(InputAction.CallbackContext ctx) {
             if (ctx.performed)
-                tryDodge = true;
+                sendPrimaryAbility = true;
         }
-    
+        
         /**
          * LMB or Right Trigger
          */
         public void OnFire(InputAction.CallbackContext ctx) {
-            Debug.Log("1");
             if (ctx.started) {
-                Debug.Log("2");
-                startShoot = true;
+                fireCoroutine = StartCoroutine(Shoot());
             } else if (ctx.canceled) {
-                Debug.Log("3");
-                endShoot = true;
+                StopCoroutine(fireCoroutine);
             }
         }
     }

@@ -7,8 +7,9 @@ namespace Game.Common.Gameplay.Ship
     [RequireComponent(typeof(global::Game.Common.Gameplay.Ship.ShipManager))]
     public partial class ShipController : MonoBehaviour
     {
-        public ShipMovement sm;
-        public ShipDodgeSettings sds;
+        //private ShipMovement sm;
+        private ShipLoadout loadout;
+        private ShipMovement movement;
 
         [HideInInspector]
         public Vector2 movementVector;
@@ -27,8 +28,10 @@ namespace Game.Common.Gameplay.Ship
         private bool dodgeFrame; // true if we can apply unclamped force, i.e. start or end of dodge
 
         partial void ServerStart() {
-            sm = _shipManager.shipMovement;
-            sds = _shipManager.sds;
+            //sm = _shipManager.shipMovement;
+            //sds = _shipManager.sds;
+            loadout = _shipManager.shipLoadout;
+            movement = loadout.ShipMovement;
         }
 
         /// <summary>
@@ -58,7 +61,7 @@ namespace Game.Common.Gameplay.Ship
                 _shipManager._rigidbody2D.AddForce(force);
                 dodgeFrame = false;
             } else {
-                _shipManager._rigidbody2D.AddForce(Vector2.ClampMagnitude(force, sm.maxForce));
+                _shipManager._rigidbody2D.AddForce(Vector2.ClampMagnitude(force, movement.maxForce));
             }
             
             
@@ -74,7 +77,7 @@ namespace Game.Common.Gameplay.Ship
 
         public void Dodge(Vector2 direction) {
             locked = true;
-            speedMultiplier = sds.speedMultiplier;
+            //speedMultiplier = sds.speedMultiplier;
             prevDir = movementVector;
             dodgeFrame = true;
         }
@@ -98,12 +101,12 @@ namespace Game.Common.Gameplay.Ship
         
         private Vector2 GetVelocity(Vector2 movementDir) {
 
-            if (locked) return stopped ? Vector2.zero : prevDir * sm.maxSpeed * speedMultiplier;
+            if (locked) return stopped ? Vector2.zero : prevDir * movement.maxSpeed * speedMultiplier;
         
             if (movementDir != Vector2.zero) { 
                 
                 x += Time.deltaTime;
-                x = Mathf.Clamp(x , 0, sm.accelTime);
+                x = Mathf.Clamp(x , 0, movement.accelTime);
                 
                 /* Old movement logic, might be good for a "drift"?
                 var movDeltaAngle = Mathf.Clamp(Vector2.SignedAngle(prevDir, movementDir) * Mathf.Deg2Rad, -sm.turnSpeed * Time.deltaTime, sm.turnSpeed * Time.deltaTime);
@@ -111,7 +114,7 @@ namespace Game.Common.Gameplay.Ship
                 var newMovAngleDeg = curMovAngle + movDeltaAngle;
                 */ 
                 
-                var newMovAngle = Vector2.MoveTowards(prevDir, movementDir, sm.turnSpeed * Time.deltaTime);
+                var newMovAngle = Vector2.MoveTowards(prevDir, movementDir, movement.turnSpeed * Time.deltaTime);
                 
                 prevDir = stopped
                     ? movementDir
@@ -119,16 +122,16 @@ namespace Game.Common.Gameplay.Ship
                 stopped = false;
             } else {
                 x -= Time.deltaTime;
-                x = Mathf.Clamp(x, 0, sm.accelTime);
+                x = Mathf.Clamp(x, 0, movement.accelTime);
                 if (x < float.Epsilon) {
                     stopped = true;
                 }
             }
 
-            var rawVel = prevDir * (sm.accelCurve.Evaluate(Mathf.Clamp(x / sm.accelTime, 0f, 1f)) * sm.maxSpeed);
+            var rawVel = prevDir * (movement.accelCurve.Evaluate(Mathf.Clamp(x / movement.accelTime, 0f, 1f)) * movement.maxSpeed);
             var correctionFactor = 
                 Mathf.Lerp(
-                    sm.backwardsSpeedFactor, 
+                    movement.backwardsSpeedFactor, 
                     1.0f, 
                     (
                         Vector2.Dot(
@@ -148,7 +151,7 @@ namespace Game.Common.Gameplay.Ship
             // Get the mouse angle, do some interpolation with the current facing direction, rotate
         
             var newAngle = Mathf.MoveTowardsAngle(prevRot, tAngle,
-                sm.maxTheta * 360 * Time.deltaTime);
+                movement.maxTheta * 360 * Time.deltaTime);
             prevRot = newAngle;
 
             return newAngle;
