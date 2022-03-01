@@ -25,7 +25,7 @@ namespace Game.Server.Phases
             var playerList = new List<uint>();
             var selectionList = new List<int>();
 
-            var players = _phaseNetworkManager.masterSettings.playerIDRegistry.GetPlayers();
+            var players = _phaseNetworkManager.masterSettings.GetPlayerIDs();
 
             foreach (var id in players)
             {

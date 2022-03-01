@@ -96,6 +96,13 @@ namespace Game.Client.Phases
                         {
                             Debug.Log("Server said I am this character");
                         }
+                        
+                        // Save their data
+                        var playerLockedIn = _phaseNetworkManager.masterSettings.playerIDRegistry.Get((uint)data[1]);
+                        if (_phaseNetworkManager.masterSettings.playerGameDataRegistry.TryGet(playerLockedIn, out var gameData))
+                        {
+                            gameData.shipCreationData.shipType = data[2];
+                        }
                     }
                     break;
                 case 4:

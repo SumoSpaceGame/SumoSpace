@@ -59,7 +59,10 @@ namespace Game.Common.Settings
             return null;
         }
 
-
+        public PlayerID[] GetPlayerIDs()
+        {
+            return playerIDRegistry.GetPlayers();
+        }
 
     }
 }

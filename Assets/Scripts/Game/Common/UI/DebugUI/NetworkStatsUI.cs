@@ -23,16 +23,25 @@ namespace Game.Common.UI.DebugUI
         private Stopwatch pingTimer = new Stopwatch();
         private const long PING_TIMER = 2500;
     
-        // Start is called before the first frame update
-        void Start()
-        {
-            NetworkManager.Instance.Networker.onPingPong += onPong;
-            NetworkManager.Instance.Networker.Ping();
-        }
+
+        private bool initated = false;
 
         // Update is called once per frame
         public void Update()
         {
+
+            //Reusable in case network manager was reset
+            if (NetworkManager.Instance != null || !NetworkManager.Instance.isActiveAndEnabled)
+            {
+                initated = false;
+                return;
+            }else if (!initated)
+            {
+                NetworkManager.Instance.Networker.onPingPong += onPong;
+                NetworkManager.Instance.Networker.Ping();
+            }
+            
+            
             if (!pingTimer.IsRunning)
             {
                 pingTimer.Start();
@@ -78,13 +87,13 @@ namespace Game.Common.UI.DebugUI
 
             if (useRaw)
             {
-                bandiwdthInText.text = "Bandwidth IN - " + BandwidthIn;
-                bandiwdthOutText.text = "Bandwidth OUT - " + BandwidthOut;
+                bandiwdthInText.text = "IN - " + BandwidthIn;
+                bandiwdthOutText.text = "OUT - " + BandwidthOut;
             }
             else
             {
-                bandiwdthInText.text = "Bandwidth IN - " + ConvertBytesCountToText(BandwidthIn);
-                bandiwdthOutText.text = "Bandwidth OUT - " + ConvertBytesCountToText(BandwidthOut);
+                bandiwdthInText.text = "IN - " + ConvertBytesCountToText(BandwidthIn);
+                bandiwdthOutText.text = "OUT - " + ConvertBytesCountToText(BandwidthOut);
             }
         }
 
