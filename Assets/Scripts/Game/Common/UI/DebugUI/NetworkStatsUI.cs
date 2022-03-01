@@ -31,7 +31,7 @@ namespace Game.Common.UI.DebugUI
         {
 
             //Reusable in case network manager was reset
-            if (NetworkManager.Instance != null || !NetworkManager.Instance.isActiveAndEnabled)
+            if (NetworkManager.Instance == null || !NetworkManager.Instance.isActiveAndEnabled)
             {
                 initated = false;
                 return;
@@ -39,6 +39,7 @@ namespace Game.Common.UI.DebugUI
             {
                 NetworkManager.Instance.Networker.onPingPong += onPong;
                 NetworkManager.Instance.Networker.Ping();
+                initated = true;
             }
             
             
