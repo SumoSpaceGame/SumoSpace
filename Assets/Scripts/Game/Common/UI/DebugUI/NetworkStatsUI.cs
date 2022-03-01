@@ -11,10 +11,10 @@ namespace Game.Common.UI.DebugUI
     {
 
         
-        public float BandwidthIn = 0.0f;
-        public float BandwidthOut = 0.0f;
-        private float BandwidthInLast = 0.0f;
-        private float BandwidthOutLast = 0.0f;
+        public ulong BandwidthIn = 0;
+        public ulong BandwidthOut = 0;
+        private ulong BandwidthInLast = 0;
+        private ulong BandwidthOutLast = 0;
         public float bandwidthTime = 0;
         
         public bool useRaw = false;
@@ -57,6 +57,16 @@ namespace Game.Common.UI.DebugUI
             {
                 pingTimer.Restart();
                 NetworkManager.Instance.Networker.Ping();
+                
+                BandwidthIn = NetworkManager.Instance.Networker.BandwidthIn - BandwidthInLast;
+                BandwidthIn = Convert.ToUInt64(BandwidthIn / bandwidthTime);
+
+                BandwidthOut = NetworkManager.Instance.Networker.BandwidthOut - BandwidthOutLast;
+                BandwidthOut = Convert.ToUInt64(BandwidthIn / bandwidthTime);
+                
+                BandwidthInLast = NetworkManager.Instance.Networker.BandwidthIn;
+                BandwidthOutLast = NetworkManager.Instance.Networker.BandwidthOut;
+                bandwidthTime = 0;
             }
         
             UpdateNetworkStats();
@@ -84,15 +94,6 @@ namespace Game.Common.UI.DebugUI
             {
                 pingText.text = "Ping - " + ping + "ms";
 
-                BandwidthIn = NetworkManager.Instance.Networker.BandwidthIn - BandwidthInLast;
-                BandwidthIn /= bandwidthTime;
-
-                BandwidthOut = NetworkManager.Instance.Networker.BandwidthOut - BandwidthOutLast;
-                BandwidthOut /= bandwidthTime;
-                
-                BandwidthInLast = NetworkManager.Instance.Networker.BandwidthIn;
-                BandwidthOutLast = NetworkManager.Instance.Networker.BandwidthOut;
-                bandwidthTime = 0;
             });
         }
 
@@ -106,8 +107,8 @@ namespace Game.Common.UI.DebugUI
             }
             else
             {
-                bandiwdthInText.text = "IN - " + ConvertBytesCountToText(BandwidthIn);
-                bandiwdthOutText.text = "OUT - " + ConvertBytesCountToText(BandwidthOut);
+                bandiwdthInText.text = "IN/s - " + ConvertBytesCountToText(BandwidthIn);
+                bandiwdthOutText.text = "OUT/s - " + ConvertBytesCountToText(BandwidthOut);
             }
         }
 
@@ -121,23 +122,28 @@ namespace Game.Common.UI.DebugUI
         /// Converts Bytes into proper Bytes,Kilo,Mega and assigns a suffix depending on data size.
         /// </summary>
         /// <returns></returns>
-        private String ConvertBytesCountToText(double byteCount)
+        private String ConvertBytesCountToText(ulong byteCount)
         {
             String suffix = "B/S";
-
-            if (byteCount / 1000 > 0.01)
+            double count = Convert.ToDouble(byteCount);
+            
+            if (count / 1000 > 0.01)
             {
-                byteCount /= 1000;
+                count /= 1000;
                 suffix = "KB/s";
 
-                if (byteCount / 1000 > 0.01)
+                if (count / 1000 > 0.01)
                 {
-                    byteCount /= 1000;
+                    count /= 1000;
                     suffix = "MB/s";
                 }
             }
-        
-            return byteCount + suffix;
+
+            count *= 100;
+            count = Math.Truncate(count);
+            count /= 100;
+            
+            return count + suffix;
         }
     }
 }
