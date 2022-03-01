@@ -63,6 +63,24 @@ namespace Game.Common.Settings
         {
             return playerIDRegistry.GetPlayers();
         }
+        
+        
+        //Ease of use commands, helper for other classes, should be moved later
+        // TODO: Organize the locations of these methods
+        
+        public void DeregisterPlayer()
+        {
+            Debug.LogWarning("Deregistering player from game, should be done on reset");
+        }
 
+        public void RegisterPlayer(uint networkID, ushort matchID, string clientID)
+        {
+            playerIDRegistry.RegisterPlayer(networkID, matchID, clientID);
+            var savedID = playerIDRegistry.Get(networkID);
+
+
+            playerStaticDataRegistry.Add(savedID, new PlayerStaticData() { });
+            playerGameDataRegistry.Add(savedID, new PlayerGameData() { });
+        }
     }
 }

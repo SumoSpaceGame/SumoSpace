@@ -23,7 +23,11 @@ namespace Game.Common.Registry
             
             return true;
         }
-        
+
+        public bool RemovePlayerID(uint networkID)
+        {
+            return playerIDs.Remove(networkID);
+        }
         
         
         public PlayerID Get(uint networkID)

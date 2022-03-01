@@ -33,6 +33,8 @@ namespace Game.Common.Networking
 
         private GamePhaseManager _gamePhaseManager = new GamePhaseManager();
 
+        public Phase CurrentPhase => _gamePhaseManager.CurrentPhase;
+
         private bool finishedNetworkStart = false;
         
         private Dictionary<Phase, IGamePhase> gamePhases =
