@@ -52,7 +52,7 @@ namespace Game.Server.Phases
         {
             _syncedPlayer.Add(info.SendingPlayer.NetworkId, _phaseNetworkManager.masterSettings.playerIDRegistry.Get(info.SendingPlayer.NetworkId));
 
-            if (_syncedPlayer.Count == _phaseNetworkManager.gameMatchSettings.PlayerCount)
+            if (_syncedPlayer.Count == _phaseNetworkManager.gameMatchSettings.MaxPlayerCount)
             {
                 _phaseNetworkManager.ServerNextPhase();
             }

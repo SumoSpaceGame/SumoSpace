@@ -37,7 +37,7 @@ namespace Game.Server.Phases
 
         public void PhaseUpdate()
         {
-            if (sceneLoaded && loadedPlayers.Count == _phaseNetworkManager.gameMatchSettings.PlayerCount)
+            if (sceneLoaded && loadedPlayers.Count == _phaseNetworkManager.gameMatchSettings.MaxPlayerCount)
             {
                 foreach (uint player in loadedPlayers)
                 {

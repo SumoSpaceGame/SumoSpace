@@ -52,6 +52,7 @@ namespace Game.Common.Networking
                 networkType = NetworkType.Server;
                 OnServerNetworkStart();
                 networkObject.Networker.disconnected += OnServerNetworkClose;
+                networkObject.Networker.playerDisconnected += OnServerNetworkPlayerDisconnected;
             }
             else
             {
@@ -132,6 +133,10 @@ namespace Game.Common.Networking
         /// </summary>
         partial void OnClientNetworkClose(NetWorker sender);
         
+        /// <summary>
+        /// Called when player left
+        /// </summary>
+        partial void OnServerNetworkPlayerDisconnected(NetworkingPlayer player, NetWorker sender);
         
         /// <summary>
         /// Called to update server

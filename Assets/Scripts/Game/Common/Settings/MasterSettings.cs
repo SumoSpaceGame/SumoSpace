@@ -64,13 +64,26 @@ namespace Game.Common.Settings
             return playerIDRegistry.GetPlayers();
         }
         
+        public int GetPlayerCount()
+        {
+            return playerIDRegistry.GetPlayers().Length;
+        }
+        
         
         //Ease of use commands, helper for other classes, should be moved later
         // TODO: Organize the locations of these methods
         
-        public void DeregisterPlayer()
+        public void CleanupPlayer(uint networkID)
         {
-            Debug.LogWarning("Deregistering player from game, should be done on reset");
+            Debug.LogWarning("Cleaning player from game, should be done on reset, or ready up");
+
+            var playerID = playerIDRegistry.Get(networkID);
+            
+            playerGameDataRegistry.Remove(playerID);
+            playerStaticDataRegistry.Remove(playerID);
+            
+            playerIDRegistry.RemovePlayerID(networkID);
+
         }
 
         public void RegisterPlayer(uint networkID, ushort matchID, string clientID)

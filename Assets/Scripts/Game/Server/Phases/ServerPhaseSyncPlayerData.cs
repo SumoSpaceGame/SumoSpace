@@ -48,9 +48,9 @@ namespace Game.Server.Phases
             finishedSynced.Add(info.SendingPlayer.NetworkId, 
                 _gamePhaseNetworkManager.masterSettings.playerIDRegistry.Get(info.SendingPlayer.NetworkId));
             
-            Debug.Log($"Checking - {finishedSynced.Count} == {_gamePhaseNetworkManager.masterSettings.matchSettings.PlayerCount}");
+            Debug.Log($"Checking - {finishedSynced.Count} == {_gamePhaseNetworkManager.masterSettings.matchSettings.MaxPlayerCount}");
             
-            if (finishedSynced.Count == _gamePhaseNetworkManager.masterSettings.matchSettings.PlayerCount)
+            if (finishedSynced.Count == _gamePhaseNetworkManager.masterSettings.matchSettings.MaxPlayerCount)
             {
                 _gamePhaseNetworkManager.ServerNextPhase();
             }

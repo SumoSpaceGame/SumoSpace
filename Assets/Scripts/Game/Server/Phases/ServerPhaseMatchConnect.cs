@@ -70,8 +70,8 @@ namespace Game.Server.Phases
                         readyPlayers.Add(info.SendingPlayer.NetworkId);
                     }
                     
-                    Debug.Log("Ready players - " + readyPlayers.Count + " Max " + _phaseNetworkManager.gameMatchSettings.PlayerCount);
-                    if (readyPlayers.Count == _phaseNetworkManager.gameMatchSettings.PlayerCount)
+                    Debug.Log("Ready players - " + readyPlayers.Count + " Max " + _phaseNetworkManager.gameMatchSettings.MaxPlayerCount);
+                    if (readyPlayers.Count == _phaseNetworkManager.gameMatchSettings.MaxPlayerCount)
                     {
                         _phaseNetworkManager.ServerNextPhase();
                     }

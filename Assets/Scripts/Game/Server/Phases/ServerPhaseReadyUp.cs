@@ -40,7 +40,7 @@ namespace Game.Server.Phases
                     new [] {(byte)PhaseReadyUp.UPDATE_PLAYER_COUNT_FLAG, (byte)readyPlayers.Count, });
             }
 
-            if (readyPlayers.Count == _phaseNetworkManager.gameMatchSettings.PlayerCount)
+            if (readyPlayers.Count == _phaseNetworkManager.gameMatchSettings.MaxPlayerCount)
             {
                 _phaseNetworkManager.ServerNextPhase();
             }

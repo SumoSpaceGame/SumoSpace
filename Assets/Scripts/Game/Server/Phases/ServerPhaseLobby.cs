@@ -76,7 +76,7 @@ namespace Game.Server.Phases
                             Debug.LogError($"Could not find game data for player {info.SendingPlayer.NetworkId}");
                         }
                         
-                        if (_lockedInPlayers.Count == _phaseNetworkManager.gameMatchSettings.PlayerCount)
+                        if (_lockedInPlayers.Count == _phaseNetworkManager.gameMatchSettings.MaxPlayerCount)
                         {
                             _phaseNetworkManager.ServerNextPhase();
                         }

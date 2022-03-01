@@ -85,7 +85,7 @@ namespace Game.Common.Networking
         {
             Debug.Log("Starting game server.. " + address + " : " + port);
         
-            _gameServer = new UDPServer(gameMatchSettings.PlayerCount + 1);
+            _gameServer = new UDPServer(gameMatchSettings.MaxPlayerCount + 1);
             
             
             _gameServer.playerConnected += (player, sender) => Debug.Log("Player connected into server!");

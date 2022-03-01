@@ -16,6 +16,7 @@ namespace Game.Common.Registry
             value.GlobalID = key;
             return base.Add(key, value);
         }
+
     }
 
     public struct PlayerStaticData

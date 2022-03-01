@@ -23,7 +23,7 @@ public class GameMatchSettings : ScriptableObject
     [SerializeField] public int ClientTeam;
     [SerializeField] public int ClientTeamPosition;
     
-    public int PlayerCount
+    public int MaxPlayerCount
     {
         get
         {
