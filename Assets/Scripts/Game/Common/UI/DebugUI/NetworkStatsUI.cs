@@ -10,9 +10,13 @@ namespace Game.Common.UI.DebugUI
     public class NetworkStatsUI : MonoBehaviour
     {
 
+        
         public float BandwidthIn = 0.0f;
         public float BandwidthOut = 0.0f;
-
+        private float BandwidthInLast = 0.0f;
+        private float BandwidthOutLast = 0.0f;
+        public float bandwidthTime = 0;
+        
         public bool useRaw = false;
     
         public TMP_Text bandiwdthInText;
@@ -41,7 +45,8 @@ namespace Game.Common.UI.DebugUI
                 NetworkManager.Instance.Networker.Ping();
                 initated = true;
             }
-            
+
+            bandwidthTime += Time.deltaTime;
             
             if (!pingTimer.IsRunning)
             {
@@ -64,8 +69,6 @@ namespace Game.Common.UI.DebugUI
         private void UpdateNetworkStats()
         {
         
-            BandwidthIn = NetworkManager.Instance.Networker.BandwidthIn;
-            BandwidthOut = NetworkManager.Instance.Networker.BandwidthOut;
         }
 
     
@@ -80,6 +83,16 @@ namespace Game.Common.UI.DebugUI
             MainThreadManager.Run(() =>
             {
                 pingText.text = "Ping - " + ping + "ms";
+
+                BandwidthIn = NetworkManager.Instance.Networker.BandwidthIn - BandwidthInLast;
+                BandwidthIn /= bandwidthTime;
+
+                BandwidthOut = NetworkManager.Instance.Networker.BandwidthOut - BandwidthOutLast;
+                BandwidthOut /= bandwidthTime;
+                
+                BandwidthInLast = NetworkManager.Instance.Networker.BandwidthIn;
+                BandwidthOutLast = NetworkManager.Instance.Networker.BandwidthOut;
+                bandwidthTime = 0;
             });
         }
 
