@@ -41,6 +41,7 @@ namespace Game.Client.Phases
             
             foreach(var playerID in syncData.playerIDs)
             {
+                Debug.Log($"Synced player {playerID}");
                 _phaseNetworkManager.masterSettings.playerIDRegistry.RegisterPlayer(playerID.ID, playerID.MatchID, playerID.ClientID);
                 var savedID = _phaseNetworkManager.masterSettings.playerIDRegistry.Get(playerID.ID);
 

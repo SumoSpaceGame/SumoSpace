@@ -17,7 +17,11 @@ namespace Game.Common.Networking
         {
             networkObject.Networker.playerAccepted += ServerOnPlayerConnected ;
         }
-        
+
+        partial void OnServerNetworkClose(NetWorker sender)
+        {
+            
+        }
         
         
         private void ServerOnPlayerConnected (NetworkingPlayer player, NetWorker sender)

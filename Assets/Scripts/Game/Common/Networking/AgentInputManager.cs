@@ -13,8 +13,8 @@ namespace Game.Common.Networking
 
         public MasterSettings masterSettings;
 
-        public ShipManager _shipManager; 
-        
+        public ShipManager _shipManager;
+        private bool isOwner = false;
         protected override void NetworkStart()
         {
             base.NetworkStart();
@@ -27,8 +27,11 @@ namespace Game.Common.Networking
             {
                 if (_shipManager == null)
                 {
-                    MainPersistantInstances.Get<AgentNetworkManager>()._playerShips
-                        .TryGet(_shipManager.playerMatchID, out _shipManager);
+                    var agentNetworkManager = MainPersistantInstances.Get<AgentNetworkManager>();
+                    if (agentNetworkManager == null) return;
+                    
+                    agentNetworkManager._playerShips
+                        .TryGet(agentNetworkManager.masterSettings.playerIDRegistry.Get(networkObject.MyPlayerId), out _shipManager);
                     return;
                 }
                 
@@ -50,10 +53,14 @@ namespace Game.Common.Networking
             {
                 return;
             }
-            
-            Debug.Log($"Taking control of ship {_shipManager.playerMatchID}");
-            
-            
+
+            isOwner = true;
+
+            if (_shipManager != null)
+            {
+                Debug.Log($"Taking control of ship {_shipManager.playerMatchID}");
+            }
+
             networkObject.TakeOwnership();
         }
     }

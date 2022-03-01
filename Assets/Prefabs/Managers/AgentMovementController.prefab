@@ -43,5 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b939de685f46451aadfcf1468ecded16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attachedShip: {fileID: 0}
+  playerIDRegistry: {fileID: 11400000, guid: ccf6ab7f4c32bbe4fbb6385be8026423, type: 2}
+  attachedShipManager: {fileID: 0}
+  initAgentInput: 0
   masterSettings: {fileID: 11400000, guid: 08b1afc459433574c83931546f497634, type: 2}

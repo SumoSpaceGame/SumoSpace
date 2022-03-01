@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using Game.Common.Networking;
 using Game.Common.Phases;
@@ -10,6 +11,10 @@ namespace Game.Common.Networking
 {
     public partial class GameNetworkManager : GameManagerBehavior
     { 
+        partial void OnClientNetworkClose(NetWorker sender)
+        {
+            
+        }
         
         partial void OnClientNetworkStart()
         {

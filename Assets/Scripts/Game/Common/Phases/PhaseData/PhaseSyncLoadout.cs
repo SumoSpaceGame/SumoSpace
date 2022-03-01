@@ -1,66 +1,45 @@
 ﻿using System;
+using System.Text;
 using UnityEngine;
 
 namespace Game.Common.Phases.PhaseData
 {
     public class PhaseSyncLoadout
     {
-
-        public struct SyncData
+       const int TrueFlag = 1 << 1;
+        
+        [Serializable]
+        public struct Data
         {
-            public int PlayerCount;
-            public int[] PlayerIDs;
-            public int[] PlayerSelections;
+            [SerializeField] public bool valid;
+            [SerializeField] public uint[] PlayerIDs;
+            [SerializeField] public int[] PlayerSelections;
         }
         
-        /// <summary>
-        /// Decodes byte[] to data used for sync. Byte structure consists of
-        /// 0 = playerCount
-        /// nextSection = playerIDs
-        /// nextSection = playerSelections
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public static SyncData Decode(byte[] data)
+        
+
+        public static byte[] Serialized(Data data)
         {
-
-            if (data.Length == 0)
-            {
-                Debug.LogError("Invalid data length, unable to process for sync loadout");
-            }
-            
-            var decodedData = new SyncData();
-
-            decodedData.PlayerCount = data[0];
-
-            decodedData.PlayerIDs = new int[decodedData.PlayerCount];
-            decodedData.PlayerSelections = new int[decodedData.PlayerCount];
-            
-            for (int i = 0; i < decodedData.PlayerCount; i++)
-            {
-                decodedData.PlayerIDs[i] = data[i + 1];
-                decodedData.PlayerSelections[i] = data[decodedData.PlayerCount + i + 1];
-            }
-
-            return decodedData;
+            byte[] jsonData = Encoding.UTF8.GetBytes(JsonUtility.ToJson(data));
+            byte[] joinedData = new byte[jsonData.Length + 1];
+            jsonData.CopyTo(joinedData, 1);
+            joinedData[0] = TrueFlag;
+            return joinedData;
         }
 
-        
-        public static byte[] Encode(int playerCount, int[] playerIDArr, int[] playerSelectionArr)
+        public static Data Deserialize(byte[] data)
         {
-            
-            byte[] data = new byte[playerCount + playerCount + 1];
-
-            data[0] = (byte) playerCount;
-
-            for (int i = 0; i < playerCount; i++)
+            if (data[0] != TrueFlag)
             {
-                data[i + 1] = (byte) playerIDArr[i];
-                playerSelectionArr[playerCount + i + 1] = (byte) playerSelectionArr[i];
+                return new Data() {valid = false};
             }
 
-            return data;
-
+            byte[] jsonData = new byte[data.Length - 1];
+            Array.Copy(data, 1, jsonData, 0, jsonData.Length);
+            
+            var finishedData = JsonUtility.FromJson<Data>(Encoding.UTF8.GetString(jsonData));
+            finishedData.valid = true;
+            return finishedData;
         }
         
     }

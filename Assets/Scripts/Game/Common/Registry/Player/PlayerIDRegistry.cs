@@ -29,7 +29,16 @@ namespace Game.Common.Registry
         public PlayerID Get(uint networkID)
         {
             //Debug.Log(clientID + 1);
-            return playerIDs[networkID];
+            try
+            {
+                return playerIDs[networkID];
+            }
+            catch (Exception e)
+            {
+                Debug.Log($"Failed to get player {networkID}");
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public PlayerID[] GetPlayers()

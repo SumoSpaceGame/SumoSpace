@@ -29,7 +29,6 @@ namespace Game.Common.Networking
             
             var requestData = RequestData.Deserialize(data);
             
-            Debug.Log(data);
             //Spawn ship
             // TODO: Move this code somewhere else
             MainThreadManager.Run(() =>
@@ -37,8 +36,8 @@ namespace Game.Common.Networking
                 var agentNetworkManager = MainPersistantInstances.Get<AgentNetworkManager>();
 
                 var playerID = playerIDRegistry.Get(requestData.clientOwner.ID);
-                
-                var ship = agentNetworkManager._shipSpawner.SpawnShip(playerID, 0,
+                var playerGameData = agentNetworkManager.masterSettings.playerGameDataRegistry.Get(playerID);
+                var ship = agentNetworkManager._shipSpawner.SpawnShip(playerID, playerGameData.shipCreationData.shipType,
                     requestData.clientOwner.ID == networkObject.MyPlayerId);
 
                 masterSettings.playerShips.Add(playerID, ship);

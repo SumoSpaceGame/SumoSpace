@@ -43,7 +43,7 @@ namespace Game.Common.Networking
             MainThreadManager.Run(()=>{ 
                 MainPersistantInstances.TryAdd(this);
             });
-
+            
 
             masterSettings.network.isServer = networkObject.IsServer;
             
@@ -51,14 +51,18 @@ namespace Game.Common.Networking
             {
                 networkType = NetworkType.Server;
                 OnServerNetworkStart();
+                networkObject.Networker.disconnected += OnServerNetworkClose;
             }
             else
             {
                 OnClientNetworkStart();
                 networkObject.Networker.onPingPong += OnPing;
                 networkObject.Networker.Ping();
+                networkObject.Networker.disconnected +=  OnClientNetworkClose;
                 
             }
+            
+            
             
             StartCoroutine(StartDebugMessage());
             
@@ -117,6 +121,16 @@ namespace Game.Common.Networking
         /// Called when client network has started
         /// </summary>
         partial void OnClientNetworkStart();
+        
+        /// <summary>
+        /// Called when server network has closed
+        /// </summary>
+        partial void OnServerNetworkClose(NetWorker sender);
+        
+        /// <summary>
+        /// Called when client network has closed
+        /// </summary>
+        partial void OnClientNetworkClose(NetWorker sender);
         
         
         /// <summary>

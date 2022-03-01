@@ -15,6 +15,7 @@ namespace Game.Common.Networking
         /// <summary>
         /// Ship request data. Should contain all information that will spawn a ship.
         /// </summary>
+        [Serializable]
         private struct RequestData
         {
             [SerializeField] public PlayerID clientOwner;
