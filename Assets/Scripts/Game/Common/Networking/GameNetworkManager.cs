@@ -83,8 +83,8 @@ namespace Game.Common.Networking
             while (networkObject.Networker.IsConnected)
             {
                 yield return new WaitForSeconds(10 + (float)ping);
-                networkObject.Networker.Ping();
-                Debug.Log("Ping: " + ping + " Frame Time: " + Time.deltaTime);
+                //networkObject.Networker.Ping();
+                
             }
             
         }

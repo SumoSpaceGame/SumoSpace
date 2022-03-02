@@ -4,6 +4,7 @@ using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Unity;
 using TMPro;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Game.Common.UI.DebugUI
 {
@@ -25,7 +26,7 @@ namespace Game.Common.UI.DebugUI
 
 
         private Stopwatch pingTimer = new Stopwatch();
-        private const long PING_TIMER = 2500;
+        private const long PING_TIMER = 10000;
     
 
         private bool initated = false;
@@ -67,6 +68,7 @@ namespace Game.Common.UI.DebugUI
                 BandwidthInLast = NetworkManager.Instance.Networker.BandwidthIn;
                 BandwidthOutLast = NetworkManager.Instance.Networker.BandwidthOut;
                 bandwidthTime = 0;
+                
             }
         
             UpdateNetworkStats();
@@ -94,6 +96,10 @@ namespace Game.Common.UI.DebugUI
             {
                 pingText.text = "Ping - " + ping + "ms";
 
+                if (sender.IsServer)
+                {
+                    Debug.Log("Ping: " + ping + " Frame Time: " + Time.deltaTime + $"\n {ConvertBytesCountToText(BandwidthIn)} {ConvertBytesCountToText(BandwidthOut)}");
+                }
             });
         }
 
