@@ -7,12 +7,12 @@ using UnityEngine;
 public class AgilityPrimaryFireAbility: ShipAbilityToggle {
 
     [SerializeField] private float rateOfFire; // shots / second
-    [SerializeField] private Coroutine coroutine;
-    public override void Execute(ShipManager shipManager, bool isServer = false) {
+    private Coroutine coroutine;
+    public override void Execute(ShipManager shipManager, bool isServer) {
         coroutine = shipManager.StartCoroutine(isServer ? ServerSide(shipManager) : ClientSide(shipManager));
     }
 
-    public override void Stop(ShipManager shipManager, bool isServer = false) {
+    public override void Stop(ShipManager shipManager, bool isServer) {
         shipManager.StopCoroutine(coroutine);
     }
 

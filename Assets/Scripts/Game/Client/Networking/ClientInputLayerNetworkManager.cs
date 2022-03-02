@@ -17,7 +17,7 @@ namespace Game.Common.Networking
             
             // TODO: Add client ship dodge to this (replace null)
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_DODGE, new ShipDodge()));
-            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_START_WEAPON, new StartGun()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_START_WEAPON, new ClientAgilityBeginPrimaryFire()));
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_END_WEAPON, new EndGun()));
             
             _commandHandlerNetworkManager.InitializeClientCommands(performers);

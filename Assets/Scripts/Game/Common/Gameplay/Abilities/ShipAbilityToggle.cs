@@ -8,5 +8,5 @@ public abstract class ShipAbilityToggle: ShipAbility {
 
     public CommandType StopCommand => stopCommand;
 
-    public abstract void Stop(ShipManager shipManager, bool isServer = false);
+    public abstract void Stop(ShipManager shipManager, bool isServer);
 }

@@ -19,6 +19,7 @@ public class ClientAgilityBeginPrimaryFire: ICommandPerformer {
 
     public bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments) {
         //Debug.Log("Starting fire");
+        shipManager.shipLoadout.PrimaryFire.Execute(shipManager, false);
         networker.SendData(CommandPacketData.Create(new byte[]{}), (int)CommandType.AGILITY_START_WEAPON, shipManager.playerMatchID);
         return true;
     }
