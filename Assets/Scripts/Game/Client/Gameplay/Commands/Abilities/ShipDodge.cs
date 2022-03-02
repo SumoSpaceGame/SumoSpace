@@ -18,7 +18,7 @@ public class ShipDodge: ICommandPerformer {
 
     public bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments) {
         Debug.Log("Dodge triggered");
-        networker.SendData(CommandPacketData.Create(new byte[]{}), (int)CommandType.AGILITY_DODGE, shipManager.playerMatchID);
+        //networker.SendData(CommandPacketData.Create(new byte[]{}), (int)CommandType.AGILITY_DODGE, shipManager.playerMatchID);
         return true;
     }
 }
