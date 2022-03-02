@@ -53,7 +53,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.25
+  m_Radius: 1.75
 --- !u!50 &-6591932524663397018
 Rigidbody2D:
   serializedVersion: 4
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementDirection: {x: 0, y: 0}
   movementRotation: 0
-  shipLoadout: {fileID: 11400000, guid: 2b3a35dc5ca329349abc59cb659dfb27, type: 2}
+  shipLoadout: {fileID: 11400000, guid: a99ede615317bd0409742db9825b5dc8, type: 2}
 --- !u!114 &8860599951211358576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,7 +252,10 @@ MonoBehaviour:
   virtualCursor: {fileID: 9146286379313495491, guid: 60cf878beb180f2428456ccfef098402, type: 3}
   isServer: 0
   isPlayer: 0
-  playerMatchID: 0
+  playerMatchID:
+    ID: 0
+    ClientID: 
+    MatchID: 0
 --- !u!114 &-8769192327207701676
 MonoBehaviour:
   m_ObjectHideFlags: 0
