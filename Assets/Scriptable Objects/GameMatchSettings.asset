@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameMatchSettings
   m_EditorClassIdentifier: 
   TeamCount: 2
-  TeamSize: 1
+  TeamSize: 2
   ClientMatchID: 1
   ClientTeam: 1
-  ClientTeamPosition: 1
+  ClientTeamPosition: 0

@@ -39,7 +39,7 @@ namespace Game.Common.Networking
                 Debug.LogError("Send movement update activated on server. This shouldn't happen");
                 return;
             }
-            networkObject.SendRpcUnreliable(RPC_MOVEMENT_UPDATE, Receivers.Server, movementVec, rotation);
+            //networkObject.SendRpcUnreliable(RPC_MOVEMENT_UPDATE, Receivers.Server, movementVec, rotation);
         }
 
         public void SendCommand(CommandType type, byte[] extra) {

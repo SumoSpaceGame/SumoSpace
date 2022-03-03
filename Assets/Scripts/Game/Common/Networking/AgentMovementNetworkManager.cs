@@ -42,8 +42,8 @@ namespace Game.Common.Networking
         
         protected override void NetworkStart()
         {
-            networkObject.UpdateInterval = masterSettings.network.updateInterval;
             base.NetworkStart();
+            networkObject.UpdateInterval = masterSettings.network.updateInterval;
             
             if(!networkObject.IsServer) networkObject.SendRpc(RPC_REQUEST_SHIP_SPAWN_DATA, Receivers.Server, "");
         }

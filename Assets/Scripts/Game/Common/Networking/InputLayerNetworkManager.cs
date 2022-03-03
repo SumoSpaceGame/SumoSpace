@@ -61,24 +61,6 @@ namespace Game.Common.Networking
             _commandHandlerNetworkManager.HandleRPC(args);
         }
 
-       
-        /// <summary>
-        /// Server receives movement updates, so it can update the ships
-        /// </summary>
-        /// <param name="args"></param>
-        public override void MovementUpdate(RpcArgs args)
-        {
-            if (networkObject.IsServer)
-            {
-                
-                ServerMovementUpdate(args);
-            }
-            else
-            {
-                Debug.LogError("Client received movement update through input layer, this should not be the case");
-                return;
-            }
-        }
 
         private void OnDestroy()
         {

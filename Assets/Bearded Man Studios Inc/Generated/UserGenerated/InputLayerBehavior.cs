@@ -4,12 +4,11 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"int\", \"byte[]\", \"ushort\"][\"Vector2\", \"float\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"id\", \"data\", \"shipID\"][\"movementVec\", \"rotationAngle\"]]")]
+	[GeneratedRPC("{\"types\":[[\"int\", \"byte[]\", \"ushort\"]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"id\", \"data\", \"shipID\"]]")]
 	public abstract partial class InputLayerBehavior : NetworkBehavior
 	{
 		public const byte RPC_COMMAND_UPDATE = 0 + 5;
-		public const byte RPC_MOVEMENT_UPDATE = 1 + 5;
 		
 		public InputLayerNetworkObject networkObject = null;
 
@@ -24,7 +23,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 			base.SetupHelperRpcs(networkObject);
 			networkObject.RegisterRpc("CommandUpdate", CommandUpdate, typeof(int), typeof(byte[]), typeof(ushort));
-			networkObject.RegisterRpc("MovementUpdate", MovementUpdate, typeof(Vector2), typeof(float));
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -108,12 +106,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		/// ushort shipID
 		/// </summary>
 		public abstract void CommandUpdate(RpcArgs args);
-		/// <summary>
-		/// Arguments:
-		/// Vector2 movementVec
-		/// float rotationAngle
-		/// </summary>
-		public abstract void MovementUpdate(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}
