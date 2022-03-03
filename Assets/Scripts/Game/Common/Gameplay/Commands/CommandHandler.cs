@@ -71,6 +71,7 @@ namespace Game.Common.Gameplay.Commands
         /// <returns>If successfully executed or not</returns>
         public bool ReceiveServer(CommandType commandType, ShipManager shipManager, ICommandNetworker networker, CommandPacketData data)
         {
+            if (shipManager == null) return false;
             
             if (commandReceivers.TryGetValue(commandType, out var command))
             {

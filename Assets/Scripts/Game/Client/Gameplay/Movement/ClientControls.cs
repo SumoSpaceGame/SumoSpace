@@ -67,6 +67,12 @@ namespace Game.Client.Gameplay.Movement
             //movementRotation = (Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg) + RotationAngleOffset;
             //var movementSend = movementVector;
 
+            if (inputLayer == null)
+            {
+                inputLayer = MainPersistantInstances.Get<InputLayerNetworkManager>();
+                return;
+            }
+
             //inputLayer.SendMovementUpdate(movementSend, rotationSend);
             if (sendPrimaryAbility) {
                 //inputLayer.PerformCommand(CommandType.AGILITY_DODGE, new byte[] { });

@@ -93,7 +93,7 @@ namespace Game.Common.Networking
         {
             if (networkType == NetworkType.Server)
             {
-                Debug.Log(1.0f/Time.deltaTime);
+                //Debug.Log(1.0f/Time.deltaTime);
                 ServerUpdate();
             }
             else

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4d9b2442e8feca43a62c6bbe4c636e7, type: 3}
+  m_Script: {fileID: 11500000, guid: 3c4f087626a6d6b4fbaf430e50217a76, type: 3}
   m_Name: Agility Primary Fire
   m_EditorClassIdentifier: 
   cooldown: 0

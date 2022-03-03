@@ -12,7 +12,7 @@ namespace Game.Common.Gameplay.Ship
         //TODO: Change when ship design is more situated
         public GameObject GetShip(int shipIndex)
         {
-            if (shipIndex < 0 || shipIndex > shipPrefabs.Count)
+            if (shipIndex < 0 || shipIndex >= shipPrefabs.Count)
             {
                 Debug.LogError("ShipIndex out of bounds! defaulting to 0");
                 return shipPrefabs[0];

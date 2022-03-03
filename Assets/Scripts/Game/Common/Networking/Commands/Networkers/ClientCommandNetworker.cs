@@ -18,7 +18,7 @@ namespace Game.Common.Gameplay.Commands.Networkers
         public bool SendData(CommandPacketData data, int commandID, PlayerID shipID)
         {
             if (networker.IsServer || networker == null) return false;
-            
+
             networker.SendRpc(rpcMethodID, Receivers.Server, commandID, data.GetBytes(), shipID.ID);
 
             return true;

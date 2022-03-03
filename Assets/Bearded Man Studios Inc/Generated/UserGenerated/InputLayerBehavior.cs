@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"int\", \"byte[]\", \"ushort\"]]")]
+	[GeneratedRPC("{\"types\":[[\"int\", \"byte[]\", \"uint\"]]")]
 	[GeneratedRPCVariableNames("{\"types\":[[\"id\", \"data\", \"shipID\"]]")]
 	public abstract partial class InputLayerBehavior : NetworkBehavior
 	{
@@ -22,7 +22,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
-			networkObject.RegisterRpc("CommandUpdate", CommandUpdate, typeof(int), typeof(byte[]), typeof(ushort));
+			networkObject.RegisterRpc("CommandUpdate", CommandUpdate, typeof(int), typeof(byte[]), typeof(uint));
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -103,7 +103,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		/// Arguments:
 		/// int id
 		/// byte[] data
-		/// ushort shipID
+		/// uint shipID
 		/// </summary>
 		public abstract void CommandUpdate(RpcArgs args);
 

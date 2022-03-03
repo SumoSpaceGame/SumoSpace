@@ -19,7 +19,7 @@ namespace Game.Common.Networking.Commands
         private ICommandNetworker _commandNetworker;
         
         private bool _isServer;
-        private uint _networkerID;
+        private uint _myNetworkerID;
         
         private MasterSettings _masterSettings;
         
@@ -27,9 +27,9 @@ namespace Game.Common.Networking.Commands
         {
             _isServer = networkObject.IsServer;
             _masterSettings = masterSettings;
-            _networkerID = networkObject.MyPlayerId;
+            _myNetworkerID = networkObject.MyPlayerId;
             
-            Debug.Log(_networkerID);
+            //Debug.Log(_networkerID);
             
             if (_isServer)
             {
@@ -65,15 +65,27 @@ namespace Game.Common.Networking.Commands
 
             CommandPacketData commandPacketData = CommandPacketData.Create(rpcArgs.GetAt<byte[]>(1));
 
-            ushort shipID = rpcArgs.GetAt<ushort>(2);
+            uint shipID = rpcArgs.GetAt<uint>(2);
             
             if (_isServer)
             {
+                if (rpcArgs.Info.SendingPlayer.IsHost)
+                {
+                    Debug.LogError("Error tried to execute command that was sent from self");
+                    return;
+                }
+                
                 _commandHandler.ReceiveServer(commandType, GetPlayerShip(rpcArgs.Info.SendingPlayer.NetworkId),
                     _commandNetworker, commandPacketData);
             }
             else
             {
+                if (!rpcArgs.Info.SendingPlayer.IsHost)
+                {
+                    Debug.LogError("Error tried to execute command that was sent from self");
+                    return;
+                }
+                
                 _commandHandler.ReceiveClient(commandType, GetPlayerShip(shipID),
                     _commandNetworker, commandPacketData);
             }
@@ -82,9 +94,13 @@ namespace Game.Common.Networking.Commands
 
         private ShipManager GetPlayerShip(uint networkerID)
         {
-            // TODO: REPLACE
             
-            var playerID = _masterSettings.playerIDRegistry.Get(_networkerID);
+            if (!_masterSettings.playerIDRegistry.TryGet(networkerID, out var playerID))
+            {
+                Debug.LogWarning("Could not receive command, invalid player ID");
+                return null;
+            }
+            
             MainPersistantInstances.Get<AgentNetworkManager>()._playerShips.TryGet(playerID, out var data);
             return data;
             //return _masterSettings.GetShip(networkerID);
@@ -99,9 +115,8 @@ namespace Game.Common.Networking.Commands
             }
             
             //Debug.Log(_networkerID);
-            var playerID = _masterSettings.playerIDRegistry.Get(_networkerID);
-            Debug.Log(MainPersistantInstances.Get<AgentNetworkManager>()._playerShips.TryGet(playerID, out var data));
-            Debug.Log(data);
+            var playerID = _masterSettings.playerIDRegistry.Get(_myNetworkerID);
+            MainPersistantInstances.Get<AgentNetworkManager>()._playerShips.TryGet(playerID, out var data);
             return data;
             //return _masterSettings.GetShip(_networkerID);
         }

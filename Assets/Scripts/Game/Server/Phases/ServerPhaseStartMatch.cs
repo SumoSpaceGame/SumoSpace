@@ -41,7 +41,7 @@ namespace Game.Server.Phases
         public void OnTimerFinished()
         {
             _gamePhaseNetworkManager.ServerNextPhase();
-            timer.StopEvent -= OnTimerFinished;
+            if(timer != null) timer.StopEvent -= OnTimerFinished;
         }
 
         public void OnUpdateReceived(RPCInfo info, byte[] data)
