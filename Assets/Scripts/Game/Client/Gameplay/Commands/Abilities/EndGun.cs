@@ -8,7 +8,7 @@ public class EndGun: ICommandPerformer {
         if (manager.isPlayer) { // Client
             //manager.simulationObject.representative.GetComponent<ShipRenderer>().StopShoot();
         } else { 
-            manager.simulationObject.representative.GetComponent<ShipRenderer>().StopShoot();
+            //manager.simulationObject.representative.GetComponent<ShipRenderer>().StopShoot();
         }
 
         return true;

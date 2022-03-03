@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: AgilityLoadout
   m_EditorClassIdentifier: 
   ShipMovement: {fileID: 11400000, guid: 766ced906addacd4c8e1afb7f9d2d5f0, type: 2}
-  PrimaryFire: {fileID: 0}
+  PrimaryFire: {fileID: 11400000, guid: b9dc0ca43c3cb9543a4fc93fcba6f29e, type: 2}
   PrimaryAbility: {fileID: 0}
   SecondaryAbility: {fileID: 0}

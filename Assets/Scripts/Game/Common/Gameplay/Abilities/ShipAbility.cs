@@ -5,10 +5,10 @@ using UnityEngine;
 //[CreateAssetMenu(menuName = "Ship Abilities", fileName = "New Ability", order = 1)]
 public abstract class ShipAbility: ScriptableObject {
     [SerializeField] protected float cooldown;
-    [SerializeField] protected CommandType command;
+    [SerializeField] protected CommandType executeCommand;
 
-    public CommandType Command => command;
+    public CommandType ExecuteCommand => executeCommand;
     public float Cooldown => cooldown;
 
-    public abstract void Execute(ShipManager shipManager, bool isServer = false);
+    public abstract void Execute(ShipManager shipManager, bool isServer);
 }

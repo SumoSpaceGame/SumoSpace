@@ -1,12 +1,12 @@
-﻿using Game.Common.Gameplay.Ship;
+﻿using Game.Common.Gameplay.Commands;
+using Game.Common.Gameplay.Ship;
 using UnityEngine;
 
 //[CreateAssetMenu(menuName = "Ship Abilities", fileName = "New Toggle Ability")]
 public abstract class ShipAbilityToggle: ShipAbility {
-    public override void Execute(ShipManager shipManager, bool isServer = false) {
-        Start(shipManager, isServer);
-    }
+    [SerializeField] protected CommandType stopCommand;
 
-    public abstract void Start(ShipManager shipManager, bool isServer = false);
-    public abstract void Stop(ShipManager shipManager, bool isServer = false);
+    public CommandType StopCommand => stopCommand;
+
+    public abstract void Stop(ShipManager shipManager, bool isServer);
 }

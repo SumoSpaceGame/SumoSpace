@@ -43,11 +43,11 @@ namespace Game.Client.Gameplay.Movement
             }
         }
         
-        private Coroutine fireCoroutine;
+        public Coroutine fireCoroutine;
         
         
         private bool sendPrimaryAbility;
-        private bool tryShoot;
+        private bool shooting;
     
         private Camera _camera;
 
@@ -70,7 +70,7 @@ namespace Game.Client.Gameplay.Movement
             //inputLayer.SendMovementUpdate(movementSend, rotationSend);
             if (sendPrimaryAbility) {
                 //inputLayer.PerformCommand(CommandType.AGILITY_DODGE, new byte[] { });
-                inputLayer.PerformCommand(ShipLoadout.PrimaryAbility.Command, new byte[] {});
+                inputLayer.PerformCommand(ShipLoadout.PrimaryAbility.ExecuteCommand, new byte[] {});
                 sendPrimaryAbility = false;
             }
         }
@@ -139,9 +139,11 @@ namespace Game.Client.Gameplay.Movement
          */
         public void OnFire(InputAction.CallbackContext ctx) {
             if (ctx.started) {
-                fireCoroutine = StartCoroutine(Shoot());
+                //fireCoroutine = StartCoroutine(Shoot());
+                inputLayer.PerformCommand(ShipLoadout.PrimaryFire.ExecuteCommand, new byte[] {});
             } else if (ctx.canceled) {
-                StopCoroutine(fireCoroutine);
+                //StopCoroutine(fireCoroutine);
+                inputLayer.PerformCommand(ShipLoadout.PrimaryFire.StopCommand, new byte[] {});
             }
         }
     }
