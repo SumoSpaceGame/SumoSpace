@@ -163,6 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tracerEffect: {fileID: 412744511839287056, guid: dfad6deb073668d4f8d8bcef46f301bb, type: 3}
   gunMuzzle: {fileID: 3082806136064184661}
+  tracerRange: 4
 --- !u!1 &7663768051837941964
 GameObject:
   m_ObjectHideFlags: 0

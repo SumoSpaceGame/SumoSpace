@@ -7,12 +7,14 @@ using UnityEngine;
 public class AgilityPrimaryFireAbility: ShipAbilityToggle {
 
     [SerializeField] private float rateOfFire; // shots / second
+    [SerializeField] private float knockback;
     private Coroutine coroutine;
     public override void Execute(ShipManager shipManager, bool isServer) {
         coroutine = shipManager.StartCoroutine(isServer ? ServerSide(shipManager) : ClientSide(shipManager));
     }
 
     public override void Stop(ShipManager shipManager, bool isServer) {
+        Debug.Log("Peepo sad " + isServer);
         shipManager.StopCoroutine(coroutine);
     }
 
@@ -24,7 +26,7 @@ public class AgilityPrimaryFireAbility: ShipAbilityToggle {
                 var t = shipManager.transform;
                 var hit = Physics2D.Raycast(t.position + t.up * 2, t.up);
                 if (hit.rigidbody) {
-                    hit.rigidbody.AddForceAtPosition(t.up * 10, hit.point, ForceMode2D.Impulse);
+                    hit.rigidbody.AddForceAtPosition(t.up * knockback, hit.point, ForceMode2D.Impulse);
                 }
                 counter = 0;
             }
