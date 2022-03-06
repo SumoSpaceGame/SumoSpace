@@ -1,7 +1,13 @@
-﻿namespace UnityTemplateProjects.Game.Server.DebugServer
+﻿using Game.Common.Settings;
+
+namespace UnityTemplateProjects.Game.Server.DebugServer
 {
     public class DebugWebserver
     {
+        public MasterSettings _settings;
+
+           
+        
         
     }
 }

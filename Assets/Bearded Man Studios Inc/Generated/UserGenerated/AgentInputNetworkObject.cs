@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedInterpol("{\"inter\":[0,0]")]
+	[GeneratedInterpol("{\"inter\":[0]")]
 	public partial class AgentInputNetworkObject : NetworkObject
 	{
-		public const int IDENTITY = 1;
+		public const int IDENTITY = 8;
 
 		private byte[] _dirtyFields = new byte[1];
 
@@ -16,10 +16,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		public event FieldChangedEvent fieldAltered;
 		#pragma warning restore 0067
 		[ForgeGeneratedField]
-		private Vector2 _inputDirection;
-		public event FieldEvent<Vector2> inputDirectionChanged;
-		public InterpolateVector2 inputDirectionInterpolation = new InterpolateVector2() { LerpT = 0f, Enabled = false };
-		public Vector2 inputDirection
+		private Vector3 _inputDirection;
+		public event FieldEvent<Vector3> inputDirectionChanged;
+		public InterpolateVector3 inputDirectionInterpolation = new InterpolateVector3() { LerpT = 0f, Enabled = false };
+		public Vector3 inputDirection
 		{
 			get { return _inputDirection; }
 			set
@@ -46,37 +46,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (inputDirectionChanged != null) inputDirectionChanged(_inputDirection, timestep);
 			if (fieldAltered != null) fieldAltered("inputDirection", _inputDirection, timestep);
 		}
-		[ForgeGeneratedField]
-		private float _inputRotation;
-		public event FieldEvent<float> inputRotationChanged;
-		public InterpolateFloat inputRotationInterpolation = new InterpolateFloat() { LerpT = 0f, Enabled = false };
-		public float inputRotation
-		{
-			get { return _inputRotation; }
-			set
-			{
-				// Don't do anything if the value is the same
-				if (_inputRotation == value)
-					return;
-
-				// Mark the field as dirty for the network to transmit
-				_dirtyFields[0] |= 0x2;
-				_inputRotation = value;
-				hasDirtyFields = true;
-			}
-		}
-
-		public void SetinputRotationDirty()
-		{
-			_dirtyFields[0] |= 0x2;
-			hasDirtyFields = true;
-		}
-
-		private void RunChange_inputRotation(ulong timestep)
-		{
-			if (inputRotationChanged != null) inputRotationChanged(_inputRotation, timestep);
-			if (fieldAltered != null) fieldAltered("inputRotation", _inputRotation, timestep);
-		}
 
 		protected override void OwnershipChanged()
 		{
@@ -87,7 +56,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		public void SnapInterpolations()
 		{
 			inputDirectionInterpolation.current = inputDirectionInterpolation.target;
-			inputRotationInterpolation.current = inputRotationInterpolation.target;
 		}
 
 		public override int UniqueIdentity { get { return IDENTITY; } }
@@ -95,21 +63,16 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		protected override BMSByte WritePayload(BMSByte data)
 		{
 			UnityObjectMapper.Instance.MapBytes(data, _inputDirection);
-			UnityObjectMapper.Instance.MapBytes(data, _inputRotation);
 
 			return data;
 		}
 
 		protected override void ReadPayload(BMSByte payload, ulong timestep)
 		{
-			_inputDirection = UnityObjectMapper.Instance.Map<Vector2>(payload);
+			_inputDirection = UnityObjectMapper.Instance.Map<Vector3>(payload);
 			inputDirectionInterpolation.current = _inputDirection;
 			inputDirectionInterpolation.target = _inputDirection;
 			RunChange_inputDirection(timestep);
-			_inputRotation = UnityObjectMapper.Instance.Map<float>(payload);
-			inputRotationInterpolation.current = _inputRotation;
-			inputRotationInterpolation.target = _inputRotation;
-			RunChange_inputRotation(timestep);
 		}
 
 		protected override BMSByte SerializeDirtyFields()
@@ -119,8 +82,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 			if ((0x1 & _dirtyFields[0]) != 0)
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _inputDirection);
-			if ((0x2 & _dirtyFields[0]) != 0)
-				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _inputRotation);
 
 			// Reset all the dirty fields
 			for (int i = 0; i < _dirtyFields.Length; i++)
@@ -141,26 +102,13 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			{
 				if (inputDirectionInterpolation.Enabled)
 				{
-					inputDirectionInterpolation.target = UnityObjectMapper.Instance.Map<Vector2>(data);
+					inputDirectionInterpolation.target = UnityObjectMapper.Instance.Map<Vector3>(data);
 					inputDirectionInterpolation.Timestep = timestep;
 				}
 				else
 				{
-					_inputDirection = UnityObjectMapper.Instance.Map<Vector2>(data);
+					_inputDirection = UnityObjectMapper.Instance.Map<Vector3>(data);
 					RunChange_inputDirection(timestep);
-				}
-			}
-			if ((0x2 & readDirtyFlags[0]) != 0)
-			{
-				if (inputRotationInterpolation.Enabled)
-				{
-					inputRotationInterpolation.target = UnityObjectMapper.Instance.Map<float>(data);
-					inputRotationInterpolation.Timestep = timestep;
-				}
-				else
-				{
-					_inputRotation = UnityObjectMapper.Instance.Map<float>(data);
-					RunChange_inputRotation(timestep);
 				}
 			}
 		}
@@ -172,13 +120,8 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 			if (inputDirectionInterpolation.Enabled && !inputDirectionInterpolation.current.UnityNear(inputDirectionInterpolation.target, 0.0015f))
 			{
-				_inputDirection = (Vector2)inputDirectionInterpolation.Interpolate();
+				_inputDirection = (Vector3)inputDirectionInterpolation.Interpolate();
 				//RunChange_inputDirection(inputDirectionInterpolation.Timestep);
-			}
-			if (inputRotationInterpolation.Enabled && !inputRotationInterpolation.current.UnityNear(inputRotationInterpolation.target, 0.0015f))
-			{
-				_inputRotation = (float)inputRotationInterpolation.Interpolate();
-				//RunChange_inputRotation(inputRotationInterpolation.Timestep);
 			}
 		}
 

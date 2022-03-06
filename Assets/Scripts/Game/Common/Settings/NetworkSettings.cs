@@ -8,5 +8,7 @@ namespace Game.Common.Settings
         public ulong updateInterval;
         public bool isServer;
         
+        
+        
     }
 }

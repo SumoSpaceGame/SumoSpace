@@ -36,14 +36,15 @@ namespace Game.Common.Networking
                 }
                 
                 var clientControls = _shipManager.clientControls;
-                networkObject.inputRotation = clientControls.movementRotation;
-                networkObject.inputDirection = clientControls.movementDirection;
+                //networkObject.inputRotation = clientControls.movementRotation;
+                networkObject.inputDirection = new Vector3(clientControls.movementDirection.x,clientControls.movementDirection.y, clientControls.movementRotation);
             }
 
             if (networkObject.IsServer)
-            {
-                _shipManager.shipController.targetAngle = networkObject.inputRotation;
-                _shipManager.shipController.movementVector = networkObject.inputDirection;
+            {   
+                var inputDir = networkObject.inputDirection;
+                _shipManager.shipController.targetAngle = inputDir.z;
+                _shipManager.shipController.movementVector = new Vector2(inputDir.x, inputDir.y);
             }
         }
 
