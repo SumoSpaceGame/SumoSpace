@@ -15,4 +15,5 @@ MonoBehaviour:
   cooldown: 0
   executeCommand: 1
   stopCommand: 2
-  rateOfFire: 0.5
+  rateOfFire: 4
+  knockback: 200
