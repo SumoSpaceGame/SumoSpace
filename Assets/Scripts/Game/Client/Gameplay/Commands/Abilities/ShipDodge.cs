@@ -4,12 +4,12 @@ using Game.Common.Gameplay.Ship;
 using UnityEngine;
 
 public class ShipDodge: ICommandPerformer {
-    public bool Receive(ShipManager manager, ICommandNetworker networker, CommandPacketData packetData) {
-        if (manager.isPlayer) { // Client
-            manager.simulationObject.representative.GetComponent<Animator>().SetTrigger("Dodge");
+    public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData) {
+        if (shipManager.isPlayer) { // Client
+            shipManager.simulationObject.representative.GetComponent<Animator>().SetTrigger("Dodge");
             Debug.Log("Dodge from me");
         } else { 
-            manager.simulationObject.representative.GetComponent<Animator>().SetTrigger("Dodge");
+            shipManager.simulationObject.representative.GetComponent<Animator>().SetTrigger("Dodge");
             Debug.Log("Dodge not from me");
         }
 

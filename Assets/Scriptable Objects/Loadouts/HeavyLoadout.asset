@@ -13,6 +13,4 @@ MonoBehaviour:
   m_Name: HeavyLoadout
   m_EditorClassIdentifier: 
   ShipMovement: {fileID: 11400000, guid: 383694b2317473d4383bc09d5d4f7923, type: 2}
-  PrimaryFire: {fileID: 0}
-  PrimaryAbility: {fileID: 0}
-  SecondaryAbility: {fileID: 0}
+  abilities: []

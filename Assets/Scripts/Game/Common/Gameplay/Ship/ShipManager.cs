@@ -20,8 +20,6 @@ namespace Game.Common.Gameplay.Ship
         public ShipLoadout shipLoadout;
         
         public SimulationObject simulationObject;
-        public ShipMovement shipMovement;
-        public ShipDodgeSettings sds;
         public AgentMovementNetworkManager networkMovement;
         public GameObject virtualCursorPrefab;
         public VirtualCursor virtualCursor;
@@ -39,21 +37,17 @@ namespace Game.Common.Gameplay.Ship
     
     
     
-        private void Start()
-        {
+        private void Start() {
+            shipLoadout.InitializeBehaviours(this);
             simulationObject.Create();
-            if (isPlayer)
-            {
+            if (isPlayer) {
                 UnityEngine.Camera.main.GetComponent<CameraFollow>().followTarget = simulationObject.representative.transform;
                 GetComponent<PlayerInput>().enabled = true;
                 
                 virtualCursor = Instantiate(virtualCursorPrefab).GetComponent<VirtualCursor>();
                 virtualCursor.followTarget = simulationObject.representative.transform;
-            }
-            else
-            {
+            } else {
                 clientControls.enabled = false;
-                
                 GetComponent<PlayerInput>().enabled = false;
             }
         }
@@ -67,25 +61,6 @@ namespace Game.Common.Gameplay.Ship
                 }
             }
         }
-        
-        //TODO Move to controller
-        public void Dodge() {
-            EnableColliders(false);
-            shipController.Dodge(clientControls.movementDirection);
-            StartCoroutine(sds.FinishDodge(this));
-        }
-
-        private Coroutine shootingCoroutine;
-        //TODO Same as above
-        public void StartGun() {
-            shootingCoroutine = StartCoroutine(shipController.Fire());
-        }
-        
-        //TODO Same as above
-        public void StopGun() {
-            StopCoroutine(shootingCoroutine);
-        }
-        
         public void OnLookRaw(InputAction.CallbackContext ctx) { 
             virtualCursor.OnLookRaw(ctx);
         }

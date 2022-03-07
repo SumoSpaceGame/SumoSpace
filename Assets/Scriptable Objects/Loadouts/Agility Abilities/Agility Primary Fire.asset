@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c4f087626a6d6b4fbaf430e50217a76, type: 3}
   m_Name: Agility Primary Fire
   m_EditorClassIdentifier: 
-  cooldown: 0
+  cooldown: 0.2
   executeCommand: 1
   stopCommand: 2
-  rateOfFire: 4
-  knockback: 200
+  knockback: 40
