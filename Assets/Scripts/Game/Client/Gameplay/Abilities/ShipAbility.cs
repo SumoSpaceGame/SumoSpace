@@ -33,7 +33,7 @@ namespace Game.Client.Gameplay.Abilities
             throw new System.NotImplementedException();
         }
 
-        public bool Receive(ShipManager manager, ICommandNetworker networker, CommandPacketData packetData)
+        public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData)
         {
             throw new System.NotImplementedException();
         }

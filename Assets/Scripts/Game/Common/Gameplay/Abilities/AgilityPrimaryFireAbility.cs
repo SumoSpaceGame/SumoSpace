@@ -1,48 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Game.Common.Gameplay.Ship;
 using UnityEngine;
 
 [CreateAssetMenu(menuName="Ship Abilities/Agility Abilities", fileName = "Agility Primary Fire", order=1)]
-public class AgilityPrimaryFireAbility: ShipAbilityToggle {
+public class AgilityPrimaryFireAbility: ShipAbility {
 
-    [SerializeField] private float rateOfFire; // shots / second
-    [SerializeField] private float knockback;
+    public float knockback;
+
     private Coroutine coroutine;
+
+    public override void ExecuteOnce(ShipManager shipManager, bool isServer) {
+        shipManager.GetComponent<AgilityPrimaryFireBehaviour>().ExecuteOnce(shipManager, isServer);
+    }
+
     public override void Execute(ShipManager shipManager, bool isServer) {
-        coroutine = shipManager.StartCoroutine(isServer ? ServerSide(shipManager) : ClientSide(shipManager));
+        shipManager.GetComponent<AgilityPrimaryFireBehaviour>().Execute(shipManager, isServer);
     }
 
     public override void Stop(ShipManager shipManager, bool isServer) {
-        Debug.Log("Peepo sad " + isServer);
-        shipManager.StopCoroutine(coroutine);
+        shipManager.GetComponent<AgilityPrimaryFireBehaviour>().Stop(shipManager, isServer);
     }
-
-    IEnumerator ServerSide(ShipManager shipManager) {
-        var counter = 0f;
-        while (counter >= 0) {
-            counter += rateOfFire * Time.deltaTime;
-            if (counter > 1) {
-                var t = shipManager.transform;
-                var hit = Physics2D.Raycast(t.position + t.up * 2, t.up);
-                if (hit.rigidbody) {
-                    hit.rigidbody.AddForceAtPosition(t.up * knockback, hit.point, ForceMode2D.Impulse);
-                }
-                counter = 0;
-            }
-            yield return null;
-        }
-    }
-
-    IEnumerator ClientSide(ShipManager shipManager) {
-        var counter = 0f;
-        while (counter >= 0) {
-            counter += rateOfFire * Time.deltaTime;
-            if (counter > 1) {
-                shipManager.simulationObject.representative.GetComponent<ShipRenderer>().Shoot();
-                counter = 0;
-            }
-            yield return null;
-        }
+    
+    public override void AddBehaviour(GameObject gameObject) {
+        gameObject.AddComponent<AgilityPrimaryFireBehaviour>();
     }
 }
