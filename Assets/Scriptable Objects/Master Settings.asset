@@ -16,7 +16,7 @@ MonoBehaviour:
   network:
     updateInterval: 15
     isServer: 0
-  InitServer: 0
+  InitServer: 1
   ServerAddress: localhost
   ServerPort: 22233
   playerShips: {fileID: 11400000, guid: a6b5c7b7baef1a64b9618c9fa1668202, type: 2}
