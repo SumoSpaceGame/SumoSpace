@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Game.Client.Gameplay.Movement;
 using Game.Common.Networking;
 using Game.Common.Registry;
@@ -23,8 +25,10 @@ namespace Game.Common.Gameplay.Ship
         public AgentMovementNetworkManager networkMovement;
         public GameObject virtualCursorPrefab;
         public VirtualCursor virtualCursor;
+
+        [EnumNamedList(typeof(ShipLoadout.AbilityType))]
+        public List<AbilityBehaviourComponent> behaviours = new List<AbilityBehaviourComponent>(Enum.GetValues(typeof(ShipLoadout.AbilityType)).Length);
         
-    
         [Space(2)]
         [Header("Defined on creation")]
         public bool isServer = false;
@@ -38,8 +42,8 @@ namespace Game.Common.Gameplay.Ship
     
     
         private void Start() {
-            shipLoadout.InitializeBehaviours(this);
             simulationObject.Create();
+            shipLoadout.InitializeBehaviours(this);
             if (isPlayer) {
                 UnityEngine.Camera.main.GetComponent<CameraFollow>().followTarget = simulationObject.representative.transform;
                 GetComponent<PlayerInput>().enabled = true;

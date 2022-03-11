@@ -15,10 +15,11 @@ namespace Game.Common.Networking
             var receivers = new List<KeyValuePair<CommandType, ICommand>>();
             
             receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_DODGE, new ServerShipDodge()));
-            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_START_WEAPON, new ServerAgilityBeginPrimaryFire()));
-            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_END_WEAPON, new ServerAgilityEndPrimaryFire()));
-            
-            
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_PRIMARY_FIRE_START, new ServerAgilityBeginPrimaryFire()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_PRIMARY_FIRE_END, new ServerAgilityEndPrimaryFire()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_PRIMARY_FIRE_START, new ServerHeavyBeginPrimaryFire()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_PRIMARY_FIRE_END, new ServerHeavyEndPrimaryFire()));
+
             _commandHandlerNetworkManager.InitializeServerCommands(receivers);
         }
 

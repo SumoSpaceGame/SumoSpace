@@ -19,8 +19,4 @@ public class ShipMovement : ScriptableObject {
     public float backwardsSpeedFactor = 0.6f; // The multiplication factor that sets the speed of the ship when going backwards
 
     public float maxForce = 16f;
-    
-    
-    // VERY TEMP - MOVE THIS!!!
-    public float timeBetweenShots = 0.5f;
 }

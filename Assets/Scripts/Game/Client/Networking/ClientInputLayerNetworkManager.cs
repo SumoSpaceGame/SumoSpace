@@ -15,10 +15,11 @@ namespace Game.Common.Networking
         {
             var performers = new List<KeyValuePair<CommandType, ICommandPerformer>>();
             
-            // TODO: Add client ship dodge to this (replace null)
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_DODGE, new ShipDodge()));
-            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_START_WEAPON, new ClientAgilityBeginPrimaryFire()));
-            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_END_WEAPON, new EndGun()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_PRIMARY_FIRE_START, new ClientAgilityBeginPrimaryFire()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_PRIMARY_FIRE_END, new ClientAgilityEndPrimaryFire()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_PRIMARY_FIRE_START, new ClientHeavyBeginPrimaryFire()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_PRIMARY_FIRE_END, new ClientHeavyEndPrimaryFire()));
             
             _commandHandlerNetworkManager.InitializeClientCommands(performers);
         }

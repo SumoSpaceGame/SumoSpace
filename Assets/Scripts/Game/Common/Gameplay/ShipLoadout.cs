@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Linq;
 using Game.Common.Gameplay.Ship;
 using UnityEngine;
 
@@ -27,15 +27,14 @@ public class ShipLoadout : ScriptableObject {
         return null;
     }
 
-    public void InitializeBehaviours(ShipManager manager) {
-        var go = manager.gameObject;
-        foreach (var shipAbility in abilities) {
-            shipAbility.AddBehaviour(go);
+    public void InitializeBehaviours(ShipManager shipManager) {
+        for (int i = 0; i < abilities.Count; i++) {
+            abilities[i].AddBehaviour(shipManager, (AbilityType)i);
         }
     }
-    
+
     public enum AbilityType {
-        PrimaryFire,
+        PrimaryFire = 0,
         PrimaryAbility,
         SecondaryAbility,
     }

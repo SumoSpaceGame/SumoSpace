@@ -1,18 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ShipRenderer : MonoBehaviour {
 
     [SerializeField] private TrailRenderer tracerEffect;
-    [SerializeField] private Transform gunMuzzle;
+    public Transform gunMuzzle;
     [SerializeField] private float tracerRange;
-
+    
+    private TrailRenderer tracer;
 
     public void Shoot() {
-        var tracer = Instantiate(tracerEffect, gunMuzzle);
+        tracer = Instantiate(tracerEffect, gunMuzzle);
         Destroy(tracer, 0.08f);
         tracer.transform.position = gunMuzzle.position;
         tracer.AddPosition(gunMuzzle.position + gunMuzzle.forward * tracerRange);
+    }
+
+    public void StartBeam() {
+        tracer = Instantiate(tracerEffect, gunMuzzle);
+        tracer.AddPosition(gunMuzzle.position + gunMuzzle.forward * 100);
+        //tracer.transform.position = gunMuzzle.position;
+    }
+
+    public void EndBeam() {
+        Destroy(tracer);
+    }
+
+    public void Beam() {
+        Physics.Raycast(gunMuzzle.position + gunMuzzle.forward * 2, gunMuzzle.forward, out var hit, 100f, 127);
+        tracer.SetPosition(tracer.positionCount - 1, hit.collider ? hit.point : gunMuzzle.position + gunMuzzle.forward * 100);
     }
 }
