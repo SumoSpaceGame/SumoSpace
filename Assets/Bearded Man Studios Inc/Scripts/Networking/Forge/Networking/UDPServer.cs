@@ -112,6 +112,7 @@ namespace BeardedManStudios.Forge.Networking
 			{
 				foreach (NetworkingPlayer player in Players)
 				{
+					
 					// check for distance here so the owner doesn't need to be sent in stream, used for NCW field proximity check
 					if (!commonServerLogic.PlayerIsDistanceReceiver(sender, player, frame, ProximityDistance, ProximityModeUpdateFrequency))
 						continue;
@@ -131,6 +132,37 @@ namespace BeardedManStudios.Forge.Networking
 			}
 		}
 
+		/// <summary>
+		/// Sends frame to specific player.
+		/// This has the ability to cause de-sync on systems.
+		/// </summary>
+		/// <param name="frame"></param>
+		/// <param name="sender"></param>
+		/// <param name="player"></param>
+		/// <param name="reliable"></param>
+		/// <param name="skipPlayer"></param>
+		/// <exception cref="ArgumentException"></exception>
+		public void Send(FrameStream frame, NetworkingPlayer sender, NetworkingPlayer player, bool reliable = false,
+			NetworkingPlayer skipPlayer = null)
+		{
+			if (frame.Receivers != Receivers.Target)
+			{
+				throw new ArgumentException("Cannot send frame with specified player without being receivers being set to target");
+			}
+
+			if (!commonServerLogic.PlayerIsReceiver(player, frame, ProximityDistance, skipPlayer, ProximityModeUpdateFrequency))
+				return;
+
+			try
+			{
+				Send(player, frame, reliable);
+			}catch{
+				Disconnect(player, true);
+			}
+		}
+		
+		
+		
 		/// <summary>
 		/// Sends binary message to the specified receiver(s)
 		/// </summary>
