@@ -2,7 +2,6 @@ using System;
 using Game.Common.Gameplay.Ship;
 using Game.Common.Registry;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Game.Common.Settings
 {
@@ -37,6 +36,35 @@ namespace Game.Common.Settings
         [Space(4)]
         [Header("Misc")]
         public ShipPrefabList ShipPrefabList;
+
+        /// <summary>
+        /// Called on start, will process args and set required data
+        /// </summary>
+        private void Awake()
+        {
+            string[] args = System.Environment.GetCommandLineArgs ();
+            string input = "";
+            for (int i = 0; i < args.Length; i++) {
+                if (i + 1 >= args.Length) continue;
+                
+                switch (args[i])
+                {
+                    case "-teamsize":
+                        matchSettings.TeamSize = Int32.Parse(args[i + 1]);
+                        break;
+                    case "-teamamount":
+                        matchSettings.TeamCount = Int32.Parse(args[i + 1]);
+                        break;
+                    case "-updateinterval":
+                        network.updateInterval = UInt64.Parse(args[i + 1]);
+                        break;
+                    
+                }
+                
+                
+            }
+        }
+
         public void Reset()
         {
             if(playerShips != null) playerShips.Reset();
@@ -86,14 +114,23 @@ namespace Game.Common.Settings
 
         }
 
-        public void RegisterPlayer(uint networkID, ushort matchID, string clientID)
+        public PlayerID RegisterPlayer(uint networkID, ushort matchID, string clientID,
+            PlayerStaticData staticData = null)
         {
             playerIDRegistry.RegisterPlayer(networkID, matchID, clientID);
             var savedID = playerIDRegistry.Get(networkID);
 
-
-            playerStaticDataRegistry.Add(savedID, new PlayerStaticData() { });
+            if (staticData == null)
+            {
+                playerStaticDataRegistry.Add(savedID, new PlayerStaticData() { });
+            }
+            else
+            {
+                playerStaticDataRegistry.Add(savedID, staticData);
+            }
             playerGameDataRegistry.Add(savedID, new PlayerGameData() { });
+
+            return savedID;
         }
     }
 }
