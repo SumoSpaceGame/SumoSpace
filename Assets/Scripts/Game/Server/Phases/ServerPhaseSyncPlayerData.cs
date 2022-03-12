@@ -23,7 +23,8 @@ namespace Game.Server.Phases
             Debug.Log("Sending clients player data");
             PhaseSyncPlayerData.Data data = new PhaseSyncPlayerData.Data();
             data.playerIDs = _gamePhaseNetworkManager.masterSettings.GetPlayerIDs();
-            
+            data.serverUpdateInterval = _gamePhaseNetworkManager.masterSettings.network.updateInterval;
+            data.friendlyFire = _gamePhaseNetworkManager.masterSettings.matchSettings.FriendlyFire;
             _gamePhaseNetworkManager.SendPhaseUpdate(Phase.MATCH_SYNC_PLAYER_DATA, PhaseSyncPlayerData.Serialized(data));
         }
 

@@ -45,6 +45,10 @@ namespace Game.Client.Phases
                 _phaseNetworkManager.masterSettings.RegisterPlayer(playerID.ID, playerID.MatchID, playerID.ClientID);
             }
             Debug.Log("Synced played data");
+
+            // TODO: Sync in a better location
+            _phaseNetworkManager.masterSettings.network.updateInterval = syncData.serverUpdateInterval;
+            _phaseNetworkManager.masterSettings.matchSettings.FriendlyFire = syncData.friendlyFire;
             
             _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_SYNC_PLAYER_DATA, new byte[1]);
         }

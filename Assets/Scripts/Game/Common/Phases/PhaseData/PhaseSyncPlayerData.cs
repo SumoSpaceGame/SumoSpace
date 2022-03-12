@@ -16,6 +16,8 @@ namespace Game.Common.Phases.PhaseData
         {
             [SerializeField] public bool valid; 
             [SerializeField] public PlayerID[] playerIDs;
+            [SerializeField] public ulong serverUpdateInterval;
+            [SerializeField] public bool friendlyFire;
         }
         
         
