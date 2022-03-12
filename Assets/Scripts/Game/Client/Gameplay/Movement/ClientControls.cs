@@ -1,6 +1,4 @@
 using System.Collections;
-using Game.Client.Gameplay.Abilities;
-using Game.Common.Gameplay.Commands;
 using Game.Common.Instances;
 using Game.Common.Networking;
 using UnityEngine;
@@ -15,7 +13,7 @@ namespace Game.Client.Gameplay.Movement
     public class ClientControls : MonoBehaviour {
 
         //public ShipMovement ShipMovement => shipMovement;
-        [SerializeField] private ShipLoadout ShipLoadout => shipLoadout;
+        private ShipLoadout ShipLoadout => shipLoadout;
 
         public Vector2 movementDirection;
         public float movementRotation;
