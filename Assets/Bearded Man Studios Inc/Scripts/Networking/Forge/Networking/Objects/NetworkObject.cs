@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Debug = UnityEngine.Debug;
 
 namespace BeardedManStudios.Forge.Networking
 {
@@ -1371,7 +1372,9 @@ namespace BeardedManStudios.Forge.Networking
 
 				// Generate a binary frame with a router
 				Binary frame = new Binary(Networker.Time.Timestep, Networker is TCPClient, sendBinaryData, receivers, MessageGroupIds.GetId("NO_BIN_DATA_" + NetworkId), Networker is BaseTCP, RouterIds.BINARY_DATA_ROUTER_ID);
-
+				
+				
+				
 #if STEAMWORKS
                 if (Networker is SteamP2PServer)
                     ((SteamP2PServer)Networker).Send(frame, reliable, skipPlayer);
@@ -1412,10 +1415,16 @@ namespace BeardedManStudios.Forge.Networking
 						// Replicate the data to the other clients
 						if (Networker is IServer)
 						{
-							BMSByte data = new BMSByte().Clone(frame.StreamData);
+							// Do not read or replicate if the server denies replication
+							if (ServerAllowBinaryData(frame.StreamData, frame.Receivers))
+							{
+								BMSByte data = new BMSByte().Clone(frame.StreamData);
 
-							if (data != null)
-								SendBinaryData(data, ProximityBasedFields ? ProximityBasedFieldsMode : Receivers.All, DIRTY_FIELD_SUB_ROUTER_ID, false, true);
+								if (data != null)
+									SendBinaryData(data,
+										ProximityBasedFields ? ProximityBasedFieldsMode : Receivers.All,
+										DIRTY_FIELD_SUB_ROUTER_ID, false, true);
+							}
 						}
 
 						ReadDirtyFields(frame.StreamData, frame.TimeStep);
