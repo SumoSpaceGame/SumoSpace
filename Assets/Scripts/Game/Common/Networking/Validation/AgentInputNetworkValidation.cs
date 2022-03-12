@@ -15,5 +15,9 @@
                 return false;
             }
         }
+        protected override bool ServerAllowBinaryData(BMSByte data, Receivers receivers)
+        {
+            return false;
+        }
     }
 }
