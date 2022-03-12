@@ -4,10 +4,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Game.Common.Settings;
-using ICSharpCode.NRefactory.Ast;
 using TMPro;
 using UnityEngine;
-using Application = UnityEngine.WSA.Application;
 
 // A debug server that is hosted along the server, this will send statistical information
 // If management required, then we would need a standalone system to launch, restart, etc
