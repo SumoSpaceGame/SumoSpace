@@ -1,3 +1,4 @@
+using System.Collections;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
@@ -50,6 +51,20 @@ namespace Game.Common.Networking
 
             }*/
         }
+
+        public float timeout = 30;
+        public IEnumerator TimeoutWait()
+        {
+            yield return new WaitForSecondsRealtime(timeout);
+
+            if (!_gameClient.IsConnected)
+            {
+                Disconnect();
+            }
+            timeoutWaitCor = null;
+        }
+
+        public Coroutine timeoutWaitCor;
     
         public void Connect(string address, ushort port)
         {
@@ -62,13 +77,22 @@ namespace Game.Common.Networking
             _gameClient.serverAccepted += (sender) =>
             {
                 Debug.Log("Player Connected!");
+                MainThreadManager.Run(() =>
+                {
+                    if (timeoutWaitCor != null)
+                    {
+                        StopCoroutine(timeoutWaitCor);
+                        timeoutWaitCor = null;
+                    }
+                });
                 
                 NetworkObject.Flush(_gameClient);
             };
-            _gameClient.connectAttemptFailed += (sender) => Debug.Log("Connection Failed!");
-
+            
+            //_gameClient.connectAttemptFailed += (sender) => Debug.Log("Connection Failed!");
+            
             _gameClient.Connect(address, port);
-        
+            timeoutWaitCor = StartCoroutine(TimeoutWait());
 
             //If network manager does not exist, make sure to spawn it in. 
             if (NetworkManager.Instance == null)
@@ -79,6 +103,12 @@ namespace Game.Common.Networking
             Rpc.MainThreadRunner = MainThreadManager.Instance;
         
             NetworkManager.Instance.Initialize(_gameClient);
+        }
+
+        public void Disconnect(bool forced = true)
+        {
+            if (_gameClient == null) return;
+            _gameClient.Disconnect(forced);
         }
         
         public void Host(string address, ushort port)
