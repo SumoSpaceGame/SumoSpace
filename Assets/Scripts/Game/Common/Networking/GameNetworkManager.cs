@@ -26,7 +26,9 @@ namespace Game.Common.Networking
         
         private NetworkType networkType = NetworkType.Client;
 
-
+    
+        
+        
         private void Awake()
         {
             DontDestroyOnLoad(this);
@@ -57,37 +59,17 @@ namespace Game.Common.Networking
             else
             {
                 OnClientNetworkStart();
-                networkObject.Networker.onPingPong += OnPing;
-                networkObject.Networker.Ping();
                 networkObject.Networker.disconnected +=  OnClientNetworkClose;
                 
             }
             
             
             
-            StartCoroutine(StartDebugMessage());
             
             
             base.NetworkStart();
         }
 
-        private double ping;
-        
-        private void OnPing(double i, NetWorker networker)
-        {
-            ping = i;
-        }
-        
-        private IEnumerator StartDebugMessage()
-        {
-            while (networkObject.Networker.IsConnected)
-            {
-                yield return new WaitForSeconds(10 + (float)ping);
-                //networkObject.Networker.Ping();
-                
-            }
-            
-        }
 
         private void Update()
         {

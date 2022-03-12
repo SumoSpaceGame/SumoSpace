@@ -19,10 +19,23 @@ namespace Game.Common.Networking
         {
             base.NetworkStart();
             this.networkObject.UpdateInterval = masterSettings.network.updateInterval;
+            masterSettings.network.OnUpdateIntervalChange += UpdateInterval;
+        }
+
+
+        private void UpdateInterval(ulong value)
+        {
+            this.networkObject.UpdateInterval = value;
+        }
+
+        private void OnDestroy()
+        {
+            masterSettings.network.OnUpdateIntervalChange -= UpdateInterval;
         }
 
         private void Update()
         {
+            
             if (this.networkObject.IsOwner && !networkObject.IsServer)
             {
                 if (_shipManager == null)

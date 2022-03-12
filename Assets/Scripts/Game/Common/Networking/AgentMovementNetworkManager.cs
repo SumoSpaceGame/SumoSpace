@@ -46,7 +46,20 @@ namespace Game.Common.Networking
             networkObject.UpdateInterval = masterSettings.network.updateInterval;
             
             if(!networkObject.IsServer) networkObject.SendRpc(RPC_REQUEST_SHIP_SPAWN_DATA, Receivers.Server, "");
+            masterSettings.network.OnUpdateIntervalChange += UpdateInterval;
         }
+
+
+        private void UpdateInterval(ulong value)
+        {
+            this.networkObject.UpdateInterval = value;
+        }
+
+        private void OnDestroy()
+        {
+            masterSettings.network.OnUpdateIntervalChange -= UpdateInterval;
+        }
+
     
         
         public void Update()
