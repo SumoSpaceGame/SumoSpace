@@ -26,7 +26,7 @@ namespace Game.Common.Networking
             }
 
             var ClientMatchID = data.GlobalID;
-            var spawnedShip = _shipSpawner.SpawnShip(ClientMatchID, shipID, false);
+            var spawnedShip = _shipSpawner.SpawnShip(ClientMatchID, shipID, false, false);
             
             _playerShips.Add(ClientMatchID, spawnedShip);
     

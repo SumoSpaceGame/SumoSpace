@@ -37,8 +37,11 @@ namespace Game.Common.Networking
 
                 var playerID = playerIDRegistry.Get(requestData.clientOwner.ID);
                 var playerGameData = agentNetworkManager.masterSettings.playerGameDataRegistry.Get(playerID);
+                var isPlayer = requestData.clientOwner.ID == networkObject.MyPlayerId;
+                
+                var isEnemy = false;
                 var ship = agentNetworkManager._shipSpawner.SpawnShip(playerID, playerGameData.shipCreationData.shipType,
-                    requestData.clientOwner.ID == networkObject.MyPlayerId);
+                    isPlayer, isEnemy);
 
                 masterSettings.playerShips.Add(playerID, ship);
                 

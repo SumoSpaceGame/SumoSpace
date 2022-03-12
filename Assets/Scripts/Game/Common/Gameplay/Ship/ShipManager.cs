@@ -34,7 +34,21 @@ namespace Game.Common.Gameplay.Ship
     
 
         public PlayerID playerMatchID;
-    
+
+        public void SetLayer(LayerMask layer)
+        {
+            this.gameObject.layer = layer;
+            SetLayerChildren(gameObject, layer);
+        }
+
+        private void SetLayerChildren(GameObject obj, LayerMask layer)
+        {
+            foreach (GameObject child in this.transform)
+            {
+                child.layer = layer;
+                SetLayerChildren(child, layer);
+            }
+        }
     
     
         private void Start() {

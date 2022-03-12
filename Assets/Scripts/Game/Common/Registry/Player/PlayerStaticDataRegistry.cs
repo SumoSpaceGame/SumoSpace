@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Common.Registry
@@ -19,12 +20,22 @@ namespace Game.Common.Registry
 
     }
 
-    public struct PlayerStaticData
+    /// <summary>
+    /// Is a class to keep reference
+    /// </summary>
+    [Serializable]
+    public class PlayerStaticData
     {
         /// <summary>
         /// Main ID of the player. This is global game, so even out of this match, it will be unique
         /// </summary>
-        public PlayerID GlobalID;
+        [NonSerialized]public PlayerID GlobalID;
+
+        [SerializeField]
+        public int TeamID;
+        [SerializeField]
+        public int TeamPosition;
+        [SerializeField]
         public string PlayerName;
     }
     

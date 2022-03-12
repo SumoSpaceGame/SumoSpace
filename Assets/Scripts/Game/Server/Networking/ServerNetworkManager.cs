@@ -65,7 +65,13 @@ namespace Game.Common.Networking
             
             
                 // Register the player, this only happens in the server side.
-                masterSettings.RegisterPlayer(player.NetworkId, gameMatchSettings.ClientMatchID, "");
+                var id = masterSettings.RegisterPlayer(player.NetworkId, gameMatchSettings.ClientMatchID, "");
+
+                if (masterSettings.playerStaticDataRegistry.TryGet(id, out var data))
+                {
+                    data.TeamID = gameMatchSettings.ClientTeam;
+                    data.TeamPosition = gameMatchSettings.ClientTeamPosition;
+                }
                 
                 networkObject.SendRpc(player, RPC_SYNC_MATCH_SETTINGS, gameMatchSettings.GetSerialized());
             });

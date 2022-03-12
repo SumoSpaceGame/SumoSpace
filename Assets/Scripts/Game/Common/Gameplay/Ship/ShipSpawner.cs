@@ -8,9 +8,10 @@ using UnityEngine;
 public class ShipSpawner : MonoBehaviour
 {
     public ShipPrefabList shipPrefabList;
-    
 
-    public ShipManager SpawnShip(PlayerID playerID, int shipType, bool isPlayer)
+    public LayerMask player, team, enemy;
+    
+    public ShipManager SpawnShip(PlayerID playerID, int shipType, bool isPlayer, bool isEnemy)
     {
         var prefab = shipPrefabList.GetShip(shipType);
         var shipClone = Instantiate(prefab);
@@ -20,7 +21,13 @@ public class ShipSpawner : MonoBehaviour
         shipClass.isPlayer = isPlayer;
         shipClass.playerMatchID = playerID;
 
+        if (isEnemy && isPlayer)
+        {
+            Debug.LogError("Ship spawned being enemy and player, should not be possible");
+        }
 
+        shipClass.SetLayer( isPlayer ? player : isEnemy ? enemy : team);
+        
         return shipClass;
     }
 }

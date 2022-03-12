@@ -39,10 +39,11 @@ namespace Game.Client.Phases
                 return;
             }
             
-            foreach(var playerID in syncData.playerIDs)
+            for(int i = 0 ; i < syncData.playerIDs.Length; i++)
             {
+                var playerID = syncData.playerIDs[i];
                 Debug.Log($"Synced player {playerID}");
-                _phaseNetworkManager.masterSettings.RegisterPlayer(playerID.ID, playerID.MatchID, playerID.ClientID);
+                var id = _phaseNetworkManager.masterSettings.RegisterPlayer(playerID.ID, playerID.MatchID, playerID.ClientID, syncData.staticData[i]);
             }
             Debug.Log("Synced played data");
 
