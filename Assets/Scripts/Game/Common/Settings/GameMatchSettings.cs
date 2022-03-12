@@ -22,6 +22,7 @@ public class GameMatchSettings : ScriptableObject
     [SerializeField]public ushort ClientMatchID;
     [SerializeField] public int ClientTeam;
     [SerializeField] public int ClientTeamPosition;
+    [SerializeField] public bool FriendlyFire;
     
     public int MaxPlayerCount
     {
