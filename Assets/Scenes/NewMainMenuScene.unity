@@ -281,7 +281,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 46317039}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1569006982}
+        m_TargetAssemblyTypeName: Game.Common.Util.SceneUtility, Game
+        m_MethodName: Quit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &46317039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1371,6 +1383,63 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!1001 &912503062
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5393052028107760924, guid: fb7af683a20283c429c1037188663440, type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5393052028107760924, guid: fb7af683a20283c429c1037188663440, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.33750945
+      objectReference: {fileID: 0}
+    - target: {fileID: 5393052028107760924, guid: fb7af683a20283c429c1037188663440, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.2806617
+      objectReference: {fileID: 0}
+    - target: {fileID: 5393052028107760924, guid: fb7af683a20283c429c1037188663440, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.9693756
+      objectReference: {fileID: 0}
+    - target: {fileID: 5393052028107760924, guid: fb7af683a20283c429c1037188663440, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5393052028107760924, guid: fb7af683a20283c429c1037188663440, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5393052028107760924, guid: fb7af683a20283c429c1037188663440, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5393052028107760924, guid: fb7af683a20283c429c1037188663440, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5393052028107760924, guid: fb7af683a20283c429c1037188663440, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5393052028107760924, guid: fb7af683a20283c429c1037188663440, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5393052028107760924, guid: fb7af683a20283c429c1037188663440, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5393052028107760926, guid: fb7af683a20283c429c1037188663440, type: 3}
+      propertyPath: m_Name
+      value: MasterUIController
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fb7af683a20283c429c1037188663440, type: 3}
 --- !u!1 &956158594
 GameObject:
   m_ObjectHideFlags: 0
@@ -1714,7 +1783,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1340714771}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1569006981}
+        m_TargetAssemblyTypeName: Game.Common.UI.DirectConnection.DirectConnectionUIHandler,
+          Game
+        m_MethodName: ConnectToServerAuto
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1340714771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2056,6 +2138,9 @@ GameObject:
   - component: {fileID: 1569006978}
   - component: {fileID: 1569006977}
   - component: {fileID: 1569006976}
+  - component: {fileID: 1569006980}
+  - component: {fileID: 1569006981}
+  - component: {fileID: 1569006982}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2147,6 +2232,49 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1569006980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569006975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3325739d0927314bb17ac1c02ab6826, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkManagerPrefab: {fileID: 186558, guid: 79adc0da5b6caf74990d862696696ecd, type: 3}
+  gameMatchSettings: {fileID: 11400000, guid: 7b7c161bfd2f92949ac964df79581d2a, type: 2}
+  timeout: 30
+--- !u!114 &1569006981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569006975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 086238fa307b215449c87cfce5a170ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AddressTextField: {fileID: 0}
+  PortTextField: {fileID: 0}
+  connector: {fileID: 1569006980}
+  masterSettings: {fileID: 11400000, guid: 08b1afc459433574c83931546f497634, type: 2}
+--- !u!114 &1569006982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569006975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 889783b916c8164429addef31b057667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1595955865
 GameObject:
   m_ObjectHideFlags: 0
@@ -2160,7 +2288,7 @@ GameObject:
   - component: {fileID: 1595955868}
   - component: {fileID: 1595955867}
   m_Layer: 5
-  m_Name: Connect
+  m_Name: DConnect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2229,7 +2357,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1595955868}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1569006981}
+        m_TargetAssemblyTypeName: Game.Common.UI.DirectConnection.DirectConnectionUIHandler,
+          Game
+        m_MethodName: DebugConnect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1595955868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3262,7 +3403,7 @@ GameObject:
   - component: {fileID: 2091069168}
   - component: {fileID: 2091069167}
   m_Layer: 5
-  m_Name: Quit
+  m_Name: DHost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3331,7 +3472,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2091069168}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1569006981}
+        m_TargetAssemblyTypeName: Game.Common.UI.DirectConnection.DirectConnectionUIHandler,
+          Game
+        m_MethodName: DebugHost
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2091069168
 MonoBehaviour:
   m_ObjectHideFlags: 0

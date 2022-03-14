@@ -1,6 +1,7 @@
 using System;
 using Game.Common.Networking;
 using Game.Common.Settings;
+using Game.Common.Util;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -49,6 +50,28 @@ namespace Game.Common.UI.DirectConnection
         {
             ProcessTextFields();
             connector.Connect(ServerAddress, ServerPort);
+        }
+
+        /// <summary>
+        /// Automatically polls the ip from sorrer.dev/sumospace/currentServer
+        /// </summary>
+        public void ConnectToServerAuto()
+        {
+            var ip = HttpUtil.Get("https://www.sorrer.dev/sumospace/ds.html");
+
+            string[] split = ip.Split(':');
+            if (split.Length > 2)
+            {
+                Debug.LogError("AutoServer invalid address");
+                return;
+            }
+            
+            Debug.Log("Auto to " + ip);
+
+            string address = split[0];
+            ushort port = UInt16.Parse(split[1]);
+            
+            connector.Connect(address, port);
         }
 
         public void DebugConnect()

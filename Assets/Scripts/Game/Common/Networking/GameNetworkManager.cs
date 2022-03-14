@@ -8,6 +8,8 @@ using BeardedManStudios.Forge.Networking.Unity;
 using Game.Common.Instances;
 using Game.Common.Phases;
 using Game.Common.Settings;
+using ICSharpCode.NRefactory.Ast;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 namespace Game.Common.Networking
@@ -62,8 +64,11 @@ namespace Game.Common.Networking
                 networkObject.Networker.disconnected +=  OnClientNetworkClose;
                 
             }
-            
-            
+
+            this.networkObject.Networker.disconnected += (sender) =>
+            {
+                StopMatch();
+            };
             
             
             
@@ -91,7 +96,17 @@ namespace Game.Common.Networking
             MainPersistantInstances.Remove<GameNetworkManager>();
             Destroy(this.gameObject);
         }
-    
+
+
+        /// <summary>
+        /// Destroys and removes all match instance items
+        /// </summary>
+        public void StopMatch()
+        {
+            NetworkManager.Instance.Disconnect();
+            masterSettings.Reset();
+            SceneManager.LoadScene(1);
+        }
 
         
         

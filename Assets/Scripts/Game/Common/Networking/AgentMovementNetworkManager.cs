@@ -47,6 +47,8 @@ namespace Game.Common.Networking
             
             if(!networkObject.IsServer) networkObject.SendRpc(RPC_REQUEST_SHIP_SPAWN_DATA, Receivers.Server, "");
             masterSettings.network.OnUpdateIntervalChange += UpdateInterval;
+            
+            
         }
 
 

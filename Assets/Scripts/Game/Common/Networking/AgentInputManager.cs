@@ -20,6 +20,7 @@ namespace Game.Common.Networking
             base.NetworkStart();
             this.networkObject.UpdateInterval = masterSettings.network.updateInterval;
             masterSettings.network.OnUpdateIntervalChange += UpdateInterval;
+            
         }
 
 

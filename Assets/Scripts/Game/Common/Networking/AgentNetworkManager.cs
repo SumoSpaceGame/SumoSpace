@@ -38,6 +38,8 @@ namespace Game.Common.Networking
             MainThreadManager.Run(()=>{ 
                 MainPersistantInstances.TryAdd(this);
             });
+            
+            
         }
 
 

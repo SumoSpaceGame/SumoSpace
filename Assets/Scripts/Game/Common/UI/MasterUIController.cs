@@ -15,16 +15,36 @@ namespace Game.Common.UI
         public TMP_Text ReadyUpText;
 
         public GameObject WaitingForServerText;
+        public GameObject PopupPrefab;
         
         public Button selectCharacter1;
         public Button selectCharacter2;
         public Button selectCharacter3;
         public Button lockedInButton;
         
+        
         void Start()
         {
             MainPersistantInstances.Add(this);
             DontDestroyOnLoad(this.gameObject);
+        }
+
+        public void CreatePopup(string title, string message, string[] buttons, PopUpUI.ClosedEvent closed, PopUpUI.ButtonPressedEvent pressed)
+        {
+            var go = Instantiate(PopupPrefab);
+            var popup = go.GetComponent<PopUpUI>();
+
+            if (popup == null)
+            {
+                Destroy(go);
+                Debug.LogError("Supplied popup does not have a popup ui component.");
+                return;
+            }
+
+            popup.OnClose += closed;
+            popup.OnButtonPressed += pressed;
+            
+            popup.SetButtons(buttons);
         }
         
         // TODO: Replace current system with long term solution to create different types of UI

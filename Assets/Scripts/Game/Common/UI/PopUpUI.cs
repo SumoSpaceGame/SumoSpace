@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
+using TMPro;
 using UnityEngine;
 
 public class PopUpUI : MonoBehaviour
@@ -13,23 +15,52 @@ public class PopUpUI : MonoBehaviour
 
     public ButtonPressedEvent OnButtonPressed;
 
-    public bool isClosable = true;
+    public GameObject ButtonPrefabs;
+    
+    public TextMeshProUGUI title, description;
 
+    public GameObject closeButton;
+
+    public GameObject[] buttons;
+    public bool IsClosable 
+    {
+        set
+        {
+            if (!value)
+            {
+                if (buttons == null || buttons.Length == 0)
+                {
+                    Debug.LogError("Can not set IsClosable on pop up if no other buttons were made to close it");
+                    return;
+                }
+                closeButton.SetActive(false);
+            }
+            else
+            {
+                closeButton.SetActive(true);
+            }
+        }
+    }
+    public void SetTitle(string title)
+    {
+        this.title.text = title;
+    }
+
+    public void SetDescription(string description)
+    {
+        this.description.text = description;
+    }
 
     public void SetButtons(string[] ButtonNames)
     {
-        
-    }
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        //Create all the required buttons
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Close()
     {
         
+        OnClose = null;
+        OnButtonPressed = null;
+        Destroy(this.gameObject);
     }
 }

@@ -81,6 +81,8 @@ namespace Game.Common.Networking
             _gamePhaseManager.SwitchPhase(Phase.MATCH_CONNECT);
 
             finishedNetworkStart = true;
+            
+            
         }
 
         private void Update()
