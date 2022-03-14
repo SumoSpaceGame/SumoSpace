@@ -98,7 +98,7 @@ namespace Game.Common.UI.DebugUI
 
                 if (!sender.IsServer)
                 {
-                    Debug.Log("Ping: " + ping + " Frame Time: " + Time.deltaTime + $"\n {ConvertBytesCountToText(BandwidthIn)} {ConvertBytesCountToText(BandwidthOut)}");
+                    //Debug.Log("Ping: " + ping + " Frame Time: " + Time.deltaTime + $"\n {ConvertBytesCountToText(BandwidthIn)} {ConvertBytesCountToText(BandwidthOut)}");
                 }
             });
         }

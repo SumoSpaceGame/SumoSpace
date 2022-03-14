@@ -25,14 +25,13 @@
             OnActivateEvent?.Invoke();   
         }
 
-        public bool Test()
+        public bool IsFinished()
         {
             return finished;
         }
 
         public void AllFinished()
         {
-            throw new System.NotImplementedException();
         }
 
         public string GetLoadingText()
@@ -52,7 +51,6 @@
 
         public void CleanUp()
         {
-            throw new System.NotImplementedException();
         }
     }
 }

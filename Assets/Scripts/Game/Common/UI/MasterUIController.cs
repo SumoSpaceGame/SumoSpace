@@ -58,13 +58,11 @@ namespace Game.Common.UI
 
         public void ActivateWaitingForPlayer()
         {
-            Debug.Log("Activating Waiting UI");
             WaitingForServerText.SetActive(true);
         }
 
         public void StopWaitingForPlayer()
         {
-            Debug.Log("Stopping Waiting UI");
             WaitingForServerText.SetActive(false);
         }
         

@@ -81,7 +81,7 @@ namespace Game.Client.Phases
         /// </summary>
         private void SendFinished()
         {
-            Debug.Log("Finished Loading");
+            Debug.Log("Finished Instantiating Network");
             
             byte data = new byte();
             data = (byte) PhaseMatchConnect.PLAYER_NETWORK_INITIALIZED_FIN;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Game.Client.SceneLoading.SceneLoaderTasks
@@ -8,21 +9,46 @@ namespace Game.Client.SceneLoading.SceneLoaderTasks
         private string loadSceneName;
         private AsyncOperation sceneloadingOperation;
         
-        public LoadSceneTask(string sceneName)
+        private bool _finished = false;
+        private Coroutine loadSceneCor = null;
+
+        public delegate Coroutine StartCoroutineEvent(IEnumerator ienumerator);
+
+        public StartCoroutineEvent StartCoroutine;
+        
+        public LoadSceneTask(string sceneName, StartCoroutineEvent startCoroutine)
         {
             loadSceneName = sceneName;
+            StartCoroutine = startCoroutine;
         }
-        
+
+        private IEnumerator LoadScene()
+        {
+            yield return new WaitForSeconds(1.0f);
+            sceneloadingOperation = SceneManager.LoadSceneAsync(loadSceneName);
+            sceneloadingOperation.allowSceneActivation = false;
+            _finished = false;
+
+            while (!sceneloadingOperation.isDone)
+            {
+                if (sceneloadingOperation.progress >= 0.9f)
+                {
+                    _finished = true;
+                    break;
+                }
+                yield return null;
+            }
+            
+        }
 
         public void Start()
         {
-            sceneloadingOperation = SceneManager.LoadSceneAsync(loadSceneName);
-            sceneloadingOperation.allowSceneActivation = false;
+            loadSceneCor = StartCoroutine(LoadScene());
         }
 
-        public bool Test()
+        public bool IsFinished()
         {
-            return sceneloadingOperation.isDone;
+            return _finished;
         }
 
         public void AllFinished()

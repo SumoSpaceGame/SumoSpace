@@ -48,11 +48,11 @@ namespace Game.Common.Networking
         /// Client ships get spawned when agent movement network manager gets .
         /// </summary>
         /// <param name="clientID"></param>
-        public void SpawnShip(uint clientID)
+        public void SpawnShip(PlayerID playerID)
         {
             if (networkObject.IsServer)
             {
-                if (masterSettings.playerStaticDataRegistry.TryGet(masterSettings.playerIDRegistry.Get(clientID), out var data))
+                if (masterSettings.playerStaticDataRegistry.TryGet(playerID, out var data))
                 {
                     ServerCreateShip(data);
                 }

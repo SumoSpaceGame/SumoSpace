@@ -96,7 +96,7 @@ namespace Game.Common.Settings
         {
             return playerIDRegistry.GetPlayers().Length;
         }
-        
+
         
         //Ease of use commands, helper for other classes, should be moved later
         // TODO: Organize the locations of these methods

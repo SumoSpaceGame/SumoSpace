@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Game.Common.Instances;
 using Game.Common.ScriptableData;
 using UnityEngine;
@@ -8,7 +9,19 @@ namespace Game.Client.SceneLoading
 {
     public class SceneLoader : MonoBehaviour, IGamePersistantInstance
     {
-        public bool IsLoadingScene { get; private set; }
+        private bool _isLoadingScene;
+
+        public bool IsLoadingScene
+        {
+            get
+            {
+                return _isLoadingScene;
+            }
+            private set
+            {
+                _isLoadingScene = value;
+            }
+        }
 
         public delegate void FinishLoadingSceneEventHandler();
         public event FinishLoadingSceneEventHandler FinishLoadingSceneEvent;
@@ -42,7 +55,7 @@ namespace Game.Client.SceneLoading
             var currentTask = _loadingTasks[currentTaskIndex];
 
             stringScriptableData.value = currentTask.GetLoadingText();
-            if (currentTask.Test())
+            if (currentTask.IsFinished())
             {
                 currentTaskIndex++;
 
@@ -103,7 +116,6 @@ namespace Game.Client.SceneLoading
         private void StartTaskLoading(Scene scene, LoadSceneMode loadSceneMode)
         {
             SceneManager.sceneLoaded -= StartTaskLoading;
-
             foreach (var task in _loadingTasks)
             {
                 totalWeight += task.GetProgressWeight();
@@ -118,14 +130,16 @@ namespace Game.Client.SceneLoading
         /// </summary>
         private void FinishedLoading()
         {
+            Debug.Log("Scene Loader finished");
+            
+            IsLoadingScene = false;
+            
             foreach (var task in _loadingTasks)
             {
                 task.AllFinished();
             }
-
-            IsLoadingScene = false;
-            FinishLoadingSceneEvent?.Invoke();
             
+            FinishLoadingSceneEvent?.Invoke();
             Reset();
         }
         
@@ -144,7 +158,6 @@ namespace Game.Client.SceneLoading
         /// </summary>
         private void Reset()
         {
-
             foreach (var task in _loadingTasks)
             {
                 task?.CleanUp();

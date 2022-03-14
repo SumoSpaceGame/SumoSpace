@@ -14,7 +14,6 @@ namespace Game.Server.Phases
     {
         
         private GamePhaseNetworkManager _phaseNetworkManager;
-        private AgentNetworkManager _agentNetworkManager;
 
         private List<uint> loadedPlayers = new List<uint>();
 
@@ -30,20 +29,14 @@ namespace Game.Server.Phases
         
         public void PhaseStart()
         {
-            _agentNetworkManager = MainPersistantInstances.Get<AgentNetworkManager>();
             SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(_phaseNetworkManager.masterSettings.matchSettings.SelectedMap);
         }
 
         public void PhaseUpdate()
         {
             if (sceneLoaded && loadedPlayers.Count == _phaseNetworkManager.gameMatchSettings.MaxPlayerCount)
             {
-                foreach (uint player in loadedPlayers)
-                {
-                    Debug.Log("Spawning " + player);
-                    _agentNetworkManager.SpawnShip(player);
-                }
                 
                 _phaseNetworkManager.ServerNextPhase();
 

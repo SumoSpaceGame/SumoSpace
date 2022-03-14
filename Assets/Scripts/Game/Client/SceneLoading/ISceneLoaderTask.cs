@@ -14,7 +14,7 @@ namespace Game.Client.SceneLoading
         /// Is finished or not
         /// </summary>
         /// <returns></returns>
-        bool Test();
+        bool IsFinished();
         
         /// <summary>
         /// Called when all tasks are finished.

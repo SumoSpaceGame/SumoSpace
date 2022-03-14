@@ -4,6 +4,7 @@ using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using Game.Common.Instances;
 using Game.Common.Phases;
+using Game.Common.Settings;
 using Game.Common.Util;
 using UnityEngine;
 using UnityEngine.Events;

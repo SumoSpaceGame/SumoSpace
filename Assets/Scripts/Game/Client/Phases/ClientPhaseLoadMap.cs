@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Unity;
 using Game.Client.SceneLoading;
 using Game.Client.SceneLoading.SceneLoaderTasks;
 using Game.Common.Networking;
 using Game.Common.Phases;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Game.Client.Phases
@@ -24,17 +26,21 @@ namespace Game.Client.Phases
         
         public void PhaseStart()
         {
-            SceneManager.LoadScene("MapLoadingScene");
             
             _activateEventTask = new ActivateEventTask("Waiting for players..");
 
             _activateEventTask.OnActivateEvent += OnWaitForPlayers;
             
             _sceneLoader.FinishLoadingSceneEvent += OnSceneLoaded;
-            _sceneLoader.Load(new List<ISceneLoaderTask>()
+            
+            MainThreadManager.Run(() =>
             {
-                new LoadSceneTask("TestMap"),
-                _activateEventTask
+                Debug.Log("Starting loading task");
+                _sceneLoader.Load(new List<ISceneLoaderTask>()
+                {
+                    new LoadSceneTask(_phaseNetworkManager.gameMatchSettings.SelectedMap, _phaseNetworkManager.StartCoroutine),
+                    _activateEventTask
+                });
             });
             
         }
@@ -45,8 +51,11 @@ namespace Game.Client.Phases
 
         public void PhaseCleanUp()
         {
-            _sceneLoader.FinishLoadingSceneEvent += OnSceneLoaded;
-            _activateEventTask = null;
+            MainThreadManager.Run(() =>
+            {
+                _activateEventTask.FinishActivateEvent();
+            });
+            _sceneLoader.FinishLoadingSceneEvent -= OnSceneLoaded;
         }
 
         private void OnSceneLoaded()
@@ -67,7 +76,10 @@ namespace Game.Client.Phases
             {
                 if (data[0] == 1)
                 {
-                    _activateEventTask.FinishActivateEvent();
+                    MainThreadManager.Run(() =>
+                    {
+                        _activateEventTask.FinishActivateEvent();
+                    });
                 }
             }
             

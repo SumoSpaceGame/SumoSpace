@@ -18,7 +18,7 @@ namespace Game.Common.Registry
                 return false;
             }
             
-            Debug.Log("Adding " + value + " with key " + key);
+            //Debug.Log("Adding " + value + " with key " + key);
             
             _registryDictionary.Add(key, value);
             return true;

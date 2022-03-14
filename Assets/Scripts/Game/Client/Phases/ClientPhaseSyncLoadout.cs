@@ -57,7 +57,7 @@ namespace Game.Client.Phases
 
                 gameData.shipCreationData = shipInfo;
                 
-                Debug.Log($"Synced Data {syncData.PlayerIDs[i]} -> {shipInfo.shipType}");
+                //Debug.Log($"Synced Data {syncData.PlayerIDs[i]} -> {shipInfo.shipType}");
 
             }
             

@@ -90,7 +90,7 @@ namespace Game.Client.Phases
                     
                     if (data[0] == PhaseLobby.PLAYER_SELECT_FLAG)
                     {
-                        Debug.Log(data[1] + " selected " +  data[2]);
+                        //Debug.Log(data[1] + " selected " +  data[2]);
                         
                         if (info.SendingPlayer.NetworkId == this._phaseNetworkManager.networkObject.MyPlayerId)
                         {
@@ -109,7 +109,7 @@ namespace Game.Client.Phases
 
                     if (data[0] == PhaseLobby.PLAYER_LOCKED_FLAG)
                     {
-                        Debug.Log(data[1] + " locked in " +  data[3]);
+                        //Debug.Log(data[1] + " locked in " +  data[3]);
 
                         if (info.SendingPlayer.NetworkId == this._phaseNetworkManager.networkObject.MyPlayerId)
                         {
