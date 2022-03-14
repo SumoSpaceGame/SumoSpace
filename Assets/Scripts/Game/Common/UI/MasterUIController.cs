@@ -25,6 +25,7 @@ namespace Game.Common.UI
         
         void Start()
         {
+            if(MainPersistantInstances.HasType(this.GetType())) return;
             MainPersistantInstances.Add(this);
             DontDestroyOnLoad(this.gameObject);
         }

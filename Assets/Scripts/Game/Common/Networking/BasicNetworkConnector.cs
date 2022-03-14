@@ -107,7 +107,10 @@ namespace Game.Common.Networking
 
             _gameClient.disconnected += sender =>
             {
-                Destroy(this.gameObject);
+                MainThreadManager.Run(() =>
+                {
+                    Destroy(this.gameObject);
+                });
             };
             //_gameClient.connectAttemptFailed += (sender) => Debug.Log("Connection Failed!");
             

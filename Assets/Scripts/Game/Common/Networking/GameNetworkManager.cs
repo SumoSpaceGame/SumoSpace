@@ -66,7 +66,10 @@ namespace Game.Common.Networking
 
             this.networkObject.Networker.disconnected += (sender) =>
             {
-                StopMatch();
+                MainThreadManager.Run(() =>
+                {
+                    StopMatch();
+                });
             };
             
             
@@ -102,7 +105,7 @@ namespace Game.Common.Networking
         /// </summary>
         public void StopMatch()
         {
-            NetworkManager.Instance.Disconnect();
+            if(NetworkManager.Instance != null) NetworkManager.Instance.Disconnect();
             masterSettings.Reset();
             SceneManager.LoadScene(1);
         }

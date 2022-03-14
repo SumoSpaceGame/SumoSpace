@@ -1415,16 +1415,12 @@ namespace BeardedManStudios.Forge.Networking
 						// Replicate the data to the other clients
 						if (Networker is IServer)
 						{
-							// Do not read or replicate if the server denies replication
-							if (ServerAllowBinaryData(frame.StreamData, frame.Receivers))
-							{
-								BMSByte data = new BMSByte().Clone(frame.StreamData);
+							BMSByte data = new BMSByte().Clone(frame.StreamData);
 
-								if (data != null)
-									SendBinaryData(data,
-										ProximityBasedFields ? ProximityBasedFieldsMode : Receivers.All,
-										DIRTY_FIELD_SUB_ROUTER_ID, false, true);
-							}
+							if (data != null)
+								SendBinaryData(data,
+									ProximityBasedFields ? ProximityBasedFieldsMode : Receivers.All,
+									DIRTY_FIELD_SUB_ROUTER_ID, false, true);
 						}
 
 						ReadDirtyFields(frame.StreamData, frame.TimeStep);

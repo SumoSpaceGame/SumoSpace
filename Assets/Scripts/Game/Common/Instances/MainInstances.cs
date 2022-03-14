@@ -94,6 +94,8 @@ namespace Game.Common.Instances {
 			string key = GetKey<T>();
 
 			//If it wasn't able to be removed
+			if (main == null) return;
+			
 			if (!main.gameServices.Remove(key)) {
 				Debug.LogWarning("IGameService was tried to be removed when none existed in dictionary!" + key);
 			}

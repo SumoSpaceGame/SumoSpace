@@ -60,12 +60,6 @@ namespace Game.Common.Networking
             }
 
             _commandHandlerNetworkManager.HandleRPC(args);
-            
-            
-            this.networkObject.Networker.disconnected += (sender) =>
-            {
-                Destroy(this);
-            };
         }
 
 

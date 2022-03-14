@@ -26,7 +26,7 @@ public class ShipSpawner : MonoBehaviour
             Debug.LogError("Ship spawned being enemy and player, should not be possible");
         }
 
-        shipClass.SetLayer( isPlayer ? player : isEnemy ? enemy : team);
+        //shipClass.SetLayer( isPlayer ? player : isEnemy ? enemy : team);
         
         return shipClass;
     }

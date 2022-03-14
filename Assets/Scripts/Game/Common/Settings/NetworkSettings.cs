@@ -5,7 +5,7 @@ namespace Game.Common.Settings
     [Serializable]
     public struct NetworkSettings
     {
-        private ulong _updateInterval;
+        public ulong _updateInterval;
         public ulong updateInterval
         {
             get

@@ -96,7 +96,7 @@ namespace Game.Common.UI.DebugUI
             {
                 pingText.text = "Ping - " + ping + "ms";
 
-                if (sender.IsServer)
+                if (!sender.IsServer)
                 {
                     Debug.Log("Ping: " + ping + " Frame Time: " + Time.deltaTime + $"\n {ConvertBytesCountToText(BandwidthIn)} {ConvertBytesCountToText(BandwidthOut)}");
                 }
@@ -120,7 +120,7 @@ namespace Game.Common.UI.DebugUI
 
         private void OnDestroy()
         {
-            NetworkManager.Instance.Networker.onPingPong -= onPong;
+            if(NetworkManager.Instance != null) NetworkManager.Instance.Networker.onPingPong -= onPong;
         }
 
 
