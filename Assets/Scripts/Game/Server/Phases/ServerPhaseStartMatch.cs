@@ -34,7 +34,7 @@ namespace Game.Server.Phases
             
             //Send to clients to sync timer
             
-            timer.StartTimer(30 * 1000);
+            timer.StartTimer(30 * 60 * 1000);
             timer.StopEvent += OnTimerFinished;
 
             playerCounter = new PlayerCounter(_gamePhaseNetworkManager.masterSettings.GetPlayerCount());

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
@@ -11,8 +12,9 @@ namespace Game.Common.Networking.Misc
     public class MatchNetworkTimerManager : MatchTimerBehavior, IGamePersistantInstance
     {
         private Dictionary<uint, MatchNetworkTimer> _timers = new Dictionary<uint, MatchNetworkTimer>();
-
+        
         private uint _timerCounter = 0;
+
         
         private void Awake()
         {
@@ -45,7 +47,7 @@ namespace Game.Common.Networking.Misc
                     continue;
                 }
                 
-                timer.Tick();
+                if(networkObject.IsServer) timer.Tick();
             }
 
             foreach (var timerID in destroyedIDs)
@@ -69,7 +71,6 @@ namespace Game.Common.Networking.Misc
             
             var timer = CreateNewTimer();
             
-            _timers.Add(timer.ID, timer);
             
             networkObject.SendRpc(RPC_CREATE_CLIENT_TIMER_HANDLER, Receivers.Others, timer.ID);
 
@@ -85,6 +86,16 @@ namespace Game.Common.Networking.Misc
         public bool GetTimer(uint id, out MatchNetworkTimer timer)
         {
             return _timers.TryGetValue(id, out timer);
+        }
+        
+        
+        /// <summary>
+        /// Returns the current set of timers
+        /// </summary>
+        /// <returns></returns>
+        public MatchNetworkTimer[] GetTimers()
+        {
+            return _timers.Values.ToArray();
         }
 
         /// <summary>
@@ -122,7 +133,7 @@ namespace Game.Common.Networking.Misc
         /// <returns>Timer Object</returns>
         private MatchNetworkTimer CreateNewTimer(uint id)
         {
-            var timer = new MatchNetworkTimer(_timerCounter++, this.networkObject.Networker);
+            var timer = new MatchNetworkTimer(id, this.networkObject.Networker);
 
             if (networkObject.IsServer)
             {
@@ -131,6 +142,8 @@ namespace Game.Common.Networking.Misc
                 timer.NetworkResumeEvent += NetworkResumeTimer;
                 timer.NetworkStopEvent += NetworkStopTimer;
             }
+            
+            _timers.Add(timer.ID, timer);
             
             return timer;
         }
@@ -189,12 +202,15 @@ namespace Game.Common.Networking.Misc
             {
                 return;
             }
-
+            
             var id = args.GetAt<uint>(0);
             var stopTime = args.GetAt<long>(1);
 
+            Debug.Log("Doing the things " + _timers.Count + " " + id);
+            
             if (_timers.TryGetValue(id, out MatchNetworkTimer timer))
             {
+                Debug.Log("Starting the things");
                 timer.StartTimer(stopTime);
             }
         }
@@ -268,9 +284,10 @@ namespace Game.Common.Networking.Misc
             {
                 return;
             }
+            Debug.Log("Creating the things");
 
             var id = args.GetAt<uint>(0);
-
+            
             CreateNewTimer(id);
 
         }

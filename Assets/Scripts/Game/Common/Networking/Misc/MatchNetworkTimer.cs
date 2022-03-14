@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using BeardedManStudios.Forge.Networking;
 using Debug = UnityEngine.Debug;
@@ -153,13 +154,13 @@ namespace Game.Common.Networking.Misc
             if (_netWorker.IsServer)
             {
                 _timerLength = msLength;
-                _stopTime = _netWorker.Time.Milliseconds + msLength;
+                _stopTime = msLength;
                 _stopwatch.Start();
                 NetworkStartEvent?.Invoke(ID, _stopTime);
             }
             else
             {
-                _timerLength = msLength - _netWorker.Time.Milliseconds;
+                _timerLength = msLength;
                 _stopTime = msLength;
                 
                 if (_timerLength < 0)
@@ -224,13 +225,13 @@ namespace Game.Common.Networking.Misc
 
             if (_netWorker.IsServer)
             {
-                _stopTime = _timerLength + _netWorker.Time.Milliseconds;
+                _stopTime = _timerLength;
                 _stopwatch.Start();
                 NetworkResumeEvent?.Invoke(ID, _stopTime);
             }
             else
             {
-                _timerLength = stopTime - _netWorker.Time.Milliseconds;
+                _timerLength = stopTime;
 
                 if (_timerLength < 0)
                 {
@@ -294,6 +295,20 @@ namespace Game.Common.Networking.Misc
             NetworkPauseEvent = null;
             NetworkResumeEvent = null;
             NetworkStopEvent = null;
+        }
+
+        public long GetRemainingTime()
+        {
+            return _timerLength - _stopwatch.ElapsedMilliseconds;
+        }
+        
+        /// <summary>
+        /// Converts current timer time to time;
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return TimeSpan.FromMilliseconds(GetRemainingTime()).ToString();
         }
     }
 }
