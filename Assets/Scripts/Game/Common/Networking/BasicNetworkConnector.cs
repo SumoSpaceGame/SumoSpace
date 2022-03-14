@@ -4,6 +4,7 @@ using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using Game.Common.Instances;
 using Game.Common.Phases;
+using Game.Common.Util;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -31,7 +32,7 @@ namespace Game.Common.Networking
         // Start is called before the first frame update
         void Awake()
         {
-            DontDestroyOnLoad(this.gameObject);
+            //DontDestroyOnLoad(this.gameObject);
         }
 
         // Update is called once per frame
@@ -105,13 +106,7 @@ namespace Game.Common.Networking
                 NetworkObject.Flush(_gameClient);
             };
 
-            _gameClient.disconnected += sender =>
-            {
-                MainThreadManager.Run(() =>
-                {
-                    Destroy(this.gameObject);
-                });
-            };
+            
             //_gameClient.connectAttemptFailed += (sender) => Debug.Log("Connection Failed!");
             
             _gameClient.Connect(address, port);
@@ -165,11 +160,7 @@ namespace Game.Common.Networking
             //SceneManager.sceneLoaded += NetworkInstantiate;
             //Debug.Log("Instantiating required objects");
             
-            NetworkManager.Instance.InstantiateMatchTimer();
-            NetworkManager.Instance.InstantiateGameManager();
-            NetworkManager.Instance.InstantiateAgentManager();
-            NetworkManager.Instance.InstantiateInputLayer();
-            NetworkManager.Instance.InstantiateGamePhase();
+            PersistantUtility.InstantiateNetworkPersistant();
         }
 
     }

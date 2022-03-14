@@ -122,7 +122,8 @@ namespace Game.Client.SceneLoading
             {
                 task.AllFinished();
             }
-            
+
+            IsLoadingScene = false;
             FinishLoadingSceneEvent?.Invoke();
             
             Reset();
@@ -149,6 +150,7 @@ namespace Game.Client.SceneLoading
                 task?.CleanUp();
             }
             
+            IsLoadingScene = false;
             currentTaskIndex = 0;
             totalWeight = 0;
             _loadingTasks.Clear();

@@ -311,9 +311,14 @@ namespace BeardedManStudios.Forge.Networking
 			}
 		}
 
+		public static NetworkObject[] GetTargets(NetWorker networker)
+		{
+			return networkObjects.Where(n => n.Networker == networker).ToArray();
+		}
+		
 		public static void ClearNetworkObjects(NetWorker networker)
 		{
-			NetworkObject[] targets = networkObjects.Where(n => n.Networker == networker).ToArray();
+			NetworkObject[] targets = GetTargets(networker);
 			NetworkObject[] pendingTargets = pendingCreates.Where(n => n.Networker == networker).ToArray();
 
 			for (int i = 0; i < targets.Length; i++)

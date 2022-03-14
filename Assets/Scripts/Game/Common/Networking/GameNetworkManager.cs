@@ -8,6 +8,7 @@ using BeardedManStudios.Forge.Networking.Unity;
 using Game.Common.Instances;
 using Game.Common.Phases;
 using Game.Common.Settings;
+using Game.Common.Util;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
@@ -105,8 +106,13 @@ namespace Game.Common.Networking
         /// </summary>
         public void StopMatch()
         {
+            
             if(NetworkManager.Instance != null) NetworkManager.Instance.Disconnect();
+
             masterSettings.Reset();
+            
+            PersistantUtility.DestroyNetworkPersistant(Destroy);
+            
             SceneManager.LoadScene(1);
         }
 

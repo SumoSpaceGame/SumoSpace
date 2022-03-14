@@ -36,8 +36,10 @@ namespace Game.Common.Instances
 			IGamePersistantInstance output;
 			if(main.gameServices.TryGetValue(GetKey<T>(), out output)) {
 				return (T)output;
-			} else {
-				throw new UnityException("IGameService has not been added! " + typeof(T).FullName);
+			} else
+			{
+				return default(T);
+				//throw new UnityException("IGameService has not been added! " + typeof(T).FullName);
 			}
 		}
 

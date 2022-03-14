@@ -25,6 +25,11 @@ namespace Game.Common.Networking.Misc
             base.NetworkStart();
         }
 
+        private void OnDestroy()
+        {
+            MainPersistantInstances.Remove<MatchNetworkTimerManager>();
+        }
+
         /// <summary>
         /// Updates the timers, and when they are destroyed it will destroy them.
         /// </summary>
