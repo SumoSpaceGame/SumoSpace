@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Game.Common.Instances;
 using Game.Common.Networking;
@@ -59,6 +60,12 @@ namespace Game.Client.Gameplay.Movement
             
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Confined;
+        }
+
+        private void OnDestroy()
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
         }
 
         private void Update() {
