@@ -24,6 +24,8 @@ namespace Game.Client.Phases
         
         public void PhaseStart()
         {
+            SceneManager.LoadScene("MapLoadingScene");
+            
             _activateEventTask = new ActivateEventTask("Waiting for players..");
 
             _activateEventTask.OnActivateEvent += OnWaitForPlayers;

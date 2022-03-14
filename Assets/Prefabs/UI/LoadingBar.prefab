@@ -126,7 +126,7 @@ MonoBehaviour:
   IsVertical: 0
   currentValue: 0
   maxValue: 10
-  progressData: {fileID: 0}
+  progressData: {fileID: 11400000, guid: 39147a44908fef84a9197e410700db38, type: 2}
 --- !u!1 &3277852643963525014
 GameObject:
   m_ObjectHideFlags: 0
