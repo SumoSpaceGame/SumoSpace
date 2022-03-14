@@ -183,7 +183,7 @@ namespace Game.Common.Networking
                 if (updatePhase != _gamePhaseManager.CurrentPhase)
                 {
                     // TODO: Record this as a suspicious activity
-                        Debug.LogError($"Update phase received out of order! {updatePhase.ToString()}");
+                        Debug.LogWarning($"Update phase received out of order! {updatePhase.ToString()}");
                 }
                 updateQueueData[updatePhase].Enqueue(new UpdateQueueData(args.Info, updateData));
             });
