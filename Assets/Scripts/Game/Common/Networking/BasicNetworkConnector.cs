@@ -5,6 +5,7 @@ using BeardedManStudios.Forge.Networking.Unity;
 using Game.Common.Instances;
 using Game.Common.Phases;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Scene = UnityEngine.SceneManagement.Scene;
 
@@ -19,7 +20,10 @@ namespace Game.Common.Networking
         public GameObject networkManagerPrefab;
         
         public GameMatchSettings gameMatchSettings;
-        
+
+        public delegate void FailedToConnectEvent();
+
+        public FailedToConnectEvent OnFailedToConnect;
         
         private UDPClient _gameClient;
         private UDPServer _gameServer;
@@ -52,6 +56,7 @@ namespace Game.Common.Networking
             }*/
         }
 
+
         public float timeout = 30;
         public IEnumerator TimeoutWait()
         {
@@ -68,7 +73,18 @@ namespace Game.Common.Networking
     
         public void Connect(string address, ushort port)
         {
-            Debug.Log("Connecting to game server.." + address + " " + port);
+            if (NetworkManager.Instance != null)
+            {
+                Debug.Log("Stopping last connection");
+                NetworkManager.Instance.Disconnect();
+                if (timeoutWaitCor != null)
+                {
+                    StopCoroutine(timeoutWaitCor);
+                    timeoutWaitCor = null;
+                }
+            }
+            
+            Debug.Log("Connecting to game server.. " + address + " " + port);
     
             gameMatchSettings.Reset();
 
@@ -88,7 +104,11 @@ namespace Game.Common.Networking
                 
                 NetworkObject.Flush(_gameClient);
             };
-            
+
+            _gameClient.disconnected += sender =>
+            {
+                Destroy(this.gameObject);
+            };
             //_gameClient.connectAttemptFailed += (sender) => Debug.Log("Connection Failed!");
             
             _gameClient.Connect(address, port);
@@ -108,7 +128,9 @@ namespace Game.Common.Networking
         public void Disconnect(bool forced = true)
         {
             if (_gameClient == null) return;
-            _gameClient.Disconnect(forced);
+            NetworkManager.Instance.Disconnect();
+            Debug.LogError("Failed to connect to server");
+            OnFailedToConnect?.Invoke();
         }
         
         public void Host(string address, ushort port)

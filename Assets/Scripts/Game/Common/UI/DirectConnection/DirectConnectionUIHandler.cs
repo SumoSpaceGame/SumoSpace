@@ -4,6 +4,7 @@ using Game.Common.Settings;
 using Game.Common.Util;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 namespace Game.Common.UI.DirectConnection
@@ -14,7 +15,7 @@ namespace Game.Common.UI.DirectConnection
     public class DirectConnectionUIHandler : MonoBehaviour
     {
         public TMP_InputField AddressTextField;
-        public TMP_InputField PortTextField;
+        public TMP_InputField PortTextField;  
 
         public BasicNetworkConnector connector;
         public MasterSettings masterSettings;
@@ -26,6 +27,8 @@ namespace Game.Common.UI.DirectConnection
         private ushort ServerPort = 22233;
 
 
+        public UnityEvent FailedToConnect;
+        
         private void Start()
         {
             if (masterSettings.InitServer)
@@ -37,7 +40,8 @@ namespace Game.Common.UI.DirectConnection
             ServerAddress = masterSettings.ServerAddress;
             ServerPort = masterSettings.ServerPort;
             
-            PortTextField.text = "" + masterSettings.ServerPort;
+            if(PortTextField != null) PortTextField.text = "" + masterSettings.ServerPort;
+            connector.OnFailedToConnect += OnFailedToConnect;
         }
 
         public void ProcessTextFields()
@@ -88,6 +92,19 @@ namespace Game.Common.UI.DirectConnection
         public void DebugHost()
         {
             connector.Host(DEBUG_HostServerAddress, masterSettings.ServerPort);
+        }
+
+        private void OnDestroy()
+        {
+            if (connector != null)
+            {
+                connector.OnFailedToConnect -= OnFailedToConnect;
+            }
+        }
+
+        public void OnFailedToConnect()
+        {
+            FailedToConnect.Invoke();
         }
     }
 }
