@@ -11,12 +11,23 @@ namespace Game.Common.Map.Collision
         public Vector2[] points;
     }
     public class RayCrossing : MonoBehaviour
-    {
+    {  
+        /// <summary>
+        /// Checks if the point is contained inside the circular point list
+        /// </summary>
+        /// <param name="list">List of points, length greater than 1</param>
+        /// <param name="point">Point to check if inside or not</param>
+        /// <returns></returns>
         public bool PointInside(ref CircularPointList list, Vector2 point)
         {
             if (list.points.Length == 0)
             {
                 Debug.LogError("Passed in an empty list for RayCrossing. Defaulting False");
+                return false;
+            }
+            if (list.points.Length == 1)
+            {
+                Debug.LogError("Passed in an circular list of length 1. Invalid configuration. Defaulting False");
                 return false;
             }
             
@@ -49,7 +60,14 @@ namespace Game.Common.Map.Collision
             return intersectionCount % 2 != 0;
         }
         
-        
+        /// <summary>
+        /// Checks AB against CD to see if they intersect
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <param name="d"></param>
+        /// <returns></returns>
         public bool LineIntersect(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
         {
             Vector2 e = c - a;
