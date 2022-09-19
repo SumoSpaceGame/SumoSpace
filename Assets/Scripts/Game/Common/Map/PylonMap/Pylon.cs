@@ -27,6 +27,12 @@ namespace Game.Common.Map.PylonMap
         {
             float perc = Mathf.Clamp(map.currentTime / map.maxTime, 0.0f, 1.0f);
             
+            var newFrame = new PylonKeyFrame()
+            {
+                percentage = perc,
+                position = new Vector2(this.transform.position.x, this.transform.position.z)
+            };
+            
             int afterFrame = -1;
             for (int i = 0; i < pylonAnimation.keyFrames.Count; i++)
             {
@@ -36,13 +42,14 @@ namespace Game.Common.Map.PylonMap
                 {
                     afterFrame = i;
                 }
+
+                if (Math.Abs(frame.percentage - perc) < float.Epsilon)
+                {
+                    pylonAnimation.keyFrames[i] = newFrame;
+                    return;
+                }
             }
 
-            var newFrame = new PylonKeyFrame()
-            {
-                percentage = perc,
-                position = new Vector2(this.transform.position.x, this.transform.position.z)
-            };
             
             if (afterFrame == -1)
             {
