@@ -4,11 +4,13 @@ using UnityEngine.Analytics;
 namespace Game.Common.Map.Collision
 {
 
-    public struct CircularPointList
+    public struct PointList
     {
-        // Points are devised into a circular list
-        // 0 -> 1 -> 2 -> 0
         public Vector2[] points;
+        
+        // Every 2 values is a connection between to indexes
+        // 0,1 = 0 and 1 are connected
+        public int[] connections;
     }
     public class RayCrossing : MonoBehaviour
     {  
@@ -18,18 +20,8 @@ namespace Game.Common.Map.Collision
         /// <param name="list">List of points, length greater than 1</param>
         /// <param name="point">Point to check if inside or not</param>
         /// <returns></returns>
-        public bool PointInside(ref CircularPointList list, Vector2 point)
+        public static bool PointInside(ref PointList list, Vector2 point)
         {
-            if (list.points.Length == 0)
-            {
-                Debug.LogError("Passed in an empty list for RayCrossing. Defaulting False");
-                return false;
-            }
-            if (list.points.Length == 1)
-            {
-                Debug.LogError("Passed in an circular list of length 1. Invalid configuration. Defaulting False");
-                return false;
-            }
             
             Vector2 start = point;
             Vector2 end = point + Vector2.right * Mathf.Infinity;
@@ -37,10 +29,19 @@ namespace Game.Common.Map.Collision
             int intersectionCount = 0;
             Vector2 pointA, pointB;
             
-            for (int i = 0; i < list.points.Length; i++)
+#if UNITY_EDITOR
+            if (list.connections.Length % 2 == 1)
             {
-                pointA = list.points[i];
-                pointB = i +1 == list.points.Length ? list.points[0] : list.points[i + 1];
+                Debug.LogError("Point List has uneven amount of connections");
+                return false;
+            }
+#endif
+            // Things break if list is not even
+            for (int i = 0; i < list.connections.Length; i += 2)
+            {
+                
+                pointA = list.points[list.connections[i]];
+                pointB = list.points[list.connections[i + 1]];
                 
                 //Check if horizontal, if it is ignore this line.
 
@@ -68,7 +69,7 @@ namespace Game.Common.Map.Collision
         /// <param name="c"></param>
         /// <param name="d"></param>
         /// <returns></returns>
-        public bool LineIntersect(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
+        public static bool LineIntersect(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
         {
             Vector2 e = c - a;
             Vector2 r = d - b;
@@ -95,6 +96,54 @@ namespace Game.Common.Map.Collision
             float u = eXr * rxsr;
 
             return (t >= 0f) && (t <= 1f) && (u >= 0f) && (u <= 1f);
+        }
+        
+        /// <summary>
+        /// https://math.stackexchange.com/questions/4079605/how-to-find-closest-point-to-polygon-shape-from-any-coordinate
+        /// 
+        /// Could use the above to optimize, but for now we do not need to 
+        /// </summary>
+        /// <param name="pointList"></param>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public static float ClosestPointDistance(ref PointList pointList, Vector2 point)
+        {
+            Vector2 pointA, pointB;
+
+            float closestDistance = Mathf.Infinity;
+
+            for (int i = 0; i < pointList.connections.Length; i += 2)
+            {
+                pointA = pointList.points[pointList.connections[i]];
+                pointB = pointList.points[pointList.connections[i + 1]];
+
+                Vector2 AP = point - pointA;
+                Vector2 AB = pointB - pointA;
+
+                float magnitudeAB = AB.sqrMagnitude;
+                float ABAPproduct = Vector2.Dot(AP, AB);
+                float distance = ABAPproduct / magnitudeAB;
+                float realDist = 0;
+                if (distance < 0)
+                {
+                    realDist = Vector2.Distance(pointA, point);
+                }
+                else if (distance > 1)
+                {
+                    realDist = Vector2.Distance(pointB, point);
+                }
+                else
+                {
+                    realDist = Vector2.Distance(pointA + AB * distance, point);
+                }
+                
+                if (realDist < closestDistance)
+                {
+                    closestDistance = realDist;
+                }
+            }
+
+            return closestDistance;
         }
     }
 }
