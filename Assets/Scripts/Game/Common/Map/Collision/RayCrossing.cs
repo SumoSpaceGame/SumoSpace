@@ -24,7 +24,7 @@ namespace Game.Common.Map.Collision
         {
             
             Vector2 start = point;
-            Vector2 end = point + (Vector2.right * 10000f);
+            Vector2 end = point + (Vector2.right * 1000000f);
 
             int intersectionCount = 0;
             Vector2 pointA, pointB;
