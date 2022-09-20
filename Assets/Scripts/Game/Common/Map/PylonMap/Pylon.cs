@@ -95,6 +95,7 @@ namespace Game.Common.Map.PylonMap
         private void OnDrawGizmos()
         {
             Gizmos.DrawLine(this.transform.position, this.ConnectedTo.transform.position);
+            Gizmos.DrawWireSphere(this.transform.position, 0.1f);
         }
     }
 }

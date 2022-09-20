@@ -12,22 +12,22 @@ namespace Game.Common.Map
             map.UpdateMap(0);
             if (map.WithinMap(new Vector2(this.transform.position.x, this.transform.position.z)))
             {
-                Gizmos.color = Color.red;
+                Gizmos.color = Color.green;
             }
             else
             {
-                Gizmos.color = Color.green;
+                Gizmos.color = Color.red;
             }
 
             Gizmos.DrawWireCube(this.transform.position , Vector3.one * radius);
 
             if (map.WithinMap(new Vector2(this.transform.position.x, this.transform.position.z), radius))
             {
-                Gizmos.color = Color.red;
+                Gizmos.color = Color.green;
             }
             else
             {
-                Gizmos.color = Color.green;
+                Gizmos.color = Color.red;
             }   
             Gizmos.DrawWireSphere(this.transform.position, radius);
         }
