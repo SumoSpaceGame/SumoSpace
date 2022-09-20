@@ -7,12 +7,14 @@
     {
         // TODO: Fill this out with the required items for a ship
         public int shipType;
+        public bool playerLockedIn;
 
 
         public static ShipCreationData Create(int shipTypeTEMP)
         {
             ShipCreationData data = new ShipCreationData();
             data.shipType = shipTypeTEMP;
+            data.playerLockedIn = false;
 
             return data;
         }

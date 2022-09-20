@@ -37,15 +37,17 @@ public class PlayerStatsUI : MonoBehaviour
 
             uint ID = playerID.ID;
             int loadout = -1;
+            bool ready = false;
             
             var playerGameData = masterSettings.playerGameDataRegistry.Get(playerID);
             if (playerGameData != null)
             {
                 loadout = playerGameData.shipCreationData.shipType;
+                ready = playerGameData.shipCreationData.playerLockedIn;
             }
 
 
-            string statsText = $"ID: {ID} - L: {loadout}";
+            string statsText = $"ID: {ID} - L: {loadout} {(ready ? "(Ready)" : "(N)")}";
             if (curPlayerCount > currentUIText.Count - 1)
             {
                 InstantiateStatsText(statsText);

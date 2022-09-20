@@ -123,6 +123,7 @@ namespace Game.Client.Phases
                         if (_phaseNetworkManager.masterSettings.playerGameDataRegistry.TryGet(playerLockedIn, out var gameData))
                         {
                             gameData.shipCreationData.shipType = data[3];
+                            gameData.shipCreationData.playerLockedIn = true;
                         }
                         /*
                         // TODO: REPLACE THIS WITH VALID PLAYER SYNCING CODE
