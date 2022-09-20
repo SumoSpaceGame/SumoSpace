@@ -1,0 +1,18 @@
+{
+    "name": "Game.Common.Map.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5dffb7647aa50d445a65d35cd730e325"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
