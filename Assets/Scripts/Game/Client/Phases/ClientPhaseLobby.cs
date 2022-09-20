@@ -61,8 +61,8 @@ namespace Game.Client.Phases
         {
             if (selectedCharacter == -1)
             {
-                Debug.Log("None selected");
-                return;
+                Debug.Log("None selected, defaulting to 0");
+                SelectCharacter(0);
             }
             
             _phaseNetworkManager.SendUnreliablePhaseUpdate(Phase.MATCH_LOBBY, 

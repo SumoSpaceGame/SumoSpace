@@ -6,6 +6,7 @@ namespace Game.Common.Map.PylonMap
 {
     public class Pylon : MonoBehaviour
     {
+        public PylonGraphics graphics;
 
         public PylonMap map;
 
@@ -82,6 +83,9 @@ namespace Game.Common.Map.PylonMap
 
         public Vector2 UpdatePosition(float percentage)
         {
+            graphics.pylonA = this;
+            graphics.pylonB = ConnectedTo;
+            
             if (!pylonAnimation)
             {
                 return new Vector2(this.transform.position.x, this.transform.position.z);

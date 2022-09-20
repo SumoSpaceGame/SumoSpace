@@ -87,6 +87,10 @@ namespace Game.Common.Gameplay.Ship
             virtualCursor.OnLookNorm(ctx);
         }
 
+        public float GetRadius()
+        {
+            return this.GetComponent<CircleCollider2D>().radius;
+        }
 
     }
 }

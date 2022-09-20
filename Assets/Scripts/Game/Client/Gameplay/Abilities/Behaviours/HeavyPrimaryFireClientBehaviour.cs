@@ -17,7 +17,7 @@ public class HeavyPrimaryFireClientBehaviour : RenderableAbilityBehaviour<HeavyP
     }
 
     public override void Stop() {
-        shipManager.StopCoroutine(coroutine);
+        if(coroutine != null) shipManager.StopCoroutine(coroutine);
         ShipRenderer.EndBeam();
         if (--oooCounter == 0) {
             executing = false;
