@@ -1,3 +1,5 @@
+using Game.Common.Gameplay.Abilities;
+
 public abstract class AbilityBehaviour<T> : AbilityBehaviourComponent where T : ShipAbility {
     private T ability;
     protected T Ability {

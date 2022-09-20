@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Game.Common.Gameplay.Abilities;
+using UnityEngine;
 
 public abstract class RenderableAbilityBehaviour<T> : AbilityBehaviour<T> where T : ShipAbility {
     private ShipRenderer shipRenderer;

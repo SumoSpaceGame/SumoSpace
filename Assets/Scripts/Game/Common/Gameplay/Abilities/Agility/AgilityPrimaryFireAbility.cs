@@ -1,3 +1,4 @@
+using Game.Common.Gameplay.Abilities;
 using UnityEngine;
 
 [CreateAssetMenu(menuName="Ship Abilities/Agility Abilities/Agility Primary Fire", fileName = "Agility Primary Fire", order=1)]

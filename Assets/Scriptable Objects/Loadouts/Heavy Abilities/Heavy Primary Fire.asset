@@ -15,7 +15,9 @@ MonoBehaviour:
   cooldown: 0
   executeCommand: 3
   stopCommand: 4
-  shipRenderer: {fileID: 4600774720301439359, guid: 2de468f4f046c6648b345d50a73ca19a, type: 3}
+  clientBehaviour: {fileID: 7922589147683848013, guid: 1ba1653cf73d39446ba1a9d7227372c2, type: 3}
+  serverBehaviour: {fileID: 7922589147683848013, guid: 1871594e16b603041aa6ea1bd8dcff96, type: 3}
+  slot: 0
   minKnockback: 10
   maxKnockback: 50
   rampTime: 10
