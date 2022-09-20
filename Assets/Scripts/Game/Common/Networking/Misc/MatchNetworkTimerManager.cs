@@ -165,9 +165,9 @@ namespace Game.Common.Networking.Misc
         /// </summary>
         /// <param name="id"></param>
         /// <param name="stopTime"></param>
-        private void NetworkPauseTimer(uint id)
+        private void NetworkPauseTimer(uint id, long pauseTime)
         {
-            networkObject.SendRpc(RPC_PAUSE_TIMER_HANDLER, Receivers.Others, id);
+            networkObject.SendRpc(RPC_PAUSE_TIMER_HANDLER, Receivers.Others, id, pauseTime);
         }
         
         
@@ -227,10 +227,12 @@ namespace Game.Common.Networking.Misc
             }
             
             var id = args.GetAt<uint>(0);
+            var pauseTime = args.GetAt<long>(1);
+
             
             if (_timers.TryGetValue(id, out MatchNetworkTimer timer))
             {
-                timer.PauseTimer();
+                timer.PauseTimer(pauseTime);
             }
         }
 

@@ -26,22 +26,24 @@ namespace Game.Common.UI.DirectConnection
         private string ServerAddress = "localhost";
         private ushort ServerPort = 22233;
 
+        public GameObject enableWhenServer;
 
         public UnityEvent FailedToConnect;
         
         private void Start()
         {
-            if (masterSettings.InitServer)
-            {
-                Debug.Log("Hosting server at localhost:" + masterSettings.ServerPort);
-                connector.Host("localhost", masterSettings.ServerPort);
-            }
-
             ServerAddress = masterSettings.ServerAddress;
             ServerPort = masterSettings.ServerPort;
             
             if(PortTextField != null) PortTextField.text = "" + masterSettings.ServerPort;
             connector.OnFailedToConnect += OnFailedToConnect;
+            
+            if (masterSettings.InitServer)
+            {
+                Debug.Log("Hosting server at localhost:" + masterSettings.ServerPort);
+                connector.Host("localhost", masterSettings.ServerPort);
+                enableWhenServer.SetActive(true);
+            }
         }
 
         public void ProcessTextFields()

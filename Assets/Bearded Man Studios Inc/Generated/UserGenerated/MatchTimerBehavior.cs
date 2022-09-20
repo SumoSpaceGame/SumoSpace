@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"uint\", \"long\"][\"uint\"][\"uint\", \"long\"][\"uint\"][\"uint\"][\"uint\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"timerID\", \"stopTime\"][\"timerID\"][\"timerID\", \"stopTime\"][\"timerID\"][\"timerID\"][\"timerID\"]]")]
+	[GeneratedRPC("{\"types\":[[\"uint\", \"long\"][\"uint\", \"long\"][\"uint\", \"long\"][\"uint\"][\"uint\"][\"uint\"]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"timerID\", \"stopTime\"][\"timerID\", \"pauseTime\"][\"timerID\", \"stopTime\"][\"timerID\"][\"timerID\"][\"timerID\"]]")]
 	public abstract partial class MatchTimerBehavior : NetworkBehavior
 	{
 		public const byte RPC_START_TIMER_HANDLER = 0 + 5;
@@ -28,7 +28,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 			base.SetupHelperRpcs(networkObject);
 			networkObject.RegisterRpc("StartTimerRPCHandler", StartTimerRPCHandler, typeof(uint), typeof(long));
-			networkObject.RegisterRpc("PauseTimerRPCHandler", PauseTimerRPCHandler, typeof(uint));
+			networkObject.RegisterRpc("PauseTimerRPCHandler", PauseTimerRPCHandler, typeof(uint), typeof(long));
 			networkObject.RegisterRpc("ResumeTimerRPCHandler", ResumeTimerRPCHandler, typeof(uint), typeof(long));
 			networkObject.RegisterRpc("StopTimerRPCHandler", StopTimerRPCHandler, typeof(uint));
 			networkObject.RegisterRpc("CreateClientTimerRPCHandler", CreateClientTimerRPCHandler, typeof(uint));
@@ -118,6 +118,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		/// <summary>
 		/// Arguments:
 		/// uint timerID
+		/// long pauseTime
 		/// </summary>
 		public abstract void PauseTimerRPCHandler(RpcArgs args);
 		/// <summary>

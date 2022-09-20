@@ -107,7 +107,10 @@ Material:
     - Vector1_a87d0643bc2b44989bea5b8833f8af97: 0.5
     - Vector1_c22bf2983d9840fb9eafa7d3ab11fea5: 30
     - Vector1_e51a131078f849e5b1195f6cb2be3c24: 0.5
+    - Vector1_e664f504ac8d463d9c9f26471acf8000: 1
     - Vector1_f3abd49e1f564983932289370e9f7661: 30
+    - _QueueControl: 0
+    - _QueueOffset: 0
     m_Colors:
     - Color_2e6ee0c48ace4ae9b3ae07de3c8e14e0: {r: 4, g: 0, b: 0, a: 0}
     - Color_4b8325768c5a46f79d11d15571b303b5: {r: 1, g: 0, b: 0, a: 0}

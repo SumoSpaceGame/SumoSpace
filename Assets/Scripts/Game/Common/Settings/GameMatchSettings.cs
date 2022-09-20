@@ -10,15 +10,15 @@ namespace Game.Common.Settings
     
         public bool IsDataSynced { get; private set; }
 
-        [SerializeField]public string SelectedMap = "TestMap";
+        [SerializeField] public string SelectedMap = "TestMap";
     
-        [SerializeField]public int TeamCount;
-        [SerializeField]public int TeamSize;
+        [SerializeField] public int TeamCount;
+        [SerializeField] public int TeamSize;
 
         /// <summary>
         /// Match id of the player. On server side this is a temp variable that is not used.
         /// </summary>
-        [SerializeField]public ushort ClientMatchID;
+        [SerializeField] public ushort ClientMatchID;
         [SerializeField] public int ClientTeam;
         [SerializeField] public int ClientTeamPosition;
         [SerializeField] public bool FriendlyFire;

@@ -50,7 +50,7 @@ namespace Game.Common.Networking.Misc
         /// <summary>
         /// Used to pause the timer over the network. Server to client.
         /// </summary>
-        public delegate void NetworkPauseEventHandler(uint id);
+        public delegate void NetworkPauseEventHandler(uint id, long pauseTime);
         public event NetworkPauseEventHandler NetworkPauseEvent;
         
         /// <summary>
@@ -180,7 +180,7 @@ namespace Game.Common.Networking.Misc
         /// <summary>
         /// Pauses the timer.
         /// </summary>
-        public void PauseTimer()
+        public void PauseTimer(long pauseTime)
         {
             if (IsDestroyed)
             {
@@ -196,8 +196,14 @@ namespace Game.Common.Networking.Misc
             if (_netWorker.IsServer)
             {
                 _timerLength -= _stopwatch.ElapsedMilliseconds;
-                NetworkPauseEvent?.Invoke(ID);
+                NetworkPauseEvent?.Invoke(ID, _timerLength);
             }
+            else
+            {
+                _timerLength = pauseTime;
+            }
+            
+            _stopwatch.Reset();
             
             PauseEvent?.Invoke();
         }

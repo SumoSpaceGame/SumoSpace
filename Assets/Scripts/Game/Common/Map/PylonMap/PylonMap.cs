@@ -88,6 +88,11 @@ namespace Game.Common.Map.PylonMap
             return RayCrossing.ClosestPointDistance(ref pointList, point) < radius;
         }
 
+        public bool OnEdge(Vector2 point, float radius)
+        {
+            return RayCrossing.ClosestPointDistance(ref pointList, point) < radius;
+        }
+
 
         private void OnDrawGizmosSelected()
         {

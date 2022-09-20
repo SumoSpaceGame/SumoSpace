@@ -31,6 +31,14 @@ namespace Game.Common.Map
         /// <param name="radius"></param>
         /// <returns></returns>
         public bool WithinMap(Vector2 point, float radius);
+        
+        /// <summary>
+        /// Checks if a sphere is within the map
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="radius"></param>
+        /// <returns></returns>
+        public bool OnEdge(Vector2 point, float radius);
     
     
     }

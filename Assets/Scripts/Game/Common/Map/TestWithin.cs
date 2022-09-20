@@ -29,7 +29,19 @@ namespace Game.Common.Map
             {
                 Gizmos.color = Color.red;
             }   
+            
             Gizmos.DrawWireSphere(this.transform.position, radius);
+            
+            if (map.OnEdge(new Vector2(this.transform.position.x, this.transform.position.z), radius))
+            {
+                Gizmos.color = Color.red;
+            }
+            else
+            {
+                Gizmos.color = Color.green;
+            }   
+            
+            Gizmos.DrawWireCube(this.transform.position, new Vector3(1, 0.1f, 1) * radius);
         }
     }
 }
