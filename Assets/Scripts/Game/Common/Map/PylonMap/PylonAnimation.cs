@@ -14,8 +14,8 @@ namespace Game.Common.Map.PylonMap
         // TODO : Add the ability for the pylon to disappear
         
         public List<PylonKeyFrame> keyFrames = new List<PylonKeyFrame>();
-        
-        
+
+        public Pylon CurrentGameobject;
         /// <summary>
         /// Gets the position based on a percentage (0-1)
         /// </summary>

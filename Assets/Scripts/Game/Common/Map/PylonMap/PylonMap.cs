@@ -1,16 +1,19 @@
+using System;
 using System.Collections.Generic;
 using Game.Common.Map.Collision;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Game.Common.Map.PylonMap
 {
-    public class PylonMap : IGameMap
+    public class PylonMap : MonoBehaviour, IGameMap
     {
         public List<Pylon> pylons = new List<Pylon>();
         public PointList pointList;
 
         public float currentTime = 0;
         public float maxTime = 0;
+
 
         /// <summary>
         /// Create the point list and connections needed
@@ -83,6 +86,24 @@ namespace Game.Common.Map.PylonMap
             
             // Within Map if the closestPoint is less than radius
             return RayCrossing.ClosestPointDistance(ref pointList, point) < radius;
+        }
+
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.yellow;
+            
+            for (int i = 0; i < pointList.connections.Length; i += 2)
+            {
+                Vector3 position = new Vector3(pointList.points[pointList.connections[i]].x, 0,
+                    pointList.points[pointList.connections[i]].y);
+                Vector3 position2 = new Vector3(pointList.points[pointList.connections[i + 1]].x, 0,
+                    pointList.points[pointList.connections[i + 1]].y);
+                
+                position += Vector3.down;
+                position2 += Vector3.down;
+                Gizmos.DrawLine(position, position2);
+            }
         }
     }
 }

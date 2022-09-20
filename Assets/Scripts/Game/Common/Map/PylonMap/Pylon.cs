@@ -17,7 +17,17 @@ namespace Game.Common.Map.PylonMap
         [HideInInspector] public int pylonIndex;
 
         public Pylon ConnectedTo;
-        
+
+        public void Start()
+        {
+            pylonAnimation.CurrentGameobject = this;
+
+            if (pylonAnimation.CurrentGameobject != this)
+            {
+                Debug.LogError("One pylon animation per game object. Instead found multiple using " + pylonAnimation);
+            }
+        }
+
         /// <summary>
         /// Gets set by pylon map, or can be set by itself.
         /// Used for updating pylon animation 
@@ -72,9 +82,19 @@ namespace Game.Common.Map.PylonMap
 
         public Vector2 UpdatePosition(float percentage)
         {
+            if (!pylonAnimation)
+            {
+                return new Vector2(this.transform.position.x, this.transform.position.z);
+            }
+            
             Vector2 position = pylonAnimation.GetPosition(percentage);
             this.transform.position = new Vector3(position.x, 0, position.y);
             return position;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawLine(this.transform.position, this.ConnectedTo.transform.position);
         }
     }
 }

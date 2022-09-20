@@ -24,7 +24,7 @@ namespace Game.Common.Map.Collision
         {
             
             Vector2 start = point;
-            Vector2 end = point + Vector2.right * Mathf.Infinity;
+            Vector2 end = point + (Vector2.right * 10000f);
 
             int intersectionCount = 0;
             Vector2 pointA, pointB;
@@ -49,13 +49,12 @@ namespace Game.Common.Map.Collision
                 {
                     continue;
                 }
-
+                
                 if (LineIntersect(start, end, pointA, pointB))
                 {
                     intersectionCount += 1;
                 }
             }
-            
             // Even = OUT, Odd = IN
             // Checks if it is Odd
             return intersectionCount % 2 != 0;
