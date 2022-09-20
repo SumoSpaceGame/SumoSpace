@@ -83,8 +83,11 @@ namespace Game.Common.Map.PylonMap
 
         public Vector2 UpdatePosition(float percentage)
         {
-            graphics.pylonA = this;
-            graphics.pylonB = ConnectedTo;
+            if (graphics)
+            {
+                graphics.pylonA = this;
+                graphics.pylonB = ConnectedTo;
+            }
             
             if (!pylonAnimation)
             {
