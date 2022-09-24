@@ -46,7 +46,7 @@ namespace Editor.BuildingTools
             string exeLocation = "Builds/WindowsClient/SumoClient.exe";
             StartFile(exeLocation);
             SetInitServer(true);
-            EditorSceneManager.OpenScene(EditorSceneManager.GetSceneByName("InitScene").path);
+            EditorSceneManager.OpenScene("Assets/Scenes/InitScene.unity");
             EditorApplication.EnterPlaymode();
         }
         
@@ -56,7 +56,7 @@ namespace Editor.BuildingTools
             BuildAndRunServer();
             BuildAndRunClient();
             SetInitServer(false);
-            EditorSceneManager.OpenScene(EditorSceneManager.GetSceneByName("InitScene").path);
+            EditorSceneManager.OpenScene("Assets/Scenes/InitScene.unity");
             EditorApplication.EnterPlaymode();
         }
         

@@ -64,5 +64,4 @@ crashlytics-build.properties
 SumoSpace.sln.DotSettings
 
 #No layouts please
-UserSettings/Layouts/*
-*.dwlt
+UserSettings/
