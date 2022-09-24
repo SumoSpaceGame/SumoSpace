@@ -14,12 +14,16 @@ namespace Game.Common.Map.PylonMap
         public float currentTime = 0;
         public float maxTime = 0;
 
+        [HideInInspector] public bool initialized = false;
 
+        public PylonBuilder builder;
+        
         /// <summary>
         /// Create the point list and connections needed
         /// </summary>
         public void Init()
         {
+            
             List<Vector2> points = new List<Vector2>();
 
             foreach (var pylon in pylons)
@@ -37,6 +41,10 @@ namespace Game.Common.Map.PylonMap
 
             pointList.connections = connections.ToArray();
             pointList.points = points.ToArray();
+
+            initialized = true;
+
+            builder.Build(this);
         }
 
         
@@ -54,6 +62,8 @@ namespace Game.Common.Map.PylonMap
                 pointList.points[pylons[i].pylonIndex] = pylons[i].UpdatePosition(perc);
                 // TODO: If point removal system is added, have it destroy the point here if it has been destroyed
             }
+            
+            builder.UpdateGraphics();
         }
         
         /// <summary>
@@ -96,7 +106,9 @@ namespace Game.Common.Map.PylonMap
 
         private void OnDrawGizmosSelected()
         {
+            
             Gizmos.color = Color.yellow;
+            if (pointList.connections == null || pointList.connections.Length == 0) return;
             
             for (int i = 0; i < pointList.connections.Length; i += 2)
             {

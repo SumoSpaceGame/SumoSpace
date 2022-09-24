@@ -27,9 +27,14 @@ namespace Game.Common.Map
             // TODO: Make this more concerete
             if (gameMap == null)
             {
+                // TODO: Add a thing to make sure game match fails
                 this.enabled = false;
                 Debug.LogError("Failed to get IGameMap component of " + gameMapObject);
+                return;
             }
+            
+            gameMap.Init();
+            gameMap.UpdateMap(0);
             
         }
         
@@ -80,7 +85,7 @@ namespace Game.Common.Map
             
             foreach(var ship in ships)
             {
-                if (IsOutOfBounds(ship.transform.position, ship.GetRadius()))
+                if (IsOutOfBounds(ship.GetWorldPosition(), ship.GetRadius()))
                 {
                     outOfBounds.Add(ship);
                 }
@@ -93,7 +98,8 @@ namespace Game.Common.Map
 
         private bool IsOutOfBounds(Vector3 position, float radius)
         {
-            return gameMap.WithinMap(position, radius);
+            Vector2 pos = new Vector2(position.x, position.z);
+            return !gameMap.WithinMap(pos, radius);
         }
 
         

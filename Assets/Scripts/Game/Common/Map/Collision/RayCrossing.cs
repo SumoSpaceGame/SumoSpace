@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.Analytics;
 
@@ -6,6 +7,7 @@ namespace Game.Common.Map.Collision
 
     public struct PointList
     {
+        public bool init;
         public Vector2[] points;
         
         // Every 2 values is a connection between to indexes

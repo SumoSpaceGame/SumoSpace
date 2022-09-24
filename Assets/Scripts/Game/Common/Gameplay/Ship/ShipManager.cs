@@ -92,5 +92,10 @@ namespace Game.Common.Gameplay.Ship
             return this.GetComponent<CircleCollider2D>().radius;
         }
 
+        public Vector3 GetWorldPosition()
+        {
+            return simulationObject.representative.transform.position;
+        }
+
     }
 }

@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Game.Common.Map.PylonMap
 {
+    [ExecuteInEditMode]
     public class Pylon : MonoBehaviour
     {
-        public PylonGraphics graphics;
-
         public PylonMap map;
 
         public PylonAnimation pylonAnimation;
@@ -21,13 +23,18 @@ namespace Game.Common.Map.PylonMap
 
         public void Start()
         {
-            pylonAnimation.CurrentGameobject = this;
-
-            if (pylonAnimation.CurrentGameobject != this)
+            if (pylonAnimation)
             {
+                if(pylonAnimation.CurrentGameobject == null) pylonAnimation.CurrentGameobject = this;
+            }
+            
+            if (pylonAnimation != null && pylonAnimation.CurrentGameobject != this)
+            {
+                pylonAnimation = null;
                 Debug.LogError("One pylon animation per game object. Instead found multiple using " + pylonAnimation);
             }
         }
+        
 
         /// <summary>
         /// Gets set by pylon map, or can be set by itself.
@@ -36,6 +43,14 @@ namespace Game.Common.Map.PylonMap
         /// </summary>
         public void SetAnimationPosition()
         {
+            if (pylonAnimation == null)
+            {
+                Debug.LogWarning("Can not set animation position/keyframe when no pylonAnimation linked");
+                return;
+            }
+            
+            pylonAnimation.CurrentGameobject = this;
+            
             float perc = Mathf.Clamp(map.currentTime / map.maxTime, 0.0f, 1.0f);
             
             var newFrame = new PylonKeyFrame()
@@ -83,13 +98,8 @@ namespace Game.Common.Map.PylonMap
 
         public Vector2 UpdatePosition(float percentage)
         {
-            if (graphics)
-            {
-                graphics.pylonA = this;
-                graphics.pylonB = ConnectedTo;
-            }
             
-            if (!pylonAnimation)
+            if (!pylonAnimation || pylonAnimation.keyFrames.Count == 0)
             {
                 return new Vector2(this.transform.position.x, this.transform.position.z);
             }
@@ -101,8 +111,10 @@ namespace Game.Common.Map.PylonMap
 
         private void OnDrawGizmos()
         {
-            Gizmos.DrawLine(this.transform.position, this.ConnectedTo.transform.position);
+            Gizmos.color = Color.red;
+            if(ConnectedTo != null) Gizmos.DrawLine(this.transform.position, this.ConnectedTo.transform.position);
             Gizmos.DrawWireSphere(this.transform.position, 0.1f);
         }
+
     }
 }
