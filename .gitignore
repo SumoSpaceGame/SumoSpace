@@ -63,4 +63,6 @@ crashlytics-build.properties
 .vsconfig
 SumoSpace.sln.DotSettings
 
-UserSettings/Layouts*
+#No layouts please
+UserSettings/Layouts/*
+*.dwlt
