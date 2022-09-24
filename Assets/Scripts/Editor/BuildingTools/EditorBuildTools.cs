@@ -4,6 +4,7 @@ using System.Linq;
 using Game.Common.Settings;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -38,6 +39,17 @@ namespace Editor.BuildingTools
             BuildAndRun(exeLocation, BuildTarget.StandaloneWindows64, BuildOptions.Development | BuildOptions.AllowDebugging);
         }
         
+        [MenuItem("Build Debug/Editor as Server + 2 clients (debug server)")]
+        static void BuildAndRunClient2()
+        {
+            BuildAndRunClient();
+            string exeLocation = "Builds/WindowsClient/SumoClient.exe";
+            StartFile(exeLocation);
+            SetInitServer(true);
+            EditorSceneManager.OpenScene(EditorSceneManager.GetSceneByName("InitScene").path);
+            EditorApplication.EnterPlaymode();
+        }
+        
         [MenuItem("Build Debug/Build Linux Server")]
         static void BuildLinuxServer()
         {
@@ -58,6 +70,18 @@ namespace Editor.BuildingTools
             Build(exeLocation, BuildTarget.StandaloneOSX, BuildOptions.Development | BuildOptions.AllowDebugging);
         }
         
+        [MenuItem("Build Debug/Init Server Flag (true)")]
+        static void InitServerTrue()
+        {
+            SetInitServer(true);
+        }
+
+        [MenuItem("Build Debug/Init Server Flag (false)")]
+        static void InitServerFalse()
+        {
+            SetInitServer(false);
+        }
+
         static void BuildAndRun(string exeLocation, BuildTarget target, BuildOptions options)
         {
 
