@@ -50,6 +50,16 @@ namespace Editor.BuildingTools
             EditorApplication.EnterPlaymode();
         }
         
+        [MenuItem("Build Debug/Editor as Client + 1 c and s (debug client)")]
+        static void DebugClient()
+        {
+            BuildAndRunServer();
+            BuildAndRunClient();
+            SetInitServer(false);
+            EditorSceneManager.OpenScene(EditorSceneManager.GetSceneByName("InitScene").path);
+            EditorApplication.EnterPlaymode();
+        }
+        
         [MenuItem("Build Debug/Build Linux Server")]
         static void BuildLinuxServer()
         {
