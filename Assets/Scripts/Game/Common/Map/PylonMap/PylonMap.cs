@@ -25,7 +25,8 @@ namespace Game.Common.Map.PylonMap
         {
             
             List<Vector2> points = new List<Vector2>();
-
+            
+            // TODO - Just add all the pylons in the scene, find objects.
             foreach (var pylon in pylons)
             {
                 points.Add(new Vector2(pylon.transform.position.x, pylon.transform.position.y));
