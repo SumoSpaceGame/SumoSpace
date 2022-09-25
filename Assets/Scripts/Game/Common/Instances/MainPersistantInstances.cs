@@ -44,6 +44,26 @@ namespace Game.Common.Instances
 		}
 
 		/// <summary>
+		/// Try get value
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		public static bool TryGet<T>(out T obj) where T : IGamePersistantInstance
+		{
+			if (HasType(typeof(T)))
+			{
+				obj = Get<T>();
+				return true;
+			}
+			else
+			{
+				obj = default(T);
+				return false;
+			}
+		}
+
+		/// <summary>
 		/// Grabs the Object version of IGamePersistantInstance of the type defined.
 		/// </summary>
 		/// <param name="type"></param>
