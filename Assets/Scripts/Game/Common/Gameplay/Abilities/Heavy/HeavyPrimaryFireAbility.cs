@@ -16,4 +16,14 @@ public class HeavyPrimaryFireAbility : ShipAbility {
     
     [SerializeField] private AnimationCurve knockbackCurve;
     public AnimationCurve KnockbackCurve => knockbackCurve;
+
+    /// <summary>
+    /// Returns the current amount of knockback that should be used.
+    /// </summary>
+    /// <remarks>
+    /// Knockback scales linearly until maximum is reached.
+    /// </remarks>
+    /// <param name="time"> The amount of time the ability has been active.</param>
+    /// <returns></returns>
+    public float CurrentKnockback(float time) => Mathf.Lerp(minKnockback, MaxKnockback, time / rampTime);
 }

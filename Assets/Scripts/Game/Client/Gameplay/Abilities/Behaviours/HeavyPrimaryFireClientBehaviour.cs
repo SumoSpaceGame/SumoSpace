@@ -10,7 +10,8 @@ public class HeavyPrimaryFireClientBehaviour : RenderableAbilityBehaviour<HeavyP
 
     public override void QuickExecute() {
         ShipRenderer.StartBeam();
-        coroutine ??= shipManager.StartCoroutine(ClientSide());
+        var routine = shipManager.StartCoroutine(ClientSide());
+        coroutine ??= routine;
         if (++oooCounter == 1) {
             executing = true;
         }
