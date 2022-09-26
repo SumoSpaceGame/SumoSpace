@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
-using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Unity;
+using FishNet;
+using FishNet.Managing.Statistic;
 using TMPro;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -25,10 +25,6 @@ namespace Game.Common.UI.DebugUI
         public TMP_Text pingText;
 
 
-        private Stopwatch pingTimer = new Stopwatch();
-        private const long PING_TIMER = 10000;
-    
-
         private bool initated = false;
 
         // Update is called once per frame
@@ -36,43 +32,36 @@ namespace Game.Common.UI.DebugUI
         {
 
             //Reusable in case network manager was reset
-            if (NetworkManager.Instance == null || !NetworkManager.Instance.isActiveAndEnabled)
+            if (InstanceFinder.StatisticsManager == null || !InstanceFinder.StatisticsManager )
             {
                 initated = false;
                 return;
             }else if (!initated)
             {
-                NetworkManager.Instance.Networker.onPingPong += onPong;
-                NetworkManager.Instance.Networker.Ping();
+                if (InstanceFinder.IsServer)
+                {   
+                    InstanceFinder.StatisticsManager.NetworkTraffic.OnServerNetworkTraffic += OnNetworkServerStatistics;
+                }
+                else
+                {
+                    InstanceFinder.StatisticsManager.NetworkTraffic.OnClientNetworkTraffic += OnNetworkServerStatistics;
+                }
+                
                 initated = true;
             }
 
-            bandwidthTime += Time.deltaTime;
-            
-            if (!pingTimer.IsRunning)
-            {
-                pingTimer.Start();
-            }
+        }
 
-            if (pingTimer.ElapsedMilliseconds > PING_TIMER)
-            {
-                pingTimer.Restart();
-                NetworkManager.Instance.Networker.Ping();
-                
-                BandwidthIn = NetworkManager.Instance.Networker.BandwidthIn - BandwidthInLast;
-                BandwidthIn = Convert.ToUInt64(BandwidthIn / bandwidthTime);
-
-                BandwidthOut = NetworkManager.Instance.Networker.BandwidthOut - BandwidthOutLast;
-                BandwidthOut = Convert.ToUInt64(BandwidthIn / bandwidthTime);
-                
-                BandwidthInLast = NetworkManager.Instance.Networker.BandwidthIn;
-                BandwidthOutLast = NetworkManager.Instance.Networker.BandwidthOut;
-                bandwidthTime = 0;
-                
+        private void OnDestroy()
+        {
+            if (InstanceFinder.IsServer)
+            {   
+                InstanceFinder.StatisticsManager.NetworkTraffic.OnServerNetworkTraffic -= OnNetworkServerStatistics;
             }
-        
-            UpdateNetworkStats();
-            UpdateUI();
+            else
+            {
+                InstanceFinder.StatisticsManager.NetworkTraffic.OnClientNetworkTraffic -= OnNetworkServerStatistics;
+            }
         }
 
         /// <summary>
@@ -81,26 +70,6 @@ namespace Game.Common.UI.DebugUI
         private void UpdateNetworkStats()
         {
         
-        }
-
-    
-        // TODO: Rely on the game network manager for ping data.
-        /// <summary>
-        /// Custom handler for ping UI
-        /// </summary>
-        /// <param name="ping"></param>
-        /// <param name="sender"></param>
-        private void onPong(double ping, NetWorker sender)
-        {
-            MainThreadManager.Run(() =>
-            {
-                pingText.text = "Ping - " + ping + "ms";
-
-                if (!sender.IsServer)
-                {
-                    //Debug.Log("Ping: " + ping + " Frame Time: " + Time.deltaTime + $"\n {ConvertBytesCountToText(BandwidthIn)} {ConvertBytesCountToText(BandwidthOut)}");
-                }
-            });
         }
 
         private void UpdateUI()
@@ -118,11 +87,13 @@ namespace Game.Common.UI.DebugUI
             }
         }
 
-        private void OnDestroy()
+        public void OnNetworkServerStatistics(NetworkTrafficArgs args)
         {
-            if(NetworkManager.Instance != null) NetworkManager.Instance.Networker.onPingPong -= onPong;
+            BandwidthIn = args.FromServerBytes;
+            BandwidthOut = args.ToServerBytes;
+            UpdateNetworkStats();
+            UpdateUI();
         }
-
 
         /// <summary>
         /// Converts Bytes into proper Bytes,Kilo,Mega and assigns a suffix depending on data size.
