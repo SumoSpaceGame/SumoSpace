@@ -17,7 +17,6 @@ namespace Game.Common.UI.DirectConnection
         public TMP_InputField AddressTextField;
         public TMP_InputField PortTextField;  
 
-        public BasicNetworkConnector connector;
         public MasterSettings masterSettings;
         
         private const string DEBUG_ServerAddress = "localhost";
@@ -28,7 +27,6 @@ namespace Game.Common.UI.DirectConnection
 
         public GameObject enableWhenServer;
 
-        public UnityEvent FailedToConnect;
         
         private void Start()
         {
@@ -36,12 +34,12 @@ namespace Game.Common.UI.DirectConnection
             ServerPort = masterSettings.ServerPort;
             
             if(PortTextField != null) PortTextField.text = "" + masterSettings.ServerPort;
-            connector.OnFailedToConnect += OnFailedToConnect;
+           
             
             if (masterSettings.InitServer)
             {
                 Debug.Log("Hosting server at localhost:" + masterSettings.ServerPort);
-                connector.Host("localhost", masterSettings.ServerPort);
+                FishNetConnector.Host(masterSettings.ServerPort);
                 enableWhenServer.SetActive(true);
             }
         }
@@ -55,7 +53,7 @@ namespace Game.Common.UI.DirectConnection
         public void ConnectToServer()
         {
             ProcessTextFields();
-            connector.Connect(ServerAddress, ServerPort);
+            FishNetConnector.Connect(ServerAddress, ServerPort);
         }
 
         /// <summary>
@@ -77,36 +75,24 @@ namespace Game.Common.UI.DirectConnection
             string address = split[0];
             ushort port = UInt16.Parse(split[1]);
             
-            connector.Connect(address, port);
+            FishNetConnector.Connect(address, port);
         }
 
         public void DebugConnect()
         {
-            connector.Connect(DEBUG_ServerAddress, masterSettings.ServerPort);
+            FishNetConnector.Connect(DEBUG_ServerAddress, masterSettings.ServerPort);
         }
 
         public void Host()
         {
             ProcessTextFields();
-            connector.Host(ServerAddress, ServerPort);
+            FishNetConnector.Host(ServerPort);
         }
         
         public void DebugHost()
         {
-            connector.Host(DEBUG_HostServerAddress, masterSettings.ServerPort);
+            FishNetConnector.Host(masterSettings.ServerPort);
         }
 
-        private void OnDestroy()
-        {
-            if (connector != null)
-            {
-                connector.OnFailedToConnect -= OnFailedToConnect;
-            }
-        }
-
-        public void OnFailedToConnect()
-        {
-            FailedToConnect.Invoke();
-        }
     }
 }

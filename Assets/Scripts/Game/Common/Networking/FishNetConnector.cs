@@ -8,7 +8,7 @@ namespace Game.Common.Networking
 {
     public class FishNetConnector : NetworkBehaviour
     {
-        public void Host(ushort port)
+        public static void Host(ushort port)
         {
             var server = InstanceFinder.ServerManager;
 
@@ -31,7 +31,7 @@ namespace Game.Common.Networking
             server.StartConnection(port);
         }
 
-        public void Connect(string host, ushort port)
+        public static void Connect(string host, ushort port)
         {
             var client = InstanceFinder.ClientManager;
             
