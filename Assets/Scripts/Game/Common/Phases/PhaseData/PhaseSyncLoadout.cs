@@ -12,7 +12,7 @@ namespace Game.Common.Phases.PhaseData
         public struct Data
         {
             [SerializeField] public bool valid;
-            [SerializeField] public uint[] PlayerIDs;
+            [SerializeField] public ushort[] PlayerIDs;
             [SerializeField] public int[] PlayerSelections;
         }
         

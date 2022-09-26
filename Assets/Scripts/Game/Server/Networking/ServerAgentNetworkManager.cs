@@ -41,7 +41,7 @@ namespace Game.Common.Networking
             
             var agentInput = (AgentInputManager) NetworkManager.Instance.InstantiateAgentInput();
             
-            agentInput.ServerSendOwnership(networkObject.Networker.FindPlayer(player => data.GlobalID.ID == player.NetworkId));
+            agentInput.ServerSendOwnership(networkObject.Networker.FindPlayer(player => data.GlobalID.NetworkID == player.NetworkId));
             
             agentInput._shipManager = spawnedShip;
         }

@@ -14,7 +14,7 @@ namespace Game.Common.Networking.Utility
         {
             maxPlayerCount = maxPlayer;
         }
-
+        
         public void Register(PlayerID playerID)
         {
             if (players.Contains(playerID))

@@ -22,14 +22,14 @@ namespace Game.Server.Phases
         {
             PhaseSyncLoadout.Data data = new PhaseSyncLoadout.Data();
 
-            var playerList = new List<uint>();
+            var playerList = new List<ushort>();
             var selectionList = new List<int>();
 
             var players = _phaseNetworkManager.masterSettings.GetPlayerIDs();
 
             foreach (var id in players)
             {
-                playerList.Add(id.ID);
+                playerList.Add(id.MatchID);
                 
                 selectionList.Add(_phaseNetworkManager.masterSettings.playerGameDataRegistry.Get(id).shipCreationData.shipType);
             }
@@ -50,7 +50,15 @@ namespace Game.Server.Phases
 
         public void OnUpdateReceived(RPCInfo info, byte[] data)
         {
-            _syncedPlayer.Add(info.SendingPlayer.NetworkId, _phaseNetworkManager.masterSettings.playerIDRegistry.Get(info.SendingPlayer.NetworkId));
+            PlayerID playerID;
+            if (!_phaseNetworkManager.masterSettings.playerIDRegistry.TryGetByNetworkID(info.SendingPlayer.NetworkId,
+                    out playerID))
+            {
+                Debug.LogWarning("WARNING: Phase data recieved from client that is not registered? Spectator?");
+                return;
+            }
+            
+            _syncedPlayer.Add(info.SendingPlayer.NetworkId, playerID);
 
             if (_syncedPlayer.Count == _phaseNetworkManager.gameMatchSettings.MaxPlayerCount)
             {

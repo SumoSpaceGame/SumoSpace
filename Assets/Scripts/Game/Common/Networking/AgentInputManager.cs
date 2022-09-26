@@ -45,7 +45,7 @@ namespace Game.Common.Networking
                     if (agentNetworkManager == null) return;
                     
                     agentNetworkManager._playerShips
-                        .TryGet(agentNetworkManager.masterSettings.playerIDRegistry.Get(networkObject.MyPlayerId), out _shipManager);
+                        .TryGet(agentNetworkManager.masterSettings.playerIDRegistry.GetByMatchID(masterSettings.matchSettings.ClientMatchID), out _shipManager);
                     return;
                 }
                 

@@ -3,6 +3,7 @@ using BeardedManStudios.Forge.Networking;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using Game.Common.Phases.PhaseData;
+using Game.Common.Registry;
 using UnityEngine;
 
 namespace Game.Server.Phases
@@ -35,6 +36,14 @@ namespace Game.Server.Phases
         {
             if (data.Length == 0) return;
 
+            PlayerID playerID;
+
+            if (!_phaseNetworkManager.masterSettings.playerIDRegistry.TryGetByNetworkID(info.SendingPlayer.NetworkId, out playerID))
+            {
+                Debug.LogWarning("Non-registered player tried to join the network! " + info.SendingPlayer.Ip);
+                return;
+            }
+            
             switch (data.Length)
             {
                 case 1:
@@ -46,34 +55,32 @@ namespace Game.Server.Phases
                     if (flag == PhaseLobby.PLAYER_SELECT_FLAG)
                     {
                         // TODO: Add spam protection
-                        // TODO: Use pure synced client identifier. An identified that is defined by the server.
                         
-                        Debug.Log(info.SendingPlayer.NetworkId + " selected in " + selection);
+                        Debug.Log(playerID.ClientID + " selected in " + selection);
                         
                         _phaseNetworkManager.SendUnreliablePhaseUpdate(Phase.MATCH_LOBBY, 
-                            new []{(byte) PhaseLobby.PLAYER_SELECT_FLAG, (byte) info.SendingPlayer.NetworkId, selection});
+                            new []{(byte) PhaseLobby.PLAYER_SELECT_FLAG, (byte) playerID.MatchID, selection});
                     }
                     else if (flag == PhaseLobby.PLAYER_LOCKED_FLAG)
                     {
-                        if (_lockedInPlayers.Contains(info.SendingPlayer.NetworkId)) return;
+                        if (_lockedInPlayers.Contains(playerID.MatchID)) return;
                         
-                        _lockedInPlayers.Add(info.SendingPlayer.NetworkId);
+                        _lockedInPlayers.Add(playerID.MatchID);
                         
-                        Debug.Log(info.SendingPlayer.NetworkId + " locked in " + selection);;
+                        Debug.Log(playerID.MatchID + " locked in " + selection);;
                         
                         _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_LOBBY, 
-                            new []{(byte) PhaseLobby.PLAYER_LOCKED_FLAG, (byte) info.SendingPlayer.NetworkId, (byte) _phaseNetworkManager.masterSettings.playerIDRegistry.Get(info.SendingPlayer.NetworkId).MatchID, selection});
+                            new []{(byte) PhaseLobby.PLAYER_LOCKED_FLAG, (byte) playerID.MatchID, (byte) playerID.MatchID, selection});
 
 
-                        if (_phaseNetworkManager.masterSettings.playerGameDataRegistry.TryGet(
-                            _phaseNetworkManager.masterSettings.playerIDRegistry.Get(info.SendingPlayer.NetworkId),
+                        if (_phaseNetworkManager.masterSettings.playerGameDataRegistry.TryGet(playerID,
                             out var gameData))
                         {
                             gameData.shipCreationData.shipType = selection;
                         }
                         else
                         {
-                            Debug.LogError($"Could not find game data for player {info.SendingPlayer.NetworkId}");
+                            Debug.LogError($"Could not find game data for player {playerID.ClientID}");
                         }
                         
                         if (_lockedInPlayers.Count == _phaseNetworkManager.gameMatchSettings.MaxPlayerCount)

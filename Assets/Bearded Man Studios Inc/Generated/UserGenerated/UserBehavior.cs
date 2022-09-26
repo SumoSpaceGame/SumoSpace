@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"int\", \"byte[]\", \"ushort\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"id\", \"data\", \"shipID\"]]")]
-	public abstract partial class InputLayerBehavior : NetworkBehavior
+	[GeneratedRPC("{\"types\":[[\"byte\", \"byte[]\"]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"mode\", \"extraData\"]]")]
+	public abstract partial class UserBehavior : NetworkBehavior
 	{
-		public const byte RPC_COMMAND_UPDATE = 0 + 5;
+		public const byte RPC_SWITCH_MODE = 0 + 5;
 		
-		public InputLayerNetworkObject networkObject = null;
+		public UserNetworkObject networkObject = null;
 
 		public override void Initialize(NetworkObject obj)
 		{
@@ -18,11 +18,11 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (networkObject != null && networkObject.AttachedBehavior != null)
 				return;
 			
-			networkObject = (InputLayerNetworkObject)obj;
+			networkObject = (UserNetworkObject)obj;
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
-			networkObject.RegisterRpc("CommandUpdate", CommandUpdate, typeof(int), typeof(byte[]), typeof(ushort));
+			networkObject.RegisterRpc("SwitchMode", SwitchMode, typeof(byte), typeof(byte[]));
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -80,7 +80,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override void Initialize(NetWorker networker, byte[] metadata = null)
 		{
-			Initialize(new InputLayerNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
+			Initialize(new UserNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
 		}
 
 		private void DestroyGameObject(NetWorker sender)
@@ -91,7 +91,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override NetworkObject CreateNetworkObject(NetWorker networker, int createCode, byte[] metadata = null)
 		{
-			return new InputLayerNetworkObject(networker, this, createCode, metadata);
+			return new UserNetworkObject(networker, this, createCode, metadata);
 		}
 
 		protected override void InitializedTransform()
@@ -101,11 +101,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		/// <summary>
 		/// Arguments:
-		/// int id
-		/// byte[] data
-		/// ushort shipID
+		/// byte mode
+		/// byte[] extraData
 		/// </summary>
-		public abstract void CommandUpdate(RpcArgs args);
+		public abstract void SwitchMode(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}

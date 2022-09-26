@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
@@ -10,6 +11,7 @@ using Game.Common.Phases;
 using Game.Common.Settings;
 using Game.Common.Util;
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
 namespace Game.Common.Networking
@@ -28,7 +30,7 @@ namespace Game.Common.Networking
         
         private NetworkType networkType = NetworkType.Client;
 
-    
+        public string clientID;
         
         
         private void Awake()
@@ -38,6 +40,16 @@ namespace Game.Common.Networking
         
         protected override void NetworkStart()
         {
+            // TODO: Create a better system to make sure the UUID is unique
+            // This can be done by having a quick server client handshake, but
+            // the client should already have and ID that links them to the account.
+            // In the future the id can be an handshake id when the client is given a temporary code.
+            // Then the server takes the temporary code and checks it against the account server.
+            // If the account server finds the temporary code (its not expired and such) then 
+            // the sever should accept it.
+            // The server should accept the temporary code + the true account ID
+            // This can be highjacked, but it is highly unlikely
+            clientID = SystemInfo.deviceUniqueIdentifier + "P" + Process.GetCurrentProcess().Id + "R" + Random.Range(int.MinValue, int.MaxValue);
             
             masterSettings.Reset();
             
@@ -53,6 +65,7 @@ namespace Game.Common.Networking
             
             if (networkObject.IsServer)
             {
+                clientID = "";
                 networkType = NetworkType.Server;
                 OnServerNetworkStart();
                 networkObject.Networker.disconnected += OnServerNetworkClose;
@@ -167,5 +180,55 @@ namespace Game.Common.Networking
             gameMatchSettings.Sync(args.GetAt<string>(0));
             
         }
+
+        public override void RequestClientID(RpcArgs args)
+        {
+            if (networkObject.IsServer)
+            {
+                if (args.Args.Length != 1)
+                {
+                    Debug.LogError("Failed to process request client ID, client did not send their id to the server.");
+                    return;
+                }
+                
+                ServerRecieveClientID(args.Info.SendingPlayer, args.GetNext<string>());
+                return;
+            }
+            
+            // When the third party server auth gets created, any auth special temp code should only get sent to the server
+            // Checking if the receiving player is from the server
+            networkObject.SendRpc(args.Info.SendingPlayer, RPC_REQUEST_CLIENT_I_D, this.clientID);
+        }
+
+
+        partial void ServerRecieveClientID(NetworkingPlayer player, string id);
+        
+        
+        
+        public override void RequestServerJoin(RpcArgs args)
+        {
+            if (networkObject.IsServer)
+            {
+                ServerRecieveClientJoinRequest(args.Info.SendingPlayer, args.GetNext<string>());
+            }
+            else
+            {
+                Debug.LogError("Tried to request serve join on client? From " + args.Info.SendingPlayer.Ip);
+                return;
+            }
+        }
+
+        partial void ServerRecieveClientJoinRequest(NetworkingPlayer player, string requestingClientID);
+        
+        
+
+        public override void UpdatePlayerNetworkID(RpcArgs args)
+        {
+            if (networkObject.IsServer) return;
+            
+            ClientUpdatePlayerNetworkID(args.GetNext<uint>(), args.GetNext<ushort>());
+        }
+
+        partial void ClientUpdatePlayerNetworkID(uint networkID, ushort matchID);
     }
 }

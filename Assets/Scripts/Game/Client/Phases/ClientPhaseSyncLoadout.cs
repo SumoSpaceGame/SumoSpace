@@ -53,7 +53,7 @@ namespace Game.Client.Phases
                 var shipInfo = ShipCreationData.Create(syncData.PlayerSelections[i]);
 
                 var gameData = _gamePhaseNetworkManager.masterSettings.playerGameDataRegistry.Get(
-                    _gamePhaseNetworkManager.masterSettings.playerIDRegistry.Get(syncData.PlayerIDs[i]));
+                    _gamePhaseNetworkManager.masterSettings.playerIDRegistry.GetByMatchID(syncData.PlayerIDs[i]));
 
                 gameData.shipCreationData = shipInfo;
                 

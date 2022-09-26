@@ -19,6 +19,8 @@ namespace Game.Server.Phases
 
         public void PhaseStart()
         {
+            _phaseNetworkManager.gameMatchSettings.MatchStarted = true;
+            _phaseNetworkManager.gameMatchSettings.ServerRestartOnLeave = true; 
         }
 
         public void PhaseUpdate()

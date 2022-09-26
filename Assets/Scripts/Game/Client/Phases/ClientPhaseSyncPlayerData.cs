@@ -43,7 +43,7 @@ namespace Game.Client.Phases
             {
                 var playerID = syncData.playerIDs[i];
                 Debug.Log($"Synced player {playerID}");
-                var id = _phaseNetworkManager.masterSettings.RegisterPlayer(playerID.ID, playerID.MatchID, playerID.ClientID, syncData.staticData[i]);
+                var id = _phaseNetworkManager.masterSettings.RegisterPlayer(playerID.NetworkID, playerID.MatchID, playerID.ClientID, syncData.staticData[i]);
             }
             Debug.Log("Synced played data");
 

@@ -4,11 +4,14 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"string\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"data\"]]")]
+	[GeneratedRPC("{\"types\":[[\"string\"][\"string\"][\"string\"][\"uint\", \"ushort\"]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"data\"][\"clientID\"][\"UserID\"][\"networkID\", \"matchID\"]]")]
 	public abstract partial class GameManagerBehavior : NetworkBehavior
 	{
 		public const byte RPC_SYNC_MATCH_SETTINGS = 0 + 5;
+		public const byte RPC_REQUEST_CLIENT_I_D = 1 + 5;
+		public const byte RPC_REQUEST_SERVER_JOIN = 2 + 5;
+		public const byte RPC_UPDATE_PLAYER_NETWORK_I_D = 3 + 5;
 		
 		public GameManagerNetworkObject networkObject = null;
 
@@ -23,6 +26,9 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 			base.SetupHelperRpcs(networkObject);
 			networkObject.RegisterRpc("SyncMatchSettings", SyncMatchSettings, typeof(string));
+			networkObject.RegisterRpc("RequestClientID", RequestClientID, typeof(string));
+			networkObject.RegisterRpc("RequestServerJoin", RequestServerJoin, typeof(string));
+			networkObject.RegisterRpc("UpdatePlayerNetworkID", UpdatePlayerNetworkID, typeof(uint), typeof(ushort));
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -104,6 +110,22 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		/// string data
 		/// </summary>
 		public abstract void SyncMatchSettings(RpcArgs args);
+		/// <summary>
+		/// Arguments:
+		/// string clientID
+		/// </summary>
+		public abstract void RequestClientID(RpcArgs args);
+		/// <summary>
+		/// Arguments:
+		/// string UserID
+		/// </summary>
+		public abstract void RequestServerJoin(RpcArgs args);
+		/// <summary>
+		/// Arguments:
+		/// uint networkID
+		/// ushort matchID
+		/// </summary>
+		public abstract void UpdatePlayerNetworkID(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}

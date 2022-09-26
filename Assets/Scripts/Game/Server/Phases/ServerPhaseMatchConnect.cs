@@ -31,6 +31,7 @@ namespace Game.Server.Phases
         public void PhaseStart()
         {
             
+            _phaseNetworkManager.gameMatchSettings.MatchStarted = false;
         }
 
         public void PhaseUpdate()

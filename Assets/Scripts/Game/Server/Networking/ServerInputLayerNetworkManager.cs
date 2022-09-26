@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
@@ -24,11 +25,12 @@ namespace Game.Common.Networking
         }
 
         
-        
+        /*
         /// <summary>
         /// When the server receives client movement updates, it will assign the values to the ships themselves.
         /// </summary>
         /// <param name="args"></param>
+        [Obsolete("Not used anymore, was just a test. All movement should be through fields")]
         partial void ServerMovementUpdate(RpcArgs args)
         {
             var movementVec = args.GetAt<Vector2>(0);
@@ -48,5 +50,6 @@ namespace Game.Common.Networking
                 ship.shipController.targetAngle = rotationVec;
             });
         }
+        */
     }
 }

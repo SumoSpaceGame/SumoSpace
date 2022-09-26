@@ -15,7 +15,7 @@ MonoBehaviour:
   matchSettings: {fileID: 11400000, guid: 7b7c161bfd2f92949ac964df79581d2a, type: 2}
   network:
     _updateInterval: 15
-    isServer: 0
+    isServer: 1
   InitServer: 0
   ServerAddress: localhost
   ServerPort: 22233

@@ -35,7 +35,7 @@ public class PlayerStatsUI : MonoBehaviour
         foreach (var playerID in masterSettings.GetPlayerIDs())
         {
 
-            uint ID = playerID.ID;
+            uint ID = playerID.NetworkID;
             int loadout = -1;
             bool ready = false;
             

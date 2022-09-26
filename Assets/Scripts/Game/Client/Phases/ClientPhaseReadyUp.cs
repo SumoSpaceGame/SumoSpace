@@ -20,12 +20,14 @@ namespace Game.Client.Phases
         
         public ClientPhaseReadyUp(GamePhaseNetworkManager phaseNetworkManager)
         {
-            _masterUIController = MainPersistantInstances.Get<MasterUIController>();
             _phaseNetworkManager = phaseNetworkManager;
+            _masterUIController = MainPersistantInstances.Get<MasterUIController>();
         }
 
         public void PhaseStart()
         {
+            _phaseNetworkManager.gameMatchSettings.MatchStarted = true; 
+            _phaseNetworkManager.gameMatchSettings.ServerRestartOnLeave = true; 
             _masterUIController.ActivateReady();
             _masterUIController.ReadyButton.onClick.AddListener(onReadyClicked);
             _masterUIController.ReadyUpText.text = "Ready up";

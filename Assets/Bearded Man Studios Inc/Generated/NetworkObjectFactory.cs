@@ -55,6 +55,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new NetBibleNetworkObject(networker, id, frame);
 						break;
+					case UserNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new UserNetworkObject(networker, id, frame);
+						break;
 				}
 
 				if (!availableCallback)

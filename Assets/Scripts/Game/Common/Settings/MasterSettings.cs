@@ -74,9 +74,9 @@ namespace Game.Common.Settings
             
         }
 
-        public ShipManager GetShip(uint networkID)
+        public ShipManager GetShipByMatchID(ushort matchID)
         {
-            if (playerStaticDataRegistry.TryGet(playerIDRegistry.Get(networkID), out var data))
+            if (playerStaticDataRegistry.TryGet(playerIDRegistry.GetByMatchID(matchID), out var data))
             {
                 if (playerShips.TryGet(data.GlobalID, out ShipManager manager))
                 {
@@ -104,21 +104,37 @@ namespace Game.Common.Settings
         public void CleanupPlayer(uint networkID)
         {
             Debug.LogWarning("Cleaning player from game, should be done on reset, or ready up");
-
-            var playerID = playerIDRegistry.Get(networkID);
             
+            
+            PlayerID playerID;
+
+            if (!playerIDRegistry.TryGetByNetworkID(networkID, out playerID))
+            {
+                // Nothing to clean up, they are not registered
+                return;
+            }
+                
+                
             playerGameDataRegistry.Remove(playerID);
             playerStaticDataRegistry.Remove(playerID);
             
-            playerIDRegistry.RemovePlayerID(networkID);
+            playerIDRegistry.RemovePlayerID(playerID.MatchID);
 
         }
 
         public PlayerID RegisterPlayer(uint networkID, ushort matchID, string clientID,
             PlayerStaticData staticData = null)
         {
+
+            if (playerIDRegistry.HasClientID(clientID) || playerIDRegistry.HasMatchID(matchID) ||
+                playerIDRegistry.HasNetworkID(networkID))
+            {
+                Debug.LogError("Player id already contains one of these values. Failed to register " + clientID);
+                return new PlayerID();
+            }
+                
             playerIDRegistry.RegisterPlayer(networkID, matchID, clientID);
-            var savedID = playerIDRegistry.Get(networkID);
+            var savedID = playerIDRegistry.GetByMatchID(matchID);
 
             if (staticData == null)
             {

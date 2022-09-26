@@ -1,10 +1,13 @@
 using System;
+using System.Text.RegularExpressions;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using Game.Common.Instances;
 using Game.Common.Phases;
+using Game.Common.Registry;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 // Partial class namespace requirement
 // ReSharper disable once CheckNamespace
@@ -16,7 +19,10 @@ namespace Game.Common.Networking
 
         partial void OnServerNetworkStart()
         {
+            gameMatchSettings.MatchStarted = false;
             networkObject.Networker.playerAccepted += ServerOnPlayerConnected ;
+            networkObject.Networker.playerDisconnected += ServerOnPlayerDisconnected;
+            networkObject.Networker.playerTimeout += ServerOnPlayerDisconnected;
         }
 
         partial void OnServerNetworkClose(NetWorker sender)
@@ -33,7 +39,6 @@ namespace Game.Common.Networking
         /// <param name="sender"></param>
         partial void OnServerNetworkPlayerDisconnected(NetworkingPlayer player, NetWorker sender)
         {
-            
             var phaseManager = MainPersistantInstances.Get<GamePhaseNetworkManager>();
             MainThreadManager.Run(() =>
             {
@@ -59,24 +64,28 @@ namespace Game.Common.Networking
         
         private void ServerOnPlayerConnected (NetworkingPlayer player, NetWorker sender)
         {
-            MainThreadManager.Run(() =>
-            {
-                UpdateGameServerClientSettings();
-            
-            
-                // Register the player, this only happens in the server side.
-                var id = masterSettings.RegisterPlayer(player.NetworkId, gameMatchSettings.ClientMatchID, "");
-
-                if (masterSettings.playerStaticDataRegistry.TryGet(id, out var data))
-                {
-                    data.TeamID = gameMatchSettings.ClientTeam;
-                    data.TeamPosition = gameMatchSettings.ClientTeamPosition;
-                }
-                
-                networkObject.SendRpc(player, RPC_SYNC_MATCH_SETTINGS, gameMatchSettings.GetSerialized());
-            });
+            // Nothing should be done, the client should manually request to join the server first
+            // TODO: Add a time out, if they do not request to join in x amount of time disconnect them/timeout
         }
 
+        public void ServerOnPlayerDisconnected(NetworkingPlayer player, NetWorker sender)
+        {
+            // Make sure the player has an effect on the server if they leave
+            if (gameMatchSettings.ServerRestartOnLeave)
+            {
+                if (masterSettings.playerIDRegistry.TryGetByNetworkID(player.NetworkId, out var id))
+                {
+                    ResetServer();
+                }
+                
+            }
+        }
+        
+        /// <summary>
+        /// Updates game tokens
+        ///
+        /// A bad design/name, should be replaced later
+        /// </summary>
         private void UpdateGameServerClientSettings()
         {
             //Starts at 0
@@ -90,6 +99,78 @@ namespace Game.Common.Networking
             gameMatchSettings.ClientTeam = currentMatchID / gameMatchSettings.TeamSize;
             gameMatchSettings.ClientTeamPosition = currentMatchID % gameMatchSettings.TeamSize;
         }
+
         
+        public void ResetServer()
+        {
+            masterSettings.Reset();
+            // TODO: Reseting means the unity instance stops and has to spin back up
+            // This is the safest approach to prevent waste, and insures a cleaner approach
+            // Probably not the best, but its fine.. for now
+            // Also add a new systemctl to start the unity process once if none is detected.
+            Application.Quit();
+        }
+
+        partial void ServerRecieveClientID(NetworkingPlayer player, string id)
+        {
+            // TODO: Temporary
+        }
+
+
+        partial void ServerRecieveClientJoinRequest(NetworkingPlayer player, string requestingClientID)
+        {
+            // TODO: Account system EVENTUALLY USE IUserAuthenticator TO AUTHENTICATE IF THE PLAYER IS A LOGGED IN USE
+            MainThreadManager.Run(() =>
+            {
+                if (gameMatchSettings.MatchStarted)
+                {
+                    if (!gameMatchSettings.AllowSpectators)
+                    {
+                        player.Networker.Disconnect(false);
+                        return;
+                    }
+
+                    if (masterSettings.playerIDRegistry.HasClientID(requestingClientID))
+                    {
+                        PlayerID requestingPlayerID = masterSettings.playerIDRegistry.GetByClientID(requestingClientID);
+                        masterSettings.playerIDRegistry.UpdatePlayerIDNetworkID(requestingPlayerID.MatchID, player.NetworkId);
+                        // TODO: Send all players with the updated networkID, can be an rpcs 
+                        
+                        // TODO: Reconnect system
+                        // Tell the player to rejoin at this point
+                        // Update playerID with the new networkID (myPlayerID in networkObjects)
+                    }
+                    else
+                    {
+                        // TODO: Matches will not be open to the public for spectating in the future
+                        // For now spectators will be open, but should be registered in the server before hand
+                        // Spectators will be for casting, or just game debugging
+                        gameMatchSettings.ClientIsSpectator = true;
+                    }
+                    
+                    
+                    networkObject.SendRpc(player, RPC_SYNC_MATCH_SETTINGS, gameMatchSettings.GetSerialized());
+
+                    return;
+                }
+                
+                // If this is a player that is going to play
+                // TODO: Add a check against the register players for this server
+                
+                UpdateGameServerClientSettings();
+                // Register the player, this only happens in the server side.
+                var id = masterSettings.RegisterPlayer(player.NetworkId, gameMatchSettings.ClientMatchID, requestingClientID);
+
+                if (masterSettings.playerStaticDataRegistry.TryGet(id, out var data))
+                {
+                    data.TeamID = gameMatchSettings.ClientTeam;
+                    data.TeamPosition = gameMatchSettings.ClientTeamPosition;
+                }
+                gameMatchSettings.ClientIsSpectator = false;
+                
+                
+                networkObject.SendRpc(player, RPC_SYNC_MATCH_SETTINGS, gameMatchSettings.GetSerialized());
+            });
+        }
     }
 }

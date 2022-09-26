@@ -18,7 +18,7 @@ namespace Game.Common.Gameplay.Commands.Networkers
         {
             if (!networker.IsServer) return false;
 
-            networker.SendRpc(rpcMethodID, Receivers.Others, commandID, data.GetBytes(), shipID.ID);
+            networker.SendRpc(rpcMethodID, Receivers.Others, commandID, data.GetBytes(), shipID.MatchID);
 
             return true;
         }

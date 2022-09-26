@@ -16,9 +16,9 @@ namespace Tests.RegistryTests
             var instance = ScriptableObject.CreateInstance<PlayerIDRegistry>();
 
             PlayerID tempData;
-            Assert.IsFalse(instance.TryGet(0, out tempData));
-            Assert.IsFalse(instance.TryGet(uint.MaxValue/2, out tempData));
-            Assert.IsFalse(instance.TryGet(uint.MaxValue, out tempData));
+            Assert.IsFalse(instance.TryGetByNetworkID(0, out tempData));
+            Assert.IsFalse(instance.TryGetByNetworkID(uint.MaxValue/2, out tempData));
+            Assert.IsFalse(instance.TryGetByNetworkID(uint.MaxValue, out tempData));
         
         
             Assert.IsTrue(instance.RegisterPlayer(0, 1));
@@ -30,15 +30,15 @@ namespace Tests.RegistryTests
             Assert.IsFalse(instance.RegisterPlayer(uint.MaxValue, 3));
         
         
-            Assert.IsTrue(instance.TryGet(0, out tempData));
-            Assert.IsTrue(instance.TryGet(uint.MaxValue/2, out tempData));
-            Assert.IsTrue(instance.TryGet(uint.MaxValue, out tempData));
+            Assert.IsTrue(instance.TryGetByNetworkID(0, out tempData));
+            Assert.IsTrue(instance.TryGetByNetworkID(uint.MaxValue/2, out tempData));
+            Assert.IsTrue(instance.TryGetByNetworkID(uint.MaxValue, out tempData));
         
             instance.Reset();
 
-            Assert.IsFalse(instance.TryGet(0, out tempData));
-            Assert.IsFalse(instance.TryGet(uint.MaxValue/2, out tempData));
-            Assert.IsFalse(instance.TryGet(uint.MaxValue, out tempData));
+            Assert.IsFalse(instance.TryGetByNetworkID(0, out tempData));
+            Assert.IsFalse(instance.TryGetByNetworkID(uint.MaxValue/2, out tempData));
+            Assert.IsFalse(instance.TryGetByNetworkID(uint.MaxValue, out tempData));
         }
 
     }

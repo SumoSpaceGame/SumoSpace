@@ -98,7 +98,7 @@ namespace Game.Client.Phases
                         }
                         
                         // Save their data
-                        var playerLockedIn = _phaseNetworkManager.masterSettings.playerIDRegistry.Get((uint)data[1]);
+                        var playerLockedIn = _phaseNetworkManager.masterSettings.playerIDRegistry.GetByMatchID(data[1]);
                         if (_phaseNetworkManager.masterSettings.playerGameDataRegistry.TryGet(playerLockedIn, out var gameData))
                         {
                             gameData.shipCreationData.shipType = data[2];
@@ -119,7 +119,7 @@ namespace Game.Client.Phases
                         
                         
                         // Save their locked data
-                        var playerLockedIn = _phaseNetworkManager.masterSettings.playerIDRegistry.Get((uint)data[1]);
+                        var playerLockedIn = _phaseNetworkManager.masterSettings.playerIDRegistry.GetByMatchID(data[1]);
                         if (_phaseNetworkManager.masterSettings.playerGameDataRegistry.TryGet(playerLockedIn, out var gameData))
                         {
                             gameData.shipCreationData.shipType = data[3];

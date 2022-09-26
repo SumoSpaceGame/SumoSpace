@@ -25,6 +25,9 @@ namespace Game.Server.Phases
         {
             _gamePhaseNetworkManager = gamePhaseNetworkManager;
             _matchNetworkTimerManager = matchNetworkTimerManager;
+
+            // Now anyone who leaves will be subjected to the reconnect method, if it works hehe
+            _gamePhaseNetworkManager.masterSettings.matchSettings.ServerRestartOnLeave = false;
         }
         
         public void PhaseStart()
@@ -58,9 +61,18 @@ namespace Game.Server.Phases
 
         public void OnUpdateReceived(RPCInfo info, byte[] data)
         {
+            
+            PlayerID playerID;
+
+            if (!_gamePhaseNetworkManager.masterSettings.playerIDRegistry.TryGetByNetworkID(info.SendingPlayer.NetworkId, out playerID))
+            {
+                Debug.LogWarning("Non-registered player tried to push start match! " + info.SendingPlayer.Ip);
+                return;
+            }
+            
             if (data.Length == 1)
             {
-                playerCounter.Register(_gamePhaseNetworkManager.masterSettings.playerIDRegistry.Get(info.SendingPlayer.NetworkId));
+                playerCounter.Register(playerID);
 
                 if (playerCounter.IsFull())
                 {

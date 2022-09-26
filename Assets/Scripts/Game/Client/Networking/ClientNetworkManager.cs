@@ -18,8 +18,13 @@ namespace Game.Common.Networking
         
         partial void OnClientNetworkStart()
         {
+            networkObject.SendRpc(RPC_REQUEST_SERVER_JOIN, Receivers.Server, this.clientID);
         }
 
+        partial void ClientUpdatePlayerNetworkID(uint networkID, ushort matchID)
+        {
+            masterSettings.playerIDRegistry.UpdatePlayerIDNetworkID(matchID, networkID);
+        }
     }
     
 }

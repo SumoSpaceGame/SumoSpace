@@ -18,6 +18,15 @@ namespace Game.Common.Registry
             return base.Add(key, value);
         }
 
+        public override bool TryGet(PlayerID key, out PlayerStaticData value)
+        {
+            return base.TryGet(key, out value);
+        }
+            
+        public override void Remove(PlayerID key)
+        {
+            base.Remove(key);
+        }
     }
 
     /// <summary>

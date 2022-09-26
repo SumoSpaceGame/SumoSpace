@@ -29,6 +29,7 @@ namespace Game.Client.Phases
         
         public void PhaseStart()
         {
+            _phaseNetworkManager.gameMatchSettings.MatchStarted = false;
             // Enable Animated GUI saying waiting for players
             _masterUIController.ActivateWaitingForPlayer();
         }
