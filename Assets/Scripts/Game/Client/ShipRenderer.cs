@@ -27,6 +27,6 @@ public class ShipRenderer : MonoBehaviour {
 
     public void Beam() {
         Physics.Raycast(gunMuzzle.position + gunMuzzle.forward * 2, gunMuzzle.forward, out var hit, 100f, 127);
-        tracer.SetPosition(tracer.positionCount - 1, hit.collider ? hit.point : gunMuzzle.position + gunMuzzle.forward * 100);
+        //tracer.SetPosition(tracer.positionCount - 1, hit.collider ? hit.point : gunMuzzle.position + gunMuzzle.forward * 100);
     }
 }
