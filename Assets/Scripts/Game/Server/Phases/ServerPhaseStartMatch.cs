@@ -23,7 +23,7 @@ namespace Game.Server.Phases
         public ServerPhaseStartMatch(GamePhaseNetworkManager gamePhaseNetworkManager, MatchNetworkTimerManager matchNetworkTimerManager)
         {
             _gamePhaseNetworkManager = gamePhaseNetworkManager;
-            _matchNetworkTimerManager = matchNetworkTimerManager;
+            _matchNetworkTimerManager = MainPersistantInstances.Get<MatchNetworkTimerManager>();
 
             // Now anyone who leaves will be subjected to the reconnect method, if it works hehe
             _gamePhaseNetworkManager.masterSettings.matchSettings.ServerRestartOnLeave = false;
@@ -31,6 +31,7 @@ namespace Game.Server.Phases
         
         public void PhaseStart()
         {
+            _matchNetworkTimerManager = MainPersistantInstances.Get<MatchNetworkTimerManager>();
             _agentNetworkManager = MainPersistantInstances.Get<AgentNetworkManager>();
             timer = _matchNetworkTimerManager.CreateTimer();
             

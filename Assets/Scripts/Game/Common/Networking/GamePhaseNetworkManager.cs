@@ -125,6 +125,7 @@ namespace Game.Common.Networking
         /// <param name="data"></param>
         public void SendPhaseUpdate(Phase phase, byte[] data, Channel channel = Channel.Reliable)
         {
+            Debug.Log("Sending data for " + phase + " " + data.Length);
             var phaseID = (int) phase;   
             if (InstanceFinder.IsServer)
             {
@@ -140,6 +141,7 @@ namespace Game.Common.Networking
         [ServerRpc(RequireOwnership = false)]
         public void SendServerPhaseUpdate(Phase phase, byte[] data, Channel channel = Channel.Reliable, NetworkConnection conn = null)
         {
+            Debug.Log("Receiving server data for " + phase + " " + data.Length);
             
             var phaseID = (int) phase;
             var updateData = data;
@@ -164,6 +166,7 @@ namespace Game.Common.Networking
         [ObserversRpc]
         public void SendClientPhaseUpdate(Phase phase, byte[] data, Channel channel = Channel.Reliable)
         {
+            Debug.Log("Receiving client data for " + phase + " " + data.Length);
             
             var phaseID = (int) phase;
             var updateData = data;
@@ -190,9 +193,9 @@ namespace Game.Common.Networking
         /// </summary>
         /// <param name="phase"></param>
         /// <param name="data"></param>
-        [ServerRpc(RequireOwnership = false)]
         public void SendUnreliablePhaseUpdate(Phase phase, byte[] data)
         {
+            Debug.Log("Sending unreliable " + data.Length);
             SendPhaseUpdate(phase, data, Channel.Unreliable);
         }
         

@@ -80,6 +80,7 @@ namespace Game.Client.Phases
         {
             if (data.Length == 0) return;
 
+            Debug.Log("Received data " + data.ToString() + " " + data.Length + " " + data[0] + " " + data[1] + " " + _phaseNetworkManager.masterSettings.matchSettings.ClientMatchID);
             switch (data.Length)
             {
                 case 1:

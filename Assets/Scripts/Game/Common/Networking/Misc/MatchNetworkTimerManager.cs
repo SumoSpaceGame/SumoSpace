@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FishNet.Object;
 using Game.Common.Instances;
@@ -12,12 +13,15 @@ namespace Game.Common.Networking.Misc
         
         private uint _timerCounter = 0;
 
-        
+
+        private void Awake()
+        {
+            MainPersistantInstances.Add(this);
+        }
 
         public override void OnStartNetwork()
         {
             base.OnStartNetwork();
-            MainPersistantInstances.Add(this);
         }
 
         private void OnDestroy()
