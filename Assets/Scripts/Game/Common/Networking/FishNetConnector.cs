@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.Common.Networking
 {
-    public class FishNetConnector : NetworkBehaviour
+    public class FishNetConnector : MonoBehaviour
     {
         public static void Host(ushort port)
         {

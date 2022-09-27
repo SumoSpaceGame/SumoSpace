@@ -49,7 +49,6 @@ namespace Game.Common.Networking
             
             masterSettings.Reset();
             
-            Physics2D.simulationMode = SimulationMode2D.Update;
             gameMatchSettings.Reset();
             
             MainPersistantInstances.TryAdd(this);

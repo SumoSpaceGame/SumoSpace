@@ -65,7 +65,7 @@ namespace Game.Client.Phases
 
         public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
-            if (data.Length > 1)
+            if (data.Length >= 1)
             {
                 if (data[0] == PhaseReadyUp.UPDATE_PLAYER_COUNT_FLAG)
                 {
