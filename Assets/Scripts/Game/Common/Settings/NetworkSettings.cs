@@ -5,6 +5,7 @@ namespace Game.Common.Settings
     [Serializable]
     public struct NetworkSettings
     {
+        public bool isServer;
         /*
         public ulong _updateInterval;
         public ulong updateInterval
@@ -21,7 +22,6 @@ namespace Game.Common.Settings
             }
         }
 
-        public bool isServer;
 
         public delegate void UpdateIntervalChangeEvent(ulong amount);
         public UpdateIntervalChangeEvent OnUpdateIntervalChange;

@@ -56,7 +56,8 @@ namespace Game.Common.Settings
                         matchSettings.TeamCount = Int32.Parse(args[i + 1]);
                         break;
                     case "-updateinterval":
-                        network.updateInterval = UInt64.Parse(args[i + 1]);
+                        // TODO: Add update interval
+                        //network.updateInterval = UInt64.Parse(args[i + 1]);
                         break;
                     
                 }
@@ -101,7 +102,7 @@ namespace Game.Common.Settings
         //Ease of use commands, helper for other classes, should be moved later
         // TODO: Organize the locations of these methods
         
-        public void CleanupPlayer(uint networkID)
+        public void CleanupPlayer(int networkID)
         {
             Debug.LogWarning("Cleaning player from game, should be done on reset, or ready up");
             
@@ -122,7 +123,7 @@ namespace Game.Common.Settings
 
         }
 
-        public PlayerID RegisterPlayer(uint networkID, ushort matchID, string clientID,
+        public PlayerID RegisterPlayer(int networkID, ushort matchID, string clientID,
             PlayerStaticData staticData = null)
         {
 

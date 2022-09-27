@@ -135,8 +135,10 @@ namespace Game.Common.Networking
             {
                 case RemoteConnectionState.Stopped:
                     OnServerNetworkPlayerDisconnected(conn);
+                    ServerOnPlayerDisconnected(conn);
                     break;
                 case RemoteConnectionState.Started:
+                    ServerOnPlayerConnected(conn);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -221,15 +223,15 @@ namespace Game.Common.Networking
         /// </summary>
         partial void ClientUpdate();
 
-        [ObserversRpc]
-        public void SyncMatchSettings(string data)
+        [TargetRpc]
+        public void SyncMatchSettings(NetworkConnection conn, string data)
         {
             gameMatchSettings.Sync(data);
         }
         
         
         [ServerRpc(RequireOwnership = false)]
-        public void RequestServerJoin(NetworkConnection player, string clientID)
+        public void RequestServerJoin(string clientID, NetworkConnection player = null)
         {
             ServerRecieveClientJoinRequest(player, clientID);
         }
@@ -239,11 +241,11 @@ namespace Game.Common.Networking
         
 
         [ObserversRpc]
-        public void UpdatePlayerNetworkID(uint playerNetworkID, ushort matchID)
+        public void UpdatePlayerNetworkID(int playerNetworkID, ushort matchID)
         {
             ClientUpdatePlayerNetworkID(playerNetworkID, matchID);
         }
 
-        partial void ClientUpdatePlayerNetworkID(uint networkID, ushort matchID);
+        partial void ClientUpdatePlayerNetworkID(int networkID, ushort matchID);
     }
 }

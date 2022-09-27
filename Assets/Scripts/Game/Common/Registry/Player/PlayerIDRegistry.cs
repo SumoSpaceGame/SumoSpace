@@ -10,7 +10,7 @@ namespace Game.Common.Registry
     {
         private Dictionary<ushort, PlayerID> playerIDs = new Dictionary<ushort, PlayerID>();
 
-        public bool RegisterPlayer(uint networkID, ushort matchID, string clientID = "")
+        public bool RegisterPlayer(int networkID, ushort matchID, string clientID = "")
         {
             if (HasClientID(clientID) || HasMatchID(matchID) ||
                 HasNetworkID(networkID))
@@ -92,7 +92,7 @@ namespace Game.Common.Registry
             }
         }
 
-        public bool HasNetworkID(uint networkID)
+        public bool HasNetworkID(int networkID)
         {
             foreach (var playerID in playerIDs.Values)
             {
@@ -131,7 +131,7 @@ namespace Game.Common.Registry
             return playerIDs.TryGetValue(matchID, out data);
         }
 
-        public bool TryGetByNetworkID(uint networkID, out PlayerID data)
+        public bool TryGetByNetworkID(int networkID, out PlayerID data)
         {
             foreach (var playerID in playerIDs.Values)
             {
@@ -146,7 +146,7 @@ namespace Game.Common.Registry
             return false;
         }
 
-        public void UpdatePlayerIDNetworkID(ushort matchID, uint networkID)
+        public void UpdatePlayerIDNetworkID(ushort matchID, int networkID)
         {
             if (!playerIDs.ContainsKey(matchID))
             {

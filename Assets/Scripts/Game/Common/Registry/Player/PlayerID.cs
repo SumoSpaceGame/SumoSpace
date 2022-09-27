@@ -11,7 +11,7 @@ namespace Game.Common.Registry
         /// <summary>
         /// Network ID
         /// </summary>
-        [SerializeField] public uint NetworkID;
+        [SerializeField] public int NetworkID;
         
         /// <summary>
         /// Used in future development 
