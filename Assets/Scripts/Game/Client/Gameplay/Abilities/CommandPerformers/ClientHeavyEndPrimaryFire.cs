@@ -8,7 +8,7 @@ public class ClientHeavyEndPrimaryFire: ICommandPerformer {
     }
 
     public bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments) {
-        networker.SendData(CommandPacketData.Create(new byte[]{}), (int)CommandType.HEAVY_PRIMARY_FIRE_END, shipManager.playerMatchID);
+        networker.SendData(CommandPacketData.Create(new byte[]{}), CommandType.HEAVY_PRIMARY_FIRE_END, shipManager.playerMatchID);
         return true;
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics;
-using BeardedManStudios.Forge.Networking;
+using FishNet.Object;
 using Debug = UnityEngine.Debug;
 
 namespace Game.Common.Networking.Misc
@@ -70,7 +70,7 @@ namespace Game.Common.Networking.Misc
         
         public bool IsDestroyed { get; private set; }
         
-        private readonly NetWorker _netWorker;
+        private readonly NetworkObject _netWorker;
         private readonly Stopwatch _stopwatch;
 
         private long _stopTime;
@@ -80,7 +80,7 @@ namespace Game.Common.Networking.Misc
         
         
         
-        public MatchNetworkTimer(uint id, NetWorker netWorker)
+        public MatchNetworkTimer(uint id, NetworkObject netWorker)
         {
             _stopwatch = new Stopwatch();
             _netWorker = netWorker;

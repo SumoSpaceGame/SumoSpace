@@ -9,7 +9,7 @@ public class ClientAgilityBeginPrimaryFire: ICommandPerformer {
 
     public bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments) {
         shipManager.shipLoadout.PrimaryFire.QuickExecute(shipManager, false);
-        networker.SendData(CommandPacketData.Create(new byte[]{}), (int)CommandType.AGILITY_PRIMARY_FIRE_START, shipManager.playerMatchID);
+        networker.SendData(CommandPacketData.Create(new byte[]{}), CommandType.AGILITY_PRIMARY_FIRE_START, shipManager.playerMatchID);
         return true;
     }
 }
