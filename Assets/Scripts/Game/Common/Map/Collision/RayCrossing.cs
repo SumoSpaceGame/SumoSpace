@@ -1,6 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
-using UnityEngine.Analytics;
 
 namespace Game.Common.Map.Collision
 {

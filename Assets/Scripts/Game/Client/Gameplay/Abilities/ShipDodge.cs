@@ -1,5 +1,4 @@
-﻿using System;
-using Game.Common.Gameplay.Commands;
+﻿using Game.Common.Gameplay.Commands;
 using Game.Common.Gameplay.Ship;
 using UnityEngine;
 

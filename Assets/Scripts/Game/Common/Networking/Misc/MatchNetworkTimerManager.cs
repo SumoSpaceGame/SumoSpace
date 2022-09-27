@@ -1,30 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Generated;
-using BeardedManStudios.Forge.Networking.Unity;
+using FishNet.Object;
 using Game.Common.Instances;
 using UnityEngine;
 
 namespace Game.Common.Networking.Misc
 {
-    public class MatchNetworkTimerManager : MatchTimerBehavior, IGamePersistantInstance
+    public class MatchNetworkTimerManager : NetworkBehaviour, IGamePersistantInstance
     {
         private Dictionary<uint, MatchNetworkTimer> _timers = new Dictionary<uint, MatchNetworkTimer>();
         
         private uint _timerCounter = 0;
 
-        
+
         private void Awake()
         {
-            DontDestroyOnLoad(this);
             MainPersistantInstances.Add(this);
         }
-        
-        protected override void NetworkStart()
+
+        public override void OnStartNetwork()
         {
-            base.NetworkStart();
+            base.OnStartNetwork();
         }
 
         private void OnDestroy()
@@ -47,7 +44,7 @@ namespace Game.Common.Networking.Misc
                     continue;
                 }
                 
-                if(networkObject.IsServer) timer.Tick();
+                if(NetworkObject.IsServer) timer.Tick();
             }
 
             foreach (var timerID in destroyedIDs)
@@ -63,7 +60,7 @@ namespace Game.Common.Networking.Misc
         /// <returns>Timer Object, it also has an ID</returns>
         public MatchNetworkTimer CreateTimer()
         {
-            if (!networkObject.IsServer)
+            if (!NetworkObject.IsServer)
             {
                 Debug.LogError("Can not create timer on the client, has to be on the server");
                 return null;
@@ -71,9 +68,7 @@ namespace Game.Common.Networking.Misc
             
             var timer = CreateNewTimer();
             
-            
-            networkObject.SendRpc(RPC_CREATE_CLIENT_TIMER_HANDLER, Receivers.Others, timer.ID);
-
+            CreateClientTimerRPCHandler(timer.ID);
             return timer;
         }
 
@@ -109,9 +104,9 @@ namespace Game.Common.Networking.Misc
                 timer.Destroy();
                 _timers.Remove(id);
 
-                if (networkObject.IsServer)
+                if (NetworkManager.IsServer)
                 {
-                    networkObject.SendRpc(RPC_DESTROY_CLIENT_TIMER_HANDLER, Receivers.Others, id);
+                    DestroyClientTimerRPCHandler(id);
                 }
             }
         }
@@ -133,9 +128,9 @@ namespace Game.Common.Networking.Misc
         /// <returns>Timer Object</returns>
         private MatchNetworkTimer CreateNewTimer(uint id)
         {
-            var timer = new MatchNetworkTimer(id, this.networkObject.Networker);
+            var timer = new MatchNetworkTimer(id, NetworkObject);
 
-            if (networkObject.IsServer)
+            if (NetworkObject.IsServer)
             {
                 timer.NetworkStartEvent += NetworkStartTimer;
                 timer.NetworkPauseEvent += NetworkPauseTimer;
@@ -156,7 +151,7 @@ namespace Game.Common.Networking.Misc
         /// <param name="stopTime"></param>
         private void NetworkStartTimer(uint id, long stopTime)
         {
-            networkObject.SendRpc(RPC_START_TIMER_HANDLER, Receivers.Others, id, stopTime);
+            StartClientTimerRPCHandler(id, stopTime);
         }
         
         
@@ -167,7 +162,7 @@ namespace Game.Common.Networking.Misc
         /// <param name="stopTime"></param>
         private void NetworkPauseTimer(uint id, long pauseTime)
         {
-            networkObject.SendRpc(RPC_PAUSE_TIMER_HANDLER, Receivers.Others, id, pauseTime);
+            PauseClientTimerRPCHandler(id, pauseTime);
         }
         
         
@@ -178,7 +173,7 @@ namespace Game.Common.Networking.Misc
         /// <param name="stopTime"></param>
         private void NetworkResumeTimer(uint id, long stopTime)
         {
-            networkObject.SendRpc(RPC_RESUME_TIMER_HANDLER, Receivers.Others, id, stopTime);
+            ResumeClientTimerRPCHandler(id, stopTime);
         }
         
         
@@ -189,24 +184,17 @@ namespace Game.Common.Networking.Misc
         /// <param name="stopTime"></param>
         private void NetworkStopTimer(uint id)
         {
-            networkObject.SendRpc(RPC_STOP_TIMER_HANDLER, Receivers.Others, id);
+            StopClientTimerRPCHandler(id);
         }
 
         /// <summary>
         /// RPC Handler To start the timer
         /// </summary>
         /// <param name="args"></param>
-        public override void StartTimerRPCHandler(RpcArgs args)
+        [ObserversRpc]
+        public void StartClientTimerRPCHandler(uint id, long stopTime)
         {
-            if (networkObject.IsServer || !args.Info.SendingPlayer.IsHost)
-            {
-                return;
-            }
-            
-            var id = args.GetAt<uint>(0);
-            var stopTime = args.GetAt<long>(1);
-
-            Debug.Log("Doing the things " + _timers.Count + " " + id);
+            Debug.Log("Starting timer on client" + _timers.Count + " " + id);
             
             if (_timers.TryGetValue(id, out MatchNetworkTimer timer))
             {
@@ -219,17 +207,9 @@ namespace Game.Common.Networking.Misc
         /// RPC Handler to pause the timer
         /// </summary>
         /// <param name="args"></param>
-        public override void PauseTimerRPCHandler(RpcArgs args)
+        [ObserversRpc]
+        public void PauseClientTimerRPCHandler(uint id, long pauseTime)
         {
-            if (networkObject.IsServer || !args.Info.SendingPlayer.IsHost)
-            {
-                return;
-            }
-            
-            var id = args.GetAt<uint>(0);
-            var pauseTime = args.GetAt<long>(1);
-
-            
             if (_timers.TryGetValue(id, out MatchNetworkTimer timer))
             {
                 timer.PauseTimer(pauseTime);
@@ -240,16 +220,9 @@ namespace Game.Common.Networking.Misc
         /// RPC Handler to resume the timer
         /// </summary>
         /// <param name="args"></param>
-        public override void ResumeTimerRPCHandler(RpcArgs args)
+        [ObserversRpc]
+        public void ResumeClientTimerRPCHandler(uint id, long stopTime)
         {
-            if (networkObject.IsServer || !args.Info.SendingPlayer.IsHost)
-            {
-                return;
-            }
-            
-            var id = args.GetAt<uint>(0);
-            var stopTime = args.GetAt<long>(1);
-            
             if (_timers.TryGetValue(id, out MatchNetworkTimer timer))
             {
                 timer.ResumeTimer(stopTime);
@@ -260,15 +233,9 @@ namespace Game.Common.Networking.Misc
         /// RPC Handler to stop the timer
         /// </summary>
         /// <param name="args"></param>
-        public override void StopTimerRPCHandler(RpcArgs args)
+        [ObserversRpc]
+        public void StopClientTimerRPCHandler(uint id)
         {
-            if (networkObject.IsServer || !args.Info.SendingPlayer.IsHost)
-            {
-                return;
-            }
-            
-            var id = args.GetAt<uint>(0);
-            
             if (_timers.TryGetValue(id, out MatchNetworkTimer timer))
             {
                 timer.StopTimer();
@@ -280,16 +247,11 @@ namespace Game.Common.Networking.Misc
         /// RPC Handler to create the timer
         /// </summary>
         /// <param name="args"></param>
-        public override void CreateClientTimerRPCHandler(RpcArgs args)
+        [ObserversRpc]
+        public void CreateClientTimerRPCHandler(uint id)
         {
-            if (networkObject.IsServer || !args.Info.SendingPlayer.IsHost)
-            {
-                return;
-            }
-            Debug.Log("Creating the things");
+            Debug.Log("Creating match timer on client " + id);
 
-            var id = args.GetAt<uint>(0);
-            
             CreateNewTimer(id);
 
         }
@@ -298,16 +260,11 @@ namespace Game.Common.Networking.Misc
         /// RPC Handler to destroy the timer
         /// </summary>
         /// <param name="args"></param>
-        public override void DestroyClientTimerRPCHandler(RpcArgs args)
+        [ObserversRpc]
+        public void DestroyClientTimerRPCHandler(uint id)
         {
-            if (networkObject.IsServer || !args.Info.SendingPlayer.IsHost)
-            {
-                return;
-            }
-            
-            var id = args.GetAt<uint>(0);
-
             DestroyTimer(id);
         }
+        
     }
 }

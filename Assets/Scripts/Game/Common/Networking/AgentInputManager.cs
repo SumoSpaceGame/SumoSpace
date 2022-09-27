@@ -1,6 +1,7 @@
-﻿using System;
-using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Generated;
+﻿using FishNet;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
+using FishNet.Transporting;
 using Game.Common.Gameplay.Ship;
 using Game.Common.Instances;
 using Game.Common.Settings;
@@ -8,36 +9,27 @@ using UnityEngine;
 
 namespace Game.Common.Networking
 {
-    public partial class AgentInputManager : AgentInputBehavior
+    public partial class AgentInputManager : NetworkBehaviour
     {
 
         public MasterSettings masterSettings;
 
         public ShipManager _shipManager;
-        private bool isOwner = false;
-        protected override void NetworkStart()
+
+        public Vector3 InputDirection;
+
+        public override void OnStartNetwork()
         {
-            base.NetworkStart();
-            this.networkObject.UpdateInterval = masterSettings.network.updateInterval;
-            masterSettings.network.OnUpdateIntervalChange += UpdateInterval;
-            
+            base.OnStartNetwork();
+
+
+            InstanceFinder.TimeManager.OnTick += Tick;
         }
 
 
-        private void UpdateInterval(ulong value)
+        private void Tick()
         {
-            this.networkObject.UpdateInterval = value;
-        }
-
-        private void OnDestroy()
-        {
-            masterSettings.network.OnUpdateIntervalChange -= UpdateInterval;
-        }
-
-        private void Update()
-        {
-            
-            if (this.networkObject.IsOwner && !networkObject.IsServer)
+            if (this.NetworkObject.IsOwner && !InstanceFinder.IsServer)
             {
                 if (_shipManager == null)
                 {
@@ -45,38 +37,28 @@ namespace Game.Common.Networking
                     if (agentNetworkManager == null) return;
                     
                     agentNetworkManager._playerShips
-                        .TryGet(agentNetworkManager.masterSettings.playerIDRegistry.Get(networkObject.MyPlayerId), out _shipManager);
+                        .TryGet(agentNetworkManager.masterSettings.playerIDRegistry.GetByMatchID(masterSettings.matchSettings.ClientMatchID), out _shipManager);
                     return;
                 }
                 
                 var clientControls = _shipManager.clientControls;
                 //networkObject.inputRotation = clientControls.movementRotation;
-                networkObject.inputDirection = new Vector3(clientControls.movementDirection.x,clientControls.movementDirection.y, clientControls.movementRotation);
+                InputDirection = new Vector3(clientControls.movementDirection.x,clientControls.movementDirection.y, clientControls.movementRotation);
+                SetServerInput(InputDirection);
             }
 
-            if (networkObject.IsServer)
+            if (InstanceFinder.IsServer)
             {   
-                var inputDir = networkObject.inputDirection;
+                var inputDir = InputDirection;
                 _shipManager.shipController.targetAngle = inputDir.z;
                 _shipManager.shipController.movementVector = new Vector2(inputDir.x, inputDir.y);
             }
         }
 
-        public override void GiveOwnership(RpcArgs args)
+        [ServerRpc]
+        public void SetServerInput(Vector3 input)
         {
-            if (!args.Info.SendingPlayer.IsHost)
-            {
-                return;
-            }
-
-            isOwner = true;
-
-            if (_shipManager != null)
-            {
-                Debug.Log($"Taking control of ship {_shipManager.playerMatchID}");
-            }
-
-            networkObject.TakeOwnership();
+            InputDirection = input;
         }
     }
 }

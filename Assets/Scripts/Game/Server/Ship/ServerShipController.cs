@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace Game.Common.Gameplay.Ship
 {
-    [RequireComponent(typeof(global::Game.Common.Gameplay.Ship.ShipManager))]
+    [RequireComponent(typeof(ShipManager))]
     public partial class ShipController : MonoBehaviour
     {
         //private ShipMovement sm;

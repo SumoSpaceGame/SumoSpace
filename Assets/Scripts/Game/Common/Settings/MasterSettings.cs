@@ -42,7 +42,7 @@ namespace Game.Common.Settings
         /// </summary>
         private void Awake()
         {
-            string[] args = System.Environment.GetCommandLineArgs ();
+            string[] args = Environment.GetCommandLineArgs ();
             string input = "";
             for (int i = 0; i < args.Length; i++) {
                 if (i + 1 >= args.Length) continue;
@@ -56,7 +56,8 @@ namespace Game.Common.Settings
                         matchSettings.TeamCount = Int32.Parse(args[i + 1]);
                         break;
                     case "-updateinterval":
-                        network.updateInterval = UInt64.Parse(args[i + 1]);
+                        // TODO: Add update interval
+                        //network.updateInterval = UInt64.Parse(args[i + 1]);
                         break;
                     
                 }
@@ -74,9 +75,9 @@ namespace Game.Common.Settings
             
         }
 
-        public ShipManager GetShip(uint networkID)
+        public ShipManager GetShipByMatchID(ushort matchID)
         {
-            if (playerStaticDataRegistry.TryGet(playerIDRegistry.Get(networkID), out var data))
+            if (playerStaticDataRegistry.TryGet(playerIDRegistry.GetByMatchID(matchID), out var data))
             {
                 if (playerShips.TryGet(data.GlobalID, out ShipManager manager))
                 {
@@ -101,24 +102,40 @@ namespace Game.Common.Settings
         //Ease of use commands, helper for other classes, should be moved later
         // TODO: Organize the locations of these methods
         
-        public void CleanupPlayer(uint networkID)
+        public void CleanupPlayer(int networkID)
         {
             Debug.LogWarning("Cleaning player from game, should be done on reset, or ready up");
-
-            var playerID = playerIDRegistry.Get(networkID);
             
+            
+            PlayerID playerID;
+
+            if (!playerIDRegistry.TryGetByNetworkID(networkID, out playerID))
+            {
+                // Nothing to clean up, they are not registered
+                return;
+            }
+                
+                
             playerGameDataRegistry.Remove(playerID);
             playerStaticDataRegistry.Remove(playerID);
             
-            playerIDRegistry.RemovePlayerID(networkID);
+            playerIDRegistry.RemovePlayerID(playerID.MatchID);
 
         }
 
-        public PlayerID RegisterPlayer(uint networkID, ushort matchID, string clientID,
+        public PlayerID RegisterPlayer(int networkID, ushort matchID, string clientID,
             PlayerStaticData staticData = null)
         {
+
+            if (playerIDRegistry.HasClientID(clientID) || playerIDRegistry.HasMatchID(matchID) ||
+                playerIDRegistry.HasNetworkID(networkID))
+            {
+                Debug.LogError("Player id already contains one of these values. Failed to register " + clientID);
+                return new PlayerID();
+            }
+                
             playerIDRegistry.RegisterPlayer(networkID, matchID, clientID);
-            var savedID = playerIDRegistry.Get(networkID);
+            var savedID = playerIDRegistry.GetByMatchID(matchID);
 
             if (staticData == null)
             {

@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using BeardedManStudios.Forge.Networking;
+﻿using FishNet.Connection;
 using Game.Common.Instances;
 using Game.Common.Networking;
 using Game.Common.Phases;
@@ -20,12 +19,14 @@ namespace Game.Client.Phases
         
         public ClientPhaseReadyUp(GamePhaseNetworkManager phaseNetworkManager)
         {
-            _masterUIController = MainPersistantInstances.Get<MasterUIController>();
             _phaseNetworkManager = phaseNetworkManager;
+            _masterUIController = MainPersistantInstances.Get<MasterUIController>();
         }
 
         public void PhaseStart()
         {
+            _phaseNetworkManager.gameMatchSettings.MatchStarted = true; 
+            _phaseNetworkManager.gameMatchSettings.ServerRestartOnLeave = true; 
             _masterUIController.ActivateReady();
             _masterUIController.ReadyButton.onClick.AddListener(onReadyClicked);
             _masterUIController.ReadyUpText.text = "Ready up";
@@ -62,9 +63,9 @@ namespace Game.Client.Phases
             waitForServer = false;
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
-            if (data.Length > 1)
+            if (data.Length >= 1)
             {
                 if (data[0] == PhaseReadyUp.UPDATE_PLAYER_COUNT_FLAG)
                 {

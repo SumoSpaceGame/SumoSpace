@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace Game.Common.Registry
 {
@@ -11,7 +9,7 @@ namespace Game.Common.Registry
         /// <summary>
         /// Network ID
         /// </summary>
-        [SerializeField] public uint ID;
+        [SerializeField] public int NetworkID;
         
         /// <summary>
         /// Used in future development 
@@ -28,7 +26,7 @@ namespace Game.Common.Registry
 
             if (obj.GetType() == typeof(uint))
             {
-                return (uint) obj == ID || (uint) obj == MatchID;
+                return (uint) obj == NetworkID || (uint) obj == MatchID;
             }
             
             if (obj.GetType() != typeof(PlayerID))
@@ -41,7 +39,7 @@ namespace Game.Common.Registry
 
         public override int GetHashCode()
         {
-            return (int)ID;
+            return (int)NetworkID;
         }
 
         public string Serialize()
@@ -56,7 +54,7 @@ namespace Game.Common.Registry
 
         public override string ToString()
         {
-            return $"(NetworkID, ClientID, MatchID) {ID},{ClientID},{MatchID}";
+            return $"(NetworkID, ClientID, MatchID) {NetworkID},{ClientID},{MatchID}";
         }
     }
 }

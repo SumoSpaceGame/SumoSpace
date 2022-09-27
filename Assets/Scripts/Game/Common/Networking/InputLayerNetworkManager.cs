@@ -1,38 +1,28 @@
-using System;
-using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Generated;
-using BeardedManStudios.Forge.Networking.Unity;
+using FishNet;
+using FishNet.Connection;
+using FishNet.Object;
 using Game.Common.Gameplay.Commands;
 using Game.Common.Instances;
 using Game.Common.Networking.Commands;
 using Game.Common.Settings;
-using UnityEngine;
 
 namespace Game.Common.Networking
 {
-    public partial class InputLayerNetworkManager : InputLayerBehavior, IGamePersistantInstance
+    public partial class InputLayerNetworkManager : NetworkBehaviour, IGamePersistantInstance
     {
 
         public MasterSettings masterSettings;
 
         private CommandHandlerNetworkManager _commandHandlerNetworkManager;
-        
-        private void Awake()
+        public override void OnStartNetwork()
         {
-            DontDestroyOnLoad(this);
-        }
+            base.OnStartNetwork();
 
-        protected override void NetworkStart()
-        {
-            base.NetworkStart();
-
-            MainThreadManager.Run(()=>{ 
-                MainPersistantInstances.TryAdd(this);
-            });
+            MainPersistantInstances.TryAdd(this);
             
-            _commandHandlerNetworkManager = new CommandHandlerNetworkManager(networkObject, RPC_COMMAND_UPDATE, masterSettings);
+            _commandHandlerNetworkManager = new CommandHandlerNetworkManager(this, masterSettings);
             
-            if (networkObject.IsServer)
+            if (InstanceFinder.IsServer)
             {
                 ServerStart();
             }
@@ -46,20 +36,17 @@ namespace Game.Common.Networking
         
 
 
-        /// <summary>
-        /// Whenever the client wants to activate a command, it sends it to the server
-        /// </summary>
-        /// <param name="args"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        public override void CommandUpdate(RpcArgs args)
+        [ServerRpc(RequireOwnership = false)]
+        public void ServerCommandUpdate(CommandType commandID, byte[] data, ushort matchID, NetworkConnection conn = null)
         {
-            if (!networkObject.IsServer && !args.Info.SendingPlayer.IsHost)
-            {
-                Debug.LogError("Received invalid RPC from other client. Clients should only receive server data");
-                return;
-            }
-
-            _commandHandlerNetworkManager.HandleRPC(args);
+            _commandHandlerNetworkManager.HandleRPC(commandID, data, matchID, conn);
+            
+        }
+        
+        [ObserversRpc]
+        public void ClientCommandUpdate(CommandType commandID, byte[] data, ushort matchID)
+        {
+            _commandHandlerNetworkManager.HandleRPC(commandID, data, matchID);
         }
 
 
@@ -68,8 +55,6 @@ namespace Game.Common.Networking
             MainPersistantInstances.Remove<InputLayerNetworkManager>();
         }
 
-        partial void ServerMovementUpdate(RpcArgs args);
-        
 
         partial void ServerStart();
         partial void ClientStart();

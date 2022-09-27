@@ -1,15 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Generated;
-using BeardedManStudios.Forge.Networking.Unity;
+using System.Diagnostics;
+using FishNet;
+using FishNet.Connection;
+using FishNet.Object;
+using FishNet.Transporting;
 using Game.Common.Instances;
-using Game.Common.Phases;
 using Game.Common.Settings;
-using Game.Common.Util;
-using UnityEngine.SceneManagement;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Game.Common.Networking
@@ -19,7 +16,7 @@ namespace Game.Common.Networking
     /// Manages all systems that facilitate the networks between player and server.
     /// This includes making sure all systems are running and set.
     /// </summary>
-    public partial class GameNetworkManager : GameManagerBehavior, IGamePersistantInstance
+    public partial class GameNetworkManager : NetworkBehaviour, IGamePersistantInstance
     {
 
         public GameMatchSettings gameMatchSettings;
@@ -28,56 +25,53 @@ namespace Game.Common.Networking
         
         private NetworkType networkType = NetworkType.Client;
 
-    
-        
-        
+        public string clientID;
+
         private void Awake()
         {
-            DontDestroyOnLoad(this);
+            NetworkObject.SetIsGlobal(true);
         }
-        
-        protected override void NetworkStart()
+
+        public override void OnStartNetwork()
         {
+            base.OnStartNetwork();
+            
+            // TODO: Create a better system to make sure the UUID is unique
+            // This can be done by having a quick server client handshake, but
+            // the client should already have and ID that links them to the account.
+            // In the future the id can be an handshake id when the client is given a temporary code.
+            // Then the server takes the temporary code and checks it against the account server.
+            // If the account server finds the temporary code (its not expired and such) then 
+            // the sever should accept it.
+            // The server should accept the temporary code + the true account ID
+            // This can be highjacked, but it is highly unlikely
+            clientID = SystemInfo.deviceUniqueIdentifier + "P" + Process.GetCurrentProcess().Id + "R" + Random.Range(int.MinValue, int.MaxValue);
             
             masterSettings.Reset();
             
-            Physics2D.simulationMode = SimulationMode2D.Update;
             gameMatchSettings.Reset();
             
-            MainThreadManager.Run(()=>{ 
-                MainPersistantInstances.TryAdd(this);
-            });
+            MainPersistantInstances.TryAdd(this);
             
-
-            masterSettings.network.isServer = networkObject.IsServer;
+            var isServer = InstanceFinder.IsServer;
+            masterSettings.network.isServer = isServer;
             
-            if (networkObject.IsServer)
+            if (IsServer)
             {
+                clientID = "";
                 networkType = NetworkType.Server;
                 OnServerNetworkStart();
-                networkObject.Networker.disconnected += OnServerNetworkClose;
-                networkObject.Networker.playerDisconnected += OnServerNetworkPlayerDisconnected;
+                InstanceFinder.ServerManager.OnRemoteConnectionState += OnRemoveConnectionState;
+                InstanceFinder.ServerManager.OnServerConnectionState += OnServerConnectionState;
             }
             else
             {
                 OnClientNetworkStart();
-                networkObject.Networker.disconnected +=  OnClientNetworkClose;
-                
+                InstanceFinder.ClientManager.OnClientConnectionState += OnClientConnectionState;
             }
 
-            this.networkObject.Networker.disconnected += (sender) =>
-            {
-                MainThreadManager.Run(() =>
-                {
-                    StopMatch();
-                });
-            };
-            
-            
-            
-            base.NetworkStart();
         }
-
+        
 
         private void Update()
         {
@@ -106,16 +100,83 @@ namespace Game.Common.Networking
         /// </summary>
         public void StopMatch()
         {
-            
-            if(NetworkManager.Instance != null) NetworkManager.Instance.Disconnect();
+            if (InstanceFinder.NetworkManager.Initialized)
+            {
+                if (InstanceFinder.IsServer)
+                {
+                    InstanceFinder.ServerManager.StopConnection(true);
+                }
+                else
+                {
+                    InstanceFinder.ClientManager.StopConnection();
+                }
+            }
 
             masterSettings.Reset();
             
-            PersistantUtility.DestroyNetworkPersistant(Destroy);
-            
-            SceneManager.LoadScene(1);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(1);
         }
 
+        public override void OnStopNetwork()
+        {
+            base.OnStopNetwork();
+        }
+
+        private void OnRemoveConnectionState(NetworkConnection conn, RemoteConnectionStateArgs args)
+        {
+            switch (args.ConnectionState)
+            {
+                case RemoteConnectionState.Stopped:
+                    OnServerNetworkPlayerDisconnected(conn);
+                    ServerOnPlayerDisconnected(conn);
+                    break;
+                case RemoteConnectionState.Started:
+                    ServerOnPlayerConnected(conn);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void OnClientConnectionState(ClientConnectionStateArgs args)
+        {
+            switch (args.ConnectionState)
+            {
+                case LocalConnectionState.Stopped:
+                    OnClientNetworkClose();
+                    
+                    StopMatch();
+                    break;
+                case LocalConnectionState.Starting:
+                    break;
+                case LocalConnectionState.Started:
+                    break;
+                case LocalConnectionState.Stopping:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void OnServerConnectionState(ServerConnectionStateArgs args)
+        {
+            switch (args.ConnectionState)
+            {
+                case LocalConnectionState.Stopped:
+                    OnServerNetworkClose();
+                    
+                    StopMatch();
+                    break;
+                case LocalConnectionState.Starting:
+                    break;
+                case LocalConnectionState.Started:
+                    break;
+                case LocalConnectionState.Stopping:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
         
         
         // Partial Methods
@@ -133,17 +194,17 @@ namespace Game.Common.Networking
         /// <summary>
         /// Called when server network has closed
         /// </summary>
-        partial void OnServerNetworkClose(NetWorker sender);
+        partial void OnServerNetworkClose();
         
         /// <summary>
         /// Called when client network has closed
         /// </summary>
-        partial void OnClientNetworkClose(NetWorker sender);
+        partial void OnClientNetworkClose();
         
         /// <summary>
         /// Called when player left
         /// </summary>
-        partial void OnServerNetworkPlayerDisconnected(NetworkingPlayer player, NetWorker sender);
+        partial void OnServerNetworkPlayerDisconnected(NetworkConnection player);
         
         /// <summary>
         /// Called to update server
@@ -155,17 +216,29 @@ namespace Game.Common.Networking
         /// </summary>
         partial void ClientUpdate();
 
-
-        public override void SyncMatchSettings(RpcArgs args)
+        [TargetRpc]
+        public void SyncMatchSettings(NetworkConnection conn, string data)
         {
-
-            if (networkObject.IsServer)
-            {
-                return;
-            }
-            
-            gameMatchSettings.Sync(args.GetAt<string>(0));
-            
+            gameMatchSettings.Sync(data);
         }
+        
+        
+        [ServerRpc(RequireOwnership = false)]
+        public void RequestServerJoin(string clientID, NetworkConnection player = null)
+        {
+            ServerRecieveClientJoinRequest(player, clientID);
+        }
+
+        partial void ServerRecieveClientJoinRequest(NetworkConnection player, string requestingClientID);
+        
+        
+
+        [ObserversRpc]
+        public void UpdatePlayerNetworkID(int playerNetworkID, ushort matchID)
+        {
+            ClientUpdatePlayerNetworkID(playerNetworkID, matchID);
+        }
+
+        partial void ClientUpdatePlayerNetworkID(int networkID, ushort matchID);
     }
 }

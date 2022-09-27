@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Game.Common.UI
 {
     public interface ILoadingUI

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using BeardedManStudios.Forge.Networking;
+﻿using FishNet.Connection;
 using Game.Common.Instances;
 using Game.Common.Networking;
 using Game.Common.Networking.Misc;
@@ -24,11 +23,15 @@ namespace Game.Server.Phases
         public ServerPhaseStartMatch(GamePhaseNetworkManager gamePhaseNetworkManager, MatchNetworkTimerManager matchNetworkTimerManager)
         {
             _gamePhaseNetworkManager = gamePhaseNetworkManager;
-            _matchNetworkTimerManager = matchNetworkTimerManager;
+            _matchNetworkTimerManager = MainPersistantInstances.Get<MatchNetworkTimerManager>();
+
+            // Now anyone who leaves will be subjected to the reconnect method, if it works hehe
+            _gamePhaseNetworkManager.masterSettings.matchSettings.ServerRestartOnLeave = false;
         }
         
         public void PhaseStart()
         {
+            _matchNetworkTimerManager = MainPersistantInstances.Get<MatchNetworkTimerManager>();
             _agentNetworkManager = MainPersistantInstances.Get<AgentNetworkManager>();
             timer = _matchNetworkTimerManager.CreateTimer();
             
@@ -56,11 +59,20 @@ namespace Game.Server.Phases
             if(timer != null) timer.StopEvent -= OnTimerFinished;
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
+            
+            PlayerID playerID;
+
+            if (!_gamePhaseNetworkManager.masterSettings.playerIDRegistry.TryGetByNetworkID(conn.ClientId, out playerID))
+            {
+                Debug.LogWarning("Non-registered player tried to push start match! " + conn.GetAddress());
+                return;
+            }
+            
             if (data.Length == 1)
             {
-                playerCounter.Register(_gamePhaseNetworkManager.masterSettings.playerIDRegistry.Get(info.SendingPlayer.NetworkId));
+                playerCounter.Register(playerID);
 
                 if (playerCounter.IsFull())
                 {

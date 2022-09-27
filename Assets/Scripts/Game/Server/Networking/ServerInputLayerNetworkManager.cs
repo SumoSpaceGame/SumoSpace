@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
-using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Generated;
-using BeardedManStudios.Forge.Networking.Unity;
+using FishNet.Object;
 using Game.Common.Gameplay.Commands;
 using Game.Common.Instances;
-using UnityEngine;
 
 namespace Game.Common.Networking
 {
-    public partial class InputLayerNetworkManager : InputLayerBehavior, IGamePersistantInstance
+    public partial class InputLayerNetworkManager : NetworkBehaviour, IGamePersistantInstance
     {
         partial void ServerStart()
         {
@@ -24,11 +21,12 @@ namespace Game.Common.Networking
         }
 
         
-        
+        /*
         /// <summary>
         /// When the server receives client movement updates, it will assign the values to the ships themselves.
         /// </summary>
         /// <param name="args"></param>
+        [Obsolete("Not used anymore, was just a test. All movement should be through fields")]
         partial void ServerMovementUpdate(RpcArgs args)
         {
             var movementVec = args.GetAt<Vector2>(0);
@@ -48,5 +46,6 @@ namespace Game.Common.Networking
                 ship.shipController.targetAngle = rotationVec;
             });
         }
+        */
     }
 }

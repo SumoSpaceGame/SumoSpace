@@ -1,16 +1,14 @@
-﻿using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Generated;
+﻿using FishNet.Connection;
+using FishNet.Object;
 
 namespace Game.Common.Networking
 {
-    public partial class AgentInputManager : AgentInputBehavior
+    public partial class AgentInputManager : NetworkBehaviour
     {
         
-        public void ServerSendOwnership(NetworkingPlayer target)
+        public void ServerSendOwnership(NetworkConnection target)
         {
-            
-            networkObject.ServerPlayerOwnerID = target.NetworkId;
-            networkObject.SendRpc(target, RPC_GIVE_OWNERSHIP);
+            GiveOwnership(target);
         }
         
     }

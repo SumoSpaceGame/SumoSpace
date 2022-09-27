@@ -1,7 +1,6 @@
-using UnityEngine;
 using System.Collections;
 using Game.Common.Gameplay.Ship;
-using Game.Common.Gameplay.Commands;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "Ship Movement/Dodge", fileName = "Dodge")]
 public class ShipDodgeSettings : ScriptableObject {

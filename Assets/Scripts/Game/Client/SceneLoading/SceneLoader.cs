@@ -1,9 +1,11 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using FishNet;
+using FishNet.Managing.Scened;
 using Game.Common.Instances;
 using Game.Common.ScriptableData;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using SceneManager = UnityEngine.SceneManagement.SceneManager;
 
 namespace Game.Client.SceneLoading
 {
@@ -101,10 +103,8 @@ namespace Game.Client.SceneLoading
             
             _loadingTasks = loadingTasks;
             
-            
             SceneManager.sceneLoaded += StartTaskLoading;
             SceneManager.LoadScene(loadingSceneName);
-            
         }
 
 

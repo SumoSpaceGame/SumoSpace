@@ -1,6 +1,7 @@
 ﻿using System;
-using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Generated;
+using FishNet;
+using FishNet.Connection;
+using FishNet.Object;
 using Game.Common.Gameplay.Ship;
 using Game.Common.Registry;
 using Game.Common.Settings;
@@ -10,7 +11,7 @@ using UnityEngine.Serialization;
 namespace Game.Common.Networking
 {
     
-    public partial class AgentMovementNetworkManager : AgentMovementBehavior
+    public partial class AgentMovementNetworkManager : NetworkBehaviour
     {
         /// <summary>
         /// Ship request data. Should contain all information that will spawn a ship.
@@ -35,34 +36,18 @@ namespace Game.Common.Networking
         
         [FormerlySerializedAs("attachedShip")] public ShipManager attachedShipManager;
 
-        public bool initAgentInput = false;
-        
         public MasterSettings masterSettings;
+
+        public override void OnStartNetwork()
+        {
+            base.OnStartNetwork();
+
+            if (InstanceFinder.IsClient)
+            {
+                ServerRequestShipSpawnData();
+            }
+        }
         
-        
-        protected override void NetworkStart()
-        {
-            base.NetworkStart();
-            networkObject.UpdateInterval = masterSettings.network.updateInterval;
-            
-            if(!networkObject.IsServer) networkObject.SendRpc(RPC_REQUEST_SHIP_SPAWN_DATA, Receivers.Server, "");
-            masterSettings.network.OnUpdateIntervalChange += UpdateInterval;
-            
-            
-        }
-
-
-        private void UpdateInterval(ulong value)
-        {
-            this.networkObject.UpdateInterval = value;
-        }
-
-        private void OnDestroy()
-        {
-            masterSettings.network.OnUpdateIntervalChange -= UpdateInterval;
-        }
-
-    
         
         public void Update()
         {
@@ -70,7 +55,7 @@ namespace Game.Common.Networking
             {
                 return;
             }
-            if (networkObject.IsServer)
+            if (InstanceFinder.IsServer)
             {
                 ServerUpdate();
             }
@@ -81,27 +66,15 @@ namespace Game.Common.Networking
         }
         
         
-        /// <summary>
-        /// Ship spawn data handler, when the client creates a ship, it will ask the server for the ship data to spawn.
-        /// </summary>
-        /// <param name="args"></param>
-        public override void RequestShipSpawnData(RpcArgs args)
-        {
-            if (networkObject.IsServer)
-            {
-                ServerRequestShipSpawnData(args);
-            }
-            else
-            {
-                ClientRequestShipSpawnData(args);
-            }
-            
-        }
 
         partial void ClientUpdate();
         partial void ServerUpdate();
-        partial void ServerRequestShipSpawnData(RpcArgs args);
-        partial void ClientRequestShipSpawnData(RpcArgs args);
+        
+        [ServerRpc(RequireOwnership = false)]
+        partial void ServerRequestShipSpawnData(NetworkConnection conn = null);
+        
+        [TargetRpc]
+        partial void ClientRequestShipSpawnData(NetworkConnection conn, RequestData data);
 
 
     }

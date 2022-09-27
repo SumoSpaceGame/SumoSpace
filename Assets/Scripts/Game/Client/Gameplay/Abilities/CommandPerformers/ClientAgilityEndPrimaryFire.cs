@@ -9,7 +9,7 @@ public class ClientAgilityEndPrimaryFire: ICommandPerformer {
 
     public bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments) {
         //shipManager.shipLoadout.PrimaryFire.Stop(shipManager, false);
-        networker.SendData(CommandPacketData.Create(new byte[]{}), (int)CommandType.AGILITY_PRIMARY_FIRE_END, shipManager.playerMatchID);
+        networker.SendData(CommandPacketData.Create(new byte[]{}), CommandType.AGILITY_PRIMARY_FIRE_END, shipManager.playerMatchID);
         return true;
     }
 }

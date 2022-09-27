@@ -1,5 +1,4 @@
 using System.Collections;
-using Game.Common.Gameplay.Ship;
 using UnityEngine;
 
 public class AgilityPrimaryFireClientBehaviour : RenderableAbilityBehaviour<AgilityPrimaryFireAbility> {

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BeardedManStudios.Forge.Networking;
+using FishNet.Connection;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using Game.Common.Phases.PhaseData;
@@ -12,7 +12,7 @@ namespace Game.Server.Phases
     {
         private GamePhaseNetworkManager _phaseNetworkManager;
 
-        private Dictionary<uint, PlayerID> _syncedPlayer = new Dictionary<uint, PlayerID>();
+        private Dictionary<int, PlayerID> _syncedPlayer = new Dictionary<int, PlayerID>();
         public ServerPhaseSyncLoadout(GamePhaseNetworkManager gamePhaseNetworkManager)
         {
             _phaseNetworkManager = gamePhaseNetworkManager;
@@ -22,14 +22,14 @@ namespace Game.Server.Phases
         {
             PhaseSyncLoadout.Data data = new PhaseSyncLoadout.Data();
 
-            var playerList = new List<uint>();
+            var playerList = new List<ushort>();
             var selectionList = new List<int>();
 
             var players = _phaseNetworkManager.masterSettings.GetPlayerIDs();
 
             foreach (var id in players)
             {
-                playerList.Add(id.ID);
+                playerList.Add(id.MatchID);
                 
                 selectionList.Add(_phaseNetworkManager.masterSettings.playerGameDataRegistry.Get(id).shipCreationData.shipType);
             }
@@ -48,9 +48,17 @@ namespace Game.Server.Phases
         {
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
-            _syncedPlayer.Add(info.SendingPlayer.NetworkId, _phaseNetworkManager.masterSettings.playerIDRegistry.Get(info.SendingPlayer.NetworkId));
+            PlayerID playerID;
+            if (!_phaseNetworkManager.masterSettings.playerIDRegistry.TryGetByNetworkID(conn.ClientId,
+                    out playerID))
+            {
+                Debug.LogWarning("WARNING: Phase data recieved from client that is not registered? Spectator?");
+                return;
+            }
+            
+            _syncedPlayer.Add(conn.ClientId, playerID);
 
             if (_syncedPlayer.Count == _phaseNetworkManager.gameMatchSettings.MaxPlayerCount)
             {

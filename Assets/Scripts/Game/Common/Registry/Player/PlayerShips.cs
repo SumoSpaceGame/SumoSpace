@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Game.Common.Gameplay.Ship;
+﻿using Game.Common.Gameplay.Ship;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Game.Common.Registry
 {

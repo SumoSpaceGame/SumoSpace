@@ -1,15 +1,17 @@
-﻿using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Generated;
-using BeardedManStudios.Forge.Networking.Unity;
+﻿
+
+using FishNet.Connection;
+using FishNet.Object;
+using UnityEngine;
 
 namespace Game.Common.Networking
 {
-    public partial class AgentMovementNetworkManager : AgentMovementBehavior
+    public partial class AgentMovementNetworkManager : NetworkBehaviour
     {
         partial void ServerUpdate()
         {
-            networkObject.position = attachedShipManager.transform.position;
-            networkObject.rotation = attachedShipManager.transform.eulerAngles.z;
+            this.transform.position = attachedShipManager.transform.position;
+            this.transform.eulerAngles = new Vector3(0,0, attachedShipManager.transform.eulerAngles.z);
         }
 
         /// <summary>
@@ -17,16 +19,14 @@ namespace Game.Common.Networking
         /// Data should encompass all required data to spawn the ship in one to one.
         /// </summary>
         /// <param name="args"></param>
-        partial void ServerRequestShipSpawnData(RpcArgs args)
+        partial void ServerRequestShipSpawnData(NetworkConnection conn = null)
         {
-            // TODO: Ship sync
-
+            if (conn == null) return;
+            
             var requestData = new RequestData();
             requestData.clientOwner = attachedShipManager.playerMatchID;
             
-            networkObject.SendRpc(args.Info.SendingPlayer, RPC_REQUEST_SHIP_SPAWN_DATA, requestData.Serialize());
-            
-            
+            ClientRequestShipSpawnData(conn, requestData);
 
 
         }

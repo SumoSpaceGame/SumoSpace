@@ -1,4 +1,5 @@
 using System;
+using Game.Common.Registry;
 using UnityEngine;
 
 namespace Game.Common.Settings
@@ -21,8 +22,32 @@ namespace Game.Common.Settings
         [SerializeField] public ushort ClientMatchID;
         [SerializeField] public int ClientTeam;
         [SerializeField] public int ClientTeamPosition;
+        [SerializeField] public bool ClientIsSpectator;
+        
+        /// <summary>
+        /// Match flag settings
+        /// </summary>
         [SerializeField] public bool FriendlyFire;
-    
+        [SerializeField] public bool MatchStarted = false;
+        // Restarts/stops the server when a player has left
+        [SerializeField] public bool ServerRestartOnLeave = false;
+        [SerializeField] public bool AllowSpectators = false;
+        
+        /// <summary>
+        /// Match data, who is a player, and their team information
+        ///
+        /// If they are not an active player (spectator and such), there will be no info here
+        /// For delayed spectators (3mins or so)
+        /// </summary>
+        [Serializable]
+        public struct PlayerMatchData
+        {
+            [SerializeField] public PlayerID playerID;
+            [SerializeField] public int clientTeam;
+            [SerializeField] public int clientTeamPosition;
+
+        }
+        
         public int MaxPlayerCount
         {
             get

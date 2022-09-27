@@ -1,6 +1,5 @@
-using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Generated;
-using BeardedManStudios.Forge.Networking.Unity;
+using FishNet;
+using FishNet.Object;
 using Game.Common.Instances;
 using Game.Common.Registry;
 using Game.Common.Settings;
@@ -9,7 +8,7 @@ using UnityEngine;
 namespace Game.Common.Networking
 {
     [RequireComponent(typeof(ShipSpawner))]
-    public partial class AgentNetworkManager : AgentManagerBehavior, IGamePersistantInstance
+    public partial class AgentNetworkManager : NetworkBehaviour, IGamePersistantInstance
     {
 
         public GameMatchSettings gameMatchSettings;
@@ -22,7 +21,6 @@ namespace Game.Common.Networking
     
         public void Awake()
         {
-            DontDestroyOnLoad(this);
             _shipSpawner = GetComponent<ShipSpawner>();
         }
 
@@ -31,17 +29,12 @@ namespace Game.Common.Networking
             MainPersistantInstances.Remove<AgentNetworkManager>();
         }
 
-        protected override void NetworkStart()
+        public override void OnStartNetwork()
         {
-            base.NetworkStart();
+            base.OnStartNetwork();
             
-            MainThreadManager.Run(()=>{ 
-                MainPersistantInstances.TryAdd(this);
-            });
-            
-            
+            MainPersistantInstances.TryAdd(this);
         }
-
 
         /// <summary>
         /// Spawns the ship for the server.
@@ -50,7 +43,7 @@ namespace Game.Common.Networking
         /// <param name="clientID"></param>
         public void SpawnShip(PlayerID playerID)
         {
-            if (networkObject.IsServer)
+            if (InstanceFinder.IsServer)
             {
                 if (masterSettings.playerStaticDataRegistry.TryGet(playerID, out var data))
                 {

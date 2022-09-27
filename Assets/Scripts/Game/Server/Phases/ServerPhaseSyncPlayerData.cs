@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using BeardedManStudios.Forge.Networking;
+using FishNet.Connection;
 using Game.Common.Networking;
+using Game.Common.Networking.Utility;
 using Game.Common.Phases;
 using Game.Common.Phases.PhaseData;
 using Game.Common.Registry;
@@ -13,8 +14,10 @@ namespace Game.Server.Phases
         private GamePhaseNetworkManager _gamePhaseNetworkManager;
 
         private Dictionary<uint, PlayerID> finishedSynced = new Dictionary<uint, PlayerID>();
+        private PlayerCounter playerCounter;
         public ServerPhaseSyncPlayerData(GamePhaseNetworkManager gamePhaseNetworkManager)
         {
+            playerCounter = new PlayerCounter(gamePhaseNetworkManager.masterSettings.matchSettings.MaxPlayerCount);
             _gamePhaseNetworkManager = gamePhaseNetworkManager;
         }
         
@@ -33,8 +36,6 @@ namespace Game.Server.Phases
             }
 
             data.staticData = staticDataList.ToArray();
-            
-            data.serverUpdateInterval = _gamePhaseNetworkManager.masterSettings.network.updateInterval;
             data.friendlyFire = _gamePhaseNetworkManager.masterSettings.matchSettings.FriendlyFire;
             _gamePhaseNetworkManager.SendPhaseUpdate(Phase.MATCH_SYNC_PLAYER_DATA, PhaseSyncPlayerData.Serialized(data));
         }
@@ -49,20 +50,20 @@ namespace Game.Server.Phases
             
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
-            if (finishedSynced.ContainsKey(info.SendingPlayer.NetworkId))
+            
+            PlayerID playerID;
+
+            if (!_gamePhaseNetworkManager.masterSettings.playerIDRegistry.TryGetByNetworkID(conn.ClientId, out playerID))
             {
-                Debug.LogWarning("Double update received for player sync, what happened?");
+                Debug.LogWarning("Non-registered player tried to join the network! " + conn.GetAddress());
                 return;
             }
             
-            finishedSynced.Add(info.SendingPlayer.NetworkId, 
-                _gamePhaseNetworkManager.masterSettings.playerIDRegistry.Get(info.SendingPlayer.NetworkId));
+            playerCounter.Register(playerID);
             
-            Debug.Log($"Checking - {finishedSynced.Count} == {_gamePhaseNetworkManager.masterSettings.matchSettings.MaxPlayerCount}");
-            
-            if (finishedSynced.Count == _gamePhaseNetworkManager.masterSettings.matchSettings.MaxPlayerCount)
+            if (playerCounter.IsFull())
             {
                 _gamePhaseNetworkManager.ServerNextPhase();
             }

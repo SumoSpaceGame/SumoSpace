@@ -1,10 +1,8 @@
-﻿using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Lobby;
+﻿using FishNet.Connection;
 using Game.Common.Instances;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using Game.Common.Phases.PhaseData;
-using Game.Common.Registry;
 using Game.Common.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -78,10 +76,11 @@ namespace Game.Client.Phases
             _masterUIController.StopLobby();
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
             if (data.Length == 0) return;
 
+            Debug.Log("Received data " + data.ToString() + " " + data.Length + " " + data[0] + " " + data[1] + " " + _phaseNetworkManager.masterSettings.matchSettings.ClientMatchID);
             switch (data.Length)
             {
                 case 1:
@@ -92,13 +91,13 @@ namespace Game.Client.Phases
                     {
                         //Debug.Log(data[1] + " selected " +  data[2]);
                         
-                        if (info.SendingPlayer.NetworkId == this._phaseNetworkManager.networkObject.MyPlayerId)
+                        if (data[1] == _phaseNetworkManager.masterSettings.matchSettings.ClientMatchID)
                         {
                             Debug.Log("Server said I am this character");
                         }
                         
                         // Save their data
-                        var playerLockedIn = _phaseNetworkManager.masterSettings.playerIDRegistry.Get((uint)data[1]);
+                        var playerLockedIn = _phaseNetworkManager.masterSettings.playerIDRegistry.GetByMatchID(data[1]);
                         if (_phaseNetworkManager.masterSettings.playerGameDataRegistry.TryGet(playerLockedIn, out var gameData))
                         {
                             gameData.shipCreationData.shipType = data[2];
@@ -111,7 +110,7 @@ namespace Game.Client.Phases
                     {
                         //Debug.Log(data[1] + " locked in " +  data[3]);
 
-                        if (info.SendingPlayer.NetworkId == this._phaseNetworkManager.networkObject.MyPlayerId)
+                        if (data[1] == _phaseNetworkManager.gameMatchSettings.ClientMatchID)
                         {
                             Debug.Log("Server confirmed I'm locked and loaded");
                             _masterUIController.LockLobby();
@@ -119,24 +118,12 @@ namespace Game.Client.Phases
                         
                         
                         // Save their locked data
-                        var playerLockedIn = _phaseNetworkManager.masterSettings.playerIDRegistry.Get((uint)data[1]);
+                        var playerLockedIn = _phaseNetworkManager.masterSettings.playerIDRegistry.GetByMatchID(data[1]);
                         if (_phaseNetworkManager.masterSettings.playerGameDataRegistry.TryGet(playerLockedIn, out var gameData))
                         {
                             gameData.shipCreationData.shipType = data[3];
                             gameData.shipCreationData.playerLockedIn = true;
                         }
-                        /*
-                        // TODO: REPLACE THIS WITH VALID PLAYER SYNCING CODE
-                        try
-                        {
-                            _phaseNetworkManager.masterSettings.playerIDRegistry.RegisterPlayer((uint) data[2], data[2]);
-                            _phaseNetworkManager.masterSettings.playerStaticDataRegistry.Add(
-                                _phaseNetworkManager.masterSettings.playerIDRegistry.Get(data[2]), new PlayerStaticData());
-                        }
-                        catch
-                        {
-                            Debug.Log("TEMP MAKE SURE TO REMOVE THIS SECTION OF CODE. This gets printed because its registering a player twice");
-                        }*/
                     }
                     
                     

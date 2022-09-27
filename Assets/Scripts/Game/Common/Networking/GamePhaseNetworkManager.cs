@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Generated;
-using BeardedManStudios.Forge.Networking.Unity;
+﻿using System.Collections.Generic;
+using FishNet;
+using FishNet.Connection;
+using FishNet.Object;
+using FishNet.Transporting;
 using Game.Common.Instances;
 using Game.Common.Phases;
 using Game.Common.Settings;
@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Game.Common.Networking
 {
-    public partial class GamePhaseNetworkManager : GamePhaseBehavior, IGamePersistantInstance
+    public partial class GamePhaseNetworkManager : NetworkBehaviour, IGamePersistantInstance
     {
 
         public MasterSettings masterSettings;
@@ -21,13 +21,13 @@ namespace Game.Common.Networking
         /// </summary>
         private struct UpdateQueueData
         {
-            public UpdateQueueData(RPCInfo info, byte[] data)
+            public UpdateQueueData(NetworkConnection conn, byte[] data)
             {
-                Info = info;
+                Conn = conn;
                 Data = data;
             } 
             
-            public RPCInfo Info;
+            public NetworkConnection Conn;
             public byte[] Data;
         }
 
@@ -43,11 +43,6 @@ namespace Game.Common.Networking
         private Dictionary<Phase, Queue<UpdateQueueData>> updateQueueData =
             new Dictionary<Phase, Queue<UpdateQueueData>>();
         
-        // Unity functions
-        private void Awake()
-        {
-            DontDestroyOnLoad(this);
-        }
 
         private void Start()
         {
@@ -57,17 +52,13 @@ namespace Game.Common.Networking
             }
         }
 
-        protected override void NetworkStart()
+        public override void OnStartNetwork()
         {
-            base.NetworkStart();
-            //Initiate queue data
-
+            base.OnStartNetwork();
             
-            MainThreadManager.Run(()=>{ 
-                MainPersistantInstances.TryAdd(this);
-            });
+            MainPersistantInstances.TryAdd(this);
 
-            if (networkObject.IsServer)
+            if (InstanceFinder.IsServer)
             {
                 ServerAddPhases();
             }
@@ -75,6 +66,7 @@ namespace Game.Common.Networking
             {
                 ClientAddPhases();
             }
+            
             _gamePhaseManager.OnPhaseUpdate += UpdatePhases;
             _gamePhaseManager.OnPhaseSwitch += OnPhaseSwitch;
             
@@ -89,7 +81,7 @@ namespace Game.Common.Networking
         {
             if (!finishedNetworkStart) return;
             
-            if (networkObject.IsServer)
+            if (InstanceFinder.IsServer)
             {
                 ServerUpdate();
             }
@@ -107,7 +99,7 @@ namespace Game.Common.Networking
             while (dataQueue.Count > 0)
             {
                 var updateData = dataQueue.Dequeue();
-                curPhase.OnUpdateReceived(updateData.Info, updateData.Data);
+                curPhase.OnUpdateReceived(updateData.Conn, updateData.Data);
             }
         }
 
@@ -131,41 +123,28 @@ namespace Game.Common.Networking
         /// </summary>
         /// <param name="phase"></param>
         /// <param name="data"></param>
-        public void SendPhaseUpdate(Phase phase, byte[] data)
+        public void SendPhaseUpdate(Phase phase, byte[] data, Channel channel = Channel.Reliable)
         {
+            Debug.Log("Sending data for " + phase + " " + data.Length);
             var phaseID = (int) phase;   
-            networkObject.SendRpc(RPC_UPDATE_PHASE, 
-                this.networkObject.IsServer ? Receivers.Others : Receivers.Server,
-                phaseID, data);
-        }
-        
-        /// <summary>
-        /// Used by other classes to send a unreliable update
-        /// </summary>
-        /// <param name="phase"></param>
-        /// <param name="data"></param>
-        public void SendUnreliablePhaseUpdate(Phase phase, byte[] data)
-        {
-            var phaseID = (int) phase;   
-            networkObject.SendRpc(RPC_UPDATE_PHASE, 
-                this.networkObject.IsServer ? Receivers.Others : Receivers.Server,
-                phaseID, data);
-        }
-        
-        
-        /// <summary>
-        /// Processes update RPC. Checks if data is good, if so add it to a queue for the phase to run after update.
-        /// </summary>
-        /// <param name="args"></param>
-        public override void UpdatePhase(RpcArgs args)
-        {
-            if ( !this.networkObject.IsServer && !args.Info.SendingPlayer.IsHost)
+            if (InstanceFinder.IsServer)
             {
-                return;
+                SendClientPhaseUpdate(phase, data, channel);
+            }
+            else
+            {
+                SendServerPhaseUpdate(phase, data, channel);
             }
             
-            var phaseID = args.GetAt<int>(0);
-            var updateData = args.GetAt<byte[]>(1);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SendServerPhaseUpdate(Phase phase, byte[] data, Channel channel = Channel.Reliable, NetworkConnection conn = null)
+        {
+            Debug.Log("Receiving server data for " + phase + " " + data.Length);
+            
+            var phaseID = (int) phase;
+            var updateData = data;
 
             // Make sure phaseID is within the range
             if (!_gamePhaseManager.WithinPhaseRange(phaseID))
@@ -175,31 +154,56 @@ namespace Game.Common.Networking
 
             var updatePhase = (Phase) phaseID;
 
-            
-            MainThreadManager.Run(() =>
+            // If an update is sent before this has been finished
+            if (updatePhase != _gamePhaseManager.CurrentPhase)
             {
-                
-                // If an update is sent before this has been finished
-                if (updatePhase != _gamePhaseManager.CurrentPhase)
-                {
-                    // TODO: Record this as a suspicious activity
-                        Debug.LogWarning($"Update phase received out of order! {updatePhase.ToString()}");
-                }
-                updateQueueData[updatePhase].Enqueue(new UpdateQueueData(args.Info, updateData));
-            });
+                // TODO: Record this as a suspicious activity
+                Debug.LogWarning($"Update phase received out of order! {updatePhase.ToString()}");
+            }
+            updateQueueData[updatePhase].Enqueue(new UpdateQueueData(conn, updateData));
         }
-
-        /// <summary>
-        /// Network input. Process phase switch.
-        /// </summary>
-        public override void SwitchPhase(RpcArgs args)
+        
+        [ObserversRpc]
+        public void SendClientPhaseUpdate(Phase phase, byte[] data, Channel channel = Channel.Reliable)
         {
-            if (!args.Info.SendingPlayer.IsHost)
+            Debug.Log("Receiving client data for " + phase + " " + data.Length);
+            
+            var phaseID = (int) phase;
+            var updateData = data;
+
+            // Make sure phaseID is within the range
+            if (!_gamePhaseManager.WithinPhaseRange(phaseID))
             {
                 return;
             }
 
-            var nextPhase = (Phase) args.GetAt<int>(0);
+            var updatePhase = (Phase) phaseID;
+
+            // If an update is sent before this has been finished
+            if (updatePhase != _gamePhaseManager.CurrentPhase)
+            {
+                // TODO: Record this as a suspicious activity
+                Debug.LogWarning($"Update phase received out of order! {updatePhase.ToString()}");
+            }
+            updateQueueData[updatePhase].Enqueue(new UpdateQueueData(null, updateData));
+        }
+
+        /// <summary>
+        /// Used by other classes to send a unreliable update
+        /// </summary>
+        /// <param name="phase"></param>
+        /// <param name="data"></param>
+        public void SendUnreliablePhaseUpdate(Phase phase, byte[] data)
+        {
+            Debug.Log("Sending unreliable " + data.Length);
+            SendPhaseUpdate(phase, data, Channel.Unreliable);
+        }
+        
+        
+
+        [ObserversRpc]
+        public void SwitchPhase(Phase nextPhase)
+        {
             
             _gamePhaseManager.SwitchPhase(nextPhase);
         }

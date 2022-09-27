@@ -1,5 +1,4 @@
 ﻿using System;
-using BeardedManStudios.Forge.Networking.Generated;
 using Game.Common.Networking;
 using Game.Common.Networking.Misc;
 

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Game.Common.Settings;
 using TMPro;
@@ -35,7 +34,7 @@ public class PlayerStatsUI : MonoBehaviour
         foreach (var playerID in masterSettings.GetPlayerIDs())
         {
 
-            uint ID = playerID.ID;
+            var ID = playerID.NetworkID;
             int loadout = -1;
             bool ready = false;
             

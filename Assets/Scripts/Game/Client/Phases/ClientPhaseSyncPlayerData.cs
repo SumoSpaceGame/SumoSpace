@@ -1,8 +1,7 @@
-﻿using BeardedManStudios.Forge.Networking;
+﻿using FishNet.Connection;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using Game.Common.Phases.PhaseData;
-using Game.Common.Registry;
 using UnityEngine;
 
 namespace Game.Client.Phases
@@ -28,7 +27,7 @@ namespace Game.Client.Phases
         {
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
             
             var syncData = PhaseSyncPlayerData.Deserialize(data);
@@ -43,12 +42,11 @@ namespace Game.Client.Phases
             {
                 var playerID = syncData.playerIDs[i];
                 Debug.Log($"Synced player {playerID}");
-                var id = _phaseNetworkManager.masterSettings.RegisterPlayer(playerID.ID, playerID.MatchID, playerID.ClientID, syncData.staticData[i]);
+                var id = _phaseNetworkManager.masterSettings.RegisterPlayer(playerID.NetworkID, playerID.MatchID, playerID.ClientID, syncData.staticData[i]);
             }
             Debug.Log("Synced played data");
 
             // TODO: Sync in a better location
-            _phaseNetworkManager.masterSettings.network.updateInterval = syncData.serverUpdateInterval;
             _phaseNetworkManager.masterSettings.matchSettings.FriendlyFire = syncData.friendlyFire;
             
             _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_SYNC_PLAYER_DATA, new byte[1]);

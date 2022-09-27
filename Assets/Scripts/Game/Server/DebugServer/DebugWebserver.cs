@@ -3,8 +3,6 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Game.Common.Settings;
-using TMPro;
 using UnityEngine;
 
 // A debug server that is hosted along the server, this will send statistical information

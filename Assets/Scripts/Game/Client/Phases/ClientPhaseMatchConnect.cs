@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
-using System.IO;
-using BeardedManStudios.Forge.Networking;
+using FishNet.Connection;
 using Game.Common.Instances;
 using Game.Common.Networking;
 using Game.Common.Phases;
@@ -29,6 +27,7 @@ namespace Game.Client.Phases
         
         public void PhaseStart()
         {
+            _phaseNetworkManager.gameMatchSettings.MatchStarted = false;
             // Enable Animated GUI saying waiting for players
             _masterUIController.ActivateWaitingForPlayer();
         }
@@ -96,7 +95,7 @@ namespace Game.Client.Phases
             _waitingForServer = false;
         }
         
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
             
             if (data.Length < 1) return;
