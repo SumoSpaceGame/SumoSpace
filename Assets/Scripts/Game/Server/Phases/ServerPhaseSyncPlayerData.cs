@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BeardedManStudios.Forge.Networking;
+using FishNet.Connection;
 using Game.Common.Networking;
 using Game.Common.Networking.Utility;
 using Game.Common.Phases;
@@ -36,8 +37,6 @@ namespace Game.Server.Phases
             }
 
             data.staticData = staticDataList.ToArray();
-            
-            data.serverUpdateInterval = _gamePhaseNetworkManager.masterSettings.network.updateInterval;
             data.friendlyFire = _gamePhaseNetworkManager.masterSettings.matchSettings.FriendlyFire;
             _gamePhaseNetworkManager.SendPhaseUpdate(Phase.MATCH_SYNC_PLAYER_DATA, PhaseSyncPlayerData.Serialized(data));
         }
@@ -52,14 +51,14 @@ namespace Game.Server.Phases
             
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
             
             PlayerID playerID;
 
-            if (!_gamePhaseNetworkManager.masterSettings.playerIDRegistry.TryGetByNetworkID(info.SendingPlayer.NetworkId, out playerID))
+            if (!_gamePhaseNetworkManager.masterSettings.playerIDRegistry.TryGetByNetworkID(conn.ClientId, out playerID))
             {
-                Debug.LogWarning("Non-registered player tried to join the network! " + info.SendingPlayer.Ip);
+                Debug.LogWarning("Non-registered player tried to join the network! " + conn.GetAddress());
                 return;
             }
             

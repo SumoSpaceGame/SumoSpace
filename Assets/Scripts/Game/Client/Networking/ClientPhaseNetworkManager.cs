@@ -1,4 +1,5 @@
 ﻿using BeardedManStudios.Forge.Networking.Generated;
+using FishNet.Object;
 using Game.Client.Phases;
 using Game.Client.SceneLoading;
 using Game.Common.Instances;
@@ -11,7 +12,7 @@ namespace Game.Common.Networking
     /// <summary>
     /// Client phase network manager
     /// </summary>
-    public partial class GamePhaseNetworkManager : GamePhaseBehavior
+    public partial class GamePhaseNetworkManager : NetworkBehaviour
     {
         partial void ClientAddPhases()
         {

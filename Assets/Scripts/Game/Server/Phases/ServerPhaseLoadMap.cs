@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
+using FishNet.Connection;
 using Game.Client.SceneLoading;
 using Game.Common.Instances;
 using Game.Common.Networking;
@@ -15,7 +16,7 @@ namespace Game.Server.Phases
         
         private GamePhaseNetworkManager _phaseNetworkManager;
 
-        private List<uint> loadedPlayers = new List<uint>();
+        private List<int> loadedPlayers = new List<int>();
 
         private bool sceneLoaded = false;
 
@@ -37,9 +38,7 @@ namespace Game.Server.Phases
         {
             if (sceneLoaded && loadedPlayers.Count == _phaseNetworkManager.gameMatchSettings.MaxPlayerCount)
             {
-                
                 _phaseNetworkManager.ServerNextPhase();
-
                 sceneLoaded = false;
             }
         }
@@ -56,17 +55,22 @@ namespace Game.Server.Phases
             sceneLoaded = true;
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
+
+            if (!_phaseNetworkManager.masterSettings.playerIDRegistry.HasNetworkID(conn.ClientId))
+            {
+                return;
+            }
             
-            if (loadedPlayers.Contains(info.SendingPlayer.NetworkId))
+            if (loadedPlayers.Contains(conn.ClientId))
             {
                 Debug.LogError("Duplicate update received for temp load map solution");
                 return;
             }
             
             
-            loadedPlayers.Add(info.SendingPlayer.NetworkId);
+            loadedPlayers.Add(conn.ClientId);
 
         }
     }

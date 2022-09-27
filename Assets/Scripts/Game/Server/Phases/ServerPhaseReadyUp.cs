@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using BeardedManStudios.Forge.Networking;
+using FishNet.Connection;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using Game.Common.Phases.PhaseData;
@@ -10,7 +11,7 @@ namespace Game.Server.Phases
     {
         private GamePhaseNetworkManager _phaseNetworkManager;
 
-        private List<uint> readyPlayers = new List<uint>();
+        private List<int> readyPlayers = new List<int>();
         
         public ServerPhaseReadyUp(GamePhaseNetworkManager phaseNetworkManager)
         {
@@ -31,13 +32,13 @@ namespace Game.Server.Phases
         {
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
             if (data.Length != 1) return;
 
             if (data[0] == (byte)PhaseReadyUp.PLAYER_READY_FLAG)
             {
-                readyPlayers.Add(info.SendingPlayer.NetworkId);
+                readyPlayers.Add(conn.ClientId);
                 _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_READY_UP, 
                     new [] {(byte)PhaseReadyUp.UPDATE_PLAYER_COUNT_FLAG, (byte)readyPlayers.Count, });
             }

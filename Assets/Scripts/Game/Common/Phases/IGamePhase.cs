@@ -1,4 +1,5 @@
 using BeardedManStudios.Forge.Networking;
+using FishNet.Connection;
 using UnityEngine;
 
 namespace Game.Common.Phases
@@ -19,11 +20,12 @@ namespace Game.Common.Phases
         /// Cleans up this phase's dependencies for new usage.
         /// </summary>
         void PhaseCleanUp();
-        
+
         /// <summary>
         /// Whenever a network update gets received. The phase will be notified.
         /// </summary>
+        /// <param name="conn"></param>
         /// <param name="data"></param>
-        void OnUpdateReceived(RPCInfo info, byte[] data);
+        void OnUpdateReceived(NetworkConnection conn, byte[] data);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using BeardedManStudios.Forge.Networking;
+using FishNet.Connection;
 using Game.Common.Instances;
 using Game.Common.Networking;
 using Game.Common.Phases;
@@ -64,7 +65,7 @@ namespace Game.Client.Phases
             waitForServer = false;
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
             if (data.Length > 1)
             {

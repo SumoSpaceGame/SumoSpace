@@ -1,5 +1,6 @@
 ﻿using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
+using FishNet.Object;
 using Game.Client.SceneLoading;
 using Game.Common.Instances;
 using Game.Common.Networking.Misc;
@@ -12,7 +13,7 @@ namespace Game.Common.Networking
     /// <summary>
     /// Server phase network manager
     /// </summary>
-    public partial class GamePhaseNetworkManager : GamePhaseBehavior
+    public partial class GamePhaseNetworkManager : NetworkBehaviour
     {
         /// <summary>
         /// Adds the specific server phase classes to be used in the manager
@@ -44,7 +45,7 @@ namespace Game.Common.Networking
         public void ServerNextPhase()
         {
             this._gamePhaseManager.NextPhase();
-            this.networkObject.SendRpc(RPC_SWITCH_PHASE, Receivers.Others, (int) this._gamePhaseManager.CurrentPhase);
+            SwitchPhase(this._gamePhaseManager.CurrentPhase);
         }
         
         /// <summary>
@@ -54,7 +55,7 @@ namespace Game.Common.Networking
         public void ServerSwitchPhase(Phase phase)
         {
             this._gamePhaseManager.SwitchPhase(phase);
-            this.networkObject.SendRpc(RPC_SWITCH_PHASE, Receivers.Others, (int) phase);
+            SwitchPhase(phase);
         }
         
         

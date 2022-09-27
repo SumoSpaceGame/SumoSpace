@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using BeardedManStudios.Forge.Networking;
+﻿using FishNet.Connection;
 using Game.Common.Instances;
 using Game.Common.Networking;
 using Game.Common.Networking.Misc;
@@ -59,14 +58,14 @@ namespace Game.Server.Phases
             if(timer != null) timer.StopEvent -= OnTimerFinished;
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
             
             PlayerID playerID;
 
-            if (!_gamePhaseNetworkManager.masterSettings.playerIDRegistry.TryGetByNetworkID(info.SendingPlayer.NetworkId, out playerID))
+            if (!_gamePhaseNetworkManager.masterSettings.playerIDRegistry.TryGetByNetworkID(conn.ClientId, out playerID))
             {
-                Debug.LogWarning("Non-registered player tried to push start match! " + info.SendingPlayer.Ip);
+                Debug.LogWarning("Non-registered player tried to push start match! " + conn.GetAddress());
                 return;
             }
             

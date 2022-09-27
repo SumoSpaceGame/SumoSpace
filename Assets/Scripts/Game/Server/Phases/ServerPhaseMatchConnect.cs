@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using BeardedManStudios.Forge.Networking;
+using FishNet.Connection;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using Game.Common.Phases.PhaseData;
@@ -22,7 +22,7 @@ namespace Game.Server.Phases
         private readonly GamePhaseNetworkManager _phaseNetworkManager;
 
         // All variables to cleanup
-        private List<uint> readyPlayers = new List<uint>();
+        private List<int> readyPlayers = new List<int>();
         public ServerPhaseMatchConnect(GamePhaseNetworkManager phaseNetworkManager)
         {
             this._phaseNetworkManager = phaseNetworkManager;
@@ -52,7 +52,7 @@ namespace Game.Server.Phases
             readyPlayers.Clear();
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
             Debug.Log("Match connect added an update!");
             
@@ -65,10 +65,10 @@ namespace Game.Server.Phases
             switch (updateStatus)
             {
                 case PhaseMatchConnect.PLAYER_NETWORK_INITIALIZED_FIN:
-                    if (!readyPlayers.Contains(info.SendingPlayer.NetworkId))
+                    if (!readyPlayers.Contains(conn.ClientId))
                     {
-                        Debug.Log(info.SendingPlayer.Name + " connected");
-                        readyPlayers.Add(info.SendingPlayer.NetworkId);
+                        Debug.Log(conn.GetAddress() + " connected");
+                        readyPlayers.Add(conn.ClientId);
                     }
                     
                     Debug.Log("Ready players - " + readyPlayers.Count + " Max " + _phaseNetworkManager.gameMatchSettings.MaxPlayerCount);

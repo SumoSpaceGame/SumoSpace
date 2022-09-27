@@ -1,5 +1,4 @@
-﻿using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Lobby;
+﻿using FishNet.Connection;
 using Game.Common.Instances;
 using Game.Common.Networking;
 using Game.Common.Phases;
@@ -78,7 +77,7 @@ namespace Game.Client.Phases
             _masterUIController.StopLobby();
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
             if (data.Length == 0) return;
 
@@ -92,7 +91,7 @@ namespace Game.Client.Phases
                     {
                         //Debug.Log(data[1] + " selected " +  data[2]);
                         
-                        if (info.SendingPlayer.NetworkId == this._phaseNetworkManager.networkObject.MyPlayerId)
+                        if (data[1] == _phaseNetworkManager.masterSettings.matchSettings.ClientMatchID)
                         {
                             Debug.Log("Server said I am this character");
                         }
@@ -111,7 +110,7 @@ namespace Game.Client.Phases
                     {
                         //Debug.Log(data[1] + " locked in " +  data[3]);
 
-                        if (info.SendingPlayer.NetworkId == this._phaseNetworkManager.networkObject.MyPlayerId)
+                        if (data[1] == _phaseNetworkManager.gameMatchSettings.ClientMatchID)
                         {
                             Debug.Log("Server confirmed I'm locked and loaded");
                             _masterUIController.LockLobby();
@@ -125,18 +124,6 @@ namespace Game.Client.Phases
                             gameData.shipCreationData.shipType = data[3];
                             gameData.shipCreationData.playerLockedIn = true;
                         }
-                        /*
-                        // TODO: REPLACE THIS WITH VALID PLAYER SYNCING CODE
-                        try
-                        {
-                            _phaseNetworkManager.masterSettings.playerIDRegistry.RegisterPlayer((uint) data[2], data[2]);
-                            _phaseNetworkManager.masterSettings.playerStaticDataRegistry.Add(
-                                _phaseNetworkManager.masterSettings.playerIDRegistry.Get(data[2]), new PlayerStaticData());
-                        }
-                        catch
-                        {
-                            Debug.Log("TEMP MAKE SURE TO REMOVE THIS SECTION OF CODE. This gets printed because its registering a player twice");
-                        }*/
                     }
                     
                     

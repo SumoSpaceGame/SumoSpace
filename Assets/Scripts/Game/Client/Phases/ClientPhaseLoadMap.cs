@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Unity;
+using FishNet.Connection;
 using Game.Client.SceneLoading;
 using Game.Client.SceneLoading.SceneLoaderTasks;
 using Game.Common.Networking;
@@ -33,14 +32,12 @@ namespace Game.Client.Phases
             
             _sceneLoader.FinishLoadingSceneEvent += OnSceneLoaded;
             
-            MainThreadManager.Run(() =>
+            
+            Debug.Log("Starting loading task");
+            _sceneLoader.Load(new List<ISceneLoaderTask>()
             {
-                Debug.Log("Starting loading task");
-                _sceneLoader.Load(new List<ISceneLoaderTask>()
-                {
-                    new LoadSceneTask(_phaseNetworkManager.gameMatchSettings.SelectedMap, _phaseNetworkManager.StartCoroutine),
-                    _activateEventTask
-                });
+                new LoadSceneTask(_phaseNetworkManager.gameMatchSettings.SelectedMap, _phaseNetworkManager.StartCoroutine),
+                _activateEventTask
             });
             
         }
@@ -51,10 +48,7 @@ namespace Game.Client.Phases
 
         public void PhaseCleanUp()
         {
-            MainThreadManager.Run(() =>
-            {
-                _activateEventTask.FinishActivateEvent();
-            });
+            _activateEventTask.FinishActivateEvent();
             _sceneLoader.FinishLoadingSceneEvent -= OnSceneLoaded;
         }
 
@@ -70,19 +64,12 @@ namespace Game.Client.Phases
             _phaseNetworkManager.SendPhaseUpdate(Phase.MATCH_LOAD_MAP, new byte[]{});
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
-            if (info.SendingPlayer.IsHost)
+            if (data[0] == 1)
             {
-                if (data[0] == 1)
-                {
-                    MainThreadManager.Run(() =>
-                    {
-                        _activateEventTask.FinishActivateEvent();
-                    });
-                }
+                _activateEventTask.FinishActivateEvent();
             }
-            
         }
     }
 }

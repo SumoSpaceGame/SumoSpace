@@ -1,4 +1,5 @@
 ﻿using BeardedManStudios.Forge.Networking;
+using FishNet.Connection;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using UnityEngine.SceneManagement;
@@ -34,7 +35,7 @@ namespace Game.Client.Phases
         {
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
         }
     }

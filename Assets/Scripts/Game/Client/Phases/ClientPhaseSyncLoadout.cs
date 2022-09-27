@@ -1,4 +1,5 @@
 ﻿using BeardedManStudios.Forge.Networking;
+using FishNet.Connection;
 using Game.Common.Gameplay.Ship;
 using Game.Common.Networking;
 using Game.Common.Phases;
@@ -37,7 +38,7 @@ namespace Game.Client.Phases
         {
         }
 
-        public void OnUpdateReceived(RPCInfo info, byte[] data)
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
         {
             var syncData = PhaseSyncLoadout.Deserialize(data);
 
