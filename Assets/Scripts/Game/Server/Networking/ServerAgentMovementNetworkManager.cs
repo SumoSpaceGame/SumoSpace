@@ -2,6 +2,7 @@
 
 using FishNet.Connection;
 using FishNet.Object;
+using UnityEngine;
 
 namespace Game.Common.Networking
 {
@@ -9,8 +10,8 @@ namespace Game.Common.Networking
     {
         partial void ServerUpdate()
         {
-            //networkObject.position = attachedShipManager.transform.position;
-            //networkObject.rotation = attachedShipManager.transform.eulerAngles.z;
+            this.transform.position = attachedShipManager.transform.position;
+            this.transform.eulerAngles = new Vector3(0,0, attachedShipManager.transform.eulerAngles.z);
         }
 
         /// <summary>

@@ -12,8 +12,8 @@ namespace Game.Common.Networking
         
         partial void ClientUpdate()
         {
-            //attachedShipManager._rigidbody2D.position = networkObject.position;
-            //attachedShipManager.transform.rotation  = Quaternion.Euler(0,0,networkObject.rotation);
+            attachedShipManager._rigidbody2D.position = this.transform.position;
+            attachedShipManager.transform.rotation  = this.transform.rotation;
         }
 
         /// <summary>

@@ -36,8 +36,6 @@ namespace Game.Common.Networking
         
         [FormerlySerializedAs("attachedShip")] public ShipManager attachedShipManager;
 
-        public bool initAgentInput = false;
-        
         public MasterSettings masterSettings;
 
         public override void OnStartNetwork()
