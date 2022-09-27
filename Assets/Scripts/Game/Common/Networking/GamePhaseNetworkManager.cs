@@ -165,6 +165,24 @@ namespace Game.Common.Networking
         public void SendClientPhaseUpdate(Phase phase, byte[] data, Channel channel = Channel.Reliable)
         {
             
+            var phaseID = (int) phase;
+            var updateData = data;
+
+            // Make sure phaseID is within the range
+            if (!_gamePhaseManager.WithinPhaseRange(phaseID))
+            {
+                return;
+            }
+
+            var updatePhase = (Phase) phaseID;
+
+            // If an update is sent before this has been finished
+            if (updatePhase != _gamePhaseManager.CurrentPhase)
+            {
+                // TODO: Record this as a suspicious activity
+                Debug.LogWarning($"Update phase received out of order! {updatePhase.ToString()}");
+            }
+            updateQueueData[updatePhase].Enqueue(new UpdateQueueData(null, updateData));
         }
 
         /// <summary>
