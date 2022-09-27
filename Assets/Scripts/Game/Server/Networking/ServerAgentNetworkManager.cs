@@ -1,15 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Generated;
-using BeardedManStudios.Forge.Networking.Unity;
+using FishNet.Object;
 using Game.Common.Instances;
 using Game.Common.Registry;
 using UnityEngine;
 
 namespace Game.Common.Networking
 {
-    public partial class AgentNetworkManager : AgentManagerBehavior, IGamePersistantInstance
+    public partial class AgentNetworkManager : NetworkBehaviour, IGamePersistantInstance
     {
         /// <summary>
         /// Server creation of the ships. This sets up the ships to work authoritivaly with the server.
@@ -30,7 +26,8 @@ namespace Game.Common.Networking
             
             _playerShips.Add(ClientMatchID, spawnedShip);
     
-            var agentMovement = NetworkManager.Instance.InstantiateAgentMovement();
+            var agentMovement = MainPersistantInstances.Get<NetworkCreator>().InstantiateAgentMovementNetworkManager();
+            
             var agentMovementScript = agentMovement.gameObject.GetComponent<AgentMovementNetworkManager>();
             agentMovementScript.attachedShipManager = spawnedShip;
 
@@ -39,9 +36,9 @@ namespace Game.Common.Networking
             
             spawnedShip.playerMatchID = ClientMatchID;
             
-            var agentInput = (AgentInputManager) NetworkManager.Instance.InstantiateAgentInput();
+            var agentInput = MainPersistantInstances.Get<NetworkCreator>().InstantiateAgentInputNetworkManager();
             
-            agentInput.ServerSendOwnership(networkObject.Networker.FindPlayer(player => data.GlobalID.NetworkID == player.NetworkId));
+            agentInput.ServerSendOwnership(ServerManager.Clients[data.GlobalID.NetworkID]);
             
             agentInput._shipManager = spawnedShip;
         }
