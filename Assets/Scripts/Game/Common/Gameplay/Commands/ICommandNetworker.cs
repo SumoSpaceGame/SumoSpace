@@ -12,6 +12,6 @@ namespace Game.Common.Gameplay.Commands
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        bool SendData(CommandPacketData data, int commandID, PlayerID shipID);
+        bool SendData(CommandPacketData data, CommandType commandID, PlayerID shipID);
     }
 }

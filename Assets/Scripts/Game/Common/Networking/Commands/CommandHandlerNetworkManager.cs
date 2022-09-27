@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using BeardedManStudios.Forge.Networking;
+using FishNet.Connection;
+using FishNet.Object;
 using Game.Common.Gameplay.Commands;
 using Game.Common.Gameplay.Commands.Networkers;
 using Game.Common.Gameplay.Ship;
@@ -23,7 +22,7 @@ namespace Game.Common.Networking.Commands
         
         private MasterSettings _masterSettings;
         
-        public CommandHandlerNetworkManager(NetworkObject networkObject, byte RPC_COMMAND, MasterSettings masterSettings)
+        public CommandHandlerNetworkManager(InputLayerNetworkManager networkObject, MasterSettings masterSettings)
         {
             _isServer = networkObject.IsServer;
             _masterSettings = masterSettings;
@@ -33,11 +32,11 @@ namespace Game.Common.Networking.Commands
             
             if (_isServer)
             {
-                _commandNetworker = new ServerCommandNetworker(networkObject, RPC_COMMAND);
+                _commandNetworker = new ServerCommandNetworker(networkObject);
             }
             else
             {
-                _commandNetworker = new ClientCommandNetworker(networkObject, RPC_COMMAND);
+                _commandNetworker = new ClientCommandNetworker(networkObject);
             }
         }
 
@@ -58,27 +57,19 @@ namespace Game.Common.Networking.Commands
             return _commandHandler.Perform(commandType, ship, _commandNetworker/*, arguments*/);
         }
 
-        public void HandleRPC(RpcArgs rpcArgs)
+        public void HandleRPC(CommandType commandType, byte[] commandData, ushort shipID, NetworkConnection conn = null)
         {
             
-            CommandType commandType = (CommandType) rpcArgs.GetAt<int>(0);
 
-            CommandPacketData commandPacketData = CommandPacketData.Create(rpcArgs.GetAt<byte[]>(1));
+            CommandPacketData commandPacketData = CommandPacketData.Create(commandData);
 
-            ushort shipID = rpcArgs.GetAt<ushort>(2);
             
             
             if (_isServer)
             {
-                if (rpcArgs.Info.SendingPlayer.IsHost)
-                {
-                    Debug.LogError("Error tried to execute command that was sent from self");
-                    return;
-                }
-
                 PlayerID playerID;
 
-                if (!_masterSettings.playerIDRegistry.TryGetByNetworkID(rpcArgs.Info.SendingPlayer.NetworkId,
+                if (!_masterSettings.playerIDRegistry.TryGetByNetworkID(conn.ClientId,
                         out playerID))
                 {
                     Debug.LogError("Failed to handle command, player not registered");
@@ -90,12 +81,6 @@ namespace Game.Common.Networking.Commands
             }
             else
             {
-                if (!rpcArgs.Info.SendingPlayer.IsHost)
-                {
-                    Debug.LogError("Error tried to execute command that was sent from self");
-                    return;
-                }
-                
                 _commandHandler.ReceiveClient(commandType, GetPlayerShip(shipID),
                     _commandNetworker, commandPacketData);
             }
