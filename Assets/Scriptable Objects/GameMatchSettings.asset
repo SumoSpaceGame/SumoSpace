@@ -12,9 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 207a4d0c674600c40a671f43005f5352, type: 3}
   m_Name: GameMatchSettings
   m_EditorClassIdentifier: 
+  SelectedMap: TestMap
   TeamCount: 2
   TeamSize: 1
-  ClientMatchID: 2
-  ClientTeam: 1
-  ClientTeamPosition: 0
+  ClientMatchID: 1
+  ClientTeam: 0
+  ClientTeamPosition: 1
+  ClientIsSpectator: 0
   FriendlyFire: 0
+  MatchStarted: 0
+  ServerRestartOnLeave: 0
+  AllowSpectators: 0

@@ -62,7 +62,11 @@ namespace Game.Common.Networking.Commands
 
             CommandPacketData commandPacketData = CommandPacketData.Create(commandData);
 
+            int id = -1;
+
+            if (conn != null) id = conn.ClientId;
             
+            //Debug.Log($"Handling rpc from ${id} ${shipID} ${commandType}");
             
             if (_isServer)
             {
