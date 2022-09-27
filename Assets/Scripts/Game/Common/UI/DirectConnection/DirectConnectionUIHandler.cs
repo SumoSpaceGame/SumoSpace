@@ -4,8 +4,6 @@ using Game.Common.Settings;
 using Game.Common.Util;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UIElements;
 
 namespace Game.Common.UI.DirectConnection
 {

@@ -1,18 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using UnityEngine;
 using FishNet;
 using FishNet.Connection;
 using FishNet.Object;
 using FishNet.Transporting;
 using Game.Common.Instances;
-using Game.Common.Phases;
 using Game.Common.Settings;
-using Game.Common.Util;
-using UnityEngine.SceneManagement;
-using Debug = UnityEngine.Debug;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Game.Common.Networking

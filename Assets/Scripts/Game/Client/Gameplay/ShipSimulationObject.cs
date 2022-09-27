@@ -1,5 +1,4 @@
 ﻿using Game.Common.Gameplay.Ship;
-using UnityEngine;
 
 public class ShipSimulationObject : SimulationObject {
     private ShipManager shipManager;

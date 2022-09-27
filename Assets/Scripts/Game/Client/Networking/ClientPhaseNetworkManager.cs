@@ -1,11 +1,8 @@
-﻿using BeardedManStudios.Forge.Networking.Generated;
-using FishNet.Object;
+﻿using FishNet.Object;
 using Game.Client.Phases;
 using Game.Client.SceneLoading;
 using Game.Common.Instances;
-using Game.Common.Networking.Misc;
 using Game.Common.Phases;
-using Game.Server.Phases;
 
 namespace Game.Common.Networking
 {

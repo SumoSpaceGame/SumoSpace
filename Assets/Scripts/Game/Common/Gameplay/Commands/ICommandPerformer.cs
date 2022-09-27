@@ -1,4 +1,3 @@
-using UnityEngine;
 using Game.Common.Gameplay.Ship;
 
 namespace Game.Common.Gameplay.Commands

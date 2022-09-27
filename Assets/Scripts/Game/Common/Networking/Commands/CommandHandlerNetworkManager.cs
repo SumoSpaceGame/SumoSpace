@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using FishNet.Connection;
-using FishNet.Object;
 using Game.Common.Gameplay.Commands;
 using Game.Common.Gameplay.Commands.Networkers;
 using Game.Common.Gameplay.Ship;

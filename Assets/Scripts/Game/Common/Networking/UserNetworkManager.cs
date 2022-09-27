@@ -1,7 +1,4 @@
-﻿using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Generated;
-
-namespace Game.Common.Networking
+﻿namespace Game.Common.Networking
 {
     /// <summary>
     /// Handles the transfer of user data and states

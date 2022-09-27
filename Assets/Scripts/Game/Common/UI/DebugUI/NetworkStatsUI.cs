@@ -1,10 +1,8 @@
 using System;
-using System.Diagnostics;
 using FishNet;
 using FishNet.Managing.Statistic;
 using TMPro;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace Game.Common.UI.DebugUI
 {

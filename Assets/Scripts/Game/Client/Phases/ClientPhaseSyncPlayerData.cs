@@ -1,9 +1,7 @@
-﻿using BeardedManStudios.Forge.Networking;
-using FishNet.Connection;
+﻿using FishNet.Connection;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using Game.Common.Phases.PhaseData;
-using Game.Common.Registry;
 using UnityEngine;
 
 namespace Game.Client.Phases

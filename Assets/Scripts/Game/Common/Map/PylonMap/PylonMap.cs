@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Game.Common.Map.Collision;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Game.Common.Map.PylonMap
 {

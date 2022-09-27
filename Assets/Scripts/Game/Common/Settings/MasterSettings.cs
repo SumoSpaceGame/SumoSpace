@@ -42,7 +42,7 @@ namespace Game.Common.Settings
         /// </summary>
         private void Awake()
         {
-            string[] args = System.Environment.GetCommandLineArgs ();
+            string[] args = Environment.GetCommandLineArgs ();
             string input = "";
             for (int i = 0; i < args.Length; i++) {
                 if (i + 1 >= args.Length) continue;

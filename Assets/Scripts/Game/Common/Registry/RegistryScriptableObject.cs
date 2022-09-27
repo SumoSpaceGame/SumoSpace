@@ -46,7 +46,7 @@ namespace Game.Common.Registry
         }
 
 
-        public Dictionary<K,T>.ValueCollection GetAll()
+        public Dictionary<K, T>.ValueCollection GetAll()
         {
             return _registryDictionary.Values;
         }

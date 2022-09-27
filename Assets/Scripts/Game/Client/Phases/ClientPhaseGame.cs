@@ -1,5 +1,4 @@
-﻿using BeardedManStudios.Forge.Networking;
-using FishNet.Connection;
+﻿using FishNet.Connection;
 using Game.Common.Phases;
 
 namespace Game.Client.Phases

@@ -1,5 +1,4 @@
 using Game.Common.Gameplay.Abilities;
-using Game.Common.Gameplay.Ship;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Ship Abilities/Heavy Abilities/Heavy Primary Fire", fileName = "Heavy Primary Fire", order = 1)]

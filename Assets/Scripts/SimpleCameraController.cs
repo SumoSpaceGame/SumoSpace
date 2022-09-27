@@ -1,8 +1,9 @@
-﻿#if ENABLE_INPUT_SYSTEM 
+﻿ 
+using UnityEditor;
+using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
-
-using UnityEngine;
 
 namespace UnityTemplateProjects
 {
@@ -167,7 +168,7 @@ namespace UnityTemplateProjects
             {
                 Application.Quit();
 				#if UNITY_EDITOR
-				UnityEditor.EditorApplication.isPlaying = false; 
+				EditorApplication.isPlaying = false; 
 				#endif
             }
 

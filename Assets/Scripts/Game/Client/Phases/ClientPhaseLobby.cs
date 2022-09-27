@@ -3,7 +3,6 @@ using Game.Common.Instances;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using Game.Common.Phases.PhaseData;
-using Game.Common.Registry;
 using Game.Common.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;

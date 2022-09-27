@@ -1,7 +1,4 @@
-﻿using System;
-using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Generated;
-using FishNet;
+﻿using FishNet;
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using FishNet.Transporting;

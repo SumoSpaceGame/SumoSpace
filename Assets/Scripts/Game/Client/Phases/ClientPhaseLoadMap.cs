@@ -5,7 +5,6 @@ using Game.Client.SceneLoading.SceneLoaderTasks;
 using Game.Common.Networking;
 using Game.Common.Phases;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Game.Client.Phases
 {

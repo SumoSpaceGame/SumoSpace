@@ -1,5 +1,4 @@
-﻿using System;
-using Game.Common.ScriptableData;
+﻿using Game.Common.ScriptableData;
 using TMPro;
 using UnityEngine;
 

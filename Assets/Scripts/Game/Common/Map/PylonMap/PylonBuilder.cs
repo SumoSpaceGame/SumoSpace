@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 
 namespace Game.Common.Map.PylonMap
@@ -41,7 +39,7 @@ namespace Game.Common.Map.PylonMap
                 }
                 else
                 {
-                    pylonGraphics = GameObject.Instantiate(lineRendererPrefab).GetComponent<PylonGraphics>();
+                    pylonGraphics = Instantiate(lineRendererPrefab).GetComponent<PylonGraphics>();
                     pylonGraphics.Init();
                 }
                 

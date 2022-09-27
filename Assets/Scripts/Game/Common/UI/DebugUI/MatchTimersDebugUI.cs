@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Game.Common.Instances;
 using Game.Common.Networking.Misc;
