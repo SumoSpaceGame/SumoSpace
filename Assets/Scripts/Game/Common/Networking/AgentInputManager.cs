@@ -16,18 +16,18 @@ namespace Game.Common.Networking
 
         public ShipManager _shipManager;
 
-        [SyncVar(SendRate = 0f, Channel = Channel.Unreliable)]
         public Vector3 InputDirection;
 
         public override void OnStartNetwork()
         {
             base.OnStartNetwork();
-            
-            
+
+
+            InstanceFinder.TimeManager.OnTick += Tick;
         }
 
 
-        private void Update()
+        private void Tick()
         {
             if (this.NetworkObject.IsOwner && !InstanceFinder.IsServer)
             {
@@ -44,6 +44,7 @@ namespace Game.Common.Networking
                 var clientControls = _shipManager.clientControls;
                 //networkObject.inputRotation = clientControls.movementRotation;
                 InputDirection = new Vector3(clientControls.movementDirection.x,clientControls.movementDirection.y, clientControls.movementRotation);
+                SetServerInput(InputDirection);
             }
 
             if (InstanceFinder.IsServer)
@@ -52,6 +53,12 @@ namespace Game.Common.Networking
                 _shipManager.shipController.targetAngle = inputDir.z;
                 _shipManager.shipController.movementVector = new Vector2(inputDir.x, inputDir.y);
             }
+        }
+
+        [ServerRpc]
+        public void SetServerInput(Vector3 input)
+        {
+            InputDirection = input;
         }
     }
 }

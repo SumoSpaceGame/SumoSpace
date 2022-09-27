@@ -70,7 +70,7 @@ namespace Game.Common.Networking
         partial void ClientUpdate();
         partial void ServerUpdate();
         
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         partial void ServerRequestShipSpawnData(NetworkConnection conn = null);
         
         [TargetRpc]
