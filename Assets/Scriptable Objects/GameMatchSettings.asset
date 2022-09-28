@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SelectedMap: TestMap
   TeamCount: 2
-  TeamSize: 2
+  TeamSize: 1
   ClientMatchID: 1
   ClientTeam: 0
   ClientTeamPosition: 1
