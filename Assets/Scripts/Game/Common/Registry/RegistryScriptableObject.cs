@@ -45,6 +45,11 @@ namespace Game.Common.Registry
             _registryDictionary.Clear();
         }
 
+        public virtual T Get(K key)
+        {
+            return _registryDictionary[key];
+        }
+
 
         public Dictionary<K, T>.ValueCollection GetAll()
         {

@@ -149,5 +149,22 @@ namespace Game.Common.Settings
 
             return savedID;
         }
+
+        public PlayerStaticData GetPlayerData(PlayerID id)
+        {
+            return playerStaticDataRegistry.Get(id);
+        }
+        
+        public PlayerStaticData GetPlayerData(ushort matchID)
+        {
+            if (playerIDRegistry.TryGetByMatchID(matchID, out var id))
+            {
+                return GetPlayerData(id);
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
