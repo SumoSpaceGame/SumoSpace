@@ -25,7 +25,6 @@ namespace Game.Common.Networking.Commands
         {
             _isServer = networkObject.IsServer;
             _masterSettings = masterSettings;
-            _clientMatchID = _masterSettings.matchSettings.ClientMatchID;
             
             //Debug.Log(_networkerID);
             
@@ -113,7 +112,7 @@ namespace Game.Common.Networking.Commands
             }
             
             //Debug.Log(_networkerID);
-            var playerID = _masterSettings.playerIDRegistry.GetByMatchID(_clientMatchID);
+            var playerID = _masterSettings.playerIDRegistry.GetByMatchID(_masterSettings.matchSettings.ClientMatchID);
             MainPersistantInstances.Get<AgentNetworkManager>()._playerShips.TryGet(playerID, out var data);
             return data;
             //return _masterSettings.GetShip(_networkerID);
