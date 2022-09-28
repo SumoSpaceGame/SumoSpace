@@ -31,8 +31,10 @@ namespace Game.Common.Networking
             server.StartConnection(port);
         }
 
+        private static bool Connecting = false;
         public static void Connect(string host, ushort port)
-        {
+        { 
+            Connecting = true;
             var client = InstanceFinder.ClientManager;
             
             client.OnClientConnectionState += (args) =>
@@ -41,6 +43,7 @@ namespace Game.Common.Networking
                 switch (args.ConnectionState)
                 {
                     case LocalConnectionState.Stopped:
+                        Connecting = false;
                         Debug.Log("Connection stopped " + connectionStr);
                         break;
                     case LocalConnectionState.Starting:
