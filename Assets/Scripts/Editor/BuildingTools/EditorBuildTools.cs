@@ -27,7 +27,7 @@ namespace Editor.BuildingTools
             
             SetInitServer(true);
             
-            BuildAndRun(exeLocation, BuildTarget.StandaloneWindows64, BuildOptions.EnableHeadlessMode | BuildOptions.Development | BuildOptions.AllowDebugging);
+            BuildAndRun(exeLocation, BuildTarget.StandaloneWindows64, BuildOptions.Development | BuildOptions.AllowDebugging, StandaloneBuildSubtarget.Player);
         }
 
         [MenuItem("Build Debug/Build and run client")]
@@ -36,7 +36,7 @@ namespace Editor.BuildingTools
             string exeLocation = "Builds/WindowsClient/SumoClient.exe";
             
             SetInitServer(false);
-            BuildAndRun(exeLocation, BuildTarget.StandaloneWindows64, BuildOptions.Development | BuildOptions.AllowDebugging);
+            BuildAndRun(exeLocation, BuildTarget.StandaloneWindows64, BuildOptions.Development | BuildOptions.AllowDebugging, StandaloneBuildSubtarget.Player);
         }
         
         [MenuItem("Build Debug/Editor as Server + 2 clients (debug server)")]
@@ -67,7 +67,7 @@ namespace Editor.BuildingTools
             
             SetInitServer(true);
 
-            Build(exeLocation, BuildTarget.StandaloneLinux64, BuildOptions.EnableHeadlessMode | BuildOptions.Development | BuildOptions.AllowDebugging);
+            Build(exeLocation, BuildTarget.StandaloneLinux64, BuildOptions.Development | BuildOptions.AllowDebugging, StandaloneBuildSubtarget.Server);
         }
         
         [MenuItem("Build Debug/Build Mac Client")]
@@ -75,9 +75,9 @@ namespace Editor.BuildingTools
         {
             string exeLocation = "Builds/MacClient/SumoClient.exe";
             
-            SetInitServer(true);
+            SetInitServer(false);
 
-            Build(exeLocation, BuildTarget.StandaloneOSX, BuildOptions.Development | BuildOptions.AllowDebugging);
+            Build(exeLocation, BuildTarget.StandaloneOSX, BuildOptions.Development | BuildOptions.AllowDebugging, StandaloneBuildSubtarget.Player);
         }
         
         [MenuItem("Build Debug/Init Server Flag (true)")]
@@ -92,10 +92,10 @@ namespace Editor.BuildingTools
             SetInitServer(false);
         }
 
-        static void BuildAndRun(string exeLocation, BuildTarget target, BuildOptions options)
+        static void BuildAndRun(string exeLocation, BuildTarget target, BuildOptions options, StandaloneBuildSubtarget subTarget)
         {
 
-            var buildReport = Build(exeLocation, target, options);
+            var buildReport = Build(exeLocation, target, options, subTarget);
 
             if (buildReport.summary.result == BuildResult.Succeeded)
             {
@@ -109,7 +109,7 @@ namespace Editor.BuildingTools
         }
 
 
-        static BuildReport Build(string exeLocation, BuildTarget target, BuildOptions options)
+        static BuildReport Build(string exeLocation, BuildTarget target, BuildOptions options, StandaloneBuildSubtarget subTarget)
         {
             
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
@@ -118,7 +118,7 @@ namespace Editor.BuildingTools
             buildPlayerOptions.locationPathName = exeLocation;
             buildPlayerOptions.target = target;
             buildPlayerOptions.options = options;
-
+            buildPlayerOptions.subtarget = (int)subTarget;
             return BuildPipeline.BuildPlayer(buildPlayerOptions);
         }
 
@@ -135,7 +135,7 @@ namespace Editor.BuildingTools
             SerializedObject obj = new SerializedObject(masterSettings);
             obj.ApplyModifiedProperties();
             AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            AssetDatabase.Refresh();    
         }
 
         static string[] GetSceneNames()
