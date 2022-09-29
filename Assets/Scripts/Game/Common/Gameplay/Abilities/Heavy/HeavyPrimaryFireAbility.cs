@@ -1,14 +1,17 @@
 using Game.Common.Gameplay.Abilities;
+using Game.Common.Gameplay.Ship;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Ship Abilities/Heavy Abilities/Heavy Primary Fire", fileName = "Heavy Primary Fire", order = 1)]
 public class HeavyPrimaryFireAbility : ShipAbility {
 
+    public float KnockbackMultiplier = 1;
+
     [SerializeField] private float minKnockback;
-    public float MinKnockback => minKnockback;
+    public float MinKnockback => minKnockback * KnockbackMultiplier;
 
     [SerializeField] private float maxKnockback;
-    public float MaxKnockback => maxKnockback;
+    public float MaxKnockback => maxKnockback * KnockbackMultiplier;
 
     [SerializeField] private float rampTime;
     public float RampTime => rampTime;
@@ -27,6 +30,6 @@ public class HeavyPrimaryFireAbility : ShipAbility {
     public float CurrentKnockback(float time)
     {
         float curveValue = knockbackCurve.Evaluate(time / rampTime);   //  Between 0 and 1.
-        return curveValue * (maxKnockback - minKnockback) + minKnockback;
+        return curveValue * (MaxKnockback - MinKnockback) + MinKnockback;
     }
 }

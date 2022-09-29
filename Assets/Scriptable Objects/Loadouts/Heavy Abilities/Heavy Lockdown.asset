@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07a5701e591ef304daa7ef5dc0d05a8a, type: 3}
+  m_Name: Heavy Lockdown
+  m_EditorClassIdentifier: 
+  cooldown: 20
+  executeCommand: 5
+  stopCommand: 5
+  clientBehaviour: {fileID: 1304108840300774923, guid: 2efd375e1de4ddf47878b2e986837169, type: 3}
+  serverBehaviour: {fileID: 2977670781827846518, guid: 92ab5f92c7445cb4aa9021362a1253db, type: 3}
+  slot: 1
+  length: 10
+  knockbackMultiplier: 2
+  resistanceMultiplier: 4
