@@ -24,5 +24,9 @@ public class HeavyPrimaryFireAbility : ShipAbility {
     /// </remarks>
     /// <param name="time"> The amount of time the ability has been active.</param>
     /// <returns></returns>
-    public float CurrentKnockback(float time) => Mathf.Lerp(minKnockback, MaxKnockback, time / rampTime);
+    public float CurrentKnockback(float time)
+    {
+        float curveValue = knockbackCurve.Evaluate(time / rampTime);   //  Between 0 and 1.
+        return curveValue * (maxKnockback - minKnockback) + minKnockback;
+    }
 }

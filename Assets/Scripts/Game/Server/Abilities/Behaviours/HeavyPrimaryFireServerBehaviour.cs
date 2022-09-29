@@ -28,7 +28,7 @@ public class HeavyPrimaryFireServerBehaviour : AbilityBehaviour<HeavyPrimaryFire
                 var t = shipManager.transform;
                 var hit = Physics2D.Raycast(t.position + t.up * 2, t.up);
                 if (hit.rigidbody) {
-                    hit.rigidbody.AddForceAtPosition(t.up * Ability.CurrentKnockback(timer), hit.point, ForceMode2D.Force);
+                    hit.rigidbody.AddForceAtPosition(t.up * Ability.CurrentKnockback(timer) * Time.deltaTime, hit.point, ForceMode2D.Force);
                 }
                 counter = 0;
             }
