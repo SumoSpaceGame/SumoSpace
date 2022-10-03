@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5f1366572edf866fc4991f99f0ff1961d62c02aa3f10543a7744e51066610852
-size 418
+{
+    "name": "GameEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5dffb7647aa50d445a65d35cd730e325"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

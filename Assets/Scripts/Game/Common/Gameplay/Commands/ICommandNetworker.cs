@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1a99f5d0dab200cc6189fc88a186a357474f7c28f312bdf95b3a8af93f99aa18
-size 470
+﻿using Game.Common.Registry;
+
+namespace Game.Common.Gameplay.Commands
+{
+    /// <summary>
+    /// The communicator that is used for 
+    /// </summary>
+    public interface ICommandNetworker
+    {
+        /// <summary>
+        /// CommandPacketData to be sent across the network
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        bool SendData(CommandPacketData data, CommandType commandID, PlayerID shipID);
+    }
+}

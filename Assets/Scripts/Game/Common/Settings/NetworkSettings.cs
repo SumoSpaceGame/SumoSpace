@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:700d7ce04f002add8e14147b3a4687463f9f8099871f091a94cf8da7a67b157b
-size 623
+using System;
+
+namespace Game.Common.Settings
+{
+    [Serializable]
+    public struct NetworkSettings
+    {
+        public bool isServer;
+        /*
+        public ulong _updateInterval;
+        public ulong updateInterval
+        {
+            get
+            {
+                return _updateInterval;
+            }
+
+            set
+            {
+                _updateInterval = value;
+                OnUpdateIntervalChange?.Invoke(value);
+            }
+        }
+
+
+        public delegate void UpdateIntervalChangeEvent(ulong amount);
+        public UpdateIntervalChangeEvent OnUpdateIntervalChange;
+        */
+    }
+}

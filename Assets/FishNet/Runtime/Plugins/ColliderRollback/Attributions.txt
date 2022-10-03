@@ -1,3 +1,5 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a397e1cb0ada45bc461b880dab9b4966246889a3c6c83c5383e71f6390dcf1b0
-size 175
+﻿Attribution to https://assetstore.unity.com/packages/3d/environments/landscapes/low-poly-simple-nature-pack-162153
+"SimpleNaturePack"
+
+Attribution to Kenny.nl
+"Weapon Pack"

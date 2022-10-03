@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:de4255e8a48d9a70d1f1e421a144e165588e22a81613d88087f502bfb2a7364a
-size 402
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+using RVA = System.UInt32;
+
+namespace MonoFN.Cecil.PE {
+
+	sealed class Section {
+		public string Name;
+		public RVA VirtualAddress;
+		public uint VirtualSize;
+		public uint SizeOfRawData;
+		public uint PointerToRawData;
+	}
+}

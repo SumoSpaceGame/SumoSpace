@@ -1,3 +1,45 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0256d22339650466ecc3902c9ac1e520e30e24103e1bb2c8e37daf12a52be958
-size 1637
+using System.Collections;
+using Game.Common.Registry;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools;
+
+namespace Tests.RegistryTests
+{
+    public class PlayerIDRegistryTest
+    {
+    
+    
+        [Test]
+        public void PlayerIDRegistryTestSimplePasses()
+        {
+            var instance = ScriptableObject.CreateInstance<PlayerIDRegistry>();
+
+            PlayerID tempData;
+            Assert.IsFalse(instance.TryGetByNetworkID(0, out tempData));
+            Assert.IsFalse(instance.TryGetByNetworkID(int.MaxValue/2, out tempData));
+            Assert.IsFalse(instance.TryGetByNetworkID(int.MaxValue, out tempData));
+        
+        
+            Assert.IsTrue(instance.RegisterPlayer(0, 1));
+            Assert.IsTrue(instance.RegisterPlayer(int.MaxValue/2, 2));
+            Assert.IsTrue(instance.RegisterPlayer(int.MaxValue, 3));
+            
+            Assert.IsFalse(instance.RegisterPlayer(0, 1));
+            Assert.IsFalse(instance.RegisterPlayer(int.MaxValue/2, 2));
+            Assert.IsFalse(instance.RegisterPlayer(int.MaxValue, 3));
+        
+        
+            Assert.IsTrue(instance.TryGetByNetworkID(0, out tempData));
+            Assert.IsTrue(instance.TryGetByNetworkID(int.MaxValue/2, out tempData));
+            Assert.IsTrue(instance.TryGetByNetworkID(int.MaxValue, out tempData));
+        
+            instance.Reset();
+
+            Assert.IsFalse(instance.TryGetByNetworkID(0, out tempData));
+            Assert.IsFalse(instance.TryGetByNetworkID(int.MaxValue/2, out tempData));
+            Assert.IsFalse(instance.TryGetByNetworkID(int.MaxValue, out tempData));
+        }
+
+    }
+}

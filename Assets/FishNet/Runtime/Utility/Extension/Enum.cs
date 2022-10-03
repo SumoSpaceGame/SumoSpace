@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1da981393124cbc043848e0cc8418d6c59a939e0beb11256a4017e4b15c019a0
-size 781
+﻿using System;
+
+namespace FishNet.Utility.Extension
+{
+    public static class EnumFN
+    {
+
+        /// <summary>
+        /// Returns the highest numeric value for T.
+        /// </summary>
+        internal static int GetHighestValue<T>()
+        {
+            Type enumType = typeof(T);
+            /* Brute force enum values. 
+             * Linq Last/Max lookup throws for IL2CPP. */
+            int highestValue = 0;
+            Array pidValues = Enum.GetValues(enumType);
+            foreach (T pid in pidValues)
+            {
+                object obj = Enum.Parse(enumType, pid.ToString());
+                int value = Convert.ToInt32(obj);
+                highestValue = Math.Max(highestValue, value);
+            }
+
+            return highestValue;
+        }
+
+
+    }
+
+}

@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:68cd1428e6d05a6f7c6ade0cca4607b2db711e551ae784ee40f0c93cbe075f22
-size 557
+namespace FishNet.Managing.Statistic
+{
+
+    public struct NetworkTrafficArgs
+    {
+        /// <summary>
+        /// Number of bytes sent to the server.
+        /// </summary>
+        public readonly ulong ToServerBytes;
+        /// <summary>
+        /// Number of bytes sent by the server.
+        /// </summary>
+        public readonly ulong FromServerBytes;
+
+        public NetworkTrafficArgs(ulong toServerBytes, ulong fromServerBytes)
+        {
+            ToServerBytes = toServerBytes;
+            FromServerBytes = fromServerBytes;
+        }
+    }
+}

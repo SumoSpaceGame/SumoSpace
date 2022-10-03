@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:349639673ddc7cf5c81aabd784850f457bad60d908eb8d3c729cb51f7a6fbcea
-size 863
+﻿using MonoFN.Cecil;
+using System.Linq;
+using System.Reflection;
+
+namespace FishNet.CodeGenerating.ILCore
+{
+    internal class PostProcessorReflectionImporter : DefaultReflectionImporter
+    {
+        private const string k_SystemPrivateCoreLib = "System.Private.CoreLib";
+        private readonly AssemblyNameReference m_CorrectCorlib;
+
+        public PostProcessorReflectionImporter(ModuleDefinition module) : base(module)
+        {
+            m_CorrectCorlib = module.AssemblyReferences.FirstOrDefault(a => a.Name == "mscorlib" || a.Name == "netstandard" || a.Name == k_SystemPrivateCoreLib);
+        }
+
+        public override AssemblyNameReference ImportReference(AssemblyName reference)
+        {
+            return m_CorrectCorlib != null && reference.Name == k_SystemPrivateCoreLib ? m_CorrectCorlib : base.ImportReference(reference);
+        }
+    }
+}

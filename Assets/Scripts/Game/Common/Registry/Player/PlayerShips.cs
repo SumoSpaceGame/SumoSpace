@@ -1,3 +1,8 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:78ec5c5ec886dcdee16d7e0e208df08ccbedd4c93f29b99d8c79dc4a8a1ba38b
-size 286
+﻿using Game.Common.Gameplay.Ship;
+using UnityEngine;
+
+namespace Game.Common.Registry
+{
+    [CreateAssetMenu(fileName = "PlayerShipsRegistry", menuName = REGISTRY_MENU_NAME + "Player Ships Registry")]
+    public class PlayerShips : RegistryScriptableObject<PlayerID, ShipManager> { }
+}

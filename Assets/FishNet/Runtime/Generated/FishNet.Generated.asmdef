@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:26ba3841c161de6826c5c4a31206109e26aa8602e4dbbf3f8dd5b87809b7628e
-size 378
+{
+    "name": "FishNet.Generated",
+    "references": [
+        "GUID:7c88a4a7926ee5145ad2dfa06f454c67"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

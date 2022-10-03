@@ -1,3 +1,10 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:09ac9ebe218c3307e718a1fea4d63d04c2bf1290e78a59fefe3ce6bfff3fe28e
-size 446
+﻿using Game.Common.Gameplay.Commands;
+using Game.Common.Gameplay.Ship;
+
+public class ServerAgilityBeginPrimaryFire: ICommand {
+    public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData) {
+        shipManager.shipLoadout.PrimaryFire.Execute(shipManager, true);
+        networker.SendData(packetData, CommandType.AGILITY_PRIMARY_FIRE_START, shipManager.playerMatchID);
+        return true;
+    }
+}

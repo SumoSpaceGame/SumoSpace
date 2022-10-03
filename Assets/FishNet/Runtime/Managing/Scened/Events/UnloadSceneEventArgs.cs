@@ -1,3 +1,42 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:20880b439b396c7272efa5b227456cd74f0639f38d3835ac073473183020d1f0
-size 1087
+﻿namespace FishNet.Managing.Scened
+{
+
+    /// <summary>
+    /// Data container about a scene unload start.
+    /// </summary>
+    public struct SceneUnloadStartEventArgs
+    {
+        /// <summary>
+        /// Queue data used by the current scene action.
+        /// </summary>
+        public readonly UnloadQueueData QueueData;
+
+        internal SceneUnloadStartEventArgs(UnloadQueueData sqd)
+        {
+            QueueData = sqd;
+        }
+    }
+
+    /// <summary>
+    /// Data container about a scene unload end.
+    /// </summary>
+    public struct SceneUnloadEndEventArgs
+    {
+        /// <summary>
+        /// Queue data used by the current scene action.
+        /// </summary>
+        public readonly UnloadQueueData QueueData;
+        /// <summary>
+        /// Handles of scenes which were successfully unloaded.
+        /// </summary>
+        public int[] UnloadedSceneHandles;
+
+        internal SceneUnloadEndEventArgs(UnloadQueueData sqd, int[] unloadedHandles)
+        {
+            QueueData = sqd;
+            UnloadedSceneHandles = unloadedHandles;
+        }
+    }
+
+
+}

@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8061ccb61f848da4f154db22545a6a31c44aff01f87aeabf7f3d3142d3bd423a
-size 421
+﻿using FishNet.Documenting;
+
+
+namespace FishNet.Object.Synchronizing.SecretMenu
+{
+    /// <summary>
+    /// Internal SyncVar extensions.
+    /// </summary>
+    [APIExclude]
+    public static class SyncVarExtensions
+    {
+        /// <summary>
+        /// Dirties SyncVars.
+        /// </summary>
+        /// <param name="obj"></param>
+        [APIExclude]
+        public static void Dirty(this object obj) { }
+    }
+
+
+}

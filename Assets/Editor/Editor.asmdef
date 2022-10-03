@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d69da2cc46df254727eb0ae5d3034540f748270c77c6c1aebb2a022423c3cf3a
-size 414
+{
+    "name": "Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5dffb7647aa50d445a65d35cd730e325"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

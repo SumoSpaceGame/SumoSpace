@@ -1,3 +1,36 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d26d828348c5a1b6120107416086746567ec8ace52f6b25cef31c0aaea661294
-size 801
+﻿using FishNet.Transporting;
+using MonoFN.Cecil;
+
+namespace FishNet.CodeGenerating.Helping
+{
+    internal class TransportHelper
+    {
+        #region Reflection references.        
+        internal TypeReference Channel_TypeRef;
+        #endregion
+
+        /// <summary>
+        /// Resets cached values.
+        /// </summary>
+        private void ResetValues()
+        {
+            Channel_TypeRef = null;
+        }
+
+
+        /// <summary>
+        /// Imports references needed by this helper.
+        /// </summary>
+        /// <param name="moduleDef"></param>
+        /// <returns></returns>
+        internal bool ImportReferences()
+        {
+            ResetValues();
+
+            Channel_TypeRef = CodegenSession.ImportReference(typeof(Channel));
+
+            return true;
+        }
+
+    }
+}

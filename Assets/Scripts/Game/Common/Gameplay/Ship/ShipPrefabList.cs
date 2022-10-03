@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e9e9b004f581741e72da004ea40435220f867d37ca7d6dccae47a7caba2878f7
-size 729
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Game.Common.Gameplay.Ship
+{
+    [CreateAssetMenu(fileName = "ShipPrefabList", menuName = "Game/ShipPrefabList")]
+    public class ShipPrefabList : ScriptableObject
+    {
+        [SerializeField]
+        private List<GameObject> shipPrefabs = new List<GameObject>();
+
+        //TODO: Change when ship design is more situated
+        public GameObject GetShip(int shipIndex)
+        {
+            if (shipIndex < 0 || shipIndex >= shipPrefabs.Count)
+            {
+                Debug.LogError("ShipIndex out of bounds! defaulting to 0");
+                return shipPrefabs[0];
+            }
+            
+            return shipPrefabs[shipIndex];
+        }
+    }
+}

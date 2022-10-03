@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0d9b9dc94bf7819e8291a7de49c8057f55cb16167f10bce691a37ad494a3a42c
-size 659
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Game.Common.Networking.NetBible
+{
+
+    
+    public class Bible : ScriptableObject   
+    {
+        private Dictionary<string, Object> storage = new Dictionary<string, Object>();
+        
+        
+        public void Set(string key, Object data)
+        {
+            if (storage.ContainsKey(key))
+            {
+                storage[key] = data;
+            }
+            else
+            {
+                storage.Add(key, data);
+            }
+        }
+
+        public Object Get(string key)
+         {
+            //if(storage.TryGetValue(key))
+            return null;
+         }
+
+    }
+}

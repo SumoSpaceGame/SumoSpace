@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:66a359da1c31f93618aa9a86cc317d24315813d6fd913dc0a2041ee6e9f0e4a4
-size 516
+﻿using FishNet.CodeGenerating.Helping.Extension;
+using MonoFN.Cecil.Cil;
+
+namespace FishNet.CodeGenerating.Extension
+{
+
+
+    internal static class ILProcessorExtensions
+    {
+        /// <summary>
+        /// Creates a variable type within the body and returns it's VariableDef.
+        /// </summary>
+        internal static VariableDefinition CreateVariable(this ILProcessor processor, System.Type variableType)
+        {
+            return processor.Body.Method.CreateVariable(variableType);
+        }
+    }
+
+
+}

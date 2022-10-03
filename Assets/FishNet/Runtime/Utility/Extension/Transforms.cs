@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9d4a353e781b9b8137551763b1bfad405fb91335c2ee67c3417ed02da6fa24ec
-size 817
+﻿using FishNet.Documenting;
+using UnityEngine;
+
+namespace FishNet.Utility.Extension
+{
+    [APIExclude]
+    public static class TransformFN
+    {
+
+        /// <summary>
+        /// Sets local position and rotation for a transform.
+        /// </summary>
+        public static void SetLocalPositionAndRotation(this Transform t, Vector3 pos, Quaternion rot)
+        {
+            t.localPosition = pos;
+            t.localRotation = rot;
+        }
+        /// <summary>
+        /// Sets local position, rotation, and scale for a transform.
+        /// </summary>
+        public static void SetLocalPositionRotationAndScale(this Transform t, Vector3 pos, Quaternion rot, Vector3 scale)
+        {
+            t.localPosition = pos;
+            t.localRotation = rot;
+            t.localScale = scale;
+        }
+
+    }
+
+}

@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9a1fa890990e3220e1dbae976d38eb028f13b71e5c18bc2bb78327573d514624
-size 729
+﻿
+using FishNet.Documenting;
+
+namespace FishNet.Object.Synchronizing
+{
+    [APIExclude]
+    public enum SyncDictionaryOperation : byte
+    {
+        /// <summary>
+        /// A key and value have been added to the collection.
+        /// </summary>
+        Add,
+        /// <summary>
+        /// Collection has been cleared.
+        /// </summary>
+        Clear,
+        /// <summary>
+        /// A key was removed from the collection.
+        /// </summary>
+        Remove,
+        /// <summary>
+        /// A value has been set for a key in the collection.
+        /// </summary>
+        Set,
+        /// <summary>
+        /// All operations for the tick have been processed.
+        /// </summary>
+        Complete
+    }
+
+}

@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c3961af758656660d6b5ca61bec47db543f4c3b0f72d8d9859841c22cc304540
-size 560
+﻿using System.Net;
+
+namespace LiteNetLib.Layers
+{
+    public abstract class PacketLayerBase
+    {
+        public readonly int ExtraPacketSizeForLayer;
+
+        protected PacketLayerBase(int extraPacketSizeForLayer)
+        {
+            ExtraPacketSizeForLayer = extraPacketSizeForLayer;
+        }
+
+        public abstract void ProcessInboundPacket(ref IPEndPoint endPoint, ref byte[] data, ref int offset, ref int length);
+        public abstract void ProcessOutBoundPacket(ref IPEndPoint endPoint, ref byte[] data, ref int offset, ref int length);
+    }
+}

@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5df3b80fb93463d92d44d5a9b20e5e1907bcdb009957b74a8922b3171c235ee6
-size 278
+using UnityEngine;
+
+public class Vec3Util {
+    public static Vector3 Vec2ToXZ(Vector2 xyVec) {
+        return new Vector3(xyVec.x, 0f, xyVec.y);
+    }
+
+    public static Vector3 Vec2ToVec3Z(Vector2 xyVec, float z = 0) {
+        return new Vector3(xyVec.x, xyVec.y, z);
+    }
+}

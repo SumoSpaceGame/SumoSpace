@@ -1,3 +1,42 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2cb6ff6103ee0099ea4bf9bba50db8e9c56fc7d6b877e36859ad705e8f9a36e8
-size 757
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+namespace MonoFN.Cecil.Cil {
+
+	public abstract class VariableReference {
+
+		internal int index = -1;
+		protected TypeReference variable_type;
+
+		public TypeReference VariableType {
+			get { return variable_type; }
+			set { variable_type = value; }
+		}
+
+		public int Index {
+			get { return index; }
+		}
+
+		internal VariableReference (TypeReference variable_type)
+		{
+			this.variable_type = variable_type;
+		}
+
+		public abstract VariableDefinition Resolve ();
+
+		public override string ToString ()
+		{
+			if (index >= 0)
+				return "V_" + index;
+
+			return string.Empty;
+		}
+	}
+}

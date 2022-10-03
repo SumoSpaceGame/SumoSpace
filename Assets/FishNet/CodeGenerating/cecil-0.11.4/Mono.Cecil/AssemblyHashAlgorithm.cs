@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c0301badc79689d5f3356a7a33d6ae2996e1fe1682db28123bcff9b2cc886a19
-size 387
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+namespace MonoFN.Cecil {
+
+	public enum AssemblyHashAlgorithm : uint {
+		None = 0x0000,
+		MD5 = 0x8003,
+		SHA1 = 0x8004,
+		SHA256 = 0x800C,
+		SHA384 = 0x800D,
+		SHA512 = 0x800E,
+		Reserved = 0x8003, // MD5
+	}
+}

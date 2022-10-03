@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:00c84c5c8083dbe82938c9e71f2fc2c0d689f464d725fdc95d211548fbb54dd6
-size 792
+﻿using MonoFN.Cecil;
+using System;
+
+namespace FishNet.CodeGenerating.Helping.Extension
+{
+
+    internal static class FieldReferenceExtensions
+    {
+
+        /// <summary>
+        /// Gets a Resolve favoring cached results first.
+        /// </summary>
+        internal static FieldDefinition CachedResolve(this FieldReference fieldRef)
+        {
+            return CodegenSession.GeneralHelper.GetFieldReferenceResolve(fieldRef);
+        }
+
+
+        public static FieldReference MakeHostGenericIfNeeded(this FieldReference fd)
+        {
+            if (fd.DeclaringType.HasGenericParameters)
+            {
+                return new FieldReference(fd.Name, fd.FieldType, fd.DeclaringType.CachedResolve().ConvertToGenericIfNeeded());
+            }
+
+            return fd;
+        }
+
+
+    }
+
+}

@@ -1,3 +1,42 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e39946d0b319a01fcfaa1e4063b722e4257075cb93964bc955174bb4973960f8
-size 762
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+namespace MonoFN.Cecil {
+
+	public sealed class LinkedResource : Resource {
+
+		internal byte [] hash;
+		string file;
+
+		public byte [] Hash {
+			get { return hash; }
+		}
+
+		public string File {
+			get { return file; }
+			set { file = value; }
+		}
+
+		public override ResourceType ResourceType {
+			get { return ResourceType.Linked; }
+		}
+
+		public LinkedResource (string name, ManifestResourceAttributes flags)
+			: base (name, flags)
+		{
+		}
+
+		public LinkedResource (string name, ManifestResourceAttributes flags, string file)
+			: base (name, flags)
+		{
+			this.file = file;
+		}
+	}
+}

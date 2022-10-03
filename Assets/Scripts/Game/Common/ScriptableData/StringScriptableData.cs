@@ -1,3 +1,10 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:eb5615e85889e705dee8ff13bc8eb8246bcdf651530791f53a8d1733f71ba435
-size 257
+﻿using UnityEngine;
+
+namespace Game.Common.ScriptableData
+{
+    [CreateAssetMenu(fileName = "String Data", menuName = SCRIPTABLE_OBJECT_DATA_MENU_NAME + "String")]
+    public class StringScriptableData : ScriptableObjectData<string>
+    {
+        
+    }
+}

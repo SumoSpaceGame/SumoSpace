@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b6fb82d3d500d0a43a23fdfb89ad5c025d6f6f5466e5a8b584279536c99ed98b
-size 555
+﻿
+namespace FishNet.Object
+{
+    /// <summary>
+    /// Current state of the NetworkObject.
+    /// </summary>
+    internal enum NetworkObjectState : byte
+    {
+        /// <summary>
+        /// State has not been set. This occurs when the object has never been spawned or despawned.
+        /// </summary>
+        Unset = 0,
+        /// <summary>
+        /// Object is currently spawned.
+        /// </summary>
+        Spawned = 1,
+        /// <summary>
+        /// Object is currently despawned.
+        /// </summary>
+        Despawned = 2,
+    }
+
+}
+

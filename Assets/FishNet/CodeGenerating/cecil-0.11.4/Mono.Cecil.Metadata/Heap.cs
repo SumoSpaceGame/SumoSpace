@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c09155709a711261d16d6ec5c1e32b9167bffec85480bd13f41d4c47c6515500
-size 362
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+namespace MonoFN.Cecil.Metadata {
+
+	abstract class Heap {
+
+		public int IndexSize;
+
+		readonly internal byte [] data;
+
+		protected Heap (byte [] data)
+		{
+			this.data = data;
+		}
+	}
+}

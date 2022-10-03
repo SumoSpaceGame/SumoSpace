@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1d8a26e2f2a50d0b0b6f0ffa31769c89ee097ff852852a532c3cd2f98a27fa77
-size 481
+using System.Collections;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.TestTools;
+
+namespace Tests.UtilTest
+{
+    public class Vec3UtilTest
+    {
+        // A Test behaves as an ordinary method
+        [Test]
+        public void Vec3UtilTestSimplePasses()
+        {
+            Assert.IsTrue(Vec3Util.Vec2ToVec3Z(new Vector2(1,2), 3) == new Vector3(1, 2, 3));
+            Assert.IsTrue(Vec3Util.Vec2ToXZ(new Vector2(1,3)) == new Vector3(1, 0, 3));
+        }
+    }
+}

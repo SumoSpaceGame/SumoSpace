@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8e51578017b283f0d210b3b51cc3ebdaede8dc6f9b65d9cb86cac7bc040df73a
-size 510
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+namespace MonoFN.Cecil.Cil {
+
+	public sealed class VariableDefinition : VariableReference {
+
+		public bool IsPinned {
+			get { return variable_type.IsPinned; }
+		}
+
+		public VariableDefinition (TypeReference variableType)
+			: base (variableType)
+		{
+		}
+
+		public override VariableDefinition Resolve ()
+		{
+			return this;
+		}
+	}
+}

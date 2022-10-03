@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0738386b2edfaf011b130441f75a4bb17467fc9bb85187c5e76e9f8178872490
-size 517
+﻿using FishNet.Connection;
+using FishNet.Documenting;
+using FishNet.Serializing;
+using FishNet.Utility.Constant;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo(UtilityConstants.CODEGEN_ASSEMBLY_NAME)]
+namespace FishNet.Object.Prediction.Delegating
+{
+    [APIExclude]
+    public delegate void ReplicateRpcDelegate(NetworkBehaviour obj, PooledReader reader, NetworkConnection sender);
+    [APIExclude]
+    public delegate void ReconcileRpcDelegate(NetworkBehaviour obj, PooledReader reader);
+
+}

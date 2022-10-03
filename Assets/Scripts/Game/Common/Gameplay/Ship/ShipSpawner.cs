@@ -1,3 +1,30 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:70f251be640f3597dc061622ae8aeea19e732580f580091228acec7e5ad77b04
-size 827
+using Game.Common.Gameplay.Ship;
+using Game.Common.Registry;
+using UnityEngine;
+
+public class ShipSpawner : MonoBehaviour
+{
+    public ShipPrefabList shipPrefabList;
+
+    public LayerMask player, team, enemy;
+    
+    public ShipManager SpawnShip(PlayerID playerID, int shipType, bool isPlayer, bool isEnemy)
+    {
+        var prefab = shipPrefabList.GetShip(shipType);
+        var shipClone = Instantiate(prefab);
+
+        var shipClass = shipClone.GetComponent<ShipManager>();
+
+        shipClass.isPlayer = isPlayer;
+        shipClass.playerMatchID = playerID;
+
+        if (isEnemy && isPlayer)
+        {
+            Debug.LogError("Ship spawned being enemy and player, should not be possible");
+        }
+
+        //shipClass.SetLayer( isPlayer ? player : isEnemy ? enemy : team);
+        
+        return shipClass;
+    }
+}

@@ -1,3 +1,65 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f3819d2b0f20d9da9c9fa2064bb00c1f4b37f82a64c054cc2bf833ef4e81576e
-size 1980
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7922589147683848013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2350134416320272001}
+  - component: {fileID: 7539325072796016328}
+  - component: {fileID: 3682275116106452425}
+  m_Layer: 0
+  m_Name: ClientHeavyPrimaryFireBehaviour
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2350134416320272001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7922589147683848013}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7539325072796016328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7922589147683848013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06725524566b7ab41987f3217a8fe3a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shipManager: {fileID: 0}
+  executing: 0
+  oooCounter: 0
+--- !u!114 &3682275116106452425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7922589147683848013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f95ad7f564b2844bae1d348c85fb55c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tracerEffect: {fileID: 412744511839287056, guid: dfad6deb073668d4f8d8bcef46f301bb, type: 3}
+  gunMuzzle: {fileID: 2350134416320272001}
+  tracerRange: 4

@@ -1,3 +1,105 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:615c250c219d6e2b56415f126d0f9e7161e2eb73c0a857e728cc08b276d9d0b8
-size 3357
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1054709592915996021
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1054709592915996017}
+  - component: {fileID: 1054709592915996016}
+  - component: {fileID: 1054709592915996019}
+  - component: {fileID: 1054709592915996018}
+  m_Layer: 0
+  m_Name: AgentManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1054709592915996017
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054709592915996021}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -31.143906, y: 19.907621, z: 25.233313}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1054709592915996016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054709592915996021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fcb27b419083a54a96a90ffeeb68ccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shipPrefabList: {fileID: 11400000, guid: 99853f6f37e063a488943c16da56cfc2, type: 2}
+  player:
+    serializedVersion: 2
+    m_Bits: 64
+  team:
+    serializedVersion: 2
+    m_Bits: 128
+  enemy:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!114 &1054709592915996019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054709592915996021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 618c346516139c24ebb41192900f5e67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 1054709592915996018}
+  _networkObjectCache: {fileID: 1054709592915996018}
+  gameMatchSettings: {fileID: 11400000, guid: 7b7c161bfd2f92949ac964df79581d2a, type: 2}
+  masterSettings: {fileID: 11400000, guid: 08b1afc459433574c83931546f497634, type: 2}
+  _playerShips: {fileID: 11400000, guid: a6b5c7b7baef1a64b9618c9fa1668202, type: 2}
+  _shipSpawner: {fileID: 0}
+--- !u!114 &1054709592915996018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054709592915996021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  _networkBehaviours:
+  - {fileID: 1054709592915996019}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 1
+  _disableOnDespawn: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: -1
+  _scenePathHash: 1107837852
+  <SceneId>k__BackingField: 0
+  <AssetPathHash>k__BackingField: 3125864165943059487
+  _sceneNetworkObjects:
+  - {fileID: 1054709592915996018}

@@ -1,3 +1,47 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a4cc92c60ae3a42ce2956696d43e1da3471b8580430bcea239e1d8db690a8417
-size 1181
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6f7661cf21675f4bab55a2adce60b0d, type: 3}
+  m_Name: Heavy Primary Fire
+  m_EditorClassIdentifier: 
+  cooldown: 0
+  executeCommand: 3
+  stopCommand: 4
+  clientBehaviour: {fileID: 7922589147683848013, guid: 1ba1653cf73d39446ba1a9d7227372c2, type: 3}
+  serverBehaviour: {fileID: 7922589147683848013, guid: 1871594e16b603041aa6ea1bd8dcff96, type: 3}
+  slot: 0
+  minKnockback: 10
+  maxKnockback: 50
+  rampTime: 10
+  knockbackCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:24427c44059c8e63626531c3e122da902e18493076fb1aeeafd13ac235f1f6b1
-size 448
+﻿namespace FishNet.Managing.Timing
+{
+    /// <summary>
+    /// How ticks are rounded when using time.
+    /// </summary>
+    public enum TickRounding
+    {
+        /// <summary>
+        /// Rounds up.
+        /// </summary>
+        RoundUp,
+        /// <summary>
+        /// Rounds down.
+        /// </summary>
+        RoundDown,
+        /// <summary>
+        /// Rounds to the nearest whole.
+        /// </summary>
+        RoundNearest
+    }
+
+
+}

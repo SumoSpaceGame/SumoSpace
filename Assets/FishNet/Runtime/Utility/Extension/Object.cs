@@ -1,3 +1,28 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:94b008687c1d86e9859d70d2d4440a1604c991a40e58d2d575b98f9d8bd20345
-size 772
+﻿using FishNet.Connection;
+using FishNet.Object;
+using UnityEngine;
+
+namespace FishNet.Utility.Extension
+{
+
+    public static class ObjectFN
+    {
+        /// <summary>
+        /// Spawns an object over the network using InstanceFinder. Only call from the server.
+        /// </summary>
+        public static void Spawn(this NetworkObject nob, NetworkConnection owner = null)
+        {
+            InstanceFinder.ServerManager.Spawn(nob, owner);
+        }
+        /// <summary>
+        /// Spawns an object over the network using InstanceFinder. Only call from the server.
+        /// </summary>
+        public static void Spawn(this GameObject go, NetworkConnection owner = null)
+        {
+            InstanceFinder.ServerManager.Spawn(go, owner);
+        }
+
+
+    }
+
+}

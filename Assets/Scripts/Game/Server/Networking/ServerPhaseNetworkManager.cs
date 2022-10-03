@@ -1,3 +1,60 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:58a0e71bb18e9a7160431c46c78c58d9f2b6c3789a184b2872914993ee36bfd2
-size 2205
+﻿using FishNet.Object;
+using Game.Client.SceneLoading;
+using Game.Common.Instances;
+using Game.Common.Networking.Misc;
+using Game.Common.Phases;
+using Game.Server.Phases;
+
+namespace Game.Common.Networking
+{
+    /// <summary>
+    /// Server phase network manager
+    /// </summary>
+    public partial class GamePhaseNetworkManager : NetworkBehaviour
+    {
+        /// <summary>
+        /// Adds the specific server phase classes to be used in the manager
+        /// </summary>
+        partial void ServerAddPhases()
+        {
+            this.gamePhases.Add(Phase.MATCH_CONNECT, new ServerPhaseMatchConnect(this));
+            this.gamePhases.Add(Phase.MATCH_READY_UP, new ServerPhaseReadyUp(this));
+            this.gamePhases.Add(Phase.MATCH_SYNC_PLAYER_DATA, new ServerPhaseSyncPlayerData(this));
+            this.gamePhases.Add(Phase.MATCH_LOBBY, new ServerPhaseLobby(this));
+            this.gamePhases.Add(Phase.MATCH_SYNC_LOAD_OUTS, new ServerPhaseSyncLoadout(this));
+            this.gamePhases.Add(Phase.MATCH_LOAD_MAP, new ServerPhaseLoadMap(this, MainPersistantInstances.Get<SceneLoader>()));
+            this.gamePhases.Add(Phase.MATCH_START_COUNTDOWN, new ServerPhaseStartMatch(this, MainPersistantInstances.Get<MatchNetworkTimerManager>()));
+            this.gamePhases.Add(Phase.MATCH_GAME, new ServerPhaseGame());
+        }
+
+        /// <summary>
+        /// Checks on phase every frame
+        /// </summary>
+        partial void ServerUpdate()
+        {
+            var curPhase = GetCurrentPhase();
+        }
+
+
+        /// <summary>
+        /// Switches the server's phase to next, and also tells clients to do so too.
+        /// </summary>
+        public void ServerNextPhase()
+        {
+            this._gamePhaseManager.NextPhase();
+            SwitchPhase(this._gamePhaseManager.CurrentPhase);
+        }
+        
+        /// <summary>
+        /// Switches the server phase to specified phrase, and also tells clients to do so too.
+        /// </summary>
+        /// <param name="phase"></param>
+        public void ServerSwitchPhase(Phase phase)
+        {
+            this._gamePhaseManager.SwitchPhase(phase);
+            SwitchPhase(phase);
+        }
+        
+        
+    }
+}

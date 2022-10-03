@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f352c52493baae7b6b112a89dcea3e1341e6cdd6deed899ae225125251825380
-size 330
+using Game.Common.Gameplay.Abilities;
+using UnityEngine;
+
+[CreateAssetMenu(menuName="Ship Abilities/Agility Abilities/Agility Primary Fire", fileName = "Agility Primary Fire", order=1)]
+public class AgilityPrimaryFireAbility: ShipAbility {
+
+    [SerializeField] private float knockback;
+    public float Knockback => knockback;
+}

@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4bfc27ebc1f5efe6d5feef6474bdd39ec9d6040a5e0b5a59c882a8450c2c7abd
-size 464
+﻿using FishNet.Documenting;
+using FishNet.Object;
+using FishNet.Transporting;
+using System;
+using System.Runtime.CompilerServices;
+using UnityEngine;
+
+namespace FishNet.Component.Prediction
+{
+    [AddComponentMenu("")]
+    [APIExclude]
+    [Obsolete("PredictedRigidbody is obsolete. Please remove this component and use PredictedObject on your gameObject's root.")] 
+    //Remove on 2023/01/01
+    public class PredictedRigidbody : PredictedRigidbodyBase { }
+
+
+}

@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0287bd02115ffe18480e871d32b817c14e3f15e52a9aa8d65478db3b25d49fb6
-size 528
+﻿using FishNet.Managing.Logging;
+using UnityEngine;
+
+namespace FishNet.Object
+{
+
+    public abstract partial class NetworkBehaviour : MonoBehaviour
+    {
+
+        /// <summary>
+        /// True if can log for loggingType.
+        /// </summary>
+        /// <param name="loggingType">Type of logging being filtered.</param>
+        /// <returns></returns>
+        public bool CanLog(LoggingType loggingType)
+        {
+            return (NetworkManager == null) ? false : NetworkManager.CanLog(loggingType);
+        }
+    }
+
+
+}

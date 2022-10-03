@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:46cd93d908158e9fa0a4bbc456960aaa751b9846267406e7bed270d895fbc681
-size 673
+﻿using Game.Common.Gameplay.Commands;
+using Game.Common.Gameplay.Ship;
+using UnityEngine;
+
+public class ShipDodge: ICommandPerformer {
+    public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData) {
+        shipManager.simulationObject.representative.GetComponent<Animator>().SetTrigger("Dodge");
+        return true;
+    }
+
+    public bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments) {
+        Debug.Log("Dodge triggered");
+        networker.SendData(CommandPacketData.Create(new byte[]{}), (int)CommandType.AGILITY_DODGE, shipManager.playerMatchID);
+        return true;
+    }
+}

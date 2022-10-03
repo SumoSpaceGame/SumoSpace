@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:da70912d6105b11eb1a2276149931f926be1fbb777f92806583cf79942a087e7
-size 667
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cbf43dd01dec174b80b4c4601633f3e, type: 3}
+  m_Name: ShipPrefabList
+  m_EditorClassIdentifier: 
+  shipPrefabs:
+  - {fileID: 2025401133792490111, guid: 4dd2e7444c6bcf74a9ba7d0b695e2752, type: 3}
+  - {fileID: 2025401133792490111, guid: 75241b82d6e19cc4e959d2584e034f49, type: 3}
+  - {fileID: 2025401133792490111, guid: 75241b82d6e19cc4e959d2584e034f49, type: 3}

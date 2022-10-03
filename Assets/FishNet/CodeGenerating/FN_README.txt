@@ -1,3 +1,9 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:521e2ac0ddf619ef2c5baf7573249df8501cc0580511be561e3804f7bb632dd1
-size 495
+After updating a custom Cecil to fix conflict with Unity.Burst in 2021 perform the following:
+
+- Open cecil in it's own project; eg: do not place directly in FN.
+- Rename namespace.Mono to namespace.MonoFN.
+- Current project rename strings, "Mono   to   "MonoFN
+- Replace current project #if INSIDE_ROCKS  to  #if UNITY_EDITOR
+- Comment out `[assembly: AssemblyTitle ("MonoFN.Cecil.Rocks")]` within rocks\Mono.Cecil.Rocks\AssemblyInfo.cs.
+- Delete obj/bin/tests folders.
+- Copy into FN project.

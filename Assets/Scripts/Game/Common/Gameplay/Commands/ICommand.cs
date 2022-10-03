@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a5def2fd62ad7fa7edff7be1f224d78034a2f07e49090b3cf709e9e2a436f839
-size 291
+using Game.Common.Gameplay.Ship;
+
+namespace Game.Common.Gameplay.Commands
+{
+    /// <summary>
+    /// Server side command
+    /// </summary>
+    public interface ICommand
+    {
+        bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData);
+    }
+}

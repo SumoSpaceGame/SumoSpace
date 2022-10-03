@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:dc2c7a082210f056c3e0266008af4fadea67a49c1b83678a266071f6846ab485
-size 506
+﻿using UnityEngine;
+
+namespace FishNet.Managing.Debugging
+{
+    /// <summary>
+    /// A container for debugging.
+    /// </summary>
+    [DisallowMultipleComponent]
+    [AddComponentMenu("FishNet/Manager/DebugManager")]
+    public class DebugManager : MonoBehaviour
+    {
+        public bool ObserverRpcLinks = true;
+        public bool TargetRpcLinks = true;
+        public bool ReplicateRpcLinks = true;
+        public bool ReconcileRpcLinks = true;
+        public bool ServerRpcLinks = true;
+    }
+
+
+}

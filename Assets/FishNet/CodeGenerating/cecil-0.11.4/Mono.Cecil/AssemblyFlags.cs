@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:12e513aed8df764984df7f3551b7189f5f460519ff4b4cc6fe43df9f6d1d3fb0
-size 456
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+using System;
+
+namespace MonoFN.Cecil {
+
+	[Flags]
+	public enum AssemblyAttributes : uint {
+		PublicKey = 0x0001,
+		SideBySideCompatible = 0x0000,
+		Retargetable = 0x0100,
+		WindowsRuntime = 0x0200,
+		DisableJITCompileOptimizer = 0x4000,
+		EnableJITCompileTracking = 0x8000,
+	}
+}

@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:568cc4b8dcbaabe739927109f51ccc4539b4be057138b1562c9492bb576ae65a
-size 322
+using UnityEngine;
+
+namespace Game.Common.Networking.NetBIble
+{
+    public class NetBible : MonoBehaviour
+    {
+        // Start is called before the first frame update
+        void Start()
+        {
+        
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+        
+        }
+    }
+}

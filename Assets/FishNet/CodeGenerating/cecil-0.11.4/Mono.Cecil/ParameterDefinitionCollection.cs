@@ -1,3 +1,60 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:74dba9296f9a409d3450ab7bfd4be18ef71607b945b022c181960494c803f2d2
-size 1246
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+using MonoFN.Collections.Generic;
+
+namespace MonoFN.Cecil {
+
+	sealed class ParameterDefinitionCollection : Collection<ParameterDefinition> {
+
+		readonly IMethodSignature method;
+
+		internal ParameterDefinitionCollection (IMethodSignature method)
+		{
+			this.method = method;
+		}
+
+		internal ParameterDefinitionCollection (IMethodSignature method, int capacity)
+			: base (capacity)
+		{
+			this.method = method;
+		}
+
+		protected override void OnAdd (ParameterDefinition item, int index)
+		{
+			item.method = method;
+			item.index = index;
+		}
+
+		protected override void OnInsert (ParameterDefinition item, int index)
+		{
+			item.method = method;
+			item.index = index;
+
+			for (int i = index; i < size; i++)
+				items [i].index = i + 1;
+		}
+
+		protected override void OnSet (ParameterDefinition item, int index)
+		{
+			item.method = method;
+			item.index = index;
+		}
+
+		protected override void OnRemove (ParameterDefinition item, int index)
+		{
+			item.method = null;
+			item.index = -1;
+
+			for (int i = index + 1; i < size; i++)
+				items [i].index = i - 1;
+		}
+	}
+}

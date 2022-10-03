@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d256239a05a10996eaaf595ea913a40cf427502682793358e85bd90393b19038
-size 507
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+namespace MonoFN.Cecil.Metadata {
+
+	enum CodedIndex {
+		TypeDefOrRef,
+		HasConstant,
+		HasCustomAttribute,
+		HasFieldMarshal,
+		HasDeclSecurity,
+		MemberRefParent,
+		HasSemantics,
+		MethodDefOrRef,
+		MemberForwarded,
+		Implementation,
+		CustomAttributeType,
+		ResolutionScope,
+		TypeOrMethodDef,
+		HasCustomDebugInformation,
+	}
+}

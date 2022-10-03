@@ -1,3 +1,31 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:00e326f217f4af348b9be218e33ec7d77bbf6f033c91fba5275406b6fdfd85d4
-size 730
+﻿using UnityEngine;
+
+namespace Game.Common.Map.PylonMap
+{
+    public class PylonGraphics : MonoBehaviour
+    {
+        public Pylon pylonA, pylonB;
+        public LineRenderer lineRenderer;
+        
+        public void Init()
+        {
+        
+        }
+        public void Reset()
+        {
+            
+        }
+        
+        public void UpdateGraphics()
+        {
+            lineRenderer.SetPositions(new Vector3[] { pylonA.transform.position, pylonB.transform.position });
+        }
+
+        public void SetPylons(Pylon a, Pylon b)
+        {
+            pylonA = a;
+            pylonB = b;
+            lineRenderer.SetPositions(new Vector3[] { pylonA.transform.position, pylonB.transform.position });
+        }
+    }
+}

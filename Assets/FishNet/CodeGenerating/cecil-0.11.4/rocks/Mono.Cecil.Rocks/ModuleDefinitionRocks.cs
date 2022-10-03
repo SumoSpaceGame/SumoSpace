@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:823248e10cadceacff007441ccdaff86898f8e21d6e27508ced46ea5c2b59e57
-size 755
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace MonoFN.Cecil.Rocks {
+
+#if UNITY_EDITOR
+	public
+#endif
+	static class ModuleDefinitionRocks {
+
+		public static IEnumerable<TypeDefinition> GetAllTypes (this ModuleDefinition self)
+		{
+			if (self == null)
+				throw new ArgumentNullException ("self");
+
+			// it was fun to write, but we need a somewhat less convoluted implementation
+			return self.Types.SelectMany (
+				Functional.Y<TypeDefinition, IEnumerable<TypeDefinition>> (f => type => type.NestedTypes.SelectMany (f).Prepend (type)));
+		}
+	}
+}

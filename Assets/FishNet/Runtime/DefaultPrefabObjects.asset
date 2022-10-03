@@ -1,3 +1,26 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:671d198798177b47f66020687af78528625fba6ada9a9d999bc359a9f83c0e52
-size 1321
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ad70174b079c2f4ebc7931d3dd1af6f, type: 3}
+  m_Name: DefaultPrefabObjects
+  m_EditorClassIdentifier: 
+  _prefabs:
+  - {fileID: 1054709592915996018, guid: 43f7cf36b0c2fdc45b1431b0ea894966, type: 3}
+  - {fileID: 7322779081300907973, guid: 63f5152da447a3a499628d7208c1d1d1, type: 3}
+  - {fileID: 4400307341339099393, guid: b0e0942f0bce57046ae34f071fbb5680, type: 3}
+  - {fileID: 7865742853575058336, guid: 74e4eb49707b04546a0a548edff2309e, type: 3}
+  - {fileID: 6247937604759335512, guid: e2d0a6b0304772741b9430dd9445c537, type: 3}
+  - {fileID: 4400770604142937563, guid: 37823a56ce05c924bacc38900addaa68, type: 3}
+  - {fileID: 5359055736134386342, guid: 695c1068d0eba994b995719531d4b981, type: 3}
+  - {fileID: 611616139817875448, guid: bf5f023b4017a5e41a9815ec5745df3d, type: 3}
+  - {fileID: 9117857247562382210, guid: b2991431a5f893e49937d01b6da44ff8, type: 3}
+  - {fileID: 201277550, guid: d904f93bc171bb144ba33c5155282f6f, type: 3}
+  - {fileID: 27039729695437543, guid: f820efff6a2871447b961fc755212ba3, type: 3}

@@ -1,3 +1,37 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:40f7182764dc78ce870684e1e17be2468657cb2a8f58a4ca576641e75ab70fdc
-size 1619
+fileFormatVersion: 2
+guid: dedf4a0d5dbae2740ae2ad95e57b7545
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Genos
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: f4e22be8cdd2e37439d7ad8591b1427e, type: 3}
+  - {fileID: 12800000, guid: b36e838b5e3425d4db32626dd9680143, type: 3}
+  - {fileID: 12800000, guid: 78910f5f353f8fc4e88c885a3ea8f3ae, type: 3}
+  - {fileID: 12800000, guid: ddb7353f96a545e498deca042f3f2d0d, type: 3}
+  - {fileID: 12800000, guid: 64394a4c85787ae43bbcebeebd59f21e, type: 3}
+  - {fileID: 12800000, guid: bdf93a060ce6384418830045286b4f57, type: 3}
+  - {fileID: 12800000, guid: c3546f6a2fcf74d44b68ba81e5532dc4, type: 3}
+  - {fileID: 12800000, guid: f04c8bacc5a11e444beb855cbcae5119, type: 3}
+  - {fileID: 12800000, guid: e7656fb9e1aa5c64bb87e37c3b2130f7, type: 3}
+  - {fileID: 12800000, guid: 2ea5a695989c72d4fb1a38ffa18f773e, type: 3}
+  - {fileID: 12800000, guid: ec971d9ee56008945909564698165cd5, type: 3}
+  - {fileID: 12800000, guid: c3b65fe606120c041b1bc9da07398d68, type: 3}
+  - {fileID: 12800000, guid: ea0bb0e4f9f30bf4dacf298822707813, type: 3}
+  - {fileID: 12800000, guid: 1258da64b0987954d95d77ded483ac29, type: 3}
+  - {fileID: 12800000, guid: 4df8e8c4ea19dfc42af7a876993c23e6, type: 3}
+  - {fileID: 12800000, guid: 1b4808414bd09754f91267255676dc39, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

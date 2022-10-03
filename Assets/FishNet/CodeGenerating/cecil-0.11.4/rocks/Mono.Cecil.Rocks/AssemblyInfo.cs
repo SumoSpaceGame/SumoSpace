@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:294da0f57e85997a76ef89183b7c10040ac3c969a4b6ee8f312c312d2ecca297
-size 277
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+using System;
+
+//[assembly: AssemblyTitle ("MonoFN.Cecil.Rocks")]
+
+[assembly: CLSCompliant (false)]

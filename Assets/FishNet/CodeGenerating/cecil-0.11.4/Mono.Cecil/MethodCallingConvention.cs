@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:782116b6ed7a8986de50250f270ba2e86a37b25add370cd1164affa397494c15
-size 369
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+namespace MonoFN.Cecil {
+
+	public enum MethodCallingConvention : byte {
+		Default = 0x0,
+		C = 0x1,
+		StdCall = 0x2,
+		ThisCall = 0x3,
+		FastCall = 0x4,
+		VarArg = 0x5,
+		Generic = 0x10,
+	}
+}

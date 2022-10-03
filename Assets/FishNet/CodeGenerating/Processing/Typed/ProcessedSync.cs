@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:899be9441f7bfea38d3be01d93cbce0689e43a84152f7fa36337346351bf9004
-size 664
+﻿using MonoFN.Cecil;
+
+namespace FishNet.CodeGenerating.Processing
+{
+
+    public class ProcessedSync
+    {
+        public FieldReference OriginalFieldRef;
+        public FieldReference GeneratedFieldRef;
+        public MethodReference SetMethodRef;
+        public MethodReference GetMethodRef;
+
+        public ProcessedSync(FieldReference originalFieldRef,FieldReference generatedFieldRef,  MethodReference setMethodRef, MethodReference getMethodRef)
+        {
+            OriginalFieldRef = originalFieldRef;
+            GeneratedFieldRef = generatedFieldRef;
+            SetMethodRef = setMethodRef;
+            GetMethodRef = getMethodRef;
+        }
+
+    }
+
+
+}

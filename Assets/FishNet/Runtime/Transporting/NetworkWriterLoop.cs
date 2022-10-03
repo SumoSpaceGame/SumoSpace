@@ -1,3 +1,38 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:88c891ac4d3ba9ff90c0da4fe21a9526beecb58c22c02215d56c8ceceef24e4a
-size 769
+﻿using FishNet.Managing.Timing;
+using UnityEngine;
+
+namespace FishNet.Transporting
+{
+    [DisallowMultipleComponent]
+    [DefaultExecutionOrder(short.MaxValue)]
+    internal class NetworkWriterLoop : MonoBehaviour
+    {
+        #region Private.
+        /// <summary>
+        /// TimeManager this loop is for.
+        /// </summary>
+        private TimeManager _timeManager;
+        #endregion
+
+        private void Awake()
+        {
+            _timeManager = GetComponent<TimeManager>();
+        }
+
+        private void LateUpdate()
+        {
+            Iterate();
+        }
+
+        /// <summary>
+        /// Performs read on transport.
+        /// </summary>
+        private void Iterate()
+        {
+            _timeManager.TickLateUpdate();
+        }
+
+    }
+
+
+}

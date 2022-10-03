@@ -1,3 +1,14 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:896299bfd6eff53449c5a4e656b3076cd5047a09a410b9bae52aa94c91ffefa0
-size 408
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96f7e2fa7da47a196455cac3a574bb4, type: 3}
+  m_Name: SceneLoaderTextData
+  m_EditorClassIdentifier: 

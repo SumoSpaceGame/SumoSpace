@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9080aaf20adef6c809d2b02a19e9cefb47d01aabd91d6985703a460183a1062b
-size 1305
+﻿using FishNet.Broadcast;
+using FishNet.Managing.Logging;
+using FishNet.Transporting;
+using UnityEngine;
+
+namespace FishNet.Object
+{
+    public sealed partial class NetworkObject : MonoBehaviour
+    {
+
+        /// <summary>
+        /// Sends a broadcast to Observers on this NetworkObject.
+        /// </summary>
+        /// <typeparam name="T">Type of broadcast to send.</typeparam>
+        /// <param name="message">Broadcast data being sent; for example: an instance of your broadcast type.</param>
+        /// <param name="requireAuthenticated">True if the client must be authenticated for this broadcast to send.</param>
+        /// <param name="channel">Channel to send on.</param>
+        public void Broadcast<T>(T message, bool requireAuthenticated = true, Channel channel = Channel.Reliable) where T : struct, IBroadcast
+        {
+            if (NetworkManager == null)
+            {
+                if (NetworkManager.CanLog(LoggingType.Warning))
+                    Debug.LogWarning($"Cannot send broadcast from {gameObject.name}, NetworkManager reference is null. This may occur if the object is not spawned or initialized.");
+                return;
+            }
+
+            NetworkManager.ServerManager.Broadcast(Observers, message, requireAuthenticated, channel);
+        }
+    }
+
+}
+

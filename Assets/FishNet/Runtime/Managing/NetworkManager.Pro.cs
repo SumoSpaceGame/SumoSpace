@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5007d97ad51e3cc0182ce04ba2be405d41383bb7cb82521770e20f3b991ed319
-size 754
+﻿using FishNet.Component.ColliderRollback;
+using UnityEngine;
+
+namespace FishNet.Managing
+{
+    public sealed partial class NetworkManager : MonoBehaviour
+    {
+
+        #region Public.
+        /// <summary>
+        /// RollbackManager for this NetworkManager.
+        /// </summary>
+        public RollbackManager RollbackManager { get; private set; }
+        #endregion
+
+
+        /// <summary>
+        /// Adds RollbackManager.
+        /// </summary>
+        private void AddRollbackManager()
+        {
+            if (gameObject.TryGetComponent<RollbackManager>(out RollbackManager result))
+                RollbackManager = result;
+            else
+                RollbackManager = gameObject.AddComponent<RollbackManager>();
+        }
+
+
+    }
+
+
+}

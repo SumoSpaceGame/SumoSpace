@@ -1,3 +1,64 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d4ccd924a6d956a2c91d0a66f9b137a7646b8b3ef3b0efb0ed6a604bcf4226d6
-size 1261
+﻿using FishNet.Utility.Constant;
+using System.Runtime.CompilerServices;
+using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+
+
+namespace FishNet.Utility
+{
+#if UNITY_EDITOR
+    [InitializeOnLoad]
+#endif
+    public static class ApplicationState
+    {
+
+#if !UNITY_EDITOR
+        /// <summary>
+        /// True if application is quitting.
+        /// </summary>
+        private static bool _isQuitting;
+#endif
+        static ApplicationState()
+        {
+#if !UNITY_EDITOR
+            _isQuitting = false;
+#endif
+            Application.quitting -= Application_quitting;
+            Application.quitting += Application_quitting;
+        }
+
+        private static void Application_quitting()
+        {
+#if !UNITY_EDITOR
+            _isQuitting = true;
+#endif
+        }
+
+        public static bool IsQuitting()
+        {
+#if UNITY_EDITOR
+            if (!EditorApplication.isPlayingOrWillChangePlaymode && EditorApplication.isPlaying)
+                return true;
+            else
+                return false;
+#else
+            return _isQuitting;
+#endif
+        }
+
+        public static bool IsPlaying()
+        {
+#if UNITY_EDITOR
+            return EditorApplication.isPlaying;
+#else
+            return Application.isPlaying;
+#endif
+        }
+
+    }
+
+
+}

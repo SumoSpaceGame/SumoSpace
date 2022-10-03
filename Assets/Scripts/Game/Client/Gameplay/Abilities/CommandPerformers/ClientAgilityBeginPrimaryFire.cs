@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3c06fe46409754d0f436c94f127786ee9e02a5ba0d9448e723ddf7073f99f682
-size 697
+﻿using Game.Common.Gameplay.Commands;
+using Game.Common.Gameplay.Ship;
+
+public class ClientAgilityBeginPrimaryFire: ICommandPerformer {
+    public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData) {
+        shipManager.shipLoadout.PrimaryFire.Execute(shipManager, false);
+        return true;
+    }
+
+    public bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments) {
+        shipManager.shipLoadout.PrimaryFire.QuickExecute(shipManager, false);
+        networker.SendData(CommandPacketData.Create(new byte[]{}), CommandType.AGILITY_PRIMARY_FIRE_START, shipManager.playerMatchID);
+        return true;
+    }
+}

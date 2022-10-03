@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5bc5f195af88b0fb6f8a5a2e244cd550d5bd9ae0602a4d1d1e19f4dbbb407164
-size 528
+﻿using UnityEngine;
+
+namespace Game.Common.Gameplay.Abilities.Agility
+{
+    [CreateAssetMenu(menuName="Ship Abilities/Agility Abilities/Agility Dodge", fileName = "Agility Dodge", order=1)]
+    public class AgilityDodgeAbility: ShipAbility
+    {
+        [SerializeField] private float distance;
+        public float Distance => distance;
+        
+        [SerializeField] private float time;
+        public float Time => time;
+        
+        [SerializeField] private float speed;
+        public float Speed => speed;
+    }
+}

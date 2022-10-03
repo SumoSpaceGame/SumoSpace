@@ -1,3 +1,20 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7cb2a9d274a1ccdab3154d934631658b49f2068f4dcf9f2c0bf24b4d106e4c19
-size 621
+using Game.Common.Gameplay.Ship;
+
+namespace Game.Common.Gameplay.Commands
+{
+    /// <summary>
+    /// Used to start the chain of commands
+    /// Perform -> Receive Server -> Receive Client
+    /// </summary>
+    public interface ICommandPerformer : ICommand
+    {
+        /// <summary>
+        /// Performs a command
+        /// </summary>
+        /// <param name="shipManager"></param>
+        /// <param name="networker"></param>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments);
+    }
+}

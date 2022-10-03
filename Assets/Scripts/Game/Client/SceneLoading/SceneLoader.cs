@@ -1,3 +1,174 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ddf969bd0eb4d39bda8835f7c206d5d99f2e611ccc1f0c1c11a603ee1fdb7cbc
-size 5142
+using System.Collections.Generic;
+using FishNet;
+using FishNet.Managing.Scened;
+using Game.Common.Instances;
+using Game.Common.ScriptableData;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using SceneManager = UnityEngine.SceneManagement.SceneManager;
+
+namespace Game.Client.SceneLoading
+{
+    public class SceneLoader : MonoBehaviour, IGamePersistantInstance
+    {
+        private bool _isLoadingScene;
+
+        public bool IsLoadingScene
+        {
+            get
+            {
+                return _isLoadingScene;
+            }
+            private set
+            {
+                _isLoadingScene = value;
+            }
+        }
+
+        public delegate void FinishLoadingSceneEventHandler();
+        public event FinishLoadingSceneEventHandler FinishLoadingSceneEvent;
+
+        [SerializeField] private FloatScriptableData floatScriptableData;
+        [SerializeField] private StringScriptableData stringScriptableData;
+
+        private List<ISceneLoaderTask> _loadingTasks;
+        private int currentTaskIndex = 0;
+        private int totalWeight;
+        
+        public SceneLoader()
+        {
+            IsLoadingScene = false;
+        }
+
+        public void Awake()
+        {
+            MainPersistantInstances.Add(this);
+            DontDestroyOnLoad(this);
+        }
+
+        
+        /// <summary>
+        /// Updates text and progress bar. In fixed update to reduce the amount of times a task is getting called.
+        /// </summary>
+        private void FixedUpdate()
+        {
+            if (!IsLoadingScene) return;
+            
+            var currentTask = _loadingTasks[currentTaskIndex];
+
+            stringScriptableData.value = currentTask.GetLoadingText();
+            if (currentTask.IsFinished())
+            {
+                currentTaskIndex++;
+
+                if (currentTaskIndex >= _loadingTasks.Count)
+                {
+                    FinishedLoading();
+                    return;
+                }
+                else
+                {
+                    _loadingTasks[currentTaskIndex].Start();
+                }
+                
+                floatScriptableData.value = 1.0f;
+            }
+            else
+            {
+                floatScriptableData.value = currentTask.GetProgressPercentage();
+            }
+            
+        }
+
+        /// <summary>
+        /// Load loading scene and activate loading tasks. This starts the loading
+        /// </summary>
+        /// <param name="loadingTasks"></param>
+        /// <param name="loadingSceneName"></param>
+        public void Load(List<ISceneLoaderTask> loadingTasks, string loadingSceneName = "MapLoadingScene")
+        {
+            if (IsLoadingScene)
+            {
+                Debug.LogError("Tried loading a scene while already loading another scene");
+                return;
+            }
+
+            if (loadingTasks.Count == 0)
+            {
+                Debug.LogError("Can not load without any scene loader tasks!");
+                return;
+            }
+            
+            IsLoadingScene = true;
+            
+            _loadingTasks = loadingTasks;
+            
+            SceneManager.sceneLoaded += StartTaskLoading;
+            SceneManager.LoadScene(loadingSceneName);
+        }
+
+
+        /// <summary>
+        /// After the loading scene is loaded, this gets called to start the task loading
+        /// </summary>
+        /// <param name="scene"></param>
+        /// <param name="loadSceneMode"></param>
+        private void StartTaskLoading(Scene scene, LoadSceneMode loadSceneMode)
+        {
+            SceneManager.sceneLoaded -= StartTaskLoading;
+            foreach (var task in _loadingTasks)
+            {
+                totalWeight += task.GetProgressWeight();
+            }
+            
+            _loadingTasks[0].Start();
+            
+        }
+
+        /// <summary>
+        /// Called after all scene loading tasks are finished
+        /// </summary>
+        private void FinishedLoading()
+        {
+            Debug.Log("Scene Loader finished");
+            
+            IsLoadingScene = false;
+            
+            foreach (var task in _loadingTasks)
+            {
+                task.AllFinished();
+            }
+            
+            FinishLoadingSceneEvent?.Invoke();
+            Reset();
+        }
+        
+        /// <summary>
+        /// Cancel the current scene loading. If an error occurs or host lost connection, use this.
+        /// </summary>
+        /// <param name="loadBackScene"></param>
+        public void CancelSceneLoading(string loadBackScene)
+        {
+            Reset();
+            SceneManager.LoadScene(loadBackScene);
+        }
+
+        /// <summary>
+        /// Reset the data stored.
+        /// </summary>
+        private void Reset()
+        {
+            foreach (var task in _loadingTasks)
+            {
+                task?.CleanUp();
+            }
+            
+            IsLoadingScene = false;
+            currentTaskIndex = 0;
+            totalWeight = 0;
+            _loadingTasks.Clear();
+            SceneManager.sceneLoaded -= StartTaskLoading;
+            FinishLoadingSceneEvent = null;
+        }
+    }
+}

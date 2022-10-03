@@ -1,3 +1,34 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3b50e896941c8c1c409f787d41373ca1c241f0cd21e4e7442d9bb2fdf9ed6313
-size 786
+﻿namespace FishNet.Utility.Extension
+{
+
+    public static class MathFN
+    {
+
+        /// <summary>
+        /// Returns a clamped SBytte.
+        /// </summary>
+        public static sbyte ClampSByte(long value, sbyte min, sbyte max)
+        {
+            if (value < min)
+                return min;
+            else if (value > max)
+                return max;
+            else
+                return (sbyte)value;
+        }
+
+        /// <summary>
+        /// Returns a clamped double.
+        /// </summary>
+        public static double ClampDouble(double value, double min, double max)
+        {
+            if (value < min)
+                return min;
+            else if (value > max)
+                return max;
+            else
+                return value;
+        }
+    }
+
+}

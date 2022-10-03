@@ -1,3 +1,34 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d5138622a7996332aa3b152618d165a6aeafdd650c3411c4df7022fbc681fccf
-size 705
+﻿using UnityEngine;
+
+namespace Game.Common.Gameplay.Ship
+{
+    [RequireComponent(typeof(ShipManager))]
+    public partial class ShipController : MonoBehaviour
+    {
+
+        private ShipManager _shipManager;
+    
+        private void Awake()
+        {
+            _shipManager = GetComponent<ShipManager>();
+            _shipManager.shipController = this;
+        }
+
+        private void Start()
+        {
+            if (_shipManager.isServer) ServerStart();
+        }
+
+
+        public void Update()
+        {
+            if(_shipManager.isServer) ServerUpdate();
+        }
+
+        partial void ServerStart();
+        partial void ServerUpdate();
+
+        public partial void ResetInertia();
+
+    }
+}

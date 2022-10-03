@@ -1,3 +1,307 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8a391b8f967efdb17e5f0f433bdf97aecb75709a79c4e51cc3dcb76f18b21d5f
-size 10162
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2025401133792490111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 966375063036184772}
+  - component: {fileID: -3866007312540853934}
+  - component: {fileID: -6591932524663397018}
+  - component: {fileID: 8288384051041688339}
+  - component: {fileID: 8162458709843036457}
+  - component: {fileID: 8860599951211358576}
+  - component: {fileID: 1452283217186146463}
+  - component: {fileID: -8769192327207701676}
+  - component: {fileID: 4336934462001359146}
+  m_Layer: 0
+  m_Name: AgilityShip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &966375063036184772
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025401133792490111}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &-3866007312540853934
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025401133792490111}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 58d2f12522b5c784d85a9c58ee4f3f2b, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.25
+--- !u!50 &-6591932524663397018
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025401133792490111}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 5
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!114 &8288384051041688339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025401133792490111}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 366165c95ffebab43811b23972b6faf2, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8162458709843036457}
+        m_TargetAssemblyTypeName: Game.Client.Gameplay.Movement.ClientControls, Game
+        m_MethodName: OnMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 70bde7f0-950b-4c77-b686-88fc03c44c51
+    m_ActionName: Gameplay/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8162458709843036457}
+        m_TargetAssemblyTypeName: Game.Client.Gameplay.Movement.ClientControls, Game
+        m_MethodName: OnLookRaw
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1452283217186146463}
+        m_TargetAssemblyTypeName: Game.Common.Gameplay.Ship.ShipManager, Game
+        m_MethodName: OnLookRaw
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 97abc713-808c-4a09-99a3-814c91a373b6
+    m_ActionName: Gameplay/Rotate Raw[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8162458709843036457}
+        m_TargetAssemblyTypeName: Game.Client.Gameplay.Movement.ClientControls, Game
+        m_MethodName: OnLookNorm
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1452283217186146463}
+        m_TargetAssemblyTypeName: Game.Common.Gameplay.Ship.ShipManager, Game
+        m_MethodName: OnLookNorm
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 9695a1ea-6560-4821-a775-cea683cc502b
+    m_ActionName: Gameplay/Rotate Vec
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8162458709843036457}
+        m_TargetAssemblyTypeName: Game.Client.Gameplay.Movement.ClientControls, Game
+        m_MethodName: OnPrimaryAbility
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 93c29028-de7b-4e8e-97c0-b5c85b7e2c0d
+    m_ActionName: Gameplay/Dodge[/Keyboard/leftShift]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8162458709843036457}
+        m_TargetAssemblyTypeName: Game.Client.Gameplay.Movement.ClientControls, Game
+        m_MethodName: OnFire
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: b45102f7-59db-4e94-9b31-a0eef33fd402
+    m_ActionName: Gameplay/Fire[/Mouse/leftButton]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Mouse and Keyboard
+  m_DefaultActionMap: Gameplay
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &8162458709843036457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025401133792490111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b8768229e96d24ea2f52a718f3feaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementDirection: {x: 0, y: 0}
+  movementRotation: 0
+  shipLoadout: {fileID: 11400000, guid: 2b3a35dc5ca329349abc59cb659dfb27, type: 2}
+--- !u!114 &8860599951211358576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025401133792490111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a167acf415303e5479176ba7d0ab0a72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  representative: {fileID: 3655497651732392594, guid: eab8f55351db4444bab5638886f4430d, type: 3}
+  create: 0
+--- !u!114 &1452283217186146463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025401133792490111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 561b03c4a4694ed2aff666fb3d478a0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  invulnerable: 0
+  animator: {fileID: 0}
+  _rigidbody2D: {fileID: -6591932524663397018}
+  shipController: {fileID: -8769192327207701676}
+  clientControls: {fileID: 8162458709843036457}
+  shipLoadout: {fileID: 11400000, guid: 2b3a35dc5ca329349abc59cb659dfb27, type: 2}
+  simulationObject: {fileID: 8860599951211358576}
+  networkMovement: {fileID: 0}
+  virtualCursorPrefab: {fileID: 7368730354526697921, guid: 60cf878beb180f2428456ccfef098402, type: 3}
+  virtualCursor: {fileID: 9146286379313495491, guid: 60cf878beb180f2428456ccfef098402, type: 3}
+  behaviours:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  isServer: 0
+  isPlayer: 0
+  playerMatchID:
+    NetworkID: 0
+    ClientID: 
+    MatchID: 0
+--- !u!114 &-8769192327207701676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025401133792490111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc13ae929e714807a146eb00fd4ff543, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementVector: {x: 0, y: 0}
+  targetAngle: 0
+--- !u!95 &4336934462001359146
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025401133792490111}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 59a7fa35413664f41a74fd5b376a76ad, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

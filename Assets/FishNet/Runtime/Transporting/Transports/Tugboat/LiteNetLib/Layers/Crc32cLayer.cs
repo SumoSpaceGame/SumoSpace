@@ -1,3 +1,41 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:34a3c86b73de7601fe5a07498a9eb20e73a37032dc0d2fe32d145c0bb7ad6058
-size 1383
+﻿using LiteNetLib.Utils;
+using System;
+using System.Net;
+
+namespace LiteNetLib.Layers
+{
+    public sealed class Crc32cLayer : PacketLayerBase
+    {
+        public Crc32cLayer() : base(CRC32C.ChecksumSize)
+        {
+
+        }
+
+        public override void ProcessInboundPacket(ref IPEndPoint endPoint, ref byte[] data, ref int offset, ref int length)
+        {
+            if (length < NetConstants.HeaderSize + CRC32C.ChecksumSize)
+            {
+                NetDebug.WriteError("[NM] DataReceived size: bad!");
+                //Set length to 0 to have netManager drop the packet.
+                length = 0;
+                return;
+            }
+
+            int checksumPoint = length - CRC32C.ChecksumSize;
+            if (CRC32C.Compute(data, offset, checksumPoint) != BitConverter.ToUInt32(data, checksumPoint))
+            {
+                NetDebug.Write("[NM] DataReceived checksum: bad!");
+                //Set length to 0 to have netManager drop the packet.
+                length = 0;
+                return;
+            }
+            length -= CRC32C.ChecksumSize;
+        }
+
+        public override void ProcessOutBoundPacket(ref IPEndPoint endPoint, ref byte[] data, ref int offset, ref int length)
+        {
+            FastBitConverter.GetBytes(data, length, CRC32C.Compute(data, offset, length));
+            length += CRC32C.ChecksumSize;
+        }
+    }
+}

@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a707e707e502cf2472bc2fc36e363a6bfeb5ea7c35a483c65c64fa07187e4c5d
-size 311
+using UnityEngine;
+
+namespace Game.Common.Camera
+{
+    public class CameraGame : MonoBehaviour
+    {
+        // Start is called before the first frame update
+        void Start()
+        {
+        
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+        
+        }
+    }
+}

@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7ed29c9951df9e6a3bffee985e1f56b1e1d979827c83d0c6ec69cb1e63e90165
-size 398
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+namespace MonoFN.Cecil {
+
+	enum FileAttributes : uint {
+		ContainsMetaData = 0x0000,  // This is not a resource file
+		ContainsNoMetaData = 0x0001,    // This is a resource file or other non-metadata-containing file
+	}
+}

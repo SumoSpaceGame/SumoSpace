@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:630e23a5427fd0cc7fce36e380ba2e8aadc63cc729d2032c289e6a483f25331a
-size 435
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+using System;
+
+namespace MonoFN.Cecil {
+
+	[Flags]
+	public enum EventAttributes : ushort {
+		None = 0x0000,
+		SpecialName = 0x0200,   // Event is special
+		RTSpecialName = 0x0400   // CLI provides 'special' behavior, depending upon the name of the event
+	}
+}

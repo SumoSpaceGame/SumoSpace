@@ -1,3 +1,43 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2b8dec6b1f889313fc92613abd1997cd960ecae6ffe72529c43f6f4253069b66
-size 867
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+using MonoFN.Collections.Generic;
+
+namespace MonoFN.Cecil {
+
+	public abstract class PropertyReference : MemberReference {
+
+		TypeReference property_type;
+
+		public TypeReference PropertyType {
+			get { return property_type; }
+			set { property_type = value; }
+		}
+
+		public abstract Collection<ParameterDefinition> Parameters {
+			get;
+		}
+
+		internal PropertyReference (string name, TypeReference propertyType)
+			: base (name)
+		{
+			Mixin.CheckType (propertyType, Mixin.Argument.propertyType);
+
+			property_type = propertyType;
+		}
+
+		protected override IMemberDefinition ResolveDefinition ()
+		{
+			return this.Resolve ();
+		}
+
+		public new abstract PropertyDefinition Resolve ();
+	}
+}

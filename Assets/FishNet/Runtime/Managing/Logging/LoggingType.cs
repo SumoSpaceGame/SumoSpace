@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f2bb4f779f8ee6fe7c027310cac2e25726fa6c79d94ad8f81f6e61d2617368c9
-size 577
+﻿namespace FishNet.Managing.Logging
+{
+    /// <summary>
+    /// Type of logging being filtered.
+    /// </summary>
+    public enum LoggingType : byte
+    {
+        /// <summary>
+        /// Disable logging.
+        /// </summary>
+        Off = 0,
+        /// <summary>
+        /// Only log errors.
+        /// </summary>
+        Error = 1,
+        /// <summary>
+        /// Log warnings and errors.
+        /// </summary>
+        Warning = 2,
+        /// <summary>
+        /// Log all common activities, warnings, and errors.
+        /// </summary>
+        Common = 3
+    }
+}

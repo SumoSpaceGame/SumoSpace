@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:31665dff5509837277a38651c2d26430723f46d34f0e3c77899766fef540d52c
-size 281
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+namespace MonoFN.Cecil {
+
+	public enum TargetRuntime {
+		Net_1_0,
+		Net_1_1,
+		Net_2_0,
+		Net_4_0,
+	}
+}
