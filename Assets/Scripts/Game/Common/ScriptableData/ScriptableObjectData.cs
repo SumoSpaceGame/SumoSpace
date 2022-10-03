@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:eff472c353ec15e3c6194805341cb5a159da31986b52740a84171c6bad8e867f
-size 562
+﻿using UnityEngine;
+
+namespace Game.Common.ScriptableData
+{
+    public abstract class ScriptableObjectData<T> : ScriptableObject
+    {
+        public const string SCRIPTABLE_OBJECT_DATA_MENU_NAME = "Singular Data/";
+
+        public delegate void OnChangeEventHandler(T data);
+        public event OnChangeEventHandler OnChangeEvent;
+
+        public T value
+        {
+            get => _value;
+            set
+            {
+                _value = value;
+                OnChangeEvent?.Invoke(value);
+            }
+        }
+
+        private T _value;
+    }
+}

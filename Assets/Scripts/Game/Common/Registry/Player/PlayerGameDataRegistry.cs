@@ -1,3 +1,35 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:63028366b596d3bbb6c4e4f9f074c27465b482f238aa2dead6ca2f0b149f560e
-size 951
+﻿using Game.Common.Gameplay.Ship;
+using UnityEngine;
+
+namespace Game.Common.Registry
+{
+    /// <summary>
+    /// Registry for the game data
+    /// </summary>
+    [CreateAssetMenu(fileName = "PlayerGameDataRegistry", menuName = REGISTRY_MENU_NAME + "Player Game Data Registry")]
+    public class PlayerGameDataRegistry : RegistryScriptableObject<PlayerID, PlayerGameData>
+    {
+
+        public PlayerGameData Get(PlayerID id)
+        {
+            PlayerGameData data;
+            
+            if (!TryGet(id, out data))
+            {
+                Debug.LogError($"Could not grab game data registry for player {id}");
+            }
+
+            return data;
+        }
+        
+    }
+
+    /// <summary>
+    /// All data in player game data can be changed.
+    /// Do not change to a struct, having a class allows that functionality.
+    /// </summary>
+    public class PlayerGameData
+    {
+        public ShipCreationData shipCreationData;
+    }
+}

@@ -1,3 +1,43 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:42d6d46de5f4ebc9311e55bad4a50bf3811c1b31c8fb72fee59b9e7eed90b484
-size 1219
+using System.Collections.Generic;
+using FishNet;
+using FishNet.Object;
+using FishNet.Transporting;
+using UnityEngine;
+
+namespace Game.Common.Networking
+{
+    public class GameNetworkInitializer : MonoBehaviour
+    {
+        public List<NetworkObject> ManagerPrefabs = new List<NetworkObject>(); 
+        
+        // Start is called before the first frame update
+        void Awake()
+        {
+            DontDestroyOnLoad(this);
+        }
+
+        private void Start()
+        {
+            InstanceFinder.ServerManager.OnServerConnectionState += OnServerConnectionState;
+        }
+        
+        private void OnDestroy()
+        {
+            InstanceFinder.ServerManager.OnServerConnectionState -= OnServerConnectionState;
+        }
+
+        public void OnServerConnectionState(ServerConnectionStateArgs args)
+        {
+            if (args.ConnectionState == LocalConnectionState.Started)
+            {
+                foreach (var obj in ManagerPrefabs)
+                {
+                    // They will automatically get cleaned up on disconnect
+                    var go = Instantiate(obj);
+                    InstanceFinder.ServerManager.Spawn(go, null);
+                }
+            }
+
+        }
+    }
+}

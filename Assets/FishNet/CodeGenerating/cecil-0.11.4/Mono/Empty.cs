@@ -1,3 +1,62 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:db152596847576198ba5a3baf8672ed4bac0926972c8d98193cd95f521415c13
-size 1135
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+using MonoFN.Collections.Generic;
+using System;
+
+namespace MonoFN {
+
+	static class Empty<T> {
+
+		public static readonly T [] Array = new T [0];
+	}
+
+	class ArgumentNullOrEmptyException : ArgumentException {
+
+		public ArgumentNullOrEmptyException (string paramName)
+			: base ("Argument null or empty", paramName)
+		{
+		}
+	}
+}
+
+namespace MonoFN.Cecil {
+
+	static partial class Mixin {
+
+		public static bool IsNullOrEmpty<T> (this T [] self)
+		{
+			return self == null || self.Length == 0;
+		}
+
+		public static bool IsNullOrEmpty<T> (this Collection<T> self)
+		{
+			return self == null || self.size == 0;
+		}
+
+		public static T [] Resize<T> (this T [] self, int length)
+		{
+			Array.Resize (ref self, length);
+			return self;
+		}
+
+		public static T [] Add<T> (this T [] self, T item)
+		{
+			if (self == null) {
+				self = new [] { item };
+				return self;
+			}
+
+			self = self.Resize (self.Length + 1);
+			self [self.Length - 1] = item;
+			return self;
+		}
+	}
+}

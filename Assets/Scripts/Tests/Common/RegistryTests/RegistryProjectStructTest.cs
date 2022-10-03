@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7709b5866101348674198aa728624a51ab87caca34035ce86bfba7e16054af70
-size 309
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RegistryProjectStructTest : MonoBehaviour
+{
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}

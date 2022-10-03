@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:697d7f2b129a78a6f71df5f7004de26430cd2dc75dd3a7671f4bd2eb013c5733
-size 440
+using UnityEngine;
+
+public class CameraFollow : MonoBehaviour {
+
+    public Transform followTarget;
+    public Vector3 offset;
+    
+    void Start() {
+        if(followTarget != null) offset = transform.position - followTarget.position;
+    }
+
+    void LateUpdate() {
+        if (followTarget != null) {
+            transform.position = followTarget.position + offset;
+            transform.LookAt(followTarget.position);
+        }
+    }
+}

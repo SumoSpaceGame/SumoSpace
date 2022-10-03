@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:43dc1379eee5c7310a4fc5172f46252518ef971007f8fe785f1be40ebab80f6f
-size 381
+﻿using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+
+namespace FishNet.Managing.Timing
+{
+	internal sealed class SceneHandleEqualityComparer : EqualityComparer<Scene>
+	{
+		public override bool Equals(Scene a, Scene b)
+		{
+			return (a.handle == b.handle);
+		}
+
+        public override int GetHashCode(Scene obj)
+        {
+			return obj.handle;
+        }
+    }
+}

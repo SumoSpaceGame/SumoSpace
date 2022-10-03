@@ -1,3 +1,44 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:665e6c26fbd286c29bf275fff08d5c90300ac47d1979aea84e55c51e43ed7108
-size 924
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+namespace MonoFN.Cecil {
+
+	public interface IConstantProvider : IMetadataTokenProvider {
+
+		bool HasConstant { get; set; }
+		object Constant { get; set; }
+	}
+
+	static partial class Mixin {
+
+		internal static object NoValue = new object ();
+		internal static object NotResolved = new object ();
+
+		public static void ResolveConstant (
+			this IConstantProvider self,
+			ref object constant,
+			ModuleDefinition module)
+		{
+			if (module == null) {
+				constant = Mixin.NoValue;
+				return;
+			}
+
+			lock (module.SyncRoot) {
+				if (constant != Mixin.NotResolved)
+					return;
+				if (module.HasImage ())
+					constant = module.Read (self, (provider, reader) => reader.ReadConstant (provider));
+				else
+					constant = Mixin.NoValue;
+			}
+		}
+	}
+}

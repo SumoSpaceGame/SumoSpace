@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:44546a4cae63752e37806d784cb28e611120a6184e808718dd8e87d0ec00ea09
-size 477
+﻿using FishNet.Object.Helping;
+
+namespace FishNet.Object
+{
+
+
+    internal struct RpcLinkType
+    {
+        /// <summary>
+        /// Index of link.
+        /// </summary>
+        public ushort LinkIndex;
+        /// <summary>
+        /// Type of Rpc link is for.
+        /// </summary>
+        public RpcType RpcType;
+
+        public RpcLinkType(ushort linkIndex, RpcType rpcType)
+        {
+            LinkIndex = linkIndex;
+            RpcType = rpcType;
+        }
+    }
+
+}

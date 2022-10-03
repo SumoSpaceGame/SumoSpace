@@ -1,3 +1,38 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:7300493f36a7c87cc8cfcceb689ea0a8f2a767a58c598cc5db4a0e740217a9c3
-size 1046
+using Game.Common.Instances;
+using UnityEngine;
+
+public class SimulationObject : MonoBehaviour {
+
+    public GameObject representative;
+
+    [SerializeField] private bool create;
+    
+    //private Transform cachedTransform;
+
+    private void Start()
+    {
+        if (create)
+        {
+            Create();
+        }
+    }
+
+    public void Create()
+    {
+        var sim = MainInstances.Get<Simulation>();
+        var go = Instantiate(representative, GameObject.Find("GameView").transform, false);
+        representative = go;
+        sim.Add(this);
+    }
+
+    /*private void Update() {
+        //var oldLocalPosition = representative.localPosition;
+        //var newLocalPosition = cachedTransform.localPosition;
+
+        //var oldAngle = representative.eulerAngles;
+        //var newAngle = cachedTransform.eulerAngles;
+        
+        //representative.localPosition = new Vector3(newLocalPosition.x, oldLocalPosition.y, newLocalPosition.y);
+        //representative.eulerAngles = new Vector3(oldAngle.x, -newAngle.z, oldAngle.z);
+    }*/
+}

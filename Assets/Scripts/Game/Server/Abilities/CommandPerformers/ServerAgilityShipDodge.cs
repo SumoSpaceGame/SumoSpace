@@ -1,3 +1,10 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:b8812599f4f29b1c83302263b444db9f80ec7d9a93cd0516baf90b7068f72e1a
-size 424
+using Game.Common.Gameplay.Commands;
+using Game.Common.Gameplay.Ship;
+
+public class ServerShipDodge: ICommand {
+    public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData) {
+        shipManager.shipLoadout.PrimaryAbility.Execute(shipManager, true);
+        networker.SendData(packetData, (int)CommandType.AGILITY_DODGE, shipManager.playerMatchID);
+        return true;
+    }
+}

@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:40470937dc1d432b16614a179b6ab1a159608d659ae5db4af368d0543b61bcec
-size 460
+﻿using Game.Common.Gameplay.Ship;
+using UnityEngine;
+
+public abstract class AbilityBehaviourComponent : MonoBehaviour {
+    [SerializeField] protected ShipManager shipManager;
+    [SerializeField] protected bool executing;
+    [SerializeField] protected int oooCounter;
+    public abstract void Execute();
+    public virtual void QuickExecute() { }
+
+    public virtual void Stop() { }
+
+    public void Init(ShipManager sm) {
+        shipManager = sm;
+    }
+}

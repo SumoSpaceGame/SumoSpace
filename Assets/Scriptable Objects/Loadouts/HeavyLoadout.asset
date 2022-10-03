@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8eb81afe087d8e7849b0361dbe2661318069d58714a5189420c410b2c6599947
-size 570
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2408115231424966a54a51bdaaf2dfd8, type: 3}
+  m_Name: HeavyLoadout
+  m_EditorClassIdentifier: 
+  ShipMovement: {fileID: 11400000, guid: 383694b2317473d4383bc09d5d4f7923, type: 2}
+  abilities:
+  - {fileID: 11400000, guid: b9742330d4601c24885265c2dcc08e25, type: 2}

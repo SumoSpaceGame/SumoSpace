@@ -1,3 +1,34 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ff3eae54e46c480d93ef4395bb7a8cb98171b7b88fafbe270b655137661dfa76
-size 825
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+namespace FishNet.Object
+{
+    public sealed partial class NetworkObject : MonoBehaviour
+    {
+
+        #region Private.
+        /// <summary>
+        /// RpcLinks being used within this NetworkObject.
+        /// </summary>
+        private List<ushort> _rpcLinkIndexes;
+        #endregion
+
+        /// <summary>
+        /// Sets rpcLinkIndexes to values.
+        /// </summary>
+        internal void SetRpcLinkIndexes(List<ushort> values)
+        {
+            _rpcLinkIndexes = values;
+        }
+
+        /// <summary>
+        /// Removes used link indexes from ClientObjects.
+        /// </summary>
+        internal void RemoveClientRpcLinkIndexes()
+        {
+            NetworkManager.ClientManager.Objects.RemoveLinkIndexes(_rpcLinkIndexes);
+        }
+    }
+
+}
+

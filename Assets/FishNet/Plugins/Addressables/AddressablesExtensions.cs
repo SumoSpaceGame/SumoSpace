@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0144bddbb47bb1377c1c65c1943ea8702f9bf1a6368b7fcb6f545ead90a494a1
-size 817
+﻿//Remove on 2023/01/01
+//using UnityEngine;
+//using UnityEngine.ResourceManagement.AsyncOperations;
+//using UnitySceneManager = UnityEngine.SceneManagement;
+
+//namespace FishNet.Managing.Scened.Addressable
+//{
+
+//    public static class AddressablesExtensions
+//    {
+//        public static AsyncOperationHandle LoadAsync(string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
+//        {
+//            return default;
+//            //return Addressables.LoadSceneAsync(sceneName, loadSceneMode);
+//        }
+//        public static AsyncOperationHandle UnloadAsync(string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode)
+//        {
+//            return default;
+//            //return Addressables.UnloadSceneAsync() .UnloadSceneAsync(sceneName);
+//        }
+
+//    }
+
+//}

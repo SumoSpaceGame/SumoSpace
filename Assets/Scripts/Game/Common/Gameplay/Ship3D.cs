@@ -1,3 +1,16 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:691e8163462cbfacd87183aa7f1b6610be906989deb9528c7c6a3a2feed437ad
-size 375
+using UnityEngine;
+
+/**
+ * Represents a ship's kinematic properties (position, vel, etc)
+ */
+public class Ship3D : MonoBehaviour {
+    public Vector3 position;
+    public Vector3 velocity;
+    public Vector3 rotation;
+
+    void Update() {
+        transform.eulerAngles = rotation;
+        position += velocity * Time.deltaTime;
+        transform.position = position;
+    }
+}

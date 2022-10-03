@@ -1,3 +1,60 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:bfac0b14ea4bf078205ad0cf864f8503e13512b5eedefce7e11cbaccd7d40f63
-size 1465
+﻿using UnityEngine;
+
+namespace FishNet.Utility
+{
+
+
+    public class DDOLFinder : MonoBehaviour
+    {
+        #region Public.
+        /// <summary>
+        /// Singleton instance of this class.
+        /// </summary>
+        public static DDOLFinder Instance { get; private set; }
+        #endregion
+
+        private void Awake()
+        {
+            FirstInitialize();
+        }
+
+        /// <summary>
+        /// Initializes this script for use. Should only be completed once.
+        /// </summary>
+        private void FirstInitialize()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Debug.LogError("Multiple DDOL scripts found. There should be only one.");
+                return;
+            }
+            else
+            {
+                Instance = this;
+                gameObject.name = "DDOLFinder";
+                DontDestroyOnLoad(gameObject);
+            }
+        }
+
+        /// <summary>
+        /// Returns the current DDOL or creates one if not yet created.
+        /// </summary>
+        public static DDOLFinder GetDDOL()
+        {
+            //Not yet made.
+            if (Instance == null)
+            {
+                GameObject obj = new GameObject();
+                DDOLFinder ddol = obj.AddComponent<DDOLFinder>();
+                return ddol;
+            }
+            //Already  made.
+            else
+            {
+                return Instance;
+            }
+        }
+    }
+
+
+}

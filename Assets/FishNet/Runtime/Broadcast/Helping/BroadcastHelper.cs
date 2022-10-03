@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5afff038cba2cdd178f545d56fc3c9788299042b5775c71cee871695b3816c8a
-size 464
+﻿using FishNet.Object.Helping;
+
+namespace FishNet.Broadcast.Helping
+{
+    internal static class BroadcastHelper
+    {
+        /// <summary>
+        /// Gets the key for a broadcast type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="broadcastType"></param>
+        /// <returns></returns>
+        public static ushort GetKey<T>()
+        {
+            return typeof(T).FullName.GetStableHash16();
+        }
+    }
+
+}

@@ -1,3 +1,13 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:673cdbbd79d9582109d21380f8d9f3212450bb8a0d5d2de59877fdf3327e8e2b
-size 414
+﻿using Game.Common.Gameplay.Abilities.Agility;
+using UnityEngine;
+
+namespace UnityTemplateProjects.Game.Client.Gameplay.Abilities.Behaviours
+{
+    public class AgilityDodgeClientBehaviour : RenderableAbilityBehaviour<AgilityDodgeAbility>
+    {
+        public override void Execute()
+        {
+            shipManager.simulationObject.representative.GetComponent<Animator>().SetTrigger("Dodge");
+        }
+    }
+}

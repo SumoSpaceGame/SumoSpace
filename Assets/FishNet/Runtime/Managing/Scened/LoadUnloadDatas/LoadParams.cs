@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c4d5a4676658a2149ef27751f0e9f26201df66ff1209ce90e97dee39d38c55ff
-size 748
+﻿namespace FishNet.Managing.Scened
+{
+    /// <summary>
+    /// Additional user-crafted data which can be included in scene load callbacks.
+    /// </summary>
+    public class LoadParams
+    {
+        /// <summary>
+        /// Objects which are included in callbacks on the server when loading a scene. Can be useful for including unique information about the scene, such as match id. These are not sent to clients; use ClientParams for this.
+        /// </summary>
+        [System.NonSerialized]
+        public object[] ServerParams = new object[0];
+        /// <summary>
+        /// Bytes which are sent to clients during scene loads. Can contain any information.
+        /// </summary>
+        public byte[] ClientParams = new byte[0];
+    }
+
+}

@@ -1,3 +1,35 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a7a361c5165132328e11bc1ceb7591921be4126c0e90a9b6a9156aa91f1de9fe
-size 807
+﻿using FishNet.Documenting;
+
+namespace FishNet.Object
+{
+    /// <summary>
+    /// Properties which have changed on a transform.
+    /// </summary>
+    [System.Flags]
+    [APIExclude]
+    internal enum ChangedTransformProperties : byte
+    {
+        Unset = 0,
+        LocalPosition = 2,
+        LocalRotation = 4,
+        LocalScale = 8
+    }
+
+    [APIExclude]
+    internal static partial class Enums
+    {
+        /// <summary>
+        /// Returns if whole contains part.
+        /// </summary>
+        /// <param name="whole"></param>
+        /// <param name="part"></param>
+        /// <returns></returns>
+        public static bool TransformPropertiesContains(ChangedTransformProperties whole, ChangedTransformProperties part)
+        {
+            return (whole & part) == part;
+        }
+    }
+
+
+}
+

@@ -1,3 +1,83 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:313eb0ace04795046facdb5a73589a9b2a4358c7a97e33ab5d57c52202ac20c2
-size 1967
+﻿using System;
+using FishNet;
+using FishNet.Connection;
+using FishNet.Object;
+using Game.Common.Gameplay.Ship;
+using Game.Common.Registry;
+using Game.Common.Settings;
+using UnityEngine;
+using UnityEngine.Serialization;
+
+namespace Game.Common.Networking
+{
+    
+    public partial class AgentMovementNetworkManager : NetworkBehaviour
+    {
+        /// <summary>
+        /// Ship request data. Should contain all information that will spawn a ship.
+        /// </summary>
+        [Serializable]
+        private struct RequestData
+        {
+            [SerializeField] public PlayerID clientOwner;
+
+            public string Serialize()
+            {
+                return JsonUtility.ToJson(this);
+            }
+
+            public static RequestData Deserialize(string data)
+            {
+                return JsonUtility.FromJson<RequestData>(data);
+            }
+        }
+        
+        
+        
+        [FormerlySerializedAs("attachedShip")] public ShipManager attachedShipManager;
+
+        public MasterSettings masterSettings;
+
+        public override void OnStartNetwork()
+        {
+            base.OnStartNetwork();
+
+            if (InstanceFinder.IsClient)
+            {
+                ServerRequestShipSpawnData();
+            }
+        }
+        
+        
+        public void Update()
+        {
+            if (attachedShipManager == null)
+            {
+                return;
+            }
+            if (InstanceFinder.IsServer)
+            {
+                ServerUpdate();
+            }
+            else
+            {
+                ClientUpdate();
+            }
+        }
+        
+        
+
+        partial void ClientUpdate();
+        partial void ServerUpdate();
+        
+        [ServerRpc(RequireOwnership = false)]
+        partial void ServerRequestShipSpawnData(NetworkConnection conn = null);
+        
+        [TargetRpc]
+        partial void ClientRequestShipSpawnData(NetworkConnection conn, RequestData data);
+
+
+    }
+    
+    
+}

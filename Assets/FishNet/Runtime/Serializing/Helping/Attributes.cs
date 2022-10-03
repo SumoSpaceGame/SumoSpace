@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a994f8a05fd94156620386ffd94e453bbbf6116bbb9e00dc10b1f6dd4cb7e908
-size 388
+﻿using FishNet.Utility.Constant;
+using System;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo(UtilityConstants.CODEGEN_ASSEMBLY_NAME)]
+namespace FishNet.Serializing.Helping
+{
+    internal class CodegenMakePublicAttribute : Attribute { }
+    public class CodegenExcludeAttribute : Attribute { }
+    internal class CodegenIncludeInternalAttribute : Attribute { }
+
+}

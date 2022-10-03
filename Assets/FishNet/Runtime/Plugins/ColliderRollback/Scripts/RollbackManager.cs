@@ -1,3 +1,52 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:73847ebbb2e01e4115f9cb0f0811945462dcb27e6a387406eb68fc1b1bdc44e2
-size 1239
+﻿using FishNet.Managing;
+using FishNet.Managing.Timing;
+using FishNet.Transporting;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace FishNet.Component.ColliderRollback
+{
+    public class RollbackManager : MonoBehaviour
+    {
+        
+
+        
+
+        #region Serialized.
+        /// <summary>
+        /// 
+        /// </summary>
+        [Tooltip("Maximum time in the past colliders can be rolled back to.")]
+        [SerializeField]
+        private float _maximumRollbackTime = 1.25f;
+        /// <summary>
+        /// Maximum time in the past colliders can be rolled back to.
+        /// </summary>
+        internal float MaximumRollbackTime => _maximumRollbackTime;
+        /// <summary>
+        /// 
+        /// </summary>
+        [Tooltip("Interpolation value for the NetworkTransform or object being rolled back.")]
+        [Range(0, 250)]
+        [SerializeField]
+        internal ushort Interpolation = 2;
+        #endregion
+
+        
+
+        
+
+        /// <summary>
+        /// Initializes this script for use.
+        /// </summary>
+        /// <param name="manager"></param>
+        internal void InitializeOnceInternal(NetworkManager manager)
+        {
+            
+        }
+
+        
+    }
+
+}

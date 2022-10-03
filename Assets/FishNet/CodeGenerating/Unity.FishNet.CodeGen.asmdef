@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d46e15ee1b613f2397192b5cc31030f156a3d80216e141c14b6808f4ed31ee1f
-size 443
+{
+    "name": "Unity.FishNet.Codegen",
+    "references": [
+        "FishNet.Runtime",
+        "FishNet.Codegen.Cecil",
+        "FishNet.Generated"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

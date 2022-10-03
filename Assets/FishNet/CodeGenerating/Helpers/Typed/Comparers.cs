@@ -1,3 +1,34 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:17b689fc751a219cbaef698da93f09ae9052c51bbfe31baa04d4ba7136cb13cf
-size 775
+﻿using MonoFN.Cecil;
+using System.Collections.Generic;
+
+namespace FishNet.CodeGenerating.Helping
+{
+    internal class TypeDefinitionComparer : IEqualityComparer<TypeDefinition>
+    {
+        public bool Equals(TypeDefinition a, TypeDefinition b)
+        {
+            return a.FullName == b.FullName;
+        }
+
+        public int GetHashCode(TypeDefinition obj)
+        {
+            return obj.FullName.GetHashCode();
+        }
+    }
+
+
+    internal class TypeReferenceComparer : IEqualityComparer<TypeReference>
+    {
+        public bool Equals(TypeReference a, TypeReference b)
+        {
+            return a.FullName == b.FullName;
+        }
+
+        public int GetHashCode(TypeReference obj)
+        {
+            return obj.FullName.GetHashCode();
+        }
+    }
+
+
+}

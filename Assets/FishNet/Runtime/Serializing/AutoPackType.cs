@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c68a66dce2ddf843244617e4ead448368d5f7bf94d5245bf51a1be324f7bd0c4
-size 545
+namespace FishNet.Serializing
+{
+    /// <summary>
+    /// How to pack data when using serialization.
+    /// </summary>
+    public enum AutoPackType
+    {
+        /// <summary>
+        /// Data will not be compressed.
+        /// </summary>
+        Unpacked = 0,
+        /// <summary>
+        /// Data will be compressed to use the least amount of data possible.
+        /// </summary>
+        Packed = 1,
+        /// <summary>
+        /// Data will be compressed but not as much as Packed.
+        /// </summary>
+        PackedLess = 2
+    }
+}

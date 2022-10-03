@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:616d9bd4fb79b6a333f51f4beb900030b1d03e93037dd96c09d2d4e15e7a88ef
-size 625
+﻿using UnityEditor;
+using UnityEngine;
+[CustomPropertyDrawer(typeof(EnumNamedListAttribute))]
+public class DrawerEnumNamedList : PropertyDrawer {
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+        var enumNames = attribute as EnumNamedListAttribute;
+        var index = System.Convert.ToInt32(property.propertyPath.Substring(property.propertyPath.IndexOf("[")).Replace("[", "").Replace("]", ""));
+        label.text = index < enumNames.names.Length ? enumNames.names[index] : $"[Index {index}]";
+        EditorGUI.PropertyField( position, property, label, true );
+    }
+}

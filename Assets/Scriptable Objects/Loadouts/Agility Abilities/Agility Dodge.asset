@@ -1,3 +1,23 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a81f188e83833a90a95e261062562badcc07668ba6a5fff82b11f207e7de56c4
-size 697
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1dd0dc336884a839aece657e7d877d3, type: 3}
+  m_Name: Agility Dodge
+  m_EditorClassIdentifier: 
+  cooldown: 5
+  executeCommand: 0
+  stopCommand: 0
+  clientBehaviour: {fileID: 3771484431864915088, guid: e249a5ea55bf09349a9dd8912948faca, type: 3}
+  serverBehaviour: {fileID: 1723777182412283189, guid: d82e000b6fab1f14683be6aec5f778c4, type: 3}
+  slot: 1
+  distance: 10
+  time: 0.2
+  speed: 0

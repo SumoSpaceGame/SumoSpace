@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c79a26311ccaa92515dea1a34235313c76665a42ce40bda053c5345eba38d51e
-size 684
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c4f087626a6d6b4fbaf430e50217a76, type: 3}
+  m_Name: Agility Primary Fire
+  m_EditorClassIdentifier: 
+  cooldown: 0.2
+  executeCommand: 1
+  stopCommand: 2
+  clientBehaviour: {fileID: 7922589147683848013, guid: b59c5fea7bff88548a749c8de75b48d8, type: 3}
+  serverBehaviour: {fileID: 7922589147683848013, guid: 482bb03e713a10345a540c4f1133952e, type: 3}
+  slot: 0
+  knockback: 40

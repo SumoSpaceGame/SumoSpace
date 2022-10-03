@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:1933ffcee5f11e08db4dd15270033f3d75d1c2f6780bc7eb872a77299aa4f3ce
-size 275
+namespace MonoFN.Cecil {
+	internal enum TypeComparisonMode {
+		Exact,
+		SignatureOnly,
+
+		/// <summary>
+		/// Types can be in different assemblies, as long as the module, assembly, and type names match they will be considered equal
+		/// </summary>
+		SignatureOnlyLoose
+	}
+}

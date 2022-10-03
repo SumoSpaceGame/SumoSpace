@@ -1,3 +1,21 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5083010d5ffaea384c1848aea28bc1c77fbd43801d17bf4a1d6f46ac4b5b5587
-size 762
+﻿using Game.Common.Gameplay.Commands;
+using Game.Common.Gameplay.Ship;
+
+namespace UnityTemplateProjects.Game.Client.Gameplay.Abilities.CommandPerformers
+{
+    public class ClientAgilityDodge : ICommandPerformer
+    {
+        public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData)
+        {
+            shipManager.shipLoadout.PrimaryAbility.Execute(shipManager, false);
+            return true;
+        }
+
+        public bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments)
+        {
+            networker.SendData(CommandPacketData.Create(new byte[] { }), CommandType.AGILITY_DODGE,
+                shipManager.playerMatchID);
+            return true;
+        }
+    }
+}

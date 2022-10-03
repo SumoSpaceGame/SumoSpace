@@ -1,3 +1,99 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:52de604a4b34262b1764f5d9fd748fee83debacf0559bc7e3be2ddab87c583b6
-size 3413
+﻿using System;
+using System.Collections.Generic;
+using FishNet.Connection;
+using Game.Common.Instances;
+using Game.Common.Networking;
+using Game.Common.Networking.Misc;
+using Game.Common.Networking.Utility;
+using Game.Common.Phases;
+using Game.Common.Registry;
+using UnityEngine;
+
+namespace Game.Server.Phases
+{
+    public class ServerPhaseStartMatch : IGamePhase
+    {
+
+        private GamePhaseNetworkManager _gamePhaseNetworkManager;
+        private MatchNetworkTimerManager _matchNetworkTimerManager;
+        private AgentNetworkManager _agentNetworkManager;
+
+        private MatchNetworkTimer timer;
+
+        public PlayerCounter playerCounter;
+        
+        public ServerPhaseStartMatch(GamePhaseNetworkManager gamePhaseNetworkManager, MatchNetworkTimerManager matchNetworkTimerManager)
+        {
+            _gamePhaseNetworkManager = gamePhaseNetworkManager;
+            _matchNetworkTimerManager = MainPersistantInstances.Get<MatchNetworkTimerManager>();
+
+            // Now anyone who leaves will be subjected to the reconnect method, if it works hehe
+            _gamePhaseNetworkManager.masterSettings.matchSettings.ServerRestartOnLeave = false;
+        }
+        
+        public void PhaseStart()
+        {
+            _matchNetworkTimerManager = MainPersistantInstances.Get<MatchNetworkTimerManager>();
+            _agentNetworkManager = MainPersistantInstances.Get<AgentNetworkManager>();
+            timer = _matchNetworkTimerManager.CreateTimer();
+            
+            //Send to clients to sync timer
+            
+            timer.StartTimer((long) (_gamePhaseNetworkManager.masterSettings.matchSettings.SelectedMapItem.mapSettings.MatchTimeMinutes * 60 * 1000));
+            timer.StopEvent += OnTimerFinished;
+
+            playerCounter = new PlayerCounter(_gamePhaseNetworkManager.masterSettings.GetPlayerCount());
+
+            List<byte> byteArr = new List<byte>();
+            byteArr.Add(0);
+            byteArr.AddRange(BitConverter.GetBytes(timer.ID));
+            _gamePhaseNetworkManager.SendPhaseUpdate(_gamePhaseNetworkManager.CurrentPhase, byteArr.ToArray());
+        }
+
+        public void PhaseUpdate()
+        {
+            
+        }
+
+        public void PhaseCleanUp()
+        {
+            timer = null;
+        }
+
+        public void OnTimerFinished()
+        {
+            _gamePhaseNetworkManager.ServerNextPhase();
+            if(timer != null) timer.StopEvent -= OnTimerFinished;
+        }
+
+        public void OnUpdateReceived(NetworkConnection conn, byte[] data)
+        {
+            
+            PlayerID playerID;
+
+            if (!_gamePhaseNetworkManager.masterSettings.playerIDRegistry.TryGetByNetworkID(conn.ClientId, out playerID))
+            {
+                Debug.LogWarning("Non-registered player tried to push start match! " + conn.GetAddress());
+                return;
+            }
+            
+            if (data.Length == 1)
+            {
+                playerCounter.Register(playerID);
+
+                if (playerCounter.IsFull())
+                {
+                    
+                    foreach (PlayerID player in playerCounter.GetPlayers())
+                    {
+                        _agentNetworkManager.SpawnShip(player);
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError("Invalid packet recieved for server phase start match");
+            }
+        }
+    }
+}

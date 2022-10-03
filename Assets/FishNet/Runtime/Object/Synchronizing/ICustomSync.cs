@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f0fab7584aec6419060126e33555f83122d5a67e275747a65563f504d8603992
-size 619
+﻿
+namespace FishNet.Object.Synchronizing
+{
+    /// <summary>
+    /// Custom SyncObjects must inherit from SyncBase and implement this interface.
+    /// </summary>
+    public interface ICustomSync
+    {
+        /// <summary>
+        /// Get the serialized type.
+        /// This must return the value type you are synchronizing, for example a struct or class.
+        /// If you are not synchronizing a particular value but instead of supported values such as int, bool, ect, then you may return null on this method.
+        /// </summary>
+        /// <returns></returns>
+        object GetSerializedType();
+    }
+
+
+}

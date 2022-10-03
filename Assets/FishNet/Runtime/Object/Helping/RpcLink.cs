@@ -1,3 +1,39 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:056b7ec7bc5c78dcdde44813c0d1545ae9b36203d7ab79548cd091f90180cf5f
-size 923
+﻿using FishNet.Object.Helping;
+
+namespace FishNet.Object
+{
+
+    #region Types.
+    /// <summary>
+    /// Lookup data for a RPC Link.
+    /// </summary>
+    internal struct RpcLink
+    {
+        /// <summary>
+        /// ObjectId for link.
+        /// </summary>
+        public int ObjectId;
+        /// <summary>
+        /// NetworkBehaviour component index on ObjectId.
+        /// </summary>
+        public byte ComponentIndex;
+        /// <summary>
+        /// RpcHash for link.
+        /// </summary>
+        public uint RpcHash;
+        /// <summary>
+        /// Type of Rpc link is for.
+        /// </summary>
+        public RpcType RpcType;
+
+        public RpcLink(int objectId, byte componentIndex, uint rpcHash, RpcType rpcType)
+        {
+            ObjectId = objectId;
+            ComponentIndex = componentIndex;
+            RpcHash = rpcHash;
+            RpcType = rpcType;
+        }
+    }
+    #endregion
+
+}

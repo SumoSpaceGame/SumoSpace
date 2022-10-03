@@ -1,3 +1,25 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:40aa96b984f83a40cfd26f120c06b584351c2d0b0e9bfb6c83b3a95ed9d7f70e
-size 556
+﻿
+namespace FishNet.Managing.Scened
+{
+    /// <summary>
+    /// How to replace scenes when loading.
+    /// </summary>
+    public enum ReplaceOption : byte
+    { 
+        /// <summary>
+        /// Replace all scenes, online and offline.
+        /// </summary>
+        All,
+        /// <summary>
+        /// Only replace scenes loaded using the SceneManager.
+        /// </summary>
+        OnlineOnly,
+        /// <summary>
+        /// Do not replace any scenes, additional scenes will be loaded as additive.
+        /// </summary>
+        None
+    }
+
+
+
+}

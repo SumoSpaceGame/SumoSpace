@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:9513e72eab1824cd9cf874009acf97eff40e16325e3779e3b1ab1343ccfb4157
-size 381
+using MonoFN.Cecil.Cil;
+using System.Collections.Generic;
+
+namespace FishNet.CodeGenerating.Helping
+{
+
+    /// <summary>
+    /// Data used to modify an RpcIndex should the class have to be rebuilt.
+    /// </summary>
+    internal class SyncIndexData
+    {
+        public uint SyncCount = 0;
+        public List<Instruction> DelegateInstructions = new List<Instruction>();
+    }
+
+
+}

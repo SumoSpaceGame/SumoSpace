@@ -1,3 +1,36 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:04bb75a5f26b5602ff7bc68ec9427b8eabb1824ce3c4f6f2312a41fdeafa549e
-size 1278
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
+using UnityEngine;
+
+namespace Game.Common.Util
+{
+    public class HttpUtil : MonoBehaviour
+    {
+        public static string Get(string uri)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using(HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using(Stream stream = response.GetResponseStream())
+            using(StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+    
+        public static async Task<string> GetAsync(string uri)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using(HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+            using(Stream stream = response.GetResponseStream())
+            using(StreamReader reader = new StreamReader(stream))
+            {
+                return await reader.ReadToEndAsync();
+            }
+        }
+    }
+}

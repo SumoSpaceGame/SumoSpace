@@ -1,3 +1,19 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8d560e72d727cc054bde9e6dd4a73d900daa43b9574d492492507643ee446605
-size 422
+﻿using UnityEditor;
+using UnityEngine;
+
+namespace Game.Common.Map.Editor
+{
+    [CustomEditor(typeof(MapRegistry))]
+    public class MapRegistryEditor : UnityEditor.Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+
+            if (GUILayout.Button("Remove invalid"))
+            {
+                ((MapRegistry) target).CleanUpList();
+            }
+        }
+    }
+}

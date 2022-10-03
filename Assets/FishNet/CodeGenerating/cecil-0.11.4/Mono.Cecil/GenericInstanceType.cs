@@ -1,3 +1,75 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:23abf60bd770d2a116b49da82c96f260b13e08f452c1b95837c0e75d0f98cb48
-size 1720
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+using MonoFN.Collections.Generic;
+using System;
+using System.Text;
+using System.Threading;
+using MD = MonoFN.Cecil.Metadata;
+
+namespace MonoFN.Cecil {
+
+	public sealed class GenericInstanceType : TypeSpecification, IGenericInstance, IGenericContext {
+
+		Collection<TypeReference> arguments;
+
+		public bool HasGenericArguments {
+			get { return !arguments.IsNullOrEmpty (); }
+		}
+
+		public Collection<TypeReference> GenericArguments {
+			get {
+				if (arguments == null)
+					Interlocked.CompareExchange (ref arguments, new Collection<TypeReference> (), null);
+
+				return arguments;
+			}
+		}
+
+		public override TypeReference DeclaringType {
+			get { return ElementType.DeclaringType; }
+			set { throw new NotSupportedException (); }
+		}
+
+		public override string FullName {
+			get {
+				var name = new StringBuilder ();
+				name.Append (base.FullName);
+				this.GenericInstanceFullName (name);
+				return name.ToString ();
+			}
+		}
+
+		public override bool IsGenericInstance {
+			get { return true; }
+		}
+
+		public override bool ContainsGenericParameter {
+			get { return this.ContainsGenericParameter () || base.ContainsGenericParameter; }
+		}
+
+		IGenericParameterProvider IGenericContext.Type {
+			get { return ElementType; }
+		}
+
+		public GenericInstanceType (TypeReference type)
+			: base (type)
+		{
+			base.IsValueType = type.IsValueType;
+			this.etype = MD.ElementType.GenericInst;
+		}
+
+		internal GenericInstanceType (TypeReference type, int arity)
+			: this (type)
+		{
+			this.arguments = new Collection<TypeReference> (arity);
+		}
+	}
+}

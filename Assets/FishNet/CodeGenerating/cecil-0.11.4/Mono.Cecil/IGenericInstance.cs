@@ -1,3 +1,47 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d7ca6ab235b44548db05240960cabcaf13cc08dbd8225ca3d87f4184c43610cc
-size 1042
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+using MonoFN.Collections.Generic;
+using System.Text;
+
+namespace MonoFN.Cecil {
+
+	public interface IGenericInstance : IMetadataTokenProvider {
+
+		bool HasGenericArguments { get; }
+		Collection<TypeReference> GenericArguments { get; }
+	}
+
+	static partial class Mixin {
+
+		public static bool ContainsGenericParameter (this IGenericInstance self)
+		{
+			var arguments = self.GenericArguments;
+
+			for (int i = 0; i < arguments.Count; i++)
+				if (arguments [i].ContainsGenericParameter)
+					return true;
+
+			return false;
+		}
+
+		public static void GenericInstanceFullName (this IGenericInstance self, StringBuilder builder)
+		{
+			builder.Append ("<");
+			var arguments = self.GenericArguments;
+			for (int i = 0; i < arguments.Count; i++) {
+				if (i > 0)
+					builder.Append (",");
+				builder.Append (arguments [i].FullName);
+			}
+			builder.Append (">");
+		}
+	}
+}

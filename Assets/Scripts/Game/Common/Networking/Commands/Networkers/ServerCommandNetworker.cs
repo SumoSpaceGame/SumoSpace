@@ -1,3 +1,24 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3ca39feb91d75427579a0254214553d35b156e39aea4e973a4534fe0f0c760cf
-size 681
+﻿using Game.Common.Networking;
+using Game.Common.Registry;
+
+namespace Game.Common.Gameplay.Commands.Networkers
+{
+    public class ServerCommandNetworker : ICommandNetworker
+    {
+        private InputLayerNetworkManager networker;
+        
+        public ServerCommandNetworker(InputLayerNetworkManager clientNetworker)
+        {
+            networker = clientNetworker;
+        }
+
+        public bool SendData(CommandPacketData data, CommandType commandID, PlayerID shipID)
+        {
+            if (!networker.IsServer) return false;
+            
+            networker.ClientCommandUpdate(commandID, data.GetBytes(), shipID.MatchID);
+
+            return true;
+        }
+    }
+}

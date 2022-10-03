@@ -1,3 +1,26 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:538a9fb1b63be1de3370ab7e22198c993c9e6f7f2a9f845cad97e7c3c0e671f6
-size 1207
+﻿using FishNet.Object;
+using Game.Client.Phases;
+using Game.Client.SceneLoading;
+using Game.Common.Instances;
+using Game.Common.Phases;
+
+namespace Game.Common.Networking
+{
+    /// <summary>
+    /// Client phase network manager
+    /// </summary>
+    public partial class GamePhaseNetworkManager : NetworkBehaviour
+    {
+        partial void ClientAddPhases()
+        {
+            this.gamePhases.Add(Phase.MATCH_CONNECT, new ClientPhaseMatchConnect(this));
+            this.gamePhases.Add(Phase.MATCH_READY_UP, new ClientPhaseReadyUp(this));
+            this.gamePhases.Add(Phase.MATCH_SYNC_PLAYER_DATA, new ClientPhaseSyncPlayerData(this));
+            this.gamePhases.Add(Phase.MATCH_LOBBY, new ClientPhaseLobby(this));
+            this.gamePhases.Add(Phase.MATCH_SYNC_LOAD_OUTS, new ClientPhaseSyncLoadout(this, masterSettings.playerGameDataRegistry, masterSettings.playerIDRegistry));
+            this.gamePhases.Add(Phase.MATCH_LOAD_MAP, new ClientPhaseLoadMap(this, MainPersistantInstances.Get<SceneLoader>()));
+            this.gamePhases.Add(Phase.MATCH_START_COUNTDOWN, new ClientPhaseStartMatch(this));
+            this.gamePhases.Add(Phase.MATCH_GAME, new ClientPhaseGame());
+        }
+    }
+}

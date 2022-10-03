@@ -1,3 +1,40 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2488eaf84969a33ef57495778297f2e92f3b5af242f327c0a0f918f692b15210
-size 826
+//
+// Author:
+//   Jb Evain (jbevain@gmail.com)
+//
+// Copyright (c) 2008 - 2015 Jb Evain
+// Copyright (c) 2008 - 2011 Novell, Inc.
+//
+// Licensed under the MIT/X11 license.
+//
+
+namespace MonoFN.Cecil {
+
+	public abstract class EventReference : MemberReference {
+
+		TypeReference event_type;
+
+		public TypeReference EventType {
+			get { return event_type; }
+			set { event_type = value; }
+		}
+
+		public override string FullName {
+			get { return event_type.FullName + " " + MemberFullName (); }
+		}
+
+		protected EventReference (string name, TypeReference eventType)
+			: base (name)
+		{
+			Mixin.CheckType (eventType, Mixin.Argument.eventType);
+			event_type = eventType;
+		}
+
+		protected override IMemberDefinition ResolveDefinition ()
+		{
+			return this.Resolve ();
+		}
+
+		public new abstract EventDefinition Resolve ();
+	}
+}

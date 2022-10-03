@@ -1,3 +1,18 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:445fdbef36d6fcca9b136d2df24365f0ba36261e340dc65dfc4479b76d07e305
-size 430
+{
+    "name": "Game.Common.Map.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5dffb7647aa50d445a65d35cd730e325"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

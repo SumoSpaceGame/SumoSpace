@@ -1,3 +1,41 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:5a8cd2a6efff15317914fd19d67a3cf406e02aee78b4c8ae685c2c382929cc60
-size 1062
+using System.Collections;
+using UnityEngine;
+
+public class AgilityPrimaryFireClientBehaviour : RenderableAbilityBehaviour<AgilityPrimaryFireAbility> {
+    private Coroutine coroutine;
+    private bool eatNextShot;
+
+    public override void Execute() {
+        coroutine ??= shipManager.StartCoroutine(ClientSide());
+        if (++oooCounter == 1) {
+            executing = true;
+        }
+    }
+
+    public override void QuickExecute() {
+        ShipRenderer.Shoot();
+        eatNextShot = true;
+    }
+
+    public override void Stop() {
+        if (--oooCounter == 0) {
+            executing = false;
+        }
+    }
+
+    private IEnumerator ClientSide() {
+        var counter = 0f;
+        while (true) {
+            counter += Time.deltaTime / Ability.Cooldown;
+            if (counter > 1 && executing) {
+                if (!eatNextShot) {
+                    ShipRenderer.Shoot();
+                } else {
+                    eatNextShot = false;
+                }
+                counter = 0;
+            }
+            yield return null;
+        }
+    }
+}

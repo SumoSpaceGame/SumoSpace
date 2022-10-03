@@ -1,3 +1,15 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:0550a9b3bb28e4940d5bd0c1d598565e2414c58ffcd7ed8c7f27e6b2117166c3
-size 301
+﻿using FishNet.Connection;
+using FishNet.Object;
+
+namespace Game.Common.Networking
+{
+    public partial class AgentInputManager : NetworkBehaviour
+    {
+        
+        public void ServerSendOwnership(NetworkConnection target)
+        {
+            GiveOwnership(target);
+        }
+        
+    }
+}
