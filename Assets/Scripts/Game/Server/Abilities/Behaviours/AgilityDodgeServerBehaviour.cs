@@ -7,16 +7,8 @@ namespace UnityTemplateProjects.Game.Server.Abilities.Behaviours
     public class AgilityDodgeServerBehaviour : AbilityBehaviour<AgilityDodgeAbility>
     {
 
-        private Coroutine cooldownCoroutine;
-        
         public override void Execute()
         {
-            if (cooldownCoroutine != null)
-            {
-                return;
-            }
-
-            cooldownCoroutine = shipManager.StartCoroutine(Cooldown());
             shipManager.StartCoroutine(Dodge());
         }
 
@@ -32,16 +24,6 @@ namespace UnityTemplateProjects.Game.Server.Abilities.Behaviours
             {
                 shipManager.transform.position =
                     Vector3.Lerp(startPos, targetPos, (Time.time - startTime) / Ability.Time);
-                yield return null;
-            }
-        }
-
-        private IEnumerator Cooldown()
-        {
-            var timer = 0f;
-            while (timer >= 0)
-            {
-                timer += Time.deltaTime / Ability.Cooldown;
                 yield return null;
             }
         }
