@@ -18,7 +18,7 @@ namespace Game.Common.Settings
         [SerializeField] public int TeamCount;
         [SerializeField] public int TeamSize;
         
-        [NonSerialized] public MapRegistry.MapItem SelectedMapItem;
+        [SerializeField] public MapRegistry.MapItem SelectedMapItem;
         /// <summary>
         /// Match id of the player. On server side this is a temp variable that is not used.
         /// </summary>
