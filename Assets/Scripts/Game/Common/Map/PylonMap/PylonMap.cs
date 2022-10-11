@@ -8,7 +8,7 @@ namespace Game.Common.Map.PylonMap
     public class PylonMap : MonoBehaviour, IGameMap
     {
         public List<Pylon> pylons = new List<Pylon>();
-        public PointList pointList;
+        public PointList pointList = new PointList();
 
         [Range(0f, 1f)]
         public double mapPercentage = 0;
@@ -22,7 +22,17 @@ namespace Game.Common.Map.PylonMap
         /// </summary>
         public void Init(bool build = true)
         {
-            
+
+            RebuildInternalLists();
+
+            initialized = true;
+
+            if(build) builder.Build(this);
+        }
+
+
+        public void RebuildInternalLists()
+        {
             List<Vector2> points = new List<Vector2>();
             
             // TODO - Just add all the pylons in the scene, find objects.
@@ -35,27 +45,26 @@ namespace Game.Common.Map.PylonMap
             List<int> connections = new List<int>();
             for (int i = 0; i < pylons.Count; i++)
             {
+                if (pylons[i].ConnectedTo == null) continue;
+                
                 connections.Add(i);
                 connections.Add(pylons[i].ConnectedTo.pylonIndex);
             }
 
             pointList.connections = connections.ToArray();
             pointList.points = points.ToArray();
-
-            initialized = true;
-
-            if(build) builder.Build(this);
         }
 
         
         /// <summary>
         /// Update the map
         /// </summary>
-        /// <param name="matchTime"></param>
-        public void UpdateMap(double matchTime)
+        /// <param name="matchTimePercentage"></param>
+        public void UpdateMap(double matchTimePercentage)
         {
-            mapPercentage = matchTime;
+            if (!initialized) return;
             
+            mapPercentage = matchTimePercentage;
             for (int i = 0; i < pylons.Count; i++)
             {
                 pointList.points[pylons[i].pylonIndex] = pylons[i].UpdatePosition(mapPercentage);

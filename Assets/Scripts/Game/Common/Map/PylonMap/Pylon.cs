@@ -90,9 +90,30 @@ namespace Game.Common.Map.PylonMap
                 newKeyFrames.Add(pylonAnimation.keyFrames[i]);
                 if (i == afterFrame)
                 {
+                    Debug.Log("adding frame " + perc);
                     newKeyFrames.Add(newFrame);
                 }
             }
+            
+            pylonAnimation.keyFrames = new List<PylonKeyFrame>(newKeyFrames);
+            
+            pylonAnimation.keyFrames.Sort(((frame, frame2) =>
+            {
+                if (frame.percentage > frame2.percentage)
+                {
+                    return 1;
+                }
+                else if(frame.percentage < frame2.percentage)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }));
+            
+            if(map) map.RebuildInternalLists();
         }
 
         public Vector2 UpdatePosition(double percentage)
