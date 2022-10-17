@@ -118,7 +118,7 @@ namespace Game.Common.Networking.Misc
         /// <returns>Timer Object</returns>
         private MatchNetworkTimer CreateNewTimer()
         {
-            return CreateNewTimer(_timerCounter++);
+            return CreateNewTimer(++_timerCounter);
         }
         
         /// <summary>
@@ -128,6 +128,7 @@ namespace Game.Common.Networking.Misc
         /// <returns>Timer Object</returns>
         private MatchNetworkTimer CreateNewTimer(uint id)
         {
+            Debug.Log("Creating timer " + id);
             var timer = new MatchNetworkTimer(id, NetworkObject);
 
             if (NetworkObject.IsServer)
@@ -139,7 +140,6 @@ namespace Game.Common.Networking.Misc
             }
             
             _timers.Add(timer.ID, timer);
-            
             return timer;
         }
 
