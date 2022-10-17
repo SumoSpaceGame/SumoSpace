@@ -11,7 +11,8 @@
                     "id": "70bde7f0-950b-4c77-b686-88fc03c44c51",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Rotate Raw",
@@ -19,7 +20,8 @@
                     "id": "97abc713-808c-4a09-99a3-814c91a373b6",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Rotate Vec",
@@ -27,15 +29,17 @@
                     "id": "9695a1ea-6560-4821-a775-cea683cc502b",
                     "expectedControlType": "Stick",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
-                    "name": "Dodge",
+                    "name": "PrimaryAbility",
                     "type": "Button",
                     "id": "93c29028-de7b-4e8e-97c0-b5c85b7e2c0d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Fire",
@@ -43,7 +47,17 @@
                     "id": "b45102f7-59db-4e94-9b31-a0eef33fd402",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SecondaryAbility",
+                    "type": "Button",
+                    "id": "a86e3a37-06f1-4fc6-8245-2a4080c82b81",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -142,7 +156,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Mouse and Keyboard",
-                    "action": "Dodge",
+                    "action": "PrimaryAbility",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -153,7 +167,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Dodge",
+                    "action": "PrimaryAbility",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3a151c24-90bc-4c20-860b-6e2dd0d46f92",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PrimaryAbility",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -187,6 +212,39 @@
                     "processors": "",
                     "groups": "Mouse and Keyboard",
                     "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2558308d-defd-4c73-ad22-8692280765e1",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecondaryAbility",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "99aaf8de-bfaa-460a-abbb-f9ba942c1bd7",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecondaryAbility",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "54e74522-c823-4470-876f-98ccfb5c60fe",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecondaryAbility",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
