@@ -5,16 +5,24 @@ using UnityEngine;
 public class HeavyPrimaryFireAbility : ShipAbility {
 
     [SerializeField] private float minKnockback;
-    public float MinKnockback => minKnockback;
+    /// <summary>
+    /// Minimum knockback after applying multipliers.
+    /// </summary>
+    public float MinKnockback => minKnockback * KnockbackMultiplier;
 
     [SerializeField] private float maxKnockback;
-    public float MaxKnockback => maxKnockback;
+    /// <summary>
+    /// Maximum knockback after applying multipliers.
+    /// </summary>
+    public float MaxKnockback => maxKnockback * KnockbackMultiplier;
 
     [SerializeField] private float rampTime;
     public float RampTime => rampTime;
     
     [SerializeField] private AnimationCurve knockbackCurve;
     public AnimationCurve KnockbackCurve => knockbackCurve;
+
+    public float KnockbackMultiplier = 1f;
 
     /// <summary>
     /// Returns the current amount of knockback that should be used.

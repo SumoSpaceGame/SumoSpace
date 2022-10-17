@@ -64,6 +64,15 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Lockdown"",
+                    ""type"": ""Button"",
+                    ""id"": ""f1711918-9845-4cfd-b1ee-5699422d7cc4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Fire"",
                     ""type"": ""Button"",
                     ""id"": ""b45102f7-59db-4e94-9b31-a0eef33fd402"",
@@ -216,6 +225,28 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36a0517f-7546-4786-b92c-52d6f44ebdfd"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse and Keyboard"",
+                    ""action"": ""Lockdown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""07bf6f34-d60f-4f99-ba78-331771915c60"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Lockdown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -256,6 +287,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         m_Gameplay_RotateRaw = m_Gameplay.FindAction("Rotate Raw", throwIfNotFound: true);
         m_Gameplay_RotateVec = m_Gameplay.FindAction("Rotate Vec", throwIfNotFound: true);
         m_Gameplay_Dodge = m_Gameplay.FindAction("Dodge", throwIfNotFound: true);
+        m_Gameplay_Lockdown = m_Gameplay.FindAction("Lockdown", throwIfNotFound: true);
         m_Gameplay_Fire = m_Gameplay.FindAction("Fire", throwIfNotFound: true);
     }
 
@@ -320,6 +352,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_RotateRaw;
     private readonly InputAction m_Gameplay_RotateVec;
     private readonly InputAction m_Gameplay_Dodge;
+    private readonly InputAction m_Gameplay_Lockdown;
     private readonly InputAction m_Gameplay_Fire;
     public struct GameplayActions
     {
@@ -329,6 +362,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         public InputAction @RotateRaw => m_Wrapper.m_Gameplay_RotateRaw;
         public InputAction @RotateVec => m_Wrapper.m_Gameplay_RotateVec;
         public InputAction @Dodge => m_Wrapper.m_Gameplay_Dodge;
+        public InputAction @Lockdown => m_Wrapper.m_Gameplay_Lockdown;
         public InputAction @Fire => m_Wrapper.m_Gameplay_Fire;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
@@ -351,6 +385,9 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @Dodge.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDodge;
                 @Dodge.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDodge;
                 @Dodge.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDodge;
+                @Lockdown.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLockdown;
+                @Lockdown.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLockdown;
+                @Lockdown.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLockdown;
                 @Fire.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFire;
                 @Fire.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFire;
                 @Fire.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnFire;
@@ -370,6 +407,9 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @Dodge.started += instance.OnDodge;
                 @Dodge.performed += instance.OnDodge;
                 @Dodge.canceled += instance.OnDodge;
+                @Lockdown.started += instance.OnLockdown;
+                @Lockdown.performed += instance.OnLockdown;
+                @Lockdown.canceled += instance.OnLockdown;
                 @Fire.started += instance.OnFire;
                 @Fire.performed += instance.OnFire;
                 @Fire.canceled += instance.OnFire;
@@ -401,6 +441,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         void OnRotateRaw(InputAction.CallbackContext context);
         void OnRotateVec(InputAction.CallbackContext context);
         void OnDodge(InputAction.CallbackContext context);
+        void OnLockdown(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
     }
 }

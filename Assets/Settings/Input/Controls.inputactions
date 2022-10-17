@@ -11,7 +11,8 @@
                     "id": "70bde7f0-950b-4c77-b686-88fc03c44c51",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Rotate Raw",
@@ -19,7 +20,8 @@
                     "id": "97abc713-808c-4a09-99a3-814c91a373b6",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Rotate Vec",
@@ -27,7 +29,8 @@
                     "id": "9695a1ea-6560-4821-a775-cea683cc502b",
                     "expectedControlType": "Stick",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Dodge",
@@ -35,7 +38,17 @@
                     "id": "93c29028-de7b-4e8e-97c0-b5c85b7e2c0d",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Lockdown",
+                    "type": "Button",
+                    "id": "f1711918-9845-4cfd-b1ee-5699422d7cc4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Fire",
@@ -43,7 +56,8 @@
                     "id": "b45102f7-59db-4e94-9b31-a0eef33fd402",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -187,6 +201,28 @@
                     "processors": "",
                     "groups": "Mouse and Keyboard",
                     "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "36a0517f-7546-4786-b92c-52d6f44ebdfd",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mouse and Keyboard",
+                    "action": "Lockdown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "07bf6f34-d60f-4f99-ba78-331771915c60",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Lockdown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
