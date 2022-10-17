@@ -240,5 +240,13 @@ namespace Game.Common.Networking
         }
 
         partial void ClientUpdatePlayerNetworkID(int networkID, ushort matchID);
+
+        private void OnApplicationQuit()
+        {
+            if (IsServer)
+            {
+                InstanceFinder.ServerManager.StopConnection(true);
+            }
+        }
     }
 }
