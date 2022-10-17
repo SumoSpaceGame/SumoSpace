@@ -6,6 +6,12 @@ using UnityEngine;
 namespace Game.Common.Settings
 {
     [Serializable]
+    public struct MatchTimersIDs
+    {
+        public uint mainMatchTimer;
+    }
+    
+    [Serializable]
     [CreateAssetMenu(fileName = "GameMatchSettings", menuName = "Game/Game Match Settings")]
     public class GameMatchSettings : ScriptableObject
     {
@@ -26,7 +32,8 @@ namespace Game.Common.Settings
         [SerializeField] public int ClientTeam;
         [SerializeField] public int ClientTeamPosition;
         [SerializeField] public bool ClientIsSpectator;
-        
+
+        [SerializeField] public MatchTimersIDs timerIDs;
         /// <summary>
         /// Match flag settings
         /// </summary>
