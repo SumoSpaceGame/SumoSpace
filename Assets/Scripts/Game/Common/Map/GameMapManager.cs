@@ -28,7 +28,8 @@ namespace Game.Common.Map
 
         private MatchNetworkTimer timer = null;
         private uint timerID = 0;
-        private bool running = false;
+
+        public bool running { private set; get; }
         
         // TODO: Create map event handler
             // Event handler will allow you to timeline things that happen
@@ -88,11 +89,13 @@ namespace Game.Common.Map
         
         private void Update()
         {
+            //Temp way to solve timer not sync properly.. Needs a better path  
+            
             if (!running) return;
-
-            if (timer == null && !MainPersistantInstances.Get<MatchNetworkTimerManager>().GetTimer(timerID, out timer))
+            
+            if (timer == null && !MainPersistantInstances.Get<MatchNetworkTimerManager>()
+                    .GetTimer(masterSettings.matchSettings.timerIDs.mainMatchTimer, out timer))
             {
-                // Have not gotten timer yet, keep waiting for it to spawn before updating
                 return;
             }
             
@@ -119,7 +122,7 @@ namespace Game.Common.Map
         {
             // TODO: Reset them to their base
             Vector3 resetPosition = this.transform.position;
-
+            
 
             foreach (var ship in managers)
             {
@@ -140,7 +143,7 @@ namespace Game.Common.Map
             {
                 if (IsOutOfBounds(ship.GetWorldPosition(), ship.GetRadius()))
                 {
-                    outOfBounds.Add(ship);
+                      outOfBounds.Add(ship);
                 }
                 
             }

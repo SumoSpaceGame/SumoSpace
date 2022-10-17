@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using FishNet.Connection;
 using Game.Client.SceneLoading;
+using Game.Common.Instances;
 using Game.Common.Networking;
+using Game.Common.Networking.Misc;
 using Game.Common.Phases;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,9 +29,14 @@ namespace Game.Server.Phases
         
         public void PhaseStart()
         {
+            var _matchNetworkTimerManager = MainPersistantInstances.Get<MatchNetworkTimerManager>();
+            
             _phaseNetworkManager.SendPhaseUpdate(_phaseNetworkManager.CurrentPhase, new byte[]{(byte)_phaseNetworkManager.masterSettings.matchSettings.SelectedMapItem.index} );
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.LoadScene(_phaseNetworkManager.masterSettings.matchSettings.SelectedMapItem.sceneName);
+
+            _phaseNetworkManager.masterSettings.matchSettings.timerIDs.mainMatchTimer =
+                _matchNetworkTimerManager.CreateTimer().ID;
         }
 
         public void PhaseUpdate()

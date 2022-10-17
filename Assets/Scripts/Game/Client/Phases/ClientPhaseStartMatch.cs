@@ -51,10 +51,8 @@ namespace Game.Client.Phases
             {
                 case 0:
                     // Activate map
-                    uint timerID = BitConverter.ToUInt32(data.Skip(1).ToArray());
-                    
-                    MainInstances.Get<GameMapManager>().ActivateMap(timerID);
-                    
+                    _gamePhaseNetworkManager.masterSettings.matchSettings.timerIDs.mainMatchTimer = BitConverter.ToUInt32(data.Skip(1).ToArray());
+
                     break;
             }
         }

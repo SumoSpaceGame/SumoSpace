@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FishNet.Connection;
 using Game.Common.Instances;
+using Game.Common.Map;
 using Game.Common.Networking;
 using Game.Common.Networking.Misc;
 using Game.Common.Networking.Utility;
@@ -27,17 +28,25 @@ namespace Game.Server.Phases
             _gamePhaseNetworkManager = gamePhaseNetworkManager;
             _matchNetworkTimerManager = MainPersistantInstances.Get<MatchNetworkTimerManager>();
 
-            // Now anyone who leaves will be subjected to the reconnect method, if it works hehe
-            _gamePhaseNetworkManager.masterSettings.matchSettings.ServerRestartOnLeave = false;
         }
         
         public void PhaseStart()
         {
             _matchNetworkTimerManager = MainPersistantInstances.Get<MatchNetworkTimerManager>();
             _agentNetworkManager = MainPersistantInstances.Get<AgentNetworkManager>();
-            timer = _matchNetworkTimerManager.CreateTimer();
+            timer = null;
+            _matchNetworkTimerManager.GetTimer(_gamePhaseNetworkManager.gameMatchSettings.timerIDs.mainMatchTimer,
+                out timer);
+            /*
+            Debug.Log("TEST = " + _gamePhaseNetworkManager.gameMatchSettings.timerIDs.mainMatchTimer);
             
             //Send to clients to sync timer
+            
+            Debug.Log("Test 2 " + _matchNetworkTimerManager.GetTimer(_gamePhaseNetworkManager.gameMatchSettings.timerIDs.mainMatchTimer,
+                out timer));
+            Debug.Log("Test 2 " + timer);*/
+            
+            // TODO: Restructure how this works. GameMapManager should already be in the scene.
             
             timer.StartTimer((long) (_gamePhaseNetworkManager.masterSettings.matchSettings.SelectedMapItem.mapSettings.MatchTimeMinutes * 60 * 1000));
             timer.StopEvent += OnTimerFinished;
@@ -48,11 +57,24 @@ namespace Game.Server.Phases
             byteArr.Add(0);
             byteArr.AddRange(BitConverter.GetBytes(timer.ID));
             _gamePhaseNetworkManager.SendPhaseUpdate(_gamePhaseNetworkManager.CurrentPhase, byteArr.ToArray());
+            
+            // Now anyone who leaves will be subjected to the reconnect method, if it works hehe
+            _gamePhaseNetworkManager.masterSettings.matchSettings.ServerRestartOnLeave = false;
+            
+            
         }
 
         public void PhaseUpdate()
         {
-            
+            if (MainInstances.HasType(typeof(GameMapManager)))
+            {
+                var map = MainInstances.Get<GameMapManager>();
+
+                if (!map.running)
+                {
+                    map.ActivateMap(timer.ID);
+                }
+            }
         }
 
         public void PhaseCleanUp()
