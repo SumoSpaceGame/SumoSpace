@@ -9,7 +9,7 @@ namespace Game.Common.Map
     public class MapRegistry : ScriptableObject
     {
         [Serializable]
-        public class MapItem
+        public struct MapItem
         {
             // If you want to make a new gamemode for the same map, most likely copy and paste the map and 
             // add the game mode specific elements
@@ -105,8 +105,8 @@ namespace Game.Common.Map
                 }
             }
             
-            Debug.LogWarning("Failed to get map from map registry by string " + name);
-            return null;
+            Debug.LogError("Failed to get map from map registry by string " + name);
+            return new MapItem();
         }
         
         /// <summary>
@@ -121,8 +121,8 @@ namespace Game.Common.Map
                 return mapItems[index];
             }
         
-            Debug.LogWarning("Tried to get map by index out of range " + index);
-            return null;
+            Debug.LogError("Tried to get map by index out of range " + index);
+            return new MapItem();
         }
 
         
