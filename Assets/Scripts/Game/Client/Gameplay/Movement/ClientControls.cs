@@ -53,7 +53,7 @@ namespace Game.Client.Gameplay.Movement
 
         private const float ROTATION_ANGLE_OFFSET = -90f;
 
-        private InputLayerNetworkManager inputLayer;
+        private InputLayerNetworkManager inputLayer; 
     
         private void Start() {
             _camera = Camera.main;
