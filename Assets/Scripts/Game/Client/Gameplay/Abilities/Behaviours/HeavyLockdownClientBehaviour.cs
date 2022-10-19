@@ -15,13 +15,13 @@ public class HeavyLockdownClientBehaviour : RenderableAbilityBehaviour<HeavyLock
         {
             executing = true;
         }
-        StartCoroutine(Timer());
     }
 
-    private IEnumerator Timer()
+    public override void Stop()
     {
-        yield return new WaitForSeconds(Ability.Time);
-        executing = false;
+        if (--oooCounter == 0)
+        {
+            executing = false;
+        }
     }
-
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d06f4ab45cd35f24b977176ff2d6e8b9, type: 3}
   m_Name: Heavy Lockdown
   m_EditorClassIdentifier: 
-  cooldown: 30
+  cooldown: 0
   executeCommand: 5
   stopCommand: 5
   clientBehaviour: {fileID: 5063673282853744019, guid: f2697a97aee53e54cbe602fdc0a3ecdc, type: 3}
@@ -20,4 +20,5 @@ MonoBehaviour:
   slot: 1
   _knockbackMultiplier: 2
   _forceMultiplier: 4
-  _time: 10
+  _windUpTime: 2
+  _windDownTime: 1

@@ -25,6 +25,11 @@ public class HeavyPrimaryFireAbility : ShipAbility {
     public float KnockbackMultiplier = 1f;
 
     /// <summary>
+    /// If true, the ship can't fire.
+    /// </summary>
+    public bool IsDisabled;
+
+    /// <summary>
     /// Returns the current amount of knockback that should be used.
     /// </summary>
     /// <remarks>
@@ -34,7 +39,7 @@ public class HeavyPrimaryFireAbility : ShipAbility {
     /// <returns></returns>
     public float CurrentKnockback(float time)
     {
-        float charge = KnockbackCurve.Evaluate(time); // Between 0 and 1.
+        float charge = KnockbackCurve.Evaluate(time / RampTime); // Between 0 and 1.
         return Mathf.Lerp(MinKnockback, MaxKnockback, charge);
     }
 }

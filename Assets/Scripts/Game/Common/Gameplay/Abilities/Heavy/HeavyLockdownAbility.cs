@@ -8,8 +8,10 @@ public class HeavyLockdownAbility : ShipAbility
     [SerializeField] private float _knockbackMultiplier;
     [Tooltip("Multiplier applied to the ship's max force.")]
     [SerializeField] private float _forceMultiplier;
-    [Tooltip("Amount of time the lockdown is active, in seconds.")]
-    [SerializeField] private float _time;
+    [Tooltip("Time it takes for ability to activate.")]
+    [SerializeField] private float _windUpTime;
+    [Tooltip("Time it takes for ability to deactivate.")]
+    [SerializeField] private float _windDownTime;
 
     /// <summary>
     /// Multiplier applied to the Heavy Primary Fire.
@@ -21,7 +23,11 @@ public class HeavyLockdownAbility : ShipAbility
     /// </summary>
     public float ForceMultiplier => _forceMultiplier;
     /// <summary>
-    /// Amount of time the lockdown is active, in seconds.
+    /// Amount of time it takes for the ability to activate. During this time, the player loses control of the ship.
     /// </summary>
-    public float Time => _time;
+    public float WindUpTime => _windUpTime;
+    /// <summary>
+    /// Amount of time it takes for the ability to deactivate. During this time, the player loses control of the ship.
+    /// </summary>
+    public float WindDownTime => _windDownTime;
 }
