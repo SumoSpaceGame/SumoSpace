@@ -5,36 +5,57 @@ using UnityEngine;
 public class HeavyLockdownServerBehaviour : AbilityBehaviour<HeavyLockdownAbility>
 {
     private Coroutine coroutine;
+    private float maxForce = 0;
+    private HeavyPrimaryFireAbility heavyFire = null;
 
     public override void Execute()
     {
-        if (!executing)
-            coroutine ??= shipManager.StartCoroutine(ServerSide());
-        executing = true;
-    }
-
-    // Activates the lockdown, waits for the correct amount of time, and then deactivates the lockdown.
-    private IEnumerator ServerSide()
-    {
-        Debug.Log("Starting lockdown.");
-        HeavyPrimaryFireAbility hpfAbility = shipManager.shipLoadout.PrimaryAbility as HeavyPrimaryFireAbility;
-        if (hpfAbility == null)
+        if (heavyFire is null)
         {
-            Debug.LogError("No Heavy Primary Fire Ability found.");
+            heavyFire = shipManager.shipLoadout.PrimaryFire as HeavyPrimaryFireAbility;
+            if (heavyFire is null)
+            {
+                Debug.LogError("No Heavy Primary Fire Ability found.");
+                return;
+            }
+        }
+        if (heavyFire.IsDisabled)
+            return;
+        if (maxForce == 0)
+            maxForce = shipManager.shipLoadout.ShipMovement.maxForce;
+        if (!executing)
+        {
+            coroutine = shipManager.StartCoroutine(ServerSideStart());
+            executing = true;
         }
         else
         {
-            hpfAbility.KnockbackMultiplier = Ability.KnockbackMultiplier;
-            float maxForce = shipManager.shipLoadout.ShipMovement.maxForce;
-            shipManager.shipLoadout.ShipMovement.maxForce *= Ability.ForceMultiplier;
-            shipManager.shipController.SetSpeedMultiplier(0);
-            yield return new WaitForSeconds(Ability.Time);
-            hpfAbility.KnockbackMultiplier = 1;
-            shipManager.shipLoadout.ShipMovement.maxForce = maxForce;
-            shipManager.shipController.SetSpeedMultiplier(1);
-            Debug.Log("Ending lockdown.");
+            coroutine = shipManager.StartCoroutine(ServerSideStop());
+            executing = false;
         }
-        executing = false;
+    }
+
+    // Winds up and activates the lockdown.
+    private IEnumerator ServerSideStart()
+    {
+        shipManager.shipController.SetSpeedMultiplier(0);
+        heavyFire.IsDisabled = true;
+        yield return new WaitForSeconds(Ability.WindUpTime);
+        heavyFire.IsDisabled = false;
+        heavyFire.KnockbackMultiplier = Ability.KnockbackMultiplier;
+        shipManager.shipLoadout.ShipMovement.maxForce *= Ability.ForceMultiplier;
+        yield return null;
+    }
+
+    // Winds down and deactivates the lockdown.
+    private IEnumerator ServerSideStop()
+    {
+        heavyFire.KnockbackMultiplier = 1;
+        shipManager.shipLoadout.ShipMovement.maxForce = maxForce;
+        heavyFire.IsDisabled = true;
+        yield return new WaitForSeconds(Ability.WindDownTime);
+        heavyFire.IsDisabled = false;
+        shipManager.shipController.SetSpeedMultiplier(1);
         yield return null;
     }
 }

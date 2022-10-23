@@ -3,23 +3,29 @@ using UnityEngine;
 
 public class HeavyPrimaryFireClientBehaviour : RenderableAbilityBehaviour<HeavyPrimaryFireAbility> {
     private Coroutine coroutine;
+    private bool _shouldBeamStart = false;
 
     public override void Execute() {
-        
+
     }
 
     public override void QuickExecute() {
-        ShipRenderer.StartBeam();
-        var routine = shipManager.StartCoroutine(ClientSide());
-        coroutine ??= routine;
+        if (!Ability.IsDisabled)
+        {
+            ShipRenderer.StartBeam();
+            coroutine = shipManager.StartCoroutine(ClientSide());
+        }
+        else
+            _shouldBeamStart = true;
         if (++oooCounter == 1) {
             executing = true;
         }
     }
 
     public override void Stop() {
-        if(coroutine != null) shipManager.StopCoroutine(coroutine);
+        if (coroutine != null) shipManager.StopCoroutine(coroutine);
         ShipRenderer.EndBeam();
+        _shouldBeamStart = false;
         if (--oooCounter == 0) {
             executing = false;
         }
@@ -27,8 +33,26 @@ public class HeavyPrimaryFireClientBehaviour : RenderableAbilityBehaviour<HeavyP
 
     private IEnumerator ClientSide() {
         while (true) {
-            ShipRenderer.Beam();
+            if (Ability.IsDisabled)
+            {
+                executing = false;
+                ShipRenderer.EndBeam();
+                _shouldBeamStart = true;
+                shipManager.StopCoroutine(coroutine);
+            }
+            else
+                ShipRenderer.Beam();
             yield return null;
+        }
+    }
+
+    // If the fire ability is reenabled while executing, start the beam.
+    private void Update()
+    {
+        if (!Ability.IsDisabled && _shouldBeamStart)
+        {
+            _shouldBeamStart = false;
+            QuickExecute();
         }
     }
 }

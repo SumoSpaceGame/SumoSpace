@@ -23,8 +23,8 @@ public class HeavyPrimaryFireServerBehaviour : AbilityBehaviour<HeavyPrimaryFire
         var timer = 0f;
         while (counter >= 0) {
             counter += Time.deltaTime / Ability.Cooldown;
-            timer = executing ? timer + Time.deltaTime : 0f;
-            if (counter > 1 && executing) {
+            timer = executing && !Ability.IsDisabled ? timer + Time.deltaTime : 0f;
+            if (counter > 1 && executing && !Ability.IsDisabled) {
                 var t = shipManager.transform;
                 var hit = Physics2D.Raycast(t.position + t.up * 2, t.up);
                 if (hit.rigidbody) {
