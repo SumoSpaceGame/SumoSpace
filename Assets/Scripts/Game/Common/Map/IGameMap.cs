@@ -14,8 +14,8 @@ namespace Game.Common.Map
         /// <summary>
         /// Updates the map with the current matchTime. Delta time should be handled by the map itself
         /// </summary>
-        /// <param name="matchTime">Current Match time</param>
-        public void UpdateMap(double matchTime);
+        /// <param name="matchTimePercentage">Current Match time 0.0-1.0</param>
+        public void UpdateMap(double matchTimePercentage);
         
 
         /// <summary>

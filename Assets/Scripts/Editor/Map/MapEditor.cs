@@ -60,6 +60,7 @@ namespace Game.Common.Map.Editor
                 if (GUILayout.Button("Refresh pylon list"))
                 {
                     ((PylonMap.PylonMap) manager.gameMap).ReloadPylonList();
+                    ((PylonMap.PylonMap) manager.gameMap).RebuildInternalLists();
                 }
                 
             }
@@ -79,12 +80,13 @@ namespace Game.Common.Map.Editor
                 manager.mapSettings.MatchTimeMinutes = EditorGUILayout.DoubleField("Max Match Time", manager.mapSettings.MatchTimeMinutes);
 
             }
+            
             currentMatchTimeMinutes = Math.Clamp(currentMatchTimeMinutes, 0.0f,
                 manager.mapSettings.MatchTimeMinutes);
-        
+            
             // TODO: Add scrubbing visualization
-
-
+            
+            manager.gameMap.UpdateMap(currentMatchTimeMinutes/manager.mapSettings.MatchTimeMinutes);
 
         }
 

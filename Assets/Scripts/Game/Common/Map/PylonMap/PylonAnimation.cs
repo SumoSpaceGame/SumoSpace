@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Common.Map.PylonMap
 {
-    
+    [Serializable]
     public struct PylonKeyFrame
     {
         public double percentage;
@@ -48,7 +49,11 @@ namespace Game.Common.Map.PylonMap
             {
                 return keyFrames[keyFrames.Count - 1].position;
             }
-
+            else if (frameStart == -1)
+            {
+                return keyFrames[frameEnd].position;
+            }
+            
             double remaining = percentage - keyFrames[frameStart].percentage;
             double total = keyFrames[frameEnd].percentage - keyFrames[frameStart].percentage;
 

@@ -8,6 +8,7 @@ namespace Game.Common.Networking
 {
     public partial class AgentMovementNetworkManager : NetworkBehaviour
     {
+            
         partial void ServerUpdate()
         {
             this.transform.position = attachedShipManager.transform.position;

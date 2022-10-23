@@ -16,3 +16,6 @@ MonoBehaviour:
   - mapSettings: {fileID: 11400000, guid: 5208cf664294a344cba72dd82f3500ac, type: 2}
     sceneName: TestMap
     index: 0
+  - mapSettings: {fileID: 11400000, guid: 68b92f6b39f364847ae3558374d83c95, type: 2}
+    sceneName: NewTestMap
+    index: 1

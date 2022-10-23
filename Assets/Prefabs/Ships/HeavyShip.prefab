@@ -34,6 +34,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -173,7 +174,19 @@ MonoBehaviour:
     m_ActionId: 9695a1ea-6560-4821-a775-cea683cc502b
     m_ActionName: Gameplay/Rotate Vec
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8162458709843036457}
+        m_TargetAssemblyTypeName: Game.Client.Gameplay.Movement.ClientControls, Game
+        m_MethodName: OnPrimaryAbility
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 93c29028-de7b-4e8e-97c0-b5c85b7e2c0d
     m_ActionName: Gameplay/Dodge[/Keyboard/leftShift]
   - m_PersistentCalls:
@@ -192,6 +205,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: b45102f7-59db-4e94-9b31-a0eef33fd402
     m_ActionName: Gameplay/Fire[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8162458709843036457}
+        m_TargetAssemblyTypeName: Game.Client.Gameplay.Movement.ClientControls, Game
+        m_MethodName: OnSecondaryAbility
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a86e3a37-06f1-4fc6-8245-2a4080c82b81
+    m_ActionName: Gameplay/SecondaryAbility[/Keyboard/2,/Keyboard/ctrl]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Mouse and Keyboard
   m_DefaultActionMap: Gameplay
@@ -255,7 +284,7 @@ MonoBehaviour:
   isServer: 0
   isPlayer: 0
   playerMatchID:
-    ID: 0
+    NetworkID: 0
     ClientID: 
     MatchID: 0
 --- !u!114 &-8769192327207701676
@@ -274,7 +303,7 @@ MonoBehaviour:
   targetAngle: 0
 --- !u!95 &4336934462001359146
 Animator:
-  serializedVersion: 3
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -287,6 +316,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1

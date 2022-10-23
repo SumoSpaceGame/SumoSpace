@@ -10,8 +10,10 @@ namespace Game.Client.Gameplay.Movement
  * Processes client input in-game into movement and abilities
  */
     [RequireComponent(typeof(PlayerInput))]
-    public class ClientControls : MonoBehaviour {
+    public class ClientControls : MonoBehaviour 
+    {
 
+        // TODO: MOVE PLAYER INPUT AND CLIENT CONTROLS INTO A SECONDARY GAMEOBJECT, SO WE CAN CHANGE ONE PREFAB MORE EASILY
         //public ShipMovement ShipMovement => shipMovement;
         private ShipLoadout ShipLoadout => shipLoadout;
 
@@ -44,7 +46,7 @@ namespace Game.Client.Gameplay.Movement
         public Coroutine fireCoroutine;
         
         
-        private bool sendPrimaryAbility;
+        private bool sendPrimaryAbility, sendSecondaryAbility;
         private bool shooting;
     
         private Camera _camera;
@@ -59,6 +61,8 @@ namespace Game.Client.Gameplay.Movement
             
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Confined;
+            sendPrimaryAbility = false;
+            sendSecondaryAbility = false;
         }
 
         private void OnDestroy()
@@ -78,10 +82,35 @@ namespace Game.Client.Gameplay.Movement
             }
 
             //inputLayer.SendMovementUpdate(movementSend, rotationSend);
-            if (sendPrimaryAbility) {
-                //inputLayer.PerformCommand(CommandType.AGILITY_DODGE, new byte[] { });
-                inputLayer.PerformCommand(ShipLoadout.PrimaryAbility.ExecuteCommand, new byte[] {});
+            if (sendPrimaryAbility) 
+            {
                 sendPrimaryAbility = false;
+                
+                if (ShipLoadout.PrimaryAbility == null)
+                {
+                    Debug.LogError("Failed to execute primary ability. None set");
+                }
+                else
+                {
+                    //inputLayer.PerformCommand(CommandType.AGILITY_DODGE, new byte[] { });
+                    inputLayer.PerformCommand(ShipLoadout.PrimaryAbility.ExecuteCommand, new byte[] {});
+                }
+                
+            }
+            
+            if (sendSecondaryAbility) 
+            {
+                sendSecondaryAbility = false;
+                
+                if (ShipLoadout.SecondaryAbility == null)
+                {
+                    Debug.LogError("Failed to execute secondary ability. None set");
+                }
+                else
+                {
+                    //inputLayer.PerformCommand(CommandType.AGILITY_DODGE, new byte[] { });
+                    inputLayer.PerformCommand(ShipLoadout.SecondaryAbility.ExecuteCommand, new byte[] {});
+                }
             }
         }
 
@@ -142,6 +171,14 @@ namespace Game.Client.Gameplay.Movement
         public void OnPrimaryAbility(InputAction.CallbackContext ctx) {
             if (ctx.performed)
                 sendPrimaryAbility = true;
+        }
+        
+        /**
+     * Shift or A
+     */
+        public void OnSecondaryAbility(InputAction.CallbackContext ctx) {
+            if (ctx.performed)
+                sendSecondaryAbility = true;
         }
         
         /**
