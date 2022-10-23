@@ -5,16 +5,29 @@ using UnityEngine;
 public class HeavyPrimaryFireAbility : ShipAbility {
 
     [SerializeField] private float minKnockback;
-    public float MinKnockback => minKnockback;
+    /// <summary>
+    /// Minimum knockback after applying multipliers.
+    /// </summary>
+    public float MinKnockback => minKnockback * KnockbackMultiplier;
 
     [SerializeField] private float maxKnockback;
-    public float MaxKnockback => maxKnockback;
+    /// <summary>
+    /// Maximum knockback after applying multipliers.
+    /// </summary>
+    public float MaxKnockback => maxKnockback * KnockbackMultiplier;
 
     [SerializeField] private float rampTime;
     public float RampTime => rampTime;
     
     [SerializeField] private AnimationCurve knockbackCurve;
     public AnimationCurve KnockbackCurve => knockbackCurve;
+
+    public float KnockbackMultiplier = 1f;
+
+    /// <summary>
+    /// If true, the ship can't fire.
+    /// </summary>
+    public bool IsDisabled;
 
     /// <summary>
     /// Returns the current amount of knockback that should be used.
@@ -24,5 +37,9 @@ public class HeavyPrimaryFireAbility : ShipAbility {
     /// </remarks>
     /// <param name="time"> The amount of time the ability has been active.</param>
     /// <returns></returns>
-    public float CurrentKnockback(float time) => Mathf.Lerp(minKnockback, MaxKnockback, time / rampTime);
+    public float CurrentKnockback(float time)
+    {
+        float charge = KnockbackCurve.Evaluate(time / RampTime); // Between 0 and 1.
+        return Mathf.Lerp(MinKnockback, MaxKnockback, charge);
+    }
 }

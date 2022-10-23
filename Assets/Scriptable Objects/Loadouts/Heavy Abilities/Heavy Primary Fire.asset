@@ -18,8 +18,8 @@ MonoBehaviour:
   clientBehaviour: {fileID: 7922589147683848013, guid: 1ba1653cf73d39446ba1a9d7227372c2, type: 3}
   serverBehaviour: {fileID: 7922589147683848013, guid: 1871594e16b603041aa6ea1bd8dcff96, type: 3}
   slot: 0
-  minKnockback: 10
-  maxKnockback: 50
+  minKnockback: 4000
+  maxKnockback: 20000
   rampTime: 10
   knockbackCurve:
     serializedVersion: 2
@@ -45,3 +45,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  KnockbackMultiplier: 1
+  IsDisabled: 0
