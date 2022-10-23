@@ -18,7 +18,7 @@ MonoBehaviour:
   clientBehaviour: {fileID: 5063673282853744019, guid: f2697a97aee53e54cbe602fdc0a3ecdc, type: 3}
   serverBehaviour: {fileID: 5536711063531551996, guid: 8972f274d7cef0040992d4b3da51b24a, type: 3}
   slot: 1
-  _knockbackMultiplier: 2
+  _knockbackMultiplier: 4
   _forceMultiplier: 4
   _windUpTime: 2
   _windDownTime: 1
