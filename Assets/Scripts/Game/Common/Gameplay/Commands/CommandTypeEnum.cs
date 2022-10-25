@@ -11,5 +11,6 @@
         HEAVY_PRIMARY_FIRE_START,
         HEAVY_PRIMARY_FIRE_END,
         HEAVY_LOCKDOWN,
+        HEAVY_BURST,
     }
 }

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e6eeb7a8ce502e41904b263ac8a1984, type: 3}
+  m_Name: Heavy Burst
+  m_EditorClassIdentifier: 
+  cooldown: 0
+  executeCommand: 6
+  stopCommand: 6
+  clientBehaviour: {fileID: 5063673282853744019, guid: 502c616fd232fec42925dfe5b453f8ab, type: 3}
+  serverBehaviour: {fileID: 5536711063531551996, guid: ab77d1c160c245d469ad8d25ebaca183, type: 3}
+  slot: 2
+  _minEnergy: 400
+  _maxEnergy: 2000
+  _minImpulse: 10
+  _minRadius: 0.0625
