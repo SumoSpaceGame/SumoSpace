@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-3901718975209210744
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MissileExhaust
+  m_Shader: {fileID: -6465566751694194690, guid: 828daf01b5703484ea2c30678a272ac9, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_9703a0c4d5ce4b488e1232b518571976:
+        m_Texture: {fileID: 2800000, guid: 27ad6ef493b62aa4ca66265ee0481d6d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - Vector1_2f31c304719a44d9852ae1c1b3ad9394: 90
+    - Vector1_2f3e9e03a55c46728020aea0a42575ea: 1
+    - Vector1_2f62a14e742c433ba59f6124374bcd8a: 2
+    - Vector1_3553aa99ce6d47358209546cabfc94f2: -0.19
+    - Vector1_81a629a52e95479fbbf1fec793e49e4b: 1
+    - Vector1_b824eea976cd4224933bf14d05245577: 0
+    - Vector1_cf59b5e1f5924eba80252891b7c1d9d1: 7.53
+    - Vector1_f37ae33a80024c12978d853bc389a738: 0
+    m_Colors:
+    - Color_79b68914c3844e2a9806e1cfd10c9e85: {r: 1.7098039, g: 0.87058824, b: 0.078431375, a: 0}
+    - Color_b0aefe321920481fb9b33bd944994930: {r: 0.03137255, g: 0.28235295, b: 1.2705883, a: 0}
+    - Vector2_581cb02abc8e42e8a85c29d4db5c1310: {r: -6.77, g: 0.66, b: 0, a: 0}
+    - Vector2_b4170973260247919288647e20df3ae9: {r: -1, g: 0, b: 0, a: 0}
+    - Vector2_c8735e774bf94c16852076b10c148fbd: {r: 1, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []

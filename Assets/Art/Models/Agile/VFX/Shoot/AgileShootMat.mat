@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7734731456763075011
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AgileShootMat
+  m_Shader: {fileID: -6465566751694194690, guid: de5c4d8b8a8712a49a5f7c5b85ead745, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - Vector1_21220923329049ab8e248252199871d0: 1
+    - Vector1_2d2701d230c34bb2bc4425028bcfffa5: 1
+    - Vector1_2f132ff5cd8c40b6b20ef255dbf0ed29: 1
+    - Vector1_7a2daa28d19a4525bb2c670e2ad6c6e5: 0.75
+    - Vector1_c298d346dc434222a78da69b257f0c43: -20.5
+    m_Colors:
+    - Color_d6ac5998c2bb4f178bb3bfe5515e875b: {r: 3.4196079, g: 1.7411765, b: 0.15686275, a: 0}
+    - Color_dfd42bd2eead41e8a48a6cefe35d42c5: {r: 0.03137255, g: 0.28235295, b: 1.2705883, a: 0}
+  m_BuildTextureStacks: []
