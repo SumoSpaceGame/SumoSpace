@@ -1,18 +1,22 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class HeavyPrimaryFireClientBehaviour : RenderableAbilityBehaviour<HeavyPrimaryFireAbility> {
     private Coroutine coroutine;
     private bool _shouldBeamStart = false;
+    private VisualEffect _fireEffect;
 
     public override void Execute() {
 
     }
 
     public override void QuickExecute() {
+        _fireEffect ??= shipManager.gameObject.GetComponent<VisualEffect>();
         if (!Ability.IsDisabled)
         {
-            ShipRenderer.StartBeam();
+            //ShipRenderer.StartBeam();
+            _fireEffect.Play();
             coroutine = shipManager.StartCoroutine(ClientSide());
         }
         else
@@ -23,8 +27,10 @@ public class HeavyPrimaryFireClientBehaviour : RenderableAbilityBehaviour<HeavyP
     }
 
     public override void Stop() {
+        _fireEffect ??= shipManager.gameObject.GetComponent<VisualEffect>();
         if (coroutine != null) shipManager.StopCoroutine(coroutine);
-        ShipRenderer.EndBeam();
+        //ShipRenderer.EndBeam();
+        _fireEffect.Stop();
         _shouldBeamStart = false;
         if (--oooCounter == 0) {
             executing = false;
@@ -36,12 +42,16 @@ public class HeavyPrimaryFireClientBehaviour : RenderableAbilityBehaviour<HeavyP
             if (Ability.IsDisabled)
             {
                 executing = false;
-                ShipRenderer.EndBeam();
+                //ShipRenderer.EndBeam();
+                _fireEffect.Stop();
                 _shouldBeamStart = true;
                 shipManager.StopCoroutine(coroutine);
             }
             else
-                ShipRenderer.Beam();
+            {
+                //ShipRenderer.Beam();
+                _fireEffect.Play();
+            }
             yield return null;
         }
     }
