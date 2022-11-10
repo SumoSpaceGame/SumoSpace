@@ -1,22 +1,33 @@
-﻿using System.Collections;
+﻿using Game.Common.Gameplay.Ship;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.VFX;
 
 public class HeavyPrimaryFireClientBehaviour : RenderableAbilityBehaviour<HeavyPrimaryFireAbility> {
     private Coroutine coroutine;
     private bool _shouldBeamStart = false;
-    private VisualEffect _fireEffect;
+    [SerializeField]
+    private GameObject _shootVFXPrefab;
+    private GameObject _shootVFX;
+    private GameObject _representative;
+    private bool _isLocal;
 
-    public override void Execute() {
+    private void Start() => _representative = shipManager.simulationObject.representative;
 
+    public override void Execute()
+    {
+        if (!_isLocal)
+            QuickExecute();
     }
 
+
     public override void QuickExecute() {
-        _fireEffect ??= shipManager.gameObject.GetComponent<VisualEffect>();
+        _isLocal = true;
         if (!Ability.IsDisabled)
         {
             //ShipRenderer.StartBeam();
-            _fireEffect.Play();
+            //_fireEffect.Reinit();
+            _shootVFX ??= Instantiate(_shootVFXPrefab, _representative.transform.GetChild(0));
             coroutine = shipManager.StartCoroutine(ClientSide());
         }
         else
@@ -27,10 +38,12 @@ public class HeavyPrimaryFireClientBehaviour : RenderableAbilityBehaviour<HeavyP
     }
 
     public override void Stop() {
-        _fireEffect ??= shipManager.gameObject.GetComponent<VisualEffect>();
         if (coroutine != null) shipManager.StopCoroutine(coroutine);
         //ShipRenderer.EndBeam();
-        _fireEffect.Stop();
+        //_fireEffect.SendEvent("OnStop");
+        //_fireEffect.Stop();
+        Destroy(_shootVFX);
+        _shootVFX = null;
         _shouldBeamStart = false;
         if (--oooCounter == 0) {
             executing = false;
@@ -43,14 +56,16 @@ public class HeavyPrimaryFireClientBehaviour : RenderableAbilityBehaviour<HeavyP
             {
                 executing = false;
                 //ShipRenderer.EndBeam();
-                _fireEffect.Stop();
+                //_fireEffect.SendEvent("OnStop");
+                //_fireEffect.Stop();
+                Destroy(_shootVFX);
+                _shootVFX = null;
                 _shouldBeamStart = true;
                 shipManager.StopCoroutine(coroutine);
             }
             else
             {
                 //ShipRenderer.Beam();
-                _fireEffect.Play();
             }
             yield return null;
         }
