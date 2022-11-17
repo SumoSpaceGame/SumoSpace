@@ -50,7 +50,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats: []
+    m_Floats:
+    - _QueueControl: 0
+    - _QueueOffset: 0
     m_Colors:
     - Color_78b3fc58860b48e797e00e5ed1c12eed: {r: 0.7764706, g: 1.5529412, b: 1.772549, a: 0}
     - Color_a661c933296d428095c2f8f6433ae2ce: {r: 3.5450983, g: 2.004558, b: 0.03712145, a: 0}

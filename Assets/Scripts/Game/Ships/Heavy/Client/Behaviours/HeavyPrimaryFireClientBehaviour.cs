@@ -27,7 +27,7 @@ public class HeavyPrimaryFireClientBehaviour : RenderableAbilityBehaviour<HeavyP
         {
             //ShipRenderer.StartBeam();
             //_fireEffect.Reinit();
-            _shootVFX ??= Instantiate(_shootVFXPrefab, _representative.transform.GetChild(0));
+            _shootVFX ??= Instantiate(_shootVFXPrefab, _representative.transform.GetChild(0).GetChild(0));
             coroutine = shipManager.StartCoroutine(ClientSide());
         }
         else
