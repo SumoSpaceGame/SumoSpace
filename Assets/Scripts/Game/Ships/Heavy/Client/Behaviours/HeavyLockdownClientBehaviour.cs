@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using System.Diagnostics;
-using System.Text;
 
 public class HeavyLockdownClientBehaviour : RenderableAbilityBehaviour<HeavyLockdownAbility>
 {
@@ -14,23 +12,17 @@ public class HeavyLockdownClientBehaviour : RenderableAbilityBehaviour<HeavyLock
 
     private void Start() => _representative = shipManager.simulationObject.representative;
 
+    /// <summary>
+    /// Enable or disable the lockdown.
+    /// </summary>
     public override void Execute()
     {
-        StackTrace trace = new StackTrace();
-        StackFrame[] frames = trace.GetFrames();
-        StringBuilder str = new StringBuilder();
-        foreach (StackFrame frame in frames)
-        {
-            str.Append(frame.GetMethod().Name);
-            str.Append(" ");
-        }
-        print(str);
         if (heavyFire is null)
         {
             heavyFire = shipManager.shipLoadout.PrimaryFire as HeavyPrimaryFireAbility;
             if (heavyFire is null)
             {
-                UnityEngine.Debug.LogError("No Heavy Primary Fire Ability found.");
+                Debug.LogError("No Heavy Primary Fire Ability found.");
                 return;
             }
         }

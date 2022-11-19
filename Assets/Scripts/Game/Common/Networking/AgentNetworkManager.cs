@@ -1,5 +1,6 @@
 using FishNet;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using Game.Common.Instances;
 using Game.Common.Registry;
 using Game.Common.Settings;
@@ -10,7 +11,6 @@ namespace Game.Common.Networking
     [RequireComponent(typeof(ShipSpawner))]
     public partial class AgentNetworkManager : NetworkBehaviour, IGamePersistantInstance
     {
-
         public GameMatchSettings gameMatchSettings;
         public MasterSettings masterSettings;
 
