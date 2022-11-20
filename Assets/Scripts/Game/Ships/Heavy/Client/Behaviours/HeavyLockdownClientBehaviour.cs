@@ -9,6 +9,7 @@ public class HeavyLockdownClientBehaviour : RenderableAbilityBehaviour<HeavyLock
     private GameObject _lockdownVFX;
     private GameObject _representative;
     private Coroutine _coroutine;
+    private bool _hasRunLocally;
 
     private void Start() => _representative = shipManager.simulationObject.representative;
 
@@ -17,6 +18,11 @@ public class HeavyLockdownClientBehaviour : RenderableAbilityBehaviour<HeavyLock
     /// </summary>
     public override void Execute()
     {
+        if (_hasRunLocally)
+        {
+            _hasRunLocally = false;
+            return;
+        }
         if (heavyFire is null)
         {
             heavyFire = shipManager.shipLoadout.PrimaryFire as HeavyPrimaryFireAbility;
@@ -28,7 +34,6 @@ public class HeavyLockdownClientBehaviour : RenderableAbilityBehaviour<HeavyLock
         }
         if (heavyFire.IsDisabled)
             return;
-        print("heavy fire is enabled. this should be printing.");
         if (!executing)
         {
             /*_coroutine = */shipManager.StartCoroutine(ClientSideStart());
@@ -39,6 +44,15 @@ public class HeavyLockdownClientBehaviour : RenderableAbilityBehaviour<HeavyLock
         {
             /*_coroutine = */shipManager.StartCoroutine(ClientSideStop());
         }
+    }
+
+    /// <summary>
+    /// Enables/disables the lockdown without talking to the server.
+    /// </summary>
+    public override void QuickExecute()
+    {
+        Execute();
+        _hasRunLocally = true;
     }
 
     // Winds up and activates the lockdown.
