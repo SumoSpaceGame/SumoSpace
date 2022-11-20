@@ -11,6 +11,7 @@ public class ClientHeavyLockdown : ICommandPerformer
 
     public bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments)
     {
+        shipManager.shipLoadout.PrimaryAbility.QuickExecute(shipManager, false);
         networker.SendData(CommandPacketData.Create(new byte[] { }), CommandType.HEAVY_LOCKDOWN, shipManager.playerMatchID);
         return true;
     }

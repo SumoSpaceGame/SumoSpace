@@ -63,3 +63,4 @@ MonoBehaviour:
   shipManager: {fileID: 0}
   executing: 0
   oooCounter: 0
+  _burstVFXPrefab: {fileID: 510643660196290022, guid: e2b00a39adbdb004b857305ebc109978, type: 3}

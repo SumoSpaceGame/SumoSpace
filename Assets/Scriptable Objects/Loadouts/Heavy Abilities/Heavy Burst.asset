@@ -18,6 +18,7 @@ MonoBehaviour:
   clientBehaviour: {fileID: 5063673282853744019, guid: 502c616fd232fec42925dfe5b453f8ab, type: 3}
   serverBehaviour: {fileID: 5536711063531551996, guid: ab77d1c160c245d469ad8d25ebaca183, type: 3}
   slot: 2
+  _knockbackToCharge: 125
   _minEnergy: 400
   _maxEnergy: 2000
   _minImpulse: 10

@@ -37,27 +37,30 @@ Material:
     - Vector1_2149eee319f242cfb9bf57a22d9246d6: 1.2
     - Vector1_2f7429850f4c49d2962fbd51903d10bc: 10
     - Vector1_7a2fc1e770e848ce9147b6ed8de6bf68: 27
+    - Vector1_9368fe31527049adbaf3b3e2bcdd083b: -1
     - Vector1_9a71f39c2e594cacaedca8699d98c76b: 10
     - Vector1_c8de0a4295b84779b15b098483939e6a: 1
     - Vector1_d0aa3f2f7b664c28898cf05b8cef96d4: 0
     - Vector1_d0f8754455d147e6b10aae3e56afdcfe: 0.01
     - Vector1_d9badb2efe1c442c84c63c50ecfe859d: 0
     - Vector1_e73b30f60a47465eac7b451ce939be81: 1
-    - _Alpha: 0
-    - _GradOffset: 1
-    - _GradRadius: 1
+    - _Alpha: 1
+    - _GradOffset: 1.2
+    - _GradRadius: 27
     - _NoiseScale: 10
     - _NoiseSpeed: 1
     - _Radius: 1
-    - _Radius2: 0.7
+    - _Radius2: 0
     - _SpinSpeed: 100
+    - _StripeTiling: 0.25
     m_Colors:
     - Color_663dec1d17a54b7cbc05cd2b9d9abbee: {r: 4, g: 0, b: 0, a: 0}
     - Color_ff66b6081a584321ac24421bc926a030: {r: 0.31132078, g: 0, b: 0, a: 0}
+    - Vector2_6b321609776b49f5948938e3a8efd1b3: {r: 1, g: 0.5, b: 0, a: 0}
     - _Color1: {r: 1, g: 0, b: 0, a: 0}
     - _Color2: {r: 0, g: 0.2085075, b: 1, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &7621650111598974446
+--- !u!114 &6444960116363724050
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

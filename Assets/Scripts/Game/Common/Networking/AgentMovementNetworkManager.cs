@@ -2,6 +2,7 @@
 using FishNet;
 using FishNet.Connection;
 using FishNet.Object;
+using FishNet.Object.Synchronizing;
 using Game.Common.Gameplay.Ship;
 using Game.Common.Registry;
 using Game.Common.Settings;
@@ -13,6 +14,9 @@ namespace Game.Common.Networking
     
     public partial class AgentMovementNetworkManager : NetworkBehaviour
     {
+        [SyncVar(SendRate = 0)]
+        public ushort TempPassiveCharge; // TODO: Switch to better solution.
+
         /// <summary>
         /// Ship request data. Should contain all information that will spawn a ship.
         /// </summary>

@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Game.Common.Gameplay.Ship;
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class AgilityPrimaryFireServerBehaviour : AbilityBehaviour<AgilityPrimaryFireAbility> {
@@ -27,6 +29,22 @@ public class AgilityPrimaryFireServerBehaviour : AbilityBehaviour<AgilityPrimary
                 var hit = Physics2D.Raycast(t.position + t.up * 2, t.up);
                 if (hit.rigidbody) {
                     hit.rigidbody.AddForceAtPosition(t.up * Ability.Knockback, hit.point, ForceMode2D.Impulse);
+                    ShipManager sm = hit.rigidbody.GetComponent<ShipManager>();
+                    HeavyBurstAbility targetBurstAbility = sm.shipLoadout.SecondaryAbility as HeavyBurstAbility;
+                    if (targetBurstAbility != null)
+                    {
+                        checked
+                        {
+                            try
+                            {
+                                sm.networkMovement.TempPassiveCharge += (ushort)(Ability.Knockback * targetBurstAbility.KnockbackToCharge);
+                            }
+                            catch (OverflowException)
+                            {
+                                sm.networkMovement.TempPassiveCharge = ushort.MaxValue;
+                            }
+                        }
+                    }
                 }
                 counter = 0;
             }

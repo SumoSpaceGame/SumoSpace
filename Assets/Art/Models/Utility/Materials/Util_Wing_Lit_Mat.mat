@@ -97,7 +97,7 @@ Material:
     - Vector3_93520a01746740d59ba2f56ef3c192e0: {r: 1, g: 0, b: 0, a: 0}
     - Vector3_af4c9a1d4ed24e298c73af8650fe5eb1: {r: 0, g: 0, b: 1, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &920680903835013777
+--- !u!114 &8370027726220633488
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

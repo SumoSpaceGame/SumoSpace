@@ -10,12 +10,11 @@ using UnityEngine.InputSystem.HID;
 
 public class HeavyBurstServerBehaviour : AbilityBehaviour<HeavyBurstAbility>
 {
-    // Placeholder charge until the bar system is implemented.
-    private float charge = 1;
 
     // Apply force to every ship in the radius.
     public override void Execute()
     {
+        ushort charge = shipManager.networkMovement.TempPassiveCharge;
         if (charge < Ability.MinCharge)
             return;
         Dictionary<PlayerID, ShipManager>.ValueCollection ships = MainPersistantInstances.Get<GameNetworkManager>().masterSettings.playerShips.GetAll();
@@ -29,6 +28,6 @@ public class HeavyBurstServerBehaviour : AbilityBehaviour<HeavyBurstAbility>
             if (impulse != 0)
                 ship._rigidbody2D.AddForce(shipManagerToShip.normalized * impulse, ForceMode2D.Impulse);
         }
-        // TODO: Remove charge used.
+        shipManager.networkMovement.TempPassiveCharge = 0;
     }
 }
