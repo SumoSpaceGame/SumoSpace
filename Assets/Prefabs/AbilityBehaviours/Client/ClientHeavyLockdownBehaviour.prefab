@@ -63,3 +63,4 @@ MonoBehaviour:
   shipManager: {fileID: 0}
   executing: 0
   oooCounter: 0
+  _lockdownVFXPrefab: {fileID: 4772518482278318609, guid: 8d8230e1bab3e1049aefd45bf2b60e18, type: 3}

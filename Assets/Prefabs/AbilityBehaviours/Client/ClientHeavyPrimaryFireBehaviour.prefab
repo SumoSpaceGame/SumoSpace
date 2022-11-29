@@ -48,6 +48,7 @@ MonoBehaviour:
   shipManager: {fileID: 0}
   executing: 0
   oooCounter: 0
+  _shootVFXPrefab: {fileID: 2639041772876449090, guid: 7a1b4472c24710b4aaba632bfa6032cd, type: 3}
 --- !u!114 &3682275116106452425
 MonoBehaviour:
   m_ObjectHideFlags: 0
