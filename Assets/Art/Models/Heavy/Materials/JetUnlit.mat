@@ -39,13 +39,11 @@ Material:
     m_Ints: []
     m_Floats:
     - Vector1_d4d6d281ef264518a7d380cedc77a2bd: 3
-    - _QueueControl: 0
-    - _QueueOffset: 0
     m_Colors:
     - Color_2ab9ba6a8af24d3b8a50dc40fc21cae7: {r: 0.4392157, g: 1.2862746, b: 0.87058824, a: 0}
     - Color_adb68934fcb347a39f008282fd95e4d8: {r: 0.26666668, g: 1.082353, b: 0.23529412, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &1111519857725437564
+--- !u!114 &7532421866117249319
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

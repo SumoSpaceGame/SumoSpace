@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Game.Common.Gameplay.Abilities;
+using UnityEngine;
 
-namespace Game.Common.Gameplay.Abilities.Agility
+namespace Game.Ships.Agility.Common.Abilities
 {
     [CreateAssetMenu(menuName="Ship Abilities/Agility Abilities/Agility Dodge", fileName = "Agility Dodge", order=1)]
     public class AgilityDodgeAbility: ShipAbility

@@ -53,7 +53,7 @@ Material:
     - Color_c47b8bacda634b0981785eaa092e2360: {r: 0, g: 0.1254902, b: 2.9960785, a: 0}
     - _Color: {r: 0.03137255, g: 0.28235295, b: 1.2705883, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &4835862936189122985
+--- !u!114 &1648628164284329849
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

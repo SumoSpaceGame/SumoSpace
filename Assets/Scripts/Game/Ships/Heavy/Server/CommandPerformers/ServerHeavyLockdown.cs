@@ -1,12 +1,15 @@
 ﻿using Game.Common.Gameplay.Commands;
 using Game.Common.Gameplay.Ship;
 
-public class ServerHeavyLockdown : ICommand
+namespace Game.Ships.Heavy.Server.CommandPerformers
 {
-    public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData)
+    public class ServerHeavyLockdown : ICommand
     {
-        shipManager.shipLoadout.PrimaryAbility.Execute(shipManager, true);
-        networker.SendData(packetData, CommandType.HEAVY_LOCKDOWN, shipManager.playerMatchID);
-        return true;
+        public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData)
+        {
+            shipManager.shipLoadout.PrimaryAbility.Execute(shipManager, true);
+            networker.SendData(packetData, CommandType.HEAVY_LOCKDOWN, shipManager.playerMatchID);
+            return true;
+        }
     }
 }

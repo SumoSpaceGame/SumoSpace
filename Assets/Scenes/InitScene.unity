@@ -334,7 +334,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agentMovementNetworkManagerPrefab: {fileID: 5359055736134386342, guid: 695c1068d0eba994b995719531d4b981, type: 3}
   agentInputNetworkManagerPrefab: {fileID: 4400770604142937563, guid: 37823a56ce05c924bacc38900addaa68, type: 3}
-  agentValueNetworkManagerPrefab: {fileID: 0}
 --- !u!4 &594007627
 Transform:
   m_ObjectHideFlags: 0

@@ -1,14 +1,15 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using Game.Ships.Heavy.Common.Abilities;
 
-public class HeavyBurstClientBehaviour : RenderableAbilityBehaviour<HeavyBurstAbility>
+namespace Game.Ships.Heavy.Client.Behaviours
 {
-    public override void Execute()
+    public class HeavyBurstClientBehaviour : RenderableAbilityBehaviour<HeavyBurstAbility>
     {
+        public override void Execute()
+        {
         
-    }
+        }
 
-    /*public override void QuickExecute()
+        /*public override void QuickExecute()
     {
         if (++oooCounter == 1)
         {
@@ -23,4 +24,5 @@ public class HeavyBurstClientBehaviour : RenderableAbilityBehaviour<HeavyBurstAb
             executing = false;
         }
     }*/
+    }
 }

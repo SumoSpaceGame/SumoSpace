@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using FishNet.Object;
 using Game.Common.Gameplay.Commands;
 using Game.Common.Instances;
-using UnityTemplateProjects.Game.Client.Gameplay.Abilities.CommandPerformers;
+using Game.Ships.Agility.Client.CommandPerformers;
+using Game.Ships.Heavy.Client.CommandPerformers;
 
 namespace Game.Common.Networking
 {
@@ -16,6 +17,7 @@ namespace Game.Common.Networking
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_DODGE, new ClientAgilityDodge()));
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_PRIMARY_FIRE_START, new ClientAgilityBeginPrimaryFire()));
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_PRIMARY_FIRE_END, new ClientAgilityEndPrimaryFire()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_MICRO_MISSLES, new ClientAgilityMicroMissiles()));
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_PRIMARY_FIRE_START, new ClientHeavyBeginPrimaryFire()));
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_PRIMARY_FIRE_END, new ClientHeavyEndPrimaryFire()));
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_LOCKDOWN, new ClientHeavyLockdown()));

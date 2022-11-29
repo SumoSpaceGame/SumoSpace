@@ -1,54 +1,57 @@
 ﻿using System.Collections;
+using Game.Ships.Heavy.Common.Abilities;
 using UnityEngine;
 
-public class HeavyLockdownClientBehaviour : RenderableAbilityBehaviour<HeavyLockdownAbility>
+namespace Game.Ships.Heavy.Client.Behaviours
 {
-    private HeavyPrimaryFireAbility heavyFire = null;
-
-    public override void Execute()
+    public class HeavyLockdownClientBehaviour : RenderableAbilityBehaviour<HeavyLockdownAbility>
     {
-        if (heavyFire is null)
+        private HeavyPrimaryFireAbility heavyFire = null;
+
+        public override void Execute()
         {
-            heavyFire = shipManager.shipLoadout.PrimaryFire as HeavyPrimaryFireAbility;
             if (heavyFire is null)
             {
-                Debug.LogError("No Heavy Primary Fire Ability found.");
+                heavyFire = shipManager.shipLoadout.PrimaryFire as HeavyPrimaryFireAbility;
+                if (heavyFire is null)
+                {
+                    Debug.LogError("No Heavy Primary Fire Ability found.");
+                    return;
+                }
+            }
+            if (heavyFire.IsDisabled)
                 return;
+            if (!executing)
+            {
+                shipManager.StartCoroutine(ClientSideStart());
+                executing = true;
+            }
+            else
+            {
+                shipManager.StartCoroutine(ClientSideStop());
+                executing = false;
             }
         }
-        if (heavyFire.IsDisabled)
-            return;
-        if (!executing)
+
+        // Winds up and activates the lockdown.
+        private IEnumerator ClientSideStart()
         {
-            shipManager.StartCoroutine(ClientSideStart());
-            executing = true;
+            heavyFire.IsDisabled = true;
+            yield return new WaitForSeconds(Ability.WindUpTime);
+            heavyFire.IsDisabled = false;
+            yield return null;
         }
-        else
+
+        // Winds down and deactivates the lockdown.
+        private IEnumerator ClientSideStop()
         {
-            shipManager.StartCoroutine(ClientSideStop());
-            executing = false;
+            heavyFire.IsDisabled = true;
+            yield return new WaitForSeconds(Ability.WindDownTime);
+            heavyFire.IsDisabled = false;
+            yield return null;
         }
-    }
 
-    // Winds up and activates the lockdown.
-    private IEnumerator ClientSideStart()
-    {
-        heavyFire.IsDisabled = true;
-        yield return new WaitForSeconds(Ability.WindUpTime);
-        heavyFire.IsDisabled = false;
-        yield return null;
-    }
-
-    // Winds down and deactivates the lockdown.
-    private IEnumerator ClientSideStop()
-    {
-        heavyFire.IsDisabled = true;
-        yield return new WaitForSeconds(Ability.WindDownTime);
-        heavyFire.IsDisabled = false;
-        yield return null;
-    }
-
-    /*public override void QuickExecute()
+        /*public override void QuickExecute()
     {
         if (++oooCounter == 1)
         {
@@ -63,4 +66,5 @@ public class HeavyLockdownClientBehaviour : RenderableAbilityBehaviour<HeavyLock
             executing = false;
         }
     }*/
+    }
 }

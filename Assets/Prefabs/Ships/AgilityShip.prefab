@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 1452283217186146463}
   - component: {fileID: -8769192327207701676}
   - component: {fileID: 4336934462001359146}
+  - component: {fileID: 7891745021806615213}
   m_Layer: 0
   m_Name: AgilityShip
   m_TagString: Untagged
@@ -321,3 +322,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7891745021806615213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025401133792490111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6718b27a39441eab0a80aac51d878a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team: 0
+  isGhost: 0
+  pushable: 0

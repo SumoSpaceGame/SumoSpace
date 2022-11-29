@@ -24,6 +24,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 5f99ffb406cad0c4ea0b1917203ab7b1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - Texture2D_83f61a29e932496ea0087b1934defdf7:
+        m_Texture: {fileID: 2800000, guid: 17ffc4f541d29964ea9b4d8ae06a4732, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -38,14 +42,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Vector1_ca0529bc36a242caab591455e0cb6bce: 30
     - Vector1_d4d6d281ef264518a7d380cedc77a2bd: 3
-    - _QueueControl: 0
-    - _QueueOffset: 0
     m_Colors:
     - Color_2ab9ba6a8af24d3b8a50dc40fc21cae7: {r: 0.4392157, g: 1.2862746, b: 0.87058824, a: 0}
+    - Color_9bd2145f55774c2e88dabff624b66473: {r: 0.30498737, g: 0.822786, b: 0.61049575, a: 0}
     - Color_adb68934fcb347a39f008282fd95e4d8: {r: 0.26666668, g: 1.082353, b: 0.23529412, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &2902444743241904471
+--- !u!114 &5117141589030032550
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
