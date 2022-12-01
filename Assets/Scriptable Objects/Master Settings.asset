@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 099ccee1c5a4a8442ba0b1749b0e857c, type: 3}
   m_Name: Master Settings
   m_EditorClassIdentifier: 
+  _debug: 0
   matchSettings: {fileID: 11400000, guid: 7b7c161bfd2f92949ac964df79581d2a, type: 2}
   network:
     isServer: 1

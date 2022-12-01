@@ -59,7 +59,7 @@ namespace Game.Common.Networking
         
         public void ResetServer()
         {
-            masterSettings.Reset();
+            masterSettings.ResetMatchData();
             // TODO: Reseting means the unity instance stops and has to spin back up
             // This is the safest approach to prevent waste, and insures a cleaner approach
             // Probably not the best, but its fine.. for now

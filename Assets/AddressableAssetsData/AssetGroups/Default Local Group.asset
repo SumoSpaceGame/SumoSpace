@@ -21,14 +21,10 @@ MonoBehaviour:
     m_Address: Assets/Scenes/MainMenuScene.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 102900000, guid: abe253e5cb990e344978acd74d1b55c4, type: 3}
-    m_TargetAsset: {fileID: 102900000, guid: abe253e5cb990e344978acd74d1b55c4, type: 3}
   - m_GUID: bae2db52fe3e51f49ba3f540304c52cc
     m_Address: Assets/Scenes/LobbyScene.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
-    m_MainAsset: {fileID: 102900000, guid: bae2db52fe3e51f49ba3f540304c52cc, type: 3}
-    m_TargetAsset: {fileID: 102900000, guid: bae2db52fe3e51f49ba3f540304c52cc, type: 3}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 81d6a555e8c447846bdcf8c8edafaa63, type: 2}
   m_SchemaSet:

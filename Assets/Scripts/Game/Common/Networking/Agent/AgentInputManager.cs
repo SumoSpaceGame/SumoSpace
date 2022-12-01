@@ -61,5 +61,8 @@ namespace Game.Common.Networking
         {
             InputDirection = input;
         }
+        
+        
+        
     }
 }

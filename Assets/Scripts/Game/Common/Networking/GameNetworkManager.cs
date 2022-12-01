@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using FishNet;
 using FishNet.Connection;
 using FishNet.Object;
@@ -47,7 +48,7 @@ namespace Game.Common.Networking
             // This can be highjacked, but it is highly unlikely
             clientID = SystemInfo.deviceUniqueIdentifier + "P" + Process.GetCurrentProcess().Id + "R" + Random.Range(int.MinValue, int.MaxValue);
             
-            masterSettings.Reset();
+            masterSettings.ResetMatchData();
             
             gameMatchSettings.Reset();
             
@@ -112,9 +113,10 @@ namespace Game.Common.Networking
                 }
             }
 
-            masterSettings.Reset();
+            masterSettings.ResetMatchData();
             
             UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+            
         }
 
         public override void OnStopNetwork()
