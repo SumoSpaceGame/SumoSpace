@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5221626969052250191
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GridFloorMat
+  m_Shader: {fileID: -6465566751694194690, guid: 3161a48ff9bdd714080431a52912bddb, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_873d451633a149e385b3293a238962c2:
+        m_Texture: {fileID: 2800000, guid: 8217ab53bca278b47bd5e443b36aba64, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_d5a2178850a04855b093893abcf9c06a_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 33283dcbb9721564aafb399f302f18a5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_e3ff61acd0034299acc20293c0ba4fe3_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 8217ab53bca278b47bd5e443b36aba64, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - Vector1_11fe5664055b43e583733d628454614f: -0.2
+    - Vector1_2c7b0e606e00428f9db4fbc66e71925b: 2.5
+    - Vector1_57d5706246e3481086e08709d9b978fe: 0.2
+    - Vector1_763c112a3e124adb8afa81e00f2ffe50: 1
+    - Vector1_a93d4a2280454b5da6a23ac166fb076a: 0.003
+    - Vector1_d19538bb0c514b5e8ff2fc202e2d506c: 0.15
+    m_Colors:
+    - Color_591ec357610b4b22bb0e74587866e76f: {r: 0, g: 0.029372271, b: 0.21698111, a: 0}
+    - Color_5b2946ee158247118bdef79df38ea354: {r: 1, g: 1, b: 1, a: 0}
+    - Color_7ca134bbffde4d3999913ff0bea4de2c: {r: 0, g: 0.0018630028, b: 2, a: 0}
+    - Color_bc3231aa141d488284d54dc8f4d4932b: {r: 1, g: 0, b: 0, a: 0}
+    - Vector3_0877666954e64416bd60f61fefeb5ab6: {r: 0, g: 0, b: 0, a: 0}
+    - Vector3_3f6de148a2f34818a36a3487773b1052: {r: 1, g: 0, b: 0, a: 0}
+    - Vector3_6331392a4b454982af4ee1bb3f68b538: {r: 0, g: 0, b: 0, a: 0}
+    - Vector3_c9e57fc68e14424bbff87ddf53316216: {r: 0, g: 0, b: 0, a: 0}
+    - Vector3_ccf26311f5094019a3d48d5178db5923: {r: 0, g: 0, b: 0, a: 0}
+    - Vector3_ef51e4a1f87f452894aac2419c2dc272: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []
