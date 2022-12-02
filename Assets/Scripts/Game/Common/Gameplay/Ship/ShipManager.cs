@@ -96,6 +96,12 @@ namespace Game.Common.Gameplay.Ship
             return simulationObject.representative.transform.position;
         }
 
+        public Vector2 Get2DPosition()
+        {
+            return new Vector2(this.transform.position.x, this.transform.position.y);
+        }
+
+
         /// <summary>
         /// Teleports the ship at the the server by the server
         ///
