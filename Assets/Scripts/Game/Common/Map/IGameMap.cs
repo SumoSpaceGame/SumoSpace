@@ -40,7 +40,14 @@ namespace Game.Common.Map
         /// <param name="radius"></param>
         /// <returns></returns>
         public bool OnEdge(Vector2 point, float radius);
-    
-    
+
+        /// <summary>
+        /// Get distance from edge of a point;
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public float SqrDistanceFromEdge(Vector2 point);
+
+
     }
 }

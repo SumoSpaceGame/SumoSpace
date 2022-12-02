@@ -60,11 +60,11 @@ Material:
     m_Ints: []
     m_Floats:
     - Vector1_11fe5664055b43e583733d628454614f: -0.2
-    - Vector1_2c7b0e606e00428f9db4fbc66e71925b: 2.5
+    - Vector1_2c7b0e606e00428f9db4fbc66e71925b: 0.47
     - Vector1_57d5706246e3481086e08709d9b978fe: -0.05
     - Vector1_763c112a3e124adb8afa81e00f2ffe50: 1
     - Vector1_a93d4a2280454b5da6a23ac166fb076a: 0.003
-    - Vector1_d19538bb0c514b5e8ff2fc202e2d506c: 0.15
+    - Vector1_d19538bb0c514b5e8ff2fc202e2d506c: 0.06
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:

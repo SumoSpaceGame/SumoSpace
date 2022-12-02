@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Game.Common.Instances;
 using UnityEngine;
 
 namespace Game.Common.Map
 {
-    public class ShipSpawnManager : MonoBehaviour
+    public class ShipSpawnManager : MonoBehaviour, IGameInstance
     {
         public struct SpawnGroup
         {
@@ -14,6 +16,15 @@ namespace Game.Common.Map
         }
         public List<SpawnGroup> spawnGroups = new List<SpawnGroup>();
 
+        private void Awake()
+        {
+            MainInstances.Add(this);
+        }
+
+        private void OnDestroy()
+        {
+            MainInstances.Remove<ShipSpawnManager>();
+        }
 
         public Vector3 GetSpawnPoint(int teamIndex, int playerTeamIndex)
         {
