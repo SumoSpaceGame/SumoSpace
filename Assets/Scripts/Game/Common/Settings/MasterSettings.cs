@@ -181,7 +181,11 @@ namespace Game.Common.Settings
                 return null;
             }
 
-            return playerShips.Get(playerIDRegistry.GetByMatchID(matchSettings.ClientMatchID));
+            var data = playerIDRegistry.GetByMatchID(matchSettings.ClientMatchID);
+
+            if (!playerShips.Has(data)) return null;
+
+            return playerShips.Get(data);
         }
     }
 }

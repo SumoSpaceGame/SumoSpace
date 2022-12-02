@@ -23,7 +23,11 @@ namespace Game.Common.Settings
         /// </summary>
         [SerializeField] public int TeamCount;
         [SerializeField] public int TeamSize;
-        
+
+        /// <summary>
+        /// Selected map on launch
+        /// </summary>
+        [SerializeField] public int StartWithSelectedMapIndex;
         [SerializeField] public MapRegistry.MapItem SelectedMapItem;
         /// <summary>
         /// Match id of the player. On server side this is a temp variable that is not used.

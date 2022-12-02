@@ -20,7 +20,13 @@ public class SimulationObject : MonoBehaviour {
     public void Create()
     {
         var sim = MainInstances.Get<Simulation>();
-        var go = Instantiate(representative, GameObject.Find("GameView").transform, false);
+        var gameView = GameObject.Find("GameView");
+
+        if (gameView == null)
+        {
+            Debug.LogError("Failed to find game view");
+        }
+        var go = Instantiate(representative, gameView.transform, false);
         representative = go;
         sim.Add(this);
     }

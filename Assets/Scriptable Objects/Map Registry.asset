@@ -21,4 +21,4 @@ MonoBehaviour:
     index: 1
   - mapSettings: {fileID: 11400000, guid: 2a4798f35001bc447a5f52b6196f0246, type: 2}
     sceneName: SimulationMap
-    index: 0
+    index: 2

@@ -17,7 +17,7 @@ public class SimulationSyncMaterial : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
         if (InstanceFinder.IsServer) return;
         var ship = masterSettings.GetPlayerShip();
 

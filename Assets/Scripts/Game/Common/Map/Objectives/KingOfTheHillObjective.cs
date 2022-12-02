@@ -27,6 +27,7 @@ namespace Game.Common.Map.Objectives
 
         private void Awake()
         {
+            stopwatch = new Stopwatch();
             masterSettings = MainPersistantInstances.Get<GameNetworkManager>().masterSettings;
             Reset();
         }
