@@ -12,7 +12,7 @@ namespace Game.Ships.Heavy.Client.Behaviours
     public class HeavyBurstClientBehaviour : RenderableAbilityBehaviour<HeavyBurstAbility>
     {
         private RectTransform _innerBar;
-        private AgentMovementNetworkManager _networkMovement;
+        private AgentMovementNetworkManager _networkMovement => shipManager.networkMovement;
         private GameObject _representative;
         [SerializeField]
         private GameObject _burstVFXPrefab;
@@ -31,7 +31,6 @@ namespace Game.Ships.Heavy.Client.Behaviours
             _innerBar = chargeBar.GetChild(0).GetComponent<RectTransform>();
             _innerBar.anchoredPosition = new Vector2(_innerBar.anchoredPosition.x, 0);
             _innerBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
-            _networkMovement = shipManager.networkMovement;
         }
 
         // Maintain progress bar for charge.
