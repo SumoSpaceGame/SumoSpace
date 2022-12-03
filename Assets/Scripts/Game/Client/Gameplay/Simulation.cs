@@ -8,12 +8,14 @@ public class Simulation : MonoBehaviour, IGameInstance {
     private void Awake()
     {
         MainInstances.Add(this);
+        Debug.Log("Added main instance for simulation");
     }
 
     private void OnDestroy()
     {
         
         MainInstances.Remove<Simulation>();
+        Debug.Log("Removed main instance for simulation");
     }
 
     public void Add(SimulationObject simObject) {

@@ -37,6 +37,12 @@ namespace Game.Common.Gameplay.Ship
     
 
         public PlayerID playerMatchID;
+        private CircleCollider2D circleCollider2D;
+
+        private void Awake()
+        {
+            circleCollider2D = this.GetComponent<CircleCollider2D>();
+        }
 
         public void SetLayer(LayerMask layer)
         {
@@ -88,13 +94,19 @@ namespace Game.Common.Gameplay.Ship
 
         public float GetRadius()
         {
-            return this.GetComponent<CircleCollider2D>().radius;
+            return circleCollider2D.radius;
         }
 
         public Vector3 GetWorldPosition()
         {
             return simulationObject.representative.transform.position;
         }
+
+        public Vector2 Get2DPosition()
+        {
+            return new Vector2(this.transform.position.x, this.transform.position.y);
+        }
+
 
         /// <summary>
         /// Teleports the ship at the the server by the server

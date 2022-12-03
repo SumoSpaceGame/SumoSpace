@@ -5,6 +5,5 @@
     /// </summary>
     public class ProjectileEntity : EntityNetworkObject
     {
-        
     }
 }

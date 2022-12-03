@@ -10,6 +10,7 @@ namespace Game.Common.Map.Editor
     [CustomEditor(typeof(Pylon))]
     public class PylonEditor : UnityEditor.Editor
     {
+        public static Pylon CurrentlySelectedPylon;
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();

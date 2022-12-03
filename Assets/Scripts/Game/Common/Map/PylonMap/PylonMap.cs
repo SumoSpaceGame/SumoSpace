@@ -111,6 +111,11 @@ namespace Game.Common.Map.PylonMap
             return RayCrossing.ClosestPointDistance(ref pointList, point) < radius;
         }
 
+        public float SqrDistanceFromEdge(Vector2 point)
+        {
+            return RayCrossing.ClosestPointDistance(ref pointList, point);
+        }
+
 
         private void OnDrawGizmosSelected()
         {

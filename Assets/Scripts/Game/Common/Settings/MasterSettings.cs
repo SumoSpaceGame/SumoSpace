@@ -1,5 +1,7 @@
 using System;
+using FishNet;
 using Game.Common.Gameplay.Ship;
+using Game.Common.Instances;
 using Game.Common.Map;
 using Game.Common.Registry;
 using UnityEngine;
@@ -9,6 +11,32 @@ namespace Game.Common.Settings
     [CreateAssetMenu(fileName = "Settings" ,menuName = "Game Registry/Master Settings", order = 0)]
     public class MasterSettings : ScriptableObject
     {
+        #region Debug Region
+        
+        // Private setter, only should be set through the scriptable object or a script
+        [SerializeField]
+        private bool _debug;
+
+        /// <summary>
+        /// Used to enable debug features.
+        /// It could be about error check or such
+        /// </summary>
+        public bool IsDebug
+        {
+            get { return _debug; }
+        }
+        
+        /// <summary>
+        /// Should only be used for build items
+        /// </summary>
+        /// <param name="debug"></param>
+        public void SetDebug(bool debug)
+        {
+            _debug = debug;
+        }
+        
+        #endregion
+        
         [Header("Main settings")]
         public GameMatchSettings matchSettings;
         
@@ -23,7 +51,9 @@ namespace Game.Common.Settings
         [Header("Network config")] 
         public string ServerAddress = "localhost";
         public ushort ServerPort;
-        
+
+        #region Registries Region
+
         [Space(4)]
         [Header("Registries")]
         public PlayerShips playerShips;
@@ -35,21 +65,14 @@ namespace Game.Common.Settings
         public PlayerGameDataRegistry playerGameDataRegistry;
         
         public MapRegistry mapRegistry;
+
+        #endregion
+        
         [Space(4)]
         [Header("Misc")]
         public ShipPrefabList ShipPrefabList;
 
-
-        /// <summary>
-        /// Called on start, will process args and set required data
-        /// </summary>
-        private void Awake()
-        {
-            // Set default value
-            
-        }
-
-        public void Reset()
+        public void ResetMatchData()
         {
             if(playerShips != null) playerShips.Reset();
             playerStaticDataRegistry.Reset();
@@ -148,6 +171,21 @@ namespace Game.Common.Settings
             {
                 return null;
             }
+        }
+
+        public ShipManager GetPlayerShip()
+        {
+            if (InstanceFinder.IsServer)
+            {
+                Debug.LogError("Tried to get the player ship of a server. Should not happen");
+                return null;
+            }
+
+            var data = playerIDRegistry.GetByMatchID(matchSettings.ClientMatchID);
+
+            if (!playerShips.Has(data)) return null;
+
+            return playerShips.Get(data);
         }
     }
 }

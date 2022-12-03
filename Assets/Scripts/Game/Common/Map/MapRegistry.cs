@@ -17,7 +17,7 @@ namespace Game.Common.Map
             // To be determined
             [SerializeField] public MapSettings mapSettings;
             [SerializeField] public string sceneName;
-            [HideInInspector] public int index;
+            [SerializeField] public int index;
             
             public Scene GetScene()
             {
@@ -27,8 +27,8 @@ namespace Game.Common.Map
         
         [SerializeField]
         private List<MapItem> mapItems = new List<MapItem>();
-
-        private void OnValidate()
+        
+        public void OnValidate()
         {
             for(int i = mapItems.Count - 1; i >= 0; i--)
             {

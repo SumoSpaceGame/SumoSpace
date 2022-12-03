@@ -20,6 +20,10 @@ namespace Game.Common.Map
         public MasterSettings masterSettings;
 
         public MapSettings mapSettings;
+
+        public List<MapTrackerBase> mapTrackers = new List<MapTrackerBase>(); // A map tracker is used to determine what layer on the map it is on
+        
+        public GameMapBoundaryList gameBoundaries = new GameMapBoundaryList();
         
         private AgentNetworkManager _agentNetworkManager;
 
@@ -28,6 +32,8 @@ namespace Game.Common.Map
 
         private MatchNetworkTimer timer = null;
         private uint timerID = 0;
+
+        public float DeadZoneDistance; // Distance from an edge where the map tracker gets set to dead
 
         public bool running { private set; get; }
         
@@ -106,56 +112,105 @@ namespace Game.Common.Map
                 return;
             }
             
-            if (masterSettings.network.isServer)
-            {
-                // TODO: Replace with actual ship damaging system
-                var outOfBounds = GetOutOfBoundShips();
-
-                ResetShips(outOfBounds);
-            }
+            UpdateTrackers();
             
             gameMap.UpdateMap(Math.Clamp(timer.GetRemainingTimeMinutes()/mapSettings.MatchTimeMinutes, 0, 1));
         }
+        
 
-
-        private void ResetShips(List<ShipManager> managers)
+        private void UpdateTrackers()
         {
-            // TODO: Reset them to their base
-            Vector3 resetPosition = this.transform.position;
+            List<MapTrackerBase> trackers = new List<MapTrackerBase>();
             
-
-            foreach (var ship in managers)
-            {
-                ship.ServerTeleport(resetPosition.toXZ(), false);
-            }
-
-        }
-
-
-        private List<ShipManager> GetOutOfBoundShips()
-        {
-               
-            var ships = _agentNetworkManager._playerShips.GetAll();
-
-            List<ShipManager> outOfBounds = new List<ShipManager>();
+            float dist = DeadZoneDistance * DeadZoneDistance;
             
-            foreach(var ship in ships)
+            foreach (var tracker in mapTrackers)
             {
-                if (IsOutOfBounds(ship.GetWorldPosition(), ship.GetRadius()))
+                float radius = tracker.GetRadius();
+                Vector2 trackerPos = tracker.GetPosition();
+                bool within = false;
+                
+                if (radius <= 0)
                 {
-                      outOfBounds.Add(ship);
+                    within = gameMap.WithinMap(trackerPos);
+                }
+                else
+                {
+                    within = gameMap.WithinMap(trackerPos, radius);
+                }
+
+                if (within)
+                {
+                    tracker.currentLayer = MapTrackerBase.CurrentLayer.SAFE;
+                }
+                else
+                {
+                    if (gameMap.SqrDistanceFromEdge(tracker.GetPosition()) <= dist)
+                    {
+                        tracker.currentLayer = MapTrackerBase.CurrentLayer.WARNING;
+                    }
+                    else
+                    {
+                        tracker.currentLayer = MapTrackerBase.CurrentLayer.DEAD;
+                    }
                 }
                 
+                
+                // Compare against game boundaries now
+                // Boundary comparison is based on the priority of the elements
+                // If the ship is in within an boundary, it can only get the greatest layer within that priority level
+                // Lower priorities will be ignored
+                var sortedBoundaries = gameBoundaries.GetBoundaries();
+                
+                int lastPriority = sortedBoundaries[sortedBoundaries.Length - 1].Priority;
+
+                bool foundBoundary = false;
+                
+                for (int i = sortedBoundaries.Length - 1; i >= 0; i--)
+                {
+                    
+                    var boundary = sortedBoundaries[i];
+                    bool withinBoundary = false;
+
+                    if (foundBoundary && lastPriority != boundary.Priority)
+                    {
+                        break;
+                    }
+                    
+                    if (boundary.Priority <= 0)
+                    {
+                        if (within)
+                        {
+                            break;
+                        }
+                    }
+                    
+                    if (radius <= 0)
+                    {
+                        withinBoundary = boundary.IsWithin(trackerPos);
+                    }
+                    else
+                    {
+                        withinBoundary = boundary.IsWithin(trackerPos, radius);
+                    }
+
+                    if (withinBoundary)
+                    {
+                        foundBoundary = true;
+
+                        tracker.SetGreatest(radius <= 0
+                            ? boundary.GetLayer(trackerPos)
+                            : boundary.GetLayer(trackerPos, radius));
+                    }
+
+
+                    
+                    lastPriority = boundary.Priority;
+                }
+
             }
-
-            return outOfBounds;
-        }
-
-
-        private bool IsOutOfBounds(Vector3 position, float radius)
-        {
-            Vector2 pos = new Vector2(position.x, position.z);
-            return !gameMap.WithinMap(pos, radius);
+            
+            
         }
 
         

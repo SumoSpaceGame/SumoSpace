@@ -14,6 +14,10 @@ namespace Game.Common.Map.Editor
             {
                 ((MapRegistry) target).CleanUpList();
             }
+            if (GUILayout.Button("Refresh"))
+            {
+                ((MapRegistry)target).OnValidate();
+            }
         }
     }
 }

@@ -71,6 +71,7 @@ namespace Game.Common.Instances {
 			}
 
 			main.gameServices.Add(key, obj);
+			
 		}
 
 		/// <summary>

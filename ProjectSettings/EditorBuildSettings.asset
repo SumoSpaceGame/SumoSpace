@@ -18,11 +18,14 @@ EditorBuildSettings:
     path: Assets/Scenes/LobbyScene.unity
     guid: bae2db52fe3e51f49ba3f540304c52cc
   - enabled: 1
+    path: Assets/Scenes/MapLoadingScene.unity
+    guid: 6e3268ea702391f4a80989ddeb9e616b
+  - enabled: 1
     path: Assets/Scenes/Maps/TestMap.unity
     guid: d27ea49e560414d40be245fe146c1d5a
   - enabled: 1
-    path: Assets/Scenes/MapLoadingScene.unity
-    guid: 6e3268ea702391f4a80989ddeb9e616b
+    path: Assets/Scenes/Maps/SimulationMap.unity
+    guid: 26b5ebca15c946a42b721c29894bba28
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 562da38d9cbb279479a06635885d6530, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: cd2d691978bafe14a8f6fe8984e9ae1b, type: 2}

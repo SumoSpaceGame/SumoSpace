@@ -47,7 +47,7 @@ namespace Game.Common.Registry
             }
         }
         
-        public PlayerID GetByNetworkID(uint networkID)
+        public PlayerID GetByNetworkID(int networkID)
         {
             //Debug.Log(clientID + 1);
             try
