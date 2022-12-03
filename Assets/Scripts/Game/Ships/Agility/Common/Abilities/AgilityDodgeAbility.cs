@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Ships.Agility.Common.Abilities
 {
-    [CreateAssetMenu(menuName="Ship Abilities/Agility Abilities", fileName = "Agility Dodge", order=1)]
+    [CreateAssetMenu(menuName="Ship Abilities/Agility Abilities/Agility Dodge", fileName = "Agility Dodge", order=1)]
     public class AgilityDodgeAbility: ShipAbility
     {
         [SerializeField] private float distance;

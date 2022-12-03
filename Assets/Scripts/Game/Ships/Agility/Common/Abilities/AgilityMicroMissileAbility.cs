@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Ships.Agility.Common.Abilities
 {
-    [CreateAssetMenu(menuName="Ship Abilities/Agility Abilities", fileName = "Agility Micro Missile", order=1)]
+    [CreateAssetMenu(menuName="Ship Abilities/Agility Abilities/Agility Micro Missile", fileName = "Agility Micro Missile", order=1)]
     public class AgilityMicroMissileAbility: ShipAbility
     {
         [SerializeField] private float maxMissileTravelDistance;

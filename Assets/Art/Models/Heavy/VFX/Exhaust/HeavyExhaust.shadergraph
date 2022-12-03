@@ -1,5 +1,5 @@
 {
-    "m_SGVersion": 2,
+    "m_SGVersion": 3,
     "m_Type": "UnityEditor.ShaderGraph.GraphData",
     "m_ObjectId": "329292f56a5a4ba594c14c9037dd63a4",
     "m_Properties": [
@@ -26,6 +26,12 @@
         }
     ],
     "m_Keywords": [],
+    "m_Dropdowns": [],
+    "m_CategoryData": [
+        {
+            "m_Id": "0d2fb743b1b04c0480050bdb481ead36"
+        }
+    ],
     "m_Nodes": [
         {
             "m_Id": "1bc556d6ddc046dcaabaa3d536085bf3"
@@ -490,10 +496,11 @@
         "serializedMesh": {
             "m_SerializedMesh": "{\"mesh\":{\"instanceID\":0}}",
             "m_Guid": ""
-        }
+        },
+        "preventRotation": false
     },
     "m_Path": "Shader Graphs",
-    "m_ConcretePrecision": 0,
+    "m_GraphPrecision": 0,
     "m_PreviewMode": 2,
     "m_OutputNode": {
         "m_Id": ""
@@ -513,9 +520,13 @@
         "m_GuidSerialized": "23cf3e53-120f-448f-9958-be1e79e5736d"
     },
     "m_Name": "PatternLerp",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_00aa4b76c72744ec9ed00538fb845978",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -702,6 +713,36 @@
         "b": 0.5,
         "a": 1.0
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CategoryData",
+    "m_ObjectId": "0d2fb743b1b04c0480050bdb481ead36",
+    "m_Name": "",
+    "m_ChildObjectList": [
+        {
+            "m_Id": "42ca88af5a624b21a9e179a505455cae"
+        },
+        {
+            "m_Id": "c2f2d50ca8f9434f8e8c8871180d85d5"
+        },
+        {
+            "m_Id": "00aa4b76c72744ec9ed00538fb845978"
+        },
+        {
+            "m_Id": "aac315721bdd48a7be8856f0ba34014e"
+        },
+        {
+            "m_Id": "baf9bbbe73ed4e8a84e2e83a6b320bac"
+        },
+        {
+            "m_Id": "47aac22afb884a9fa16bf1011cc3f0c5"
+        },
+        {
+            "m_Id": "bf85e77f677147f08c887dde56b0f4c4"
+        }
+    ]
 }
 
 {
@@ -1140,9 +1181,13 @@
         "m_GuidSerialized": "2bcbce67-209c-4ff9-a02f-445756f62313"
     },
     "m_Name": "GradientOffset",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_42ca88af5a624b21a9e179a505455cae",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -1228,9 +1273,13 @@
         "m_GuidSerialized": "1d362b95-ec9c-40ab-b576-0a3cc9f7ea12"
     },
     "m_Name": "Speed",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_47aac22afb884a9fa16bf1011cc3f0c5",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -1713,7 +1762,9 @@
         1509639983,
         1402497698,
         954105332
-    ]
+    ],
+    "m_Dropdowns": [],
+    "m_DropdownSelectedEntries": []
 }
 
 {
@@ -2397,9 +2448,13 @@
         "m_GuidSerialized": "15ca617a-4147-4099-9311-3bcd17967004"
     },
     "m_Name": "PatternScale",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector2_aac315721bdd48a7be8856f0ba34014e",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -2435,9 +2490,13 @@
         "m_GuidSerialized": "314dcd2f-12c7-49e9-94c6-6ec6fcc587c7"
     },
     "m_Name": "Color",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Color_baf9bbbe73ed4e8a84e2e83a6b320bac",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -2448,6 +2507,7 @@
         "b": 0.0,
         "a": 0.0
     },
+    "isMainColor": false,
     "m_ColorMode": 1
 }
 
@@ -2556,9 +2616,13 @@
         "m_GuidSerialized": "98f638d4-5de9-4e0b-a385-ee808bf44465"
     },
     "m_Name": "PulseRotation",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_bf85e77f677147f08c887dde56b0f4c4",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -2579,9 +2643,13 @@
         "m_GuidSerialized": "37c4e4ef-66a1-480d-9645-0d86012a2ad2"
     },
     "m_Name": "GradientStrength",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_c2f2d50ca8f9434f8e8c8871180d85d5",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -3097,17 +3165,23 @@
 }
 
 {
-    "m_SGVersion": 0,
+    "m_SGVersion": 1,
     "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalTarget",
     "m_ObjectId": "f3ad54ed4bb2450aab182ebcd72b5169",
     "m_ActiveSubTarget": {
         "m_Id": "737c594100c94e70a4e7e7039fb86a47"
     },
+    "m_AllowMaterialOverride": false,
     "m_SurfaceType": 1,
+    "m_ZTestMode": 4,
+    "m_ZWriteControl": 0,
     "m_AlphaMode": 0,
-    "m_TwoSided": true,
+    "m_RenderFace": 0,
     "m_AlphaClip": false,
-    "m_CustomEditorGUI": ""
+    "m_CastShadows": true,
+    "m_ReceiveShadows": true,
+    "m_CustomEditorGUI": "",
+    "m_SupportVFX": false
 }
 
 {

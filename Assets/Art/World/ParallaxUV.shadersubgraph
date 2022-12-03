@@ -1,5 +1,5 @@
 {
-    "m_SGVersion": 2,
+    "m_SGVersion": 3,
     "m_Type": "UnityEditor.ShaderGraph.GraphData",
     "m_ObjectId": "ea401bb227184d52945a0889dd2fab8b",
     "m_Properties": [
@@ -11,6 +11,12 @@
         }
     ],
     "m_Keywords": [],
+    "m_Dropdowns": [],
+    "m_CategoryData": [
+        {
+            "m_Id": "e756f7fceed54c3290b3af6f4a8e8a33"
+        }
+    ],
     "m_Nodes": [
         {
             "m_Id": "bcdabf8b0433457aba85564c5e02a421"
@@ -123,10 +129,11 @@
         "serializedMesh": {
             "m_SerializedMesh": "{\"mesh\":{\"instanceID\":0}}",
             "m_Guid": ""
-        }
+        },
+        "preventRotation": false
     },
     "m_Path": "Sub Graphs",
-    "m_ConcretePrecision": 0,
+    "m_GraphPrecision": 0,
     "m_PreviewMode": 2,
     "m_OutputNode": {
         "m_Id": "bcdabf8b0433457aba85564c5e02a421"
@@ -232,9 +239,13 @@
         "m_GuidSerialized": "4917e7dc-53a4-4f40-86cb-20557594130b"
     },
     "m_Name": "UV",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector2_25e36bcee07c4247ba3b470c3d6e5c6c",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -444,9 +455,13 @@
         "m_GuidSerialized": "5de25b21-3efb-4cdf-b1f1-e582949fd00e"
     },
     "m_Name": "ParallaxOffset",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_63fadfa425ce478fbd8d642c991069be",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -702,5 +717,20 @@
         "m_SerializableColors": []
     },
     "IsFirstSlotValid": true
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CategoryData",
+    "m_ObjectId": "e756f7fceed54c3290b3af6f4a8e8a33",
+    "m_Name": "",
+    "m_ChildObjectList": [
+        {
+            "m_Id": "25e36bcee07c4247ba3b470c3d6e5c6c"
+        },
+        {
+            "m_Id": "63fadfa425ce478fbd8d642c991069be"
+        }
+    ]
 }
 

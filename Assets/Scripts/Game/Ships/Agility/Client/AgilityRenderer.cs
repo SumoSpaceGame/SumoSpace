@@ -6,10 +6,11 @@ namespace Game.Ships.Agility.Client
     public class AgilityRenderer: ShipRenderer
     {
         public GameObject muzzleFlash;
+        public string MuzzlePrefabLocation = "AgilePrefab/Sphere/BulletSpawn/MuzzlePrefab";
         
         public void PrimaryMuzzleFlash()
         {
-            muzzleFlash.transform.Find("Sphere/AgileShip/MuzzlePrefab").GetComponent<VisualEffect>().Play();
+            transform.Find("../Sphere/BulletSpawn/MuzzlePrefab").GetComponent<VisualEffect>().Play();
         }
     }
 }

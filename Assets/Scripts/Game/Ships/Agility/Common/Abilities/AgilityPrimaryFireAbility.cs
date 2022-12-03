@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Ships.Agility.Common.Abilities
 {
-    [CreateAssetMenu(menuName="Ship Abilities/Agility Abilities", fileName = "Agility Primary Fire", order=1)]
+    [CreateAssetMenu(menuName="Ship Abilities/Agility Abilities/Agility Primary Fire", fileName = "Agility Primary Fire", order=1)]
     public class AgilityPrimaryFireAbility: ShipAbility {
 
         [SerializeField] private float knockback;
