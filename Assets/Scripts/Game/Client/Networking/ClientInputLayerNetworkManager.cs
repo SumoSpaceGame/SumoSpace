@@ -17,7 +17,7 @@ namespace Game.Common.Networking
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_DODGE, new ClientAgilityDodge()));
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_PRIMARY_FIRE_START, new ClientAgilityBeginPrimaryFire()));
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_PRIMARY_FIRE_END, new ClientAgilityEndPrimaryFire()));
-            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_MICRO_MISSLES, new ClientAgilityMicroMissiles()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_MICRO_MISSLES, new ClientAgilityMicroMissile()));
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_PRIMARY_FIRE_START, new ClientHeavyBeginPrimaryFire()));
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_PRIMARY_FIRE_END, new ClientHeavyEndPrimaryFire()));
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_LOCKDOWN, new ClientHeavyLockdown()));

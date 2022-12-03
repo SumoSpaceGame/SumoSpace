@@ -1,6 +1,7 @@
 ﻿using Game.Common.Gameplay.Ship;
 using System;
 using System.Collections;
+using Game.Ships.Agility.Common.Abilities;
 using UnityEngine;
 
 public class AgilityPrimaryFireServerBehaviour : AbilityBehaviour<AgilityPrimaryFireAbility> {

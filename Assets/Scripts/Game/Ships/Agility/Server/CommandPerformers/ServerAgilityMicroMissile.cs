@@ -3,10 +3,10 @@ using Game.Common.Gameplay.Ship;
 
 namespace Game.Ships.Agility.Server.CommandPerformers
 {
-    public class ServerAgilityShipDodge: ICommand {
+    public class ServerAgilityMicroMissile: ICommand {
         public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData) {
-            shipManager.shipLoadout.PrimaryAbility.Execute(shipManager, true);
-            networker.SendData(packetData, CommandType.AGILITY_DODGE, shipManager.playerMatchID);
+            shipManager.shipLoadout.SecondaryAbility.Execute(shipManager, true);
+            networker.SendData(packetData, CommandType.AGILITY_PRIMARY_FIRE_END, shipManager.playerMatchID);
             return true;
         }
     }

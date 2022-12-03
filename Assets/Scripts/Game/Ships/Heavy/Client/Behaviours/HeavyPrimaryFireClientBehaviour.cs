@@ -1,5 +1,6 @@
 ﻿using Game.Common.Gameplay.Ship;
 using System.Collections;
+using Game.Ships.Heavy.Common.Abilities;
 using UnityEngine;
 using UnityEngine.VFX;
 

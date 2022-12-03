@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Game.Ships.Heavy.Common.Abilities;
 using UnityEngine;
 
 public class HeavyLockdownClientBehaviour : RenderableAbilityBehaviour<HeavyLockdownAbility>

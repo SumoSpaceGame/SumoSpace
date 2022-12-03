@@ -16,7 +16,7 @@ namespace Game.Common.Networking
             receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_DODGE, new ServerAgilityShipDodge()));
             receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_PRIMARY_FIRE_START, new ServerAgilityBeginPrimaryFire()));
             receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_PRIMARY_FIRE_END, new ServerAgilityEndPrimaryFire()));
-            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_MICRO_MISSLES, new ServerAgilityMicroMissiles()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_MICRO_MISSLES, new ServerAgilityMicroMissile()));
             receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_PRIMARY_FIRE_START, new ServerHeavyBeginPrimaryFire()));
             receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_PRIMARY_FIRE_END, new ServerHeavyEndPrimaryFire()));
             receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_LOCKDOWN, new ServerHeavyLockdown()));

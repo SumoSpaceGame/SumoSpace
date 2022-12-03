@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Linq.Expressions;
+using Game.Ships.Heavy.Common.Abilities;
 using UnityEngine;
 
 public class HeavyPrimaryFireServerBehaviour : AbilityBehaviour<HeavyPrimaryFireAbility> {
