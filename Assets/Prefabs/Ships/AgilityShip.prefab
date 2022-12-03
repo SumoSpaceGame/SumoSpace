@@ -278,6 +278,7 @@ MonoBehaviour:
   networkMovement: {fileID: 0}
   virtualCursorPrefab: {fileID: 7368730354526697921, guid: 60cf878beb180f2428456ccfef098402, type: 3}
   virtualCursor: {fileID: 9146286379313495491, guid: 60cf878beb180f2428456ccfef098402, type: 3}
+  matchCollisionFilter: {fileID: 7891745021806615213}
   behaviours:
   - {fileID: 0}
   - {fileID: 0}

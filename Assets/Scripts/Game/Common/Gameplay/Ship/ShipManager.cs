@@ -6,6 +6,7 @@ using Game.Common.Registry;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using UnityTemplateProjects.Game.Common.Gameplay;
 
 namespace Game.Common.Gameplay.Ship
 {
@@ -24,6 +25,8 @@ namespace Game.Common.Gameplay.Ship
         public AgentMovementNetworkManager networkMovement;
         public GameObject virtualCursorPrefab;
         public VirtualCursor virtualCursor;
+
+        public MatchCollisionFilter matchCollisionFilter;
 
         [EnumNamedList(typeof(ShipLoadout.AbilityType))]
         public List<AbilityBehaviourComponent> behaviours = new List<AbilityBehaviourComponent>(Enum.GetValues(typeof(ShipLoadout.AbilityType)).Length);

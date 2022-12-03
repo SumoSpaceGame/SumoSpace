@@ -1,3 +1,4 @@
+using System;
 using Game.Common.Instances;
 using UnityEngine;
 
@@ -29,6 +30,16 @@ public class SimulationObject : MonoBehaviour {
         var go = Instantiate(representative, gameView.transform, false);
         representative = go;
         sim.Add(this);
+    }
+
+    private void OnEnable()
+    {
+        representative.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        representative.SetActive(false);
     }
 
     /*private void Update() {
