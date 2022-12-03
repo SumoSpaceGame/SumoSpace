@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.VFX;
 
-namespace UnityTemplateProjects.Game.Ships.Agility.Client
+namespace Game.Ships.Agility.Client
 {
     public class AgilityRenderer: ShipRenderer
     {

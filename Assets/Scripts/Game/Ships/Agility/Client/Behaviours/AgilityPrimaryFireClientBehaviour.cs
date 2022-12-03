@@ -1,7 +1,6 @@
 using System.Collections;
 using Game.Ships.Agility.Common.Abilities;
 using UnityEngine;
-using UnityTemplateProjects.Game.Ships.Agility.Client;
 
 namespace Game.Ships.Agility.Client.Behaviours
 {
