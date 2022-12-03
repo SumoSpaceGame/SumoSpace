@@ -1,7 +1,7 @@
 ﻿using Game.Common.Gameplay.Commands;
 using Game.Common.Gameplay.Ship;
 
-namespace UnityTemplateProjects.Game.Client.Gameplay.Abilities.CommandPerformers
+namespace Game.Ships.Agility.Client.CommandPerformers
 {
     public class ClientAgilityDodge : ICommandPerformer
     {

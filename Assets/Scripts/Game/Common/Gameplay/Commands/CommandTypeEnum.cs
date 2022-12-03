@@ -12,5 +12,6 @@
         HEAVY_PRIMARY_FIRE_END,
         HEAVY_LOCKDOWN,
         HEAVY_BURST,
+        AGILITY_MICRO_MISSLES,
     }
 }

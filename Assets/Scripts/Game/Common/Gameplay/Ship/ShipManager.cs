@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.HID;
 using UnityEngine.Serialization;
+using UnityTemplateProjects.Game.Common.Gameplay;
 
 namespace Game.Common.Gameplay.Ship
 {
@@ -26,6 +27,8 @@ namespace Game.Common.Gameplay.Ship
         public GameObject virtualCursorPrefab;
         public VirtualCursor virtualCursor;
 
+        public MatchCollisionFilter matchCollisionFilter;
+
         [EnumNamedList(typeof(ShipLoadout.AbilityType))]
         public List<AbilityBehaviourComponent> behaviours = new List<AbilityBehaviourComponent>(Enum.GetValues(typeof(ShipLoadout.AbilityType)).Length);
 
@@ -38,6 +41,12 @@ namespace Game.Common.Gameplay.Ship
 
 
         public PlayerID playerMatchID;
+        private CircleCollider2D circleCollider2D;
+
+        private void Awake()
+        {
+            circleCollider2D = this.GetComponent<CircleCollider2D>();
+        }
 
         public delegate void OnHitDelegate(Vector2 force, Vector2 position, ForceMode2D forceMode);
         /// <summary>
@@ -97,13 +106,19 @@ namespace Game.Common.Gameplay.Ship
 
         public float GetRadius()
         {
-            return this.GetComponent<CircleCollider2D>().radius;
+            return circleCollider2D.radius;
         }
 
         public Vector3 GetWorldPosition()
         {
             return simulationObject.representative.transform.position;
         }
+
+        public Vector2 Get2DPosition()
+        {
+            return new Vector2(this.transform.position.x, this.transform.position.y);
+        }
+
 
         /// <summary>
         /// Teleports the ship at the the server by the server

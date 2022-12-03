@@ -54,6 +54,8 @@ namespace Game.Common.Networking
         {
             MainPersistantInstances.Remove<InputLayerNetworkManager>();
         }
+        
+        
 
 
         partial void ServerStart();

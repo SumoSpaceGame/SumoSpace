@@ -9,6 +9,7 @@ namespace Game.Common.Networking
     {
         public NetworkObject agentMovementNetworkManagerPrefab;
         public NetworkObject agentInputNetworkManagerPrefab;
+        public NetworkObject agentValueNetworkManagerPrefab;
 
         private void Awake()
         {

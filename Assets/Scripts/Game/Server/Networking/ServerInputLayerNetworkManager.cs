@@ -2,6 +2,8 @@
 using FishNet.Object;
 using Game.Common.Gameplay.Commands;
 using Game.Common.Instances;
+using Game.Ships.Agility.Server.CommandPerformers;
+using Game.Ships.Heavy.Server.CommandPerformers;
 
 namespace Game.Common.Networking
 {
@@ -11,9 +13,10 @@ namespace Game.Common.Networking
         {
             var receivers = new List<KeyValuePair<CommandType, ICommand>>();
             
-            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_DODGE, new ServerShipDodge()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_DODGE, new ServerAgilityShipDodge()));
             receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_PRIMARY_FIRE_START, new ServerAgilityBeginPrimaryFire()));
             receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_PRIMARY_FIRE_END, new ServerAgilityEndPrimaryFire()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_MICRO_MISSLES, new ServerAgilityMicroMissile()));
             receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_PRIMARY_FIRE_START, new ServerHeavyBeginPrimaryFire()));
             receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_PRIMARY_FIRE_END, new ServerHeavyEndPrimaryFire()));
             receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_LOCKDOWN, new ServerHeavyLockdown()));

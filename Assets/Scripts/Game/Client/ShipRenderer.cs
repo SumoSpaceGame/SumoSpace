@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class ShipRenderer : MonoBehaviour {
 
@@ -34,5 +35,10 @@ public class ShipRenderer : MonoBehaviour {
             tracer.SetPosition(tracer.positionCount - 1, hit.collider ? hit.point : gunMuzzle.position + gunMuzzle.forward * 100);
         else
             tracer.AddPosition(gunMuzzle.position + gunMuzzle.forward * 100);
+    }
+
+    private void muzzleFlash()
+    {
+        GetComponent<VisualEffect>().Play();
     }
 }

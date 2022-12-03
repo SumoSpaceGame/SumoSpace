@@ -1,5 +1,5 @@
 {
-    "m_SGVersion": 2,
+    "m_SGVersion": 3,
     "m_Type": "UnityEditor.ShaderGraph.GraphData",
     "m_ObjectId": "9cacbab4bab94a33a29c39d50082335c",
     "m_Properties": [
@@ -17,6 +17,12 @@
         }
     ],
     "m_Keywords": [],
+    "m_Dropdowns": [],
+    "m_CategoryData": [
+        {
+            "m_Id": "85eb25d7168c402d9cd4c6b070bc23d6"
+        }
+    ],
     "m_Nodes": [
         {
             "m_Id": "f2a83973397d420495716cdc2530a76c"
@@ -158,10 +164,11 @@
         "serializedMesh": {
             "m_SerializedMesh": "{\"mesh\":{\"instanceID\":0}}",
             "m_Guid": ""
-        }
+        },
+        "preventRotation": false
     },
     "m_Path": "Shader Graphs",
-    "m_ConcretePrecision": 0,
+    "m_GraphPrecision": 0,
     "m_PreviewMode": 2,
     "m_OutputNode": {
         "m_Id": ""
@@ -324,9 +331,13 @@
         "m_GuidSerialized": "01c1ce11-f23a-404b-8c77-f5c36de657cf"
     },
     "m_Name": "PulseColor",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Color_35baf1d98fe34981a535a9fa34af512a",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -337,21 +348,28 @@
         "b": 0.0,
         "a": 0.0
     },
+    "isMainColor": false,
     "m_ColorMode": 1
 }
 
 {
-    "m_SGVersion": 0,
+    "m_SGVersion": 1,
     "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalTarget",
     "m_ObjectId": "3efe5397e82346dc91b1f66908967608",
     "m_ActiveSubTarget": {
         "m_Id": "08d4d7209d52424fb4ea078b59e1b4d9"
     },
+    "m_AllowMaterialOverride": false,
     "m_SurfaceType": 1,
+    "m_ZTestMode": 4,
+    "m_ZWriteControl": 0,
     "m_AlphaMode": 0,
-    "m_TwoSided": false,
+    "m_RenderFace": 2,
     "m_AlphaClip": false,
-    "m_CustomEditorGUI": ""
+    "m_CastShadows": true,
+    "m_ReceiveShadows": true,
+    "m_CustomEditorGUI": "",
+    "m_SupportVFX": false
 }
 
 {
@@ -397,9 +415,13 @@
         "m_GuidSerialized": "22702f9d-f894-4448-a353-6d93362288b1"
     },
     "m_Name": "PulseTiling",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_4be6cf11fb1549d49632502e38987692",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -420,9 +442,13 @@
         "m_GuidSerialized": "017df7e5-ffa2-4800-90ef-ff2cd968d405"
     },
     "m_Name": "PulseSpeed",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_4c0cefc30e244510b55c766a6f44d034",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
@@ -627,7 +653,9 @@
         1509639983,
         1402497698,
         954105332
-    ]
+    ],
+    "m_Dropdowns": [],
+    "m_DropdownSelectedEntries": []
 }
 
 {
@@ -658,6 +686,27 @@
         "b": 0.5,
         "a": 1.0
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CategoryData",
+    "m_ObjectId": "85eb25d7168c402d9cd4c6b070bc23d6",
+    "m_Name": "",
+    "m_ChildObjectList": [
+        {
+            "m_Id": "35baf1d98fe34981a535a9fa34af512a"
+        },
+        {
+            "m_Id": "4be6cf11fb1549d49632502e38987692"
+        },
+        {
+            "m_Id": "4c0cefc30e244510b55c766a6f44d034"
+        },
+        {
+            "m_Id": "a57be93cce8840a7a3449b032d7d6da9"
+        }
+    ]
 }
 
 {
@@ -767,9 +816,13 @@
         "m_GuidSerialized": "5aff93a6-8b6f-4655-b28f-fd5096fa533b"
     },
     "m_Name": "PulseRotation",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_a57be93cce8840a7a3449b032d7d6da9",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,

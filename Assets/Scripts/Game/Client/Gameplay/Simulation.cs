@@ -8,20 +8,24 @@ public class Simulation : MonoBehaviour, IGameInstance {
     private void Awake()
     {
         MainInstances.Add(this);
+        Debug.Log("Added main instance for simulation");
     }
 
     private void OnDestroy()
     {
         
         MainInstances.Remove<Simulation>();
+        Debug.Log("Removed main instance for simulation");
     }
 
-    public void Add(SimulationObject simObject) {
+    public void Add(SimulationObject simObject)
+    {
+        /*simObject.representative.transform.localPosition =
+            new Vector3(simObject.transform.position.x, 0, simObject.transform.position.y);*/
         transforms.Add(new SimulationObjectPair(simObject.transform, simObject.representative.transform));
     }
 
     public void Update() {
-        
         for (int i = transforms.Count - 1; i >= 0; i--) {
             var oldLocalPosition = transforms[i].repObjTransform.localPosition;
             var newLocalPosition = transforms[i].simObjTransform.localPosition;

@@ -1,8 +1,8 @@
 ﻿using System.Collections;
-using Game.Common.Gameplay.Abilities.Agility;
+using Game.Ships.Agility.Common.Abilities;
 using UnityEngine;
 
-namespace UnityTemplateProjects.Game.Server.Abilities.Behaviours
+namespace Game.Ships.Agility.Server.Behaviours
 {
     public class AgilityDodgeServerBehaviour : AbilityBehaviour<AgilityDodgeAbility>
     {

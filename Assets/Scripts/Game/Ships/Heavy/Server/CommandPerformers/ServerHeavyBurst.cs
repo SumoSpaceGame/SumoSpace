@@ -1,12 +1,15 @@
 ﻿using Game.Common.Gameplay.Commands;
 using Game.Common.Gameplay.Ship;
 
-public class ServerHeavyBurst : ICommand
+namespace Game.Ships.Heavy.Server.CommandPerformers
 {
-    public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData)
+    public class ServerHeavyBurst : ICommand
     {
-        shipManager.shipLoadout.SecondaryAbility.Execute(shipManager, true);
-        networker.SendData(packetData, CommandType.HEAVY_BURST, shipManager.playerMatchID);
-        return true;
+        public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData)
+        {
+            shipManager.shipLoadout.SecondaryAbility.Execute(shipManager, true);
+            networker.SendData(packetData, CommandType.HEAVY_BURST, shipManager.playerMatchID);
+            return true;
+        }
     }
 }

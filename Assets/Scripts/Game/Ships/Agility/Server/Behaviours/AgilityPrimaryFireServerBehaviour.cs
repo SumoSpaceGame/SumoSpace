@@ -1,23 +1,27 @@
-﻿using Game.Common.Gameplay.Ship;
-using System;
+﻿using System;
 using System.Collections;
+using Game.Common.Gameplay.Ship;
+using Game.Ships.Agility.Common.Abilities;
+using Game.Ships.Heavy.Common.Abilities;
 using UnityEngine;
 
-public class AgilityPrimaryFireServerBehaviour : AbilityBehaviour<AgilityPrimaryFireAbility> {
-    private Coroutine coroutine;
+namespace Game.Ships.Agility.Server.Behaviours
+{
+    public class AgilityPrimaryFireServerBehaviour : AbilityBehaviour<AgilityPrimaryFireAbility> {
+        private Coroutine coroutine;
     
-    public override void Execute() {
-        coroutine ??= shipManager.StartCoroutine(ServerSide());
-        if (++oooCounter == 1) {
-            executing = true;
+        public override void Execute() {
+            coroutine ??= shipManager.StartCoroutine(ServerSide());
+            if (++oooCounter == 1) {
+                executing = true;
+            }
         }
-    }
 
-    public override void Stop() {
-        if (--oooCounter == 0) {
-            executing = false;
+        public override void Stop() {
+            if (--oooCounter == 0) {
+                executing = false;
+            }
         }
-    }
     
     // TODO shoot from the correct points (not out front)
     private IEnumerator ServerSide() {

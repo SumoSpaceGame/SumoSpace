@@ -49,9 +49,12 @@ Material:
     - _GradRadius: 27
     - _NoiseScale: 10
     - _NoiseSpeed: 1
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _Radius: 1
     - _Radius2: 0
     - _SpinSpeed: 100
+    - _StripeSpeed: 100
     - _StripeTiling: 0.25
     m_Colors:
     - Color_663dec1d17a54b7cbc05cd2b9d9abbee: {r: 4, g: 0, b: 0, a: 0}

@@ -1,5 +1,5 @@
 {
-    "m_SGVersion": 2,
+    "m_SGVersion": 3,
     "m_Type": "UnityEditor.ShaderGraph.GraphData",
     "m_ObjectId": "be66ef7514824291933cc5847a4784b8",
     "m_Properties": [
@@ -8,6 +8,12 @@
         }
     ],
     "m_Keywords": [],
+    "m_Dropdowns": [],
+    "m_CategoryData": [
+        {
+            "m_Id": "29ae9e36147d4359a391b29101773102"
+        }
+    ],
     "m_Nodes": [
         {
             "m_Id": "c35b9ecc54cb47cd9ce216a43b09a601"
@@ -137,10 +143,11 @@
         "serializedMesh": {
             "m_SerializedMesh": "{\"mesh\":{\"instanceID\":0}}",
             "m_Guid": ""
-        }
+        },
+        "preventRotation": false
     },
     "m_Path": "Sub Graphs",
-    "m_ConcretePrecision": 0,
+    "m_GraphPrecision": 0,
     "m_PreviewMode": 2,
     "m_OutputNode": {
         "m_Id": "c35b9ecc54cb47cd9ce216a43b09a601"
@@ -248,6 +255,18 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CategoryData",
+    "m_ObjectId": "29ae9e36147d4359a391b29101773102",
+    "m_Name": "",
+    "m_ChildObjectList": [
+        {
+            "m_Id": "5eb8f23b637a414a8654192aec432b5e"
+        }
+    ]
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "43ab9d2dab074c109526f39d8b5dbb63",
     "m_Id": 3,
@@ -278,9 +297,13 @@
         "m_GuidSerialized": "57d924e1-aac8-44a5-aa21-7323a26558cb"
     },
     "m_Name": "Offset",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_5eb8f23b637a414a8654192aec432b5e",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,

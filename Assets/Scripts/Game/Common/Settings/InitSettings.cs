@@ -12,7 +12,7 @@ namespace Game.Common.Settings
             var mapRegistry = masterSettings.mapRegistry;
             var matchSettings = masterSettings.matchSettings;
             
-            matchSettings.SelectedMapItem = mapRegistry.GetMap(0);
+            matchSettings.SelectedMapItem = mapRegistry.GetMap(matchSettings.StartWithSelectedMapIndex);
                 
             string[] args = Environment.GetCommandLineArgs ();
             string input = "";

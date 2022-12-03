@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -154,13 +154,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fdaae44044276a49a52229c1597e33b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _updateOrder: 0
   _allowTickDropping: 0
   _maximumFrameTicks: 3
   _tickRate: 120
   _pingInterval: 1
   _timingInterval: 2
   _physicsMode: 1
-  _maximumBufferedInputs: 15
 --- !u!114 &258405427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,6 +334,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agentMovementNetworkManagerPrefab: {fileID: 5359055736134386342, guid: 695c1068d0eba994b995719531d4b981, type: 3}
   agentInputNetworkManagerPrefab: {fileID: 4400770604142937563, guid: 37823a56ce05c924bacc38900addaa68, type: 3}
+  agentValueNetworkManagerPrefab: {fileID: 0}
 --- !u!4 &594007627
 Transform:
   m_ObjectHideFlags: 0
