@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Game.Common.Gameplay.Abilities;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Game.Ships.Agility.Common.Abilities
 {
@@ -10,10 +11,7 @@ namespace Game.Ships.Agility.Common.Abilities
     {
         [SerializeField] private float maxMissileTime;
         public float MaxMissileTime => maxMissileTime;
-        
-        [SerializeField] private float homingAngle;
-        public float HomingAngle => homingAngle;
-        
+
         [SerializeField] private float acceleration;
         public float Acceleration => acceleration;
         

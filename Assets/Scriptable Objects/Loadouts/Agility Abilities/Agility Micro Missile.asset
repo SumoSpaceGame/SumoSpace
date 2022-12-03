@@ -12,17 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36ea4f8ebfb78ae468b1dc8695efaf02, type: 3}
   m_Name: Agility Micro Missile
   m_EditorClassIdentifier: 
-  cooldown: 5
+  cooldown: 1
   executeCommand: 7
   stopCommand: 7
   clientBehaviour: {fileID: 3911644314431376584, guid: 7dbf06da906aab34e9d7b70c840e4897, type: 3}
   serverBehaviour: {fileID: 8584451514853077862, guid: 587984c0a56010943bb4d828d6cfe9af, type: 3}
   slot: 2
   maxMissileTime: 0.75
-  homingAngle: 20
-  acceleration: 5000
+  acceleration: 7000
   maxSpeed: 50
   numMissiles: 10
   attackDuration: 1
   explosionRadius: 1
-  explosionForce: 100
+  explosionForce: 60
