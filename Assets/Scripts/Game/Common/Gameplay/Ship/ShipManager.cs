@@ -5,6 +5,7 @@ using Game.Common.Networking;
 using Game.Common.Registry;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.HID;
 using UnityEngine.Serialization;
 
 namespace Game.Common.Gameplay.Ship
@@ -19,7 +20,7 @@ namespace Game.Common.Gameplay.Ship
         public ClientControls clientControls;
 
         public ShipLoadout shipLoadout;
-        
+
         public SimulationObject simulationObject;
         public AgentMovementNetworkManager networkMovement;
         public GameObject virtualCursorPrefab;
@@ -27,16 +28,22 @@ namespace Game.Common.Gameplay.Ship
 
         [EnumNamedList(typeof(ShipLoadout.AbilityType))]
         public List<AbilityBehaviourComponent> behaviours = new List<AbilityBehaviourComponent>(Enum.GetValues(typeof(ShipLoadout.AbilityType)).Length);
-        
+
         [Space(2)]
         [Header("Defined on creation")]
         public bool isServer = false;
 
         // True, if this manages manages the client's player ship (per instance)
         public bool isPlayer;
-    
+
 
         public PlayerID playerMatchID;
+
+        public delegate void OnHitDelegate(Vector2 force, Vector2 position, ForceMode2D forceMode);
+        /// <summary>
+        /// The instance of the delegate to br triggered on hit.
+        /// </summary>
+        public OnHitDelegate OnHit;
 
         public void SetLayer(LayerMask layer)
         {
@@ -52,36 +59,38 @@ namespace Game.Common.Gameplay.Ship
                 SetLayerChildren(child, layer);
             }
         }
-    
-    
+
+
         private void Start() {
             simulationObject.Create();
             shipLoadout.InitializeBehaviours(this);
             if (isPlayer) {
                 UnityEngine.Camera.main.GetComponent<CameraFollow>().followTarget = simulationObject.representative.transform;
                 GetComponent<PlayerInput>().enabled = true;
-                
+
                 virtualCursor = Instantiate(virtualCursorPrefab).GetComponent<VirtualCursor>();
                 virtualCursor.followTarget = simulationObject.representative.transform;
             } else {
                 clientControls.enabled = false;
                 GetComponent<PlayerInput>().enabled = false;
             }
+
+            OnHit += Knockback;
         }
 
         public void EnableColliders(bool enable = true) {
             var colliders = new Collider2D[3];
             _rigidbody2D.GetAttachedColliders(colliders);
             foreach (var collider in colliders) {
-                if(collider != null) {
+                if (collider != null) {
                     collider.isTrigger = !enable;
                 }
             }
         }
-        public void OnLookRaw(InputAction.CallbackContext ctx) { 
+        public void OnLookRaw(InputAction.CallbackContext ctx) {
             virtualCursor.OnLookRaw(ctx);
         }
-    
+
         public void OnLookNorm(InputAction.CallbackContext ctx) {
             virtualCursor.OnLookNorm(ctx);
         }
@@ -109,7 +118,7 @@ namespace Game.Common.Gameplay.Ship
             {
                 Debug.LogError("Failed to teleport, can not teleport on client!");
             }
-            
+
             if (!keepInertia)
             {
                 shipController.ResetInertia();
@@ -117,5 +126,8 @@ namespace Game.Common.Gameplay.Ship
 
             this.transform.position = new Vector3(position.x, position.y, 0);
         }
+
+        // Gives the ship knockback.
+        private void Knockback(Vector2 force, Vector2 position, ForceMode2D forceMode) => GetComponent<Rigidbody2D>().AddForceAtPosition(force, position, forceMode);
     }
 }

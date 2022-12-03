@@ -31,23 +31,7 @@ public class HeavyPrimaryFireServerBehaviour : AbilityBehaviour<HeavyPrimaryFire
                 var t = shipManager.transform;
                 var hit = Physics2D.Raycast(t.position + t.up * 2, t.up);
                 if (hit.rigidbody) {
-                    hit.rigidbody.AddForceAtPosition(t.up * Ability.CurrentKnockback(timer) * Time.deltaTime, hit.point, ForceMode2D.Force);
-                    ShipManager sm = hit.rigidbody.GetComponent<ShipManager>();
-                    HeavyBurstAbility targetBurstAbility = sm.shipLoadout.SecondaryAbility as HeavyBurstAbility;
-                    if (targetBurstAbility != null)
-                    {
-                        checked
-                        {
-                            try
-                            {
-                                sm.networkMovement.TempPassiveCharge += (ushort)(Ability.CurrentKnockback(timer) * targetBurstAbility.KnockbackToCharge);
-                            }
-                            catch (OverflowException)
-                            {
-                                sm.networkMovement.TempPassiveCharge = ushort.MaxValue;
-                            }
-                        }
-                    }
+                    hit.rigidbody.GetComponent<ShipManager>().OnHit(t.up * Ability.CurrentKnockback(timer) * Time.deltaTime, hit.point, ForceMode2D.Force);
                 }
                 counter = 0;
             }
