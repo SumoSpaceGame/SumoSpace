@@ -31,12 +31,13 @@ namespace Game.Ships.Heavy.Server.Behaviours
                 if (counter > 1 && executing && !Ability.IsDisabled) {
                     var t = shipManager.transform;
                     var hit = Physics2D.Raycast(t.position + t.up * 2, t.up);
-                    if (hit.rigidbody) {
+                    if (hit.rigidbody) 
+                    {
                         hit.rigidbody.GetComponent<ShipManager>().OnHit(t.up * Ability.CurrentKnockback(timer) * Time.deltaTime, hit.point, ForceMode2D.Force);
                     }
                     counter = 0;
-                    }
-                    yield return null;
+                }
+                yield return null;
             }
         }
     }

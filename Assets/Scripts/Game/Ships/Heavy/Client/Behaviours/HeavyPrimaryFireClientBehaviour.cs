@@ -11,19 +11,17 @@ namespace Game.Ships.Heavy.Client.Behaviours
         private GameObject _shootVFXPrefab;
         private GameObject _shootVFX;
         private GameObject _representative;
-        private bool _isLocal;
+        private bool _hasRunLocally;
 
         private void Start() => _representative = shipManager.simulationObject.representative;
 
         public override void Execute()
         {
-            if (!_isLocal)
-                QuickExecute();
-        }
-
-
-        public override void QuickExecute() {
-            _isLocal = true;
+            if (_hasRunLocally)
+            {
+                _hasRunLocally = false;
+                return;
+            }
             if (!Ability.IsDisabled)
             {
                 //ShipRenderer.StartBeam();
@@ -36,6 +34,12 @@ namespace Game.Ships.Heavy.Client.Behaviours
             if (++oooCounter == 1) {
                 executing = true;
             }
+        }
+
+        public override void QuickExecute()
+        {
+            Execute();
+            _hasRunLocally = true;
         }
 
         public override void Stop() {
