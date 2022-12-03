@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4629541005180197378}
   - component: {fileID: 147876735534674990}
+  - component: {fileID: 4178035082953245921}
   m_Layer: 0
   m_Name: ClientAgilityDodgeBehaviour
   m_TagString: Untagged
@@ -47,3 +48,20 @@ MonoBehaviour:
   shipManager: {fileID: 0}
   executing: 0
   oooCounter: 0
+--- !u!114 &4178035082953245921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3771484431864915088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04180631e5794970b23c5084e6794c64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tracerEffect: {fileID: 0}
+  gunMuzzle: {fileID: 0}
+  tracerRange: 0
+  muzzleFlash: {fileID: 0}
+  MuzzlePrefabLocation: AgilePrefab/Sphere/BulletSpawn/MuzzlePrefab

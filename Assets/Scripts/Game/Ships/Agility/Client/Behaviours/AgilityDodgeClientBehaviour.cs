@@ -7,7 +7,7 @@ namespace Game.Ships.Agility.Client.Behaviours
     {
         public override void Execute()
         {
-            shipManager.simulationObject.representative.GetComponent<Animator>().SetTrigger("Dodge");
+            ((AgilityRenderer)ShipRenderer).DodgeEffect();
         }
     }
 }
