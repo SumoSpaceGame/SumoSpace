@@ -10,7 +10,10 @@ namespace Game.Common.Map
         private List<GameMapBoundary> sortedBoundaries = new List<GameMapBoundary>();
         private GameMapBoundary[] sortedBoundariesArr;
 
-
+        public bool HasBoundaries()
+        {
+            return boundaries.Count > 0;
+        }
         public void AddBoundary(GameMapBoundary boundary)
         {
             boundaries.Add(boundary);

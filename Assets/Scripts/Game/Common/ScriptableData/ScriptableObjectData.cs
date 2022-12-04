@@ -9,7 +9,7 @@ namespace Game.Common.ScriptableData
         public bool HasChanged;
         public delegate void OnChangeEventHandler(T data);
         public event OnChangeEventHandler OnChangeEvent;
-        
+
         public T value
         {
             get => _value;
@@ -31,7 +31,8 @@ namespace Game.Common.ScriptableData
                 OnChangeEvent?.Invoke(value);
             }
         }
-
+        
+        [SerializeField]
         private T _value;
     }
 }

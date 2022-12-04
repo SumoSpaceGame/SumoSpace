@@ -115,6 +115,9 @@ namespace Game.Common.Networking
                 data.TeamID = gameMatchSettings.ClientTeam;
                 data.TeamPosition = gameMatchSettings.ClientTeamPosition;
             }
+            
+            masterSettings.DebugLogPlayerStatic();
+            
             gameMatchSettings.ClientIsSpectator = false;
                 
             SyncMatchSettings(player, gameMatchSettings.GetSerialized());

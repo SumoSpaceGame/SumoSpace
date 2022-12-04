@@ -50,6 +50,7 @@ MonoBehaviour:
   _addedNetworkObject: {fileID: 5359055736134386342}
   _networkObjectCache: {fileID: 5359055736134386342}
   playerIDRegistry: {fileID: 11400000, guid: ccf6ab7f4c32bbe4fbb6385be8026423, type: 2}
+  TempPassiveCharge: 0
   attachedShipManager: {fileID: 0}
   masterSettings: {fileID: 11400000, guid: 08b1afc459433574c83931546f497634, type: 2}
 --- !u!114 &5359055736134386342
@@ -68,13 +69,14 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   _networkBehaviours:
   - {fileID: 2562604988421173456}
+  - {fileID: 4777538681440001594}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
-  _disableOnDespawn: 0
+  _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: -1
+  <PrefabId>k__BackingField: 8
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 9500265863014292368
@@ -92,15 +94,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 1
   _addedNetworkObject: {fileID: 5359055736134386342}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 5359055736134386342}
   _synchronizeParent: 0
   _packing:
     Position: 1
     Rotation: 1
     Scale: 0
-  _interpolation: 2
+  _interpolation: 13
   _extrapolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1

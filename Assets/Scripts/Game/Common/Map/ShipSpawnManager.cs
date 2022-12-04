@@ -46,6 +46,7 @@ namespace Game.Common.Map
 
         public Vector3 GetRespawnPoint(int teamIndex, int playerTeamIndex)
         {
+            Debug.Log("Respawn positions " + teamIndex + " " + playerTeamIndex);
             if (teamIndex > spawnGroups.Count)
             {
                 teamIndex = spawnGroups.Count - 1;

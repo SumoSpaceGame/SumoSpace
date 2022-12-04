@@ -39,7 +39,7 @@ public class SimulationObject : MonoBehaviour {
 
     private void OnDisable()
     {
-        representative.SetActive(false);
+        if(representative) representative.SetActive(false);
     }
 
     /*private void Update() {

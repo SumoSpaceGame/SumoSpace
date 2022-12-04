@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using FishNet;
+using Game.Common.Gameplay.Ship;
 using Game.Common.Instances;
 using UnityEngine;
 using UnityTemplateProjects.Game.Common.Gameplay;
@@ -136,7 +137,10 @@ namespace Game.Common.Networking.Entity.Types
                     && this.mcf.CanInteract(otherMcf)).Select(x => x.attachedRigidbody).ToList()
                 .ForEach(x =>
                 {
-                    x.AddForce((x.position - rb.position) * explosionForce, ForceMode2D.Impulse);
+                    if (x.GetComponent<ShipManager>() != null)
+                        x.GetComponent<ShipManager>().OnHit((x.position - rb.position) * explosionForce, rb.position, ForceMode2D.Impulse);
+                    else
+                        x.AddForce((x.position - rb.position) * explosionForce, ForceMode2D.Impulse);
                 });
             exploded = true;
             MainPersistantInstances.Get<EntityNetworkManager>().DespawnEntity(this);

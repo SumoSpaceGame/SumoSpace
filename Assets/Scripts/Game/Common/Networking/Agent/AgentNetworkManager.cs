@@ -41,13 +41,13 @@ namespace Game.Common.Networking
         /// Client ships get spawned when agent movement network manager gets .
         /// </summary>
         /// <param name="clientID"></param>
-        public void SpawnShip(PlayerID playerID)
+        public void SpawnShip(PlayerID playerID, Vector3 position)
         {
             if (InstanceFinder.IsServer)
             {
                 if (masterSettings.playerStaticDataRegistry.TryGet(playerID, out var data))
                 {
-                    ServerCreateShip(data);
+                    ServerCreateShip(data, position);
                 }
                 else
                 {
@@ -61,6 +61,6 @@ namespace Game.Common.Networking
             }
         }
         
-        partial void ServerCreateShip(PlayerStaticData data);
+        partial void ServerCreateShip(PlayerStaticData data, Vector3 position);
     }
 }

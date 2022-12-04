@@ -20,7 +20,16 @@ namespace Game.Common.Map.PylonMap
                 Debug.LogError("Failed to build map. Pylon map not initialized. ");
                 return;
             }
+
+            for (int i = pylonGraphicsList.Count - 1; i >= 0; i--)
+            {
+                if (pylonGraphicsList[i] == null)
+                {
+                    pylonGraphicsList.RemoveAt(i);
+                }
+            }
             
+
             List<PylonGraphics> currentLineRenderers = new List<PylonGraphics>(pylonGraphicsList);
             pylonGraphicsList.Clear();
 
@@ -56,8 +65,12 @@ namespace Game.Common.Map.PylonMap
 
         public void UpdateGraphics()
         {
-            for (int i = 0; i < pylonGraphicsList.Count; i++)
+            for (int i = pylonGraphicsList.Count - 1; i >= 0; i--)
             {
+                if (pylonGraphicsList[i] == null)
+                {
+                    pylonGraphicsList.RemoveAt(i);
+                }
                 pylonGraphicsList[i].UpdateGraphics();
             }
         }

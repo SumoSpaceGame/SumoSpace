@@ -8,6 +8,8 @@ namespace Game.Common.Map
         public PylonMap.PylonMap map;
         private void OnDrawGizmos()
         {
+            if (!map) return;
+            
             map.Init();
             map.UpdateMap(0);
             if (map.WithinMap(new Vector2(this.transform.position.x, this.transform.position.z)))
