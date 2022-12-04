@@ -129,8 +129,10 @@ namespace Game.Common.Gameplay.Ship
             var master = MainPersistantInstances.Get<GameNetworkManager>().masterSettings;
 
             if (InstanceFinder.IsServer)
-            {            
-                this.transform.position = shipSpawner.GetRespawnPoint(master.matchSettings.ClientTeam, master.matchSettings.ClientTeamPosition).toSimulationPlane();
+            {
+                var data = master.playerStaticDataRegistry.Get(this.playerMatchID);
+                
+                this.transform.position = shipSpawner.GetRespawnPoint(data.TeamPosition, data.TeamID).toSimulationPlane();
             }
             else
             {

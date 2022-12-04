@@ -1,6 +1,7 @@
 using FishNet.Object;
 using Game.Common.Instances;
 using Game.Common.Registry;
+using UnityEngine;
 
 namespace Game.Common.Networking
 {
@@ -10,7 +11,7 @@ namespace Game.Common.Networking
         /// Server creation of the ships. This sets up the ships to work authoritivaly with the server.
         /// </summary>
         /// <param name="ClientMatchID"></param>
-        partial void ServerCreateShip(PlayerStaticData data)
+        partial void ServerCreateShip(PlayerStaticData data, Vector3 position)
         {
             PlayerGameData gameData = masterSettings.playerGameDataRegistry.Get(data.GlobalID);
 
@@ -23,6 +24,7 @@ namespace Game.Common.Networking
             var ClientMatchID = data.GlobalID;
             var spawnedShip = _shipSpawner.SpawnShip(ClientMatchID, shipID, false, false);
             
+            
             _playerShips.Add(ClientMatchID, spawnedShip);
     
             var agentMovement = MainPersistantInstances.Get<NetworkCreator>().InstantiateAgentMovementNetworkManager();
@@ -32,6 +34,7 @@ namespace Game.Common.Networking
 
             spawnedShip.networkMovement = agentMovementScript;
             spawnedShip.isServer = true;
+            spawnedShip.transform.position = position;
             
             spawnedShip.playerMatchID = ClientMatchID;
             

@@ -105,10 +105,16 @@ namespace Game.Server.Phases
 
                 if (playerCounter.IsFull())
                 {
+                    Debug.Log("Spawning ships");
+                    _gamePhaseNetworkManager.masterSettings.DebugLogPlayerStatic();
+
+                    var spawnpositions = MainInstances.Get<ShipSpawnManager>();
                     
                     foreach (PlayerID player in playerCounter.GetPlayers())
                     {
-                        _agentNetworkManager.SpawnShip(player);
+                        var staticData = _gamePhaseNetworkManager.masterSettings.playerStaticDataRegistry.Get(player);
+                        
+                        _agentNetworkManager.SpawnShip(player, spawnpositions.GetSpawnPoint(staticData.TeamID, staticData.TeamPosition));
                     }
                 }
             }

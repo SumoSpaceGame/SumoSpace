@@ -187,5 +187,17 @@ namespace Game.Common.Settings
 
             return playerShips.Get(data);
         }
+
+
+        public void DebugLogPlayerStatic()
+        {
+            var playerIDs = GetPlayerIDs();
+
+            foreach (var id in playerIDs)
+            {
+                var staticData = playerStaticDataRegistry.Get(id);
+                Debug.Log(id.MatchID + " TeamID: " + staticData.TeamID + " TeamPosition: " + staticData.TeamPosition + " PlayerName: " + staticData.PlayerName);
+            }
+        }
     }
 }
