@@ -155,13 +155,17 @@ namespace Game.Common.Map
                     }
                 }
                 
-                
                 // Compare against game boundaries now
                 // Boundary comparison is based on the priority of the elements
                 // If the ship is in within an boundary, it can only get the greatest layer within that priority level
                 // Lower priorities will be ignored
-                var sortedBoundaries = gameBoundaries.GetBoundaries();
+                if (!gameBoundaries.HasBoundaries())
+                {
+                    continue;
+                }
                 
+                var sortedBoundaries = gameBoundaries.GetBoundaries();
+
                 int lastPriority = sortedBoundaries[sortedBoundaries.Length - 1].Priority;
 
                 bool foundBoundary = false;

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using FishNet;
 using Game.Client.Gameplay.Movement;
+using Game.Common.Instances;
+using Game.Common.Map;
 using Game.Common.Networking;
 using Game.Common.Registry;
+using Game.Common.Util;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -109,6 +113,23 @@ namespace Game.Common.Gameplay.Ship
         {
             return new Vector2(this.transform.position.x, this.transform.position.y);
         }
+
+        public void Kill()
+        {
+            var shipSpawner = MainInstances.Get<ShipSpawnManager>();
+            var master = MainPersistantInstances.Get<GameNetworkManager>().masterSettings;
+
+            if (InstanceFinder.IsServer)
+            {            
+                this.transform.position = shipSpawner.GetRespawnPoint(master.matchSettings.ClientTeam, master.matchSettings.ClientTeamPosition).toSimulationPlane();
+            }
+            else
+            {
+                // Do the kill    
+            }
+        }
+        
+        
 
 
         /// <summary>

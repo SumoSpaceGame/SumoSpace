@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 266858117316837251}
   - component: {fileID: 266858117316837255}
   - component: {fileID: 7190991688975852411}
+  - component: {fileID: 154194094138703525}
   m_Layer: 0
   m_Name: PlayerShipPrefab
   m_TagString: Untagged
@@ -34,6 +35,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2.425, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -216,6 +218,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: b45102f7-59db-4e94-9b31-a0eef33fd402
     m_ActionName: Gameplay/Fire[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a86e3a37-06f1-4fc6-8245-2a4080c82b81
+    m_ActionName: Gameplay/SecondaryAbility[/Keyboard/2,/Keyboard/ctrl]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Mouse and Keyboard
   m_DefaultActionMap: Gameplay
@@ -235,8 +241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementDirection: {x: 0, y: 0}
   movementRotation: 0
-  shipMovement: {fileID: 0}
-  primaryAbility: {fileID: 0}
+  shipLoadout: {fileID: 0}
 --- !u!114 &266858117316837250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,15 +273,19 @@ MonoBehaviour:
   _rigidbody2D: {fileID: 266858117316837253}
   shipController: {fileID: 266858117316837255}
   clientControls: {fileID: 266858117316837273}
+  shipLoadout: {fileID: 0}
   simulationObject: {fileID: 266858117316837250}
-  shipMovement: {fileID: 11400000, guid: a533291414ea7e74e871a6887121c8c9, type: 2}
-  sds: {fileID: 11400000, guid: ac82bffb40da82448ad69f8eeae76313, type: 2}
   networkMovement: {fileID: 0}
   virtualCursorPrefab: {fileID: 7368730354526697921, guid: 60cf878beb180f2428456ccfef098402, type: 3}
   virtualCursor: {fileID: 9146286379313495491, guid: 60cf878beb180f2428456ccfef098402, type: 3}
+  matchCollisionFilter: {fileID: 0}
+  behaviours: []
   isServer: 0
   isPlayer: 0
-  playerMatchID: 0
+  playerMatchID:
+    NetworkID: 0
+    ClientID: 
+    MatchID: 0
 --- !u!114 &266858117316837255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,13 +298,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc13ae929e714807a146eb00fd4ff543, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sm: {fileID: 0}
-  sds: {fileID: 11400000, guid: ac82bffb40da82448ad69f8eeae76313, type: 2}
   movementVector: {x: 0, y: 0}
   targetAngle: 0
 --- !u!95 &7190991688975852411
 Animator:
-  serializedVersion: 3
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -308,7 +315,22 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &154194094138703525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266858117316837275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea38e0be3fcf495288fb1a7691c0694a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 266858117316837251}
+  shipWarningSeconds: {fileID: 11400000, guid: 843563acaaa875443b270b5c3bd69539, type: 2}
