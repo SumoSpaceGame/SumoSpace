@@ -68,10 +68,10 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - Color_591ec357610b4b22bb0e74587866e76f: {r: 0, g: 0.029372271, b: 0.21698111, a: 0}
-    - Color_5b2946ee158247118bdef79df38ea354: {r: 1, g: 1, b: 1, a: 0}
+    - Color_591ec357610b4b22bb0e74587866e76f: {r: 0.01886791, g: 0.01886791, b: 0.01886791, a: 0}
+    - Color_5b2946ee158247118bdef79df38ea354: {r: 0.11320752, g: 0.11320752, b: 0.11320752, a: 0}
     - Color_7ca134bbffde4d3999913ff0bea4de2c: {r: 0, g: 0.0018630028, b: 2, a: 0}
-    - Color_bc3231aa141d488284d54dc8f4d4932b: {r: 0.08960724, g: 0, b: 1, a: 0}
+    - Color_bc3231aa141d488284d54dc8f4d4932b: {r: 0.047703125, g: 0.043137252, b: 1, a: 1}
     - Vector3_0877666954e64416bd60f61fefeb5ab6: {r: 0, g: 0, b: 0, a: 0}
     - Vector3_3f6de148a2f34818a36a3487773b1052: {r: 0, g: 0, b: 0, a: 0}
     - Vector3_6331392a4b454982af4ee1bb3f68b538: {r: 0, g: 0, b: 0, a: 0}
