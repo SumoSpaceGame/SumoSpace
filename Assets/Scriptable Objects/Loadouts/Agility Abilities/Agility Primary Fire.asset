@@ -18,4 +18,4 @@ MonoBehaviour:
   clientBehaviour: {fileID: 7922589147683848013, guid: b59c5fea7bff88548a749c8de75b48d8, type: 3}
   serverBehaviour: {fileID: 7922589147683848013, guid: 482bb03e713a10345a540c4f1133952e, type: 3}
   slot: 0
-  knockback: 40
+  knockback: 100

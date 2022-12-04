@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36ea4f8ebfb78ae468b1dc8695efaf02, type: 3}
   m_Name: Agility Micro Missile
   m_EditorClassIdentifier: 
-  cooldown: 1
+  cooldown: 5
   executeCommand: 7
   stopCommand: 7
   clientBehaviour: {fileID: 3911644314431376584, guid: 7dbf06da906aab34e9d7b70c840e4897, type: 3}
