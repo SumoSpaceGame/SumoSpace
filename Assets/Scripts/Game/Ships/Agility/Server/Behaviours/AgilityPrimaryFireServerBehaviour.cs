@@ -41,7 +41,7 @@ namespace Game.Ships.Agility.Server.Behaviours
                     var hit = Physics2D.Raycast(t.position + t.up * 2, t.up);
                     if (hit.rigidbody)
                     {
-                        hit.rigidbody.GetComponent<ShipManager>().OnHit(t.up * Ability.Knockback, hit.point, ForceMode2D.Impulse);\
+                        hit.rigidbody.GetComponent<ShipManager>().OnHit(t.up * Ability.Knockback, hit.point, ForceMode2D.Impulse);
                     }
                     counter = 0;
                 }
