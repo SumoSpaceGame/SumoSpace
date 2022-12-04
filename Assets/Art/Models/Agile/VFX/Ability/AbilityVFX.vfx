@@ -20,7 +20,7 @@ MonoBehaviour:
     x: 315
     y: -190
     width: 1051
-    height: 1466
+    height: 1446
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2772,7 +2772,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614664}
   m_ExposedName: PatternTiling
   m_Exposed: 1
-  m_Order: 4
+  m_Order: 3
   m_Category: 
   m_Min:
     m_Type:
@@ -2979,7 +2979,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614670}
   m_ExposedName: Velocity
   m_Exposed: 1
-  m_Order: 5
+  m_Order: 4
   m_Category: 
   m_Min:
     m_Type:

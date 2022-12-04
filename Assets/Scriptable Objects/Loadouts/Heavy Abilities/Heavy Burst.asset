@@ -19,7 +19,7 @@ MonoBehaviour:
   serverBehaviour: {fileID: 5536711063531551996, guid: ab77d1c160c245d469ad8d25ebaca183, type: 3}
   slot: 2
   _knockbackToCharge: 125
-  _minEnergy: 400
-  _maxEnergy: 2000
+  _minEnergy: 600
+  _maxEnergy: 3000
   _minImpulse: 10
   _minRadius: 0.0625

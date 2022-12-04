@@ -7,51 +7,41 @@ using UnityEngine;
 
 namespace Game.Ships.Agility.Server.Behaviours
 {
-    public class AgilityPrimaryFireServerBehaviour : AbilityBehaviour<AgilityPrimaryFireAbility> {
+    public class AgilityPrimaryFireServerBehaviour : AbilityBehaviour<AgilityPrimaryFireAbility>
+    {
         private Coroutine coroutine;
-    
-        public override void Execute() {
+
+        public override void Execute()
+        {
             coroutine ??= shipManager.StartCoroutine(ServerSide());
-            if (++oooCounter == 1) {
+            if (++oooCounter == 1)
+            {
                 executing = true;
             }
         }
 
-        public override void Stop() {
-            if (--oooCounter == 0) {
+        public override void Stop()
+        {
+            if (--oooCounter == 0)
+            {
                 executing = false;
             }
         }
-    
+
         // TODO shoot from the correct points (not out front)
-        private IEnumerator ServerSide() {
+        private IEnumerator ServerSide()
+        {
             var counter = 0f;
-            while (counter >= 0) {
+            while (counter >= 0)
+            {
                 counter += Time.deltaTime / Ability.Cooldown;
-                if (counter > 1 && executing) {
+                if (counter > 1 && executing)
+                {
                     var t = shipManager.transform;
                     var hit = Physics2D.Raycast(t.position + t.up * 2, t.up);
-                    if (hit.rigidbody) {
-                        hit.rigidbody.AddForceAtPosition(t.up * Ability.Knockback, hit.point, ForceMode2D.Impulse);
-                        if(hit.rigidbody.TryGetComponent(out ShipManager sm))
-                        {
-                            HeavyBurstAbility targetBurstAbility = sm.shipLoadout.SecondaryAbility as HeavyBurstAbility;
-                            if (targetBurstAbility != null)
-                            {
-                                checked
-                                {
-                                    try
-                                    {
-                                        sm.networkMovement.TempPassiveCharge += (ushort)(Ability.Knockback * targetBurstAbility.KnockbackToCharge);
-                                    }
-                                    catch (OverflowException)
-                                    {
-                                        sm.networkMovement.TempPassiveCharge = ushort.MaxValue;
-                                    }
-                                }
-                            }
-                        }
-                        
+                    if (hit.rigidbody)
+                    {
+                        hit.rigidbody.GetComponent<ShipManager>().OnHit(t.up * Ability.Knockback, hit.point, ForceMode2D.Impulse);
                     }
                     counter = 0;
                 }
