@@ -99,7 +99,7 @@ namespace FishNet.Managing.Client
         /// Initializes this script for use.
         /// </summary>
         /// <param name="manager"></param>
-        internal void InitializeOnceInternal(NetworkManager manager)
+        internal void InitializeOnce_Internal(NetworkManager manager)
         {
             NetworkManager = manager;
             Objects = new ClientObjects(manager);
@@ -147,7 +147,11 @@ namespace FishNet.Managing.Client
         {
             NetworkManager.ClearClientsCollection(Clients);
 
-            List<int> collection = args.Ids;
+            List<int> collection = args.ListCache.Collection;// args.Ids;
+            //No connected clients except self.
+            if (collection == null)
+                return;
+
             int count = collection.Count;
             for (int i = 0; i < count; i++)
             {
@@ -165,17 +169,17 @@ namespace FishNet.Managing.Client
             if (NetworkManager == null || NetworkManager.TransportManager == null || NetworkManager.TransportManager.Transport == null)
                 return;
 
-            if (!subscribe)
-            {
-                NetworkManager.TransportManager.OnIterateIncomingEnd -= TransportManager_OnIterateIncomingEnd;
-                NetworkManager.TransportManager.Transport.OnClientReceivedData -= Transport_OnClientReceivedData;
-                NetworkManager.TransportManager.Transport.OnClientConnectionState -= Transport_OnClientConnectionState;
-            }
-            else
+            if (subscribe)
             {
                 NetworkManager.TransportManager.OnIterateIncomingEnd += TransportManager_OnIterateIncomingEnd;
                 NetworkManager.TransportManager.Transport.OnClientReceivedData += Transport_OnClientReceivedData;
                 NetworkManager.TransportManager.Transport.OnClientConnectionState += Transport_OnClientConnectionState;
+            }
+            else
+            {
+                NetworkManager.TransportManager.OnIterateIncomingEnd -= TransportManager_OnIterateIncomingEnd;
+                NetworkManager.TransportManager.Transport.OnClientReceivedData -= Transport_OnClientReceivedData;
+                NetworkManager.TransportManager.Transport.OnClientConnectionState -= Transport_OnClientConnectionState;
             }
         }
 
@@ -245,6 +249,7 @@ namespace FishNet.Managing.Client
         /// </summary>
         private void Transport_OnClientReceivedData(ClientReceivedDataArgs args)
         {
+            args.Data = NetworkManager.TransportManager.ProcessIntermediateIncoming(args.Data, true);
             ParseReceived(args);
         }
 
@@ -373,6 +378,10 @@ namespace FishNet.Managing.Client
                         {
                             Objects.ParseSyncType(reader, true, args.Channel);
                         }
+                        else if (packetId == PacketId.PredictedSpawnResult)
+                        {
+                            Objects.ParsePredictedSpawnResult(reader);
+                        }
                         else if (packetId == PacketId.TimingUpdate)
                         {
                             NetworkManager.TimeManager.ParseTimingUpdate();
@@ -387,18 +396,16 @@ namespace FishNet.Managing.Client
                         }
                         else if (packetId == PacketId.Disconnect)
                         {
-                            reader.Skip(reader.Remaining);
+                            reader.Clear();
                             StopConnection();
                         }
                         else
                         {
-                            if (NetworkManager.CanLog(LoggingType.Error))
-                            {
-                                Debug.LogError($"Client received an unhandled PacketId of {(ushort)packetId}. Remaining data has been purged.");
+
+                            NetworkManager.LogError($"Client received an unhandled PacketId of {(ushort)packetId}. Remaining data has been purged.");
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-                                _parseLogger.Print(NetworkManager);
+                            _parseLogger.Print(NetworkManager);
 #endif
-                            }
                             return;
                         }
                     }
@@ -457,11 +464,18 @@ namespace FishNet.Managing.Client
                 }
                 else
                 {
-                    if (networkManager.CanLog(LoggingType.Error))
-                        Debug.LogError($"Unable to lookup LocalConnection for {connectionId} as host.");
-
+                    networkManager.LogError($"Unable to lookup LocalConnection for {connectionId} as host.");
                     Connection = new NetworkConnection(networkManager, connectionId, false);
                 }
+            }
+
+            //If predicted spawning is enabled also get reserved Ids.
+            if (NetworkManager.PredictionManager.GetAllowPredictedSpawning())
+            {
+                byte count = reader.ReadByte();
+                Queue<int> q = Connection.PredictedObjectIds;
+                for (int i = 0; i < count; i++)
+                    q.Enqueue(reader.ReadNetworkObjectId());
             }
 
             /* Set the TimeManager tick to lastReceivedTick.

@@ -160,35 +160,19 @@ namespace FishNet.Object.Synchronizing
             if (!base.IsRegistered)
                 return;
 
-            if (base.NetworkManager != null && base.Settings.WritePermission == WritePermission.ServerOnly && !base.NetworkBehaviour.IsServer)
+            bool asServerInvoke = (!base.IsNetworkInitialized || base.NetworkBehaviour.IsServer);
+
+            if (asServerInvoke)
             {
-                if (NetworkManager.CanLog(LoggingType.Warning))
-                    Debug.LogWarning($"Cannot complete operation as server when server is not active.");
-                return;
+                _valuesChanged = true;
+                if (base.Dirty())
+                {
+                    ChangeData change = new ChangeData(operation, item);
+                    _changed.Add(change);
+                }
             }
 
-            /* Set as changed even if cannot dirty.
-            * Dirty is only set when there are observers,
-            * but even if there are not observers
-            * values must be marked as changed so when
-            * there are observers, new values are sent. */
-            _valuesChanged = true;
-
-            /* If unable to dirty then do not add to changed.
-             * A dirty may fail if the server is not started
-             * or if there's no observers. Changed doesn't need
-             * to be populated in this situations because clients
-             * will get the full collection on spawn. If we
-             * were to also add to changed clients would get the full
-             * collection as well the changed, which would double results. */
-            if (base.Dirty())
-            {
-                ChangeData change = new ChangeData(operation, item);
-                _changed.Add(change);
-            }
-
-            bool asServer = true;
-            InvokeOnChange(operation, item, asServer);
+            InvokeOnChange(operation, item, asServerInvoke);
         }
 
         /// <summary>
@@ -267,14 +251,12 @@ namespace FishNet.Object.Synchronizing
         }
 
         /// <summary>
-        /// Sets current values.
+        /// Reads and sets the current values for server or client.
         /// </summary>
-        /// <param name="reader"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [APIExclude]
-        public override void Read(PooledReader reader)
+        public override void Read(PooledReader reader, bool asServer)
         {
-            bool asServer = false;
             /* When !asServer don't make changes if server is running.
             * This is because changes would have already been made on
             * the server side and doing so again would result in duplicates
@@ -375,6 +357,9 @@ namespace FishNet.Object.Synchronizing
         }
         private bool Add(T item, bool asServer)
         {
+            if (!base.CanNetworkSetValues(true))
+                return false;
+
             bool result = Collection.Add(item);
             //Only process if remove was successful.
             if (result && asServer)
@@ -405,6 +390,9 @@ namespace FishNet.Object.Synchronizing
         }
         private void Clear(bool asServer)
         {
+            if (!base.CanNetworkSetValues(true))
+                return;
+
             Collection.Clear();
             if (asServer)
             {
@@ -435,6 +423,9 @@ namespace FishNet.Object.Synchronizing
         }
         private bool Remove(T item, bool asServer)
         {
+            if (!base.CanNetworkSetValues(true))
+                return false;
+
             bool result = Collection.Remove(item);
             //Only process if remove was successful.
             if (result && asServer)
@@ -454,13 +445,8 @@ namespace FishNet.Object.Synchronizing
         {
             if (!base.IsRegistered)
                 return;
-
-            if (base.NetworkManager != null && base.Settings.WritePermission == WritePermission.ServerOnly && !base.NetworkBehaviour.IsServer)
-            {
-                if (NetworkManager.CanLog(LoggingType.Warning))
-                    Debug.LogWarning($"Cannot complete operation as server when server is not active.");
+            if (!base.CanNetworkSetValues(true))
                 return;
-            }
 
             if (base.Dirty())
                 _sendAll = true;
@@ -473,6 +459,11 @@ namespace FishNet.Object.Synchronizing
         /// <param name="obj">Object to lookup.</param>
         public void Dirty(T obj)
         {
+            if (!base.IsRegistered)
+                return;
+            if (!base.CanNetworkSetValues(true))
+                return;
+
             foreach (T item in Collection)
             {
                 if (item.Equals(obj))
@@ -483,8 +474,7 @@ namespace FishNet.Object.Synchronizing
             }
 
             //Not found.
-            if (base.NetworkManager.CanLog(LoggingType.Error))
-                Debug.LogError($"Could not find object within SyncHashSet, dirty will not be set.");
+            base.NetworkManager.LogError($"Could not find object within SyncHashSet, dirty will not be set.");
         }
 
         /// <summary>

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 5
+  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -22,6 +22,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: UtilityExhaustTop
   m_Shader: {fileID: -6465566751694194690, guid: 4f9d12b069b23eb4485d1781f9ca2619, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -30,6 +32,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -73,6 +76,8 @@ Material:
     - Vector1_e42d1f688e50469b94daf9e14ba98a48: 10
     - Vector1_f51eb2633b394008bf1b48fe0bd22bb6: 0.9995
     - Vector1_fd6c90c9796243f5be24e6f5d68eae19: 1
+    - _QueueControl: 0
+    - _QueueOffset: 0
     m_Colors:
     - Color_dc5ced50237e4a0a8dab54a5dbd36d31: {r: 1.4980392, g: 1.4980392, b: 1.4980392, a: 1}
     - Vector2_208a08732de943b79cf9d7363c5e152e: {r: 5, g: 0, b: 0, a: 0}

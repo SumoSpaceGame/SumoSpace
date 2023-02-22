@@ -35,9 +35,13 @@ namespace FishNet.Object
     public class ObserversRpcAttribute : Attribute
     {
         /// <summary>
-        /// True to also send data to the owner of object.
+        /// True to exclude the owner from receiving this RPC.
         /// </summary>
-        public bool IncludeOwner = true;
+        public bool ExcludeOwner = false;
+        /// <summary>
+        /// True to prevent the connection from receiving this Rpc if they are also server.
+        /// </summary>
+        public bool ExcludeServer = false;
         /// <summary>
         /// True to buffer the last value and send it to new players when the object is spawned for them.
         /// RPC will be sent on the same channel as the original RPC, and immediately before the OnSpawnServer override.
@@ -61,6 +65,10 @@ namespace FishNet.Object
     [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
     public class TargetRpcAttribute : Attribute 
     {
+        /// <summary>
+        /// True to prevent the connection from receiving this Rpc if they are also server.
+        /// </summary>
+        public bool ExcludeServer = false;
         /// <summary>
         /// True to also run the RPC logic locally.
         /// </summary>
@@ -127,6 +135,11 @@ namespace FishNet.Object.Synchronizing
         /// Clients which may receive value updates.
         /// </summary>
         public ReadPermission ReadPermissions = ReadPermission.Observers;
+        /// <summary>
+        /// True if to require the readonly attribute.
+        /// Setting to false will allow inspector serialization of this object, but you must never manually initialize this object.
+        /// </summary>
+        public bool RequireReadOnly = true;
     }
 
     /// <summary>

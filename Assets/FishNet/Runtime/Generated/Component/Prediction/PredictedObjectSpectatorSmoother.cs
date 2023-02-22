@@ -12,49 +12,6 @@ namespace FishNet.Component.Prediction
     {
         #region Types.
         /// <summary>
-        /// Data for a rigidbody at it's current state.
-        /// </summary>
-        private class RigidbodyData
-        {
-            /// <summary>
-            /// Velocity of the rigidbody.
-            /// </summary>
-            public Vector2 Velocity;
-            /// <summary>
-            /// AngularVelocity of the rigidbody. When rigidbody is for 2d Z contains the velocity.
-            /// </summary>
-            public Vector3 AngularVelocity;
-            /// <summary>
-            /// Position of the rigidbody.
-            /// </summary>
-            public Vector3 Position;
-            /// <summary>
-            /// Rotation of the rigidbody.
-            /// </summary>
-            public Quaternion Rotation;
-
-            /// <summary>
-            /// Updates values for rigidbody.
-            /// </summary>
-            public void Update(Rigidbody rigidbody)
-            {
-                Velocity = rigidbody.velocity;
-                AngularVelocity = rigidbody.angularVelocity;
-                Position = rigidbody.transform.position;
-                Rotation = rigidbody.transform.rotation;
-            }
-            /// <summary>
-            /// Updates values for rigidbody.
-            /// </summary>
-            public void Update(Rigidbody2D rigidbody)
-            {
-                Velocity = rigidbody.velocity;
-                AngularVelocity.z = rigidbody.angularVelocity;
-                Position = rigidbody.transform.position;
-                Rotation = rigidbody.transform.rotation;
-            }
-        }
-        /// <summary>
         /// Data on a goal to move towards.
         /// </summary>
         private class GoalData
@@ -170,46 +127,32 @@ namespace FishNet.Component.Prediction
             /// Rotation of the transform.
             /// </summary>
             public Quaternion Rotation;
-            /// <summary>
-            /// Velocity of the transform or rigidbody.
-            /// </summary>
-            public Vector3 Velocity;
-            /// <summary>
-            /// AngularVelocity of the transform or rigidbody.
-            /// </summary>
-            public Vector3 AngularVelocity;
 
             public void Reset()
             {
                 Position = Vector3.zero;
                 Rotation = Quaternion.identity;
-                Velocity = Vector3.zero;
-                AngularVelocity = Vector3.zero;
             }
             /// <summary>
             /// Updates this data.
             /// </summary>
             public void Update(TransformData copy)
             {
-                Update(copy.Position, copy.Rotation, copy.Velocity, copy.AngularVelocity);
+                Update(copy.Position, copy.Rotation);
             }
             /// <summary>
             /// Updates this data.
             /// </summary>
-            public void Update(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity)
+            public void Update(Vector3 position, Quaternion rotation)
             {
                 Position = position;
                 Rotation = rotation;
-                Velocity = velocity;
-                AngularVelocity = angularVelocity;
             }
             /// <summary>
             /// Updates this data.
             /// </summary>
             public void Update(Rigidbody rigidbody)
             {
-                Velocity = rigidbody.velocity;
-                AngularVelocity = rigidbody.angularVelocity;
                 Position = rigidbody.transform.position;
                 Rotation = rigidbody.transform.rotation;
             }
@@ -218,21 +161,8 @@ namespace FishNet.Component.Prediction
             /// </summary>
             public void Update(Rigidbody2D rigidbody)
             {
-                Velocity = rigidbody.velocity;
-                AngularVelocity.z = rigidbody.angularVelocity;
                 Position = rigidbody.transform.position;
                 Rotation = rigidbody.transform.rotation;
-            }
-            /// <summary>
-            /// Updates this data.
-            /// </summary>
-            public void Update(RigidbodyData data)
-            {
-                Velocity = data.Velocity;
-                AngularVelocity = data.AngularVelocity;
-                Position = data.Position;
-                Rotation = data.Rotation;
-
             }
         }
         #endregion
@@ -251,6 +181,14 @@ namespace FishNet.Component.Prediction
         /// </summary>
         /// <param name="value"></param>
         public void SetGraphicalObject(Transform value) => _graphicalObject = value;
+        /// <summary>
+        /// True to move towards position goals.
+        /// </summary>
+        private bool _smoothPosition;
+        /// <summary>
+        /// True to move towards rotation goals.
+        /// </summary>
+        private bool _smoothRotation;
         /// <summary>
         /// Time to smooth initial velocities when an object was previously stopped.
         /// </summary>
@@ -281,9 +219,9 @@ namespace FishNet.Component.Prediction
         /// </summary>
         private Rigidbody2D _rigidbody2d;
         /// <summary>
-        /// State data for a rigidbody.
+        /// Transform state during PreTick.
         /// </summary>
-        private RigidbodyData _rigidbodyData = new RigidbodyData();
+        private TransformData _preTickTransformdata = new TransformData();
         /// <summary>
         /// Type of rigidbody being used.
         /// </summary>
@@ -292,10 +230,6 @@ namespace FishNet.Component.Prediction
         /// Last tick which a reconcile occured. This is reset at the end of a tick.
         /// </summary>
         private long _reconcileLocalTick = -1;
-        /// <summary>
-        /// Number of replays which have occured for the current reconcile.
-        /// </summary>
-        private uint _replayCount;
         /// <summary>
         /// Called when this frame receives OnPreTick.
         /// </summary>
@@ -317,29 +251,33 @@ namespace FishNet.Component.Prediction
         /// </summary>
         private float _teleportThreshold;
         /// <summary>
-        /// NetworkBehaviour which is using this object.
+        /// PredictedObject which is using this object.
         /// </summary>
-        private NetworkBehaviour _networkBehaviour;
+        private PredictedObject _predictedObject;
         /// <summary>
         /// Cache of GoalDatas to prevent allocations.
         /// </summary>
         private static Stack<GoalData> _goalDataCache = new Stack<GoalData>();
         #endregion
 
+        private Vector3 _startPosition;
+
         /// <summary>
         /// Initializes this for use.
         /// </summary>
-        internal void Initialize(NetworkBehaviour nb, RigidbodyType rbType, Rigidbody rb, Rigidbody2D rb2d, Transform graphicalObject
-            , float smoothingDuration, byte interpolation, float overflowMultiplier,
+        internal void Initialize(PredictedObject po, RigidbodyType rbType, Rigidbody rb, Rigidbody2D rb2d, Transform graphicalObject
+            , bool smoothPosition, bool smoothRotation, float smoothingDuration, byte interpolation, float overflowMultiplier,
             float teleportThreshold)
         {
-            _networkBehaviour = nb;
+            _predictedObject = po;
             _rigidbodyType = rbType;
-            _rigidbodyData = new RigidbodyData();
 
             _rigidbody = rb;
             _rigidbody2d = rb2d;
             _graphicalObject = graphicalObject;
+            _startPosition = _graphicalObject.position;
+            _smoothPosition = smoothPosition;
+            _smoothRotation = smoothRotation;
             _smoothingDuration = smoothingDuration;
             _interpolation = interpolation;
             _overflowMultiplier = overflowMultiplier;
@@ -364,13 +302,17 @@ namespace FishNet.Component.Prediction
         {
             if (CanSmooth())
             {
+                if (!_preTickReceived)
+                {
+                    uint tick = _predictedObject.TimeManager.LocalTick - 1;
+                    CreateGoalData(tick, false);
+                }
                 _preTickReceived = true;
-                _replayCount = 0;
 
                 if (_rigidbodyType == RigidbodyType.Rigidbody)
-                    _rigidbodyData.Update(_rigidbody);
+                    _preTickTransformdata.Update(_rigidbody);
                 else
-                    _rigidbodyData.Update(_rigidbody2d);
+                    _preTickTransformdata.Update(_rigidbody2d);
 
                 _graphicalStartPosition = _graphicalObject.position;
                 _graphicalStartRotation = _graphicalObject.rotation;
@@ -385,25 +327,73 @@ namespace FishNet.Component.Prediction
             if (CanSmooth())
             {
                 if (!_preTickReceived)
+                {
+                    /* During test the Z value for applyImmediately is 5.9.
+                     * Then increased 1 unit per tick: 6.9, 7.9.
+                     * 
+                     * When the spectator smoother initializes 5.9 is shown.
+                     * Before first starting smoothing the transform needs to be set
+                     * back to that.
+                     * 
+                     * The second issue is the first addition to goal datas seems
+                     * to occur at 7.9. This would need to be 6.9 to move from the
+                     * proper 5.9 starting point. It's probably because pretick is not received
+                     * when OnPostTick is called at the 6.9 position.
+                     * 
+                     * Have not validated the above yet but that's the most likely situation since
+                     * we know this was initialized at 5.9, which means it would be assumed pretick would
+                     * call at 6.9. Perhaps the following is happening....
+                     * 
+                     * - Pretick.
+                     * - Client gets spawn+applyImmediately.
+                     * - This also initializes this script at 5.9.
+                     * - Simulation moves object to 6.9.
+                     * - PostTick.
+                     * - This script does not run because _preTickReceived is not set yet.
+                     * 
+                     * - Pretick. Sets _preTickReceived.
+                     * - Simulation moves object to 7.9.
+                     * - PostTick.
+                     * - The first goalData is created for 7.9.
+                     * 
+                     *  In writing the theory checks out.
+                     *  Perhaps the solution could be simple as creating a goal
+                     *  during pretick if _preTickReceived is being set for
+                     *  the first time. Might need to reduce tick by 1
+                     *  when setting goalData for this; not sure yet.
+                     */
+                    _graphicalObject.SetPositionAndRotation(_startPosition, Quaternion.identity);
                     return;
+                }
 
                 _graphicalObject.SetPositionAndRotation(_graphicalStartPosition, _graphicalStartRotation);
-                CreateGoalData(_networkBehaviour.TimeManager.LocalTick, true);
+                CreateGoalData(_predictedObject.TimeManager.LocalTick, true);
+            }
+        }
+
+        public void OnPreReplay(uint tick)
+        {
+            if (!_preTickReceived)
+            {
+                if (CanSmooth())
+                {
+
+                    CreateGoalData(tick, false);
+                }
             }
         }
 
         /// <summary>
         /// Called after a reconcile runs a replay.
         /// </summary>
-        public void OnPostReplay()
+        public void OnPostReplay(uint tick)
         {
             if (CanSmooth())
             {
                 if (_reconcileLocalTick == -1)
                     return;
 
-                _replayCount++;
-                CreateGoalData((uint)_reconcileLocalTick + _replayCount, false);
+                CreateGoalData(tick, false);
             }
         }
 
@@ -415,7 +405,7 @@ namespace FishNet.Component.Prediction
         {
             if (_interpolation == 0)
                 return false;
-            if (_networkBehaviour.IsOwner || _networkBehaviour.IsServer)
+            if (_predictedObject.IsPredictingOwner() || _predictedObject.IsServer)
                 return false;
 
             return true;
@@ -447,7 +437,9 @@ namespace FishNet.Component.Prediction
         /// <returns></returns>
         private bool GraphicalObjectMatches(Vector3 localPosition, Quaternion localRotation)
         {
-            return (_graphicalObject.position == localPosition && _graphicalObject.rotation == localRotation);
+            bool positionMatches = (!_smoothPosition || _graphicalObject.position == localPosition);
+            bool rotationMatches = (!_smoothRotation || _graphicalObject.rotation == localRotation);
+            return (positionMatches && rotationMatches);
         }
 
         /// <summary>
@@ -464,25 +456,14 @@ namespace FishNet.Component.Prediction
         /// </summary>
         private bool HasChanged(TransformData td)
         {
-            Vector3 velocity;
-            Vector3 angularVelocity;
             Transform rigidbodyTransform;
 
             if (_rigidbodyType == RigidbodyType.Rigidbody)
-            {
-                velocity = _rigidbody.velocity;
-                angularVelocity = _rigidbody.angularVelocity;
                 rigidbodyTransform = _rigidbody.transform;
-            }
             else
-            {
-                velocity = _rigidbody2d.velocity;
-                angularVelocity = new Vector3(0f, 0f, _rigidbody2d.angularVelocity);
                 rigidbodyTransform = _rigidbody2d.transform;
-            }
 
-            bool changed = (td.Position != rigidbodyTransform.position) || (td.Rotation != rigidbodyTransform.rotation)
-                || (td.Velocity != velocity) || (td.AngularVelocity != angularVelocity);
+            bool changed = (td.Position != rigidbodyTransform.position) || (td.Rotation != rigidbodyTransform.rotation);
 
             return changed;
         }
@@ -557,19 +538,25 @@ namespace FishNet.Component.Prediction
             Transform t = _graphicalObject;
 
             //Position.
-            rate = rd.Position;
-            Vector3 posGoal = td.Position;
-            if (rate == -1f)
-                t.position = td.Position;
-            else if (rate > 0f)
-                t.position = Vector3.MoveTowards(t.position, posGoal, rate * delta * multiplier);
+            if (_smoothPosition)
+            {
+                rate = rd.Position;
+                Vector3 posGoal = td.Position;
+                if (rate == -1f)
+                    t.position = td.Position;
+                else if (rate > 0f)
+                    t.position = Vector3.MoveTowards(t.position, posGoal, rate * delta * multiplier);
+            }
 
             //Rotation.
-            rate = rd.Rotation;
-            if (rate == -1f)
-                t.rotation = td.Rotation;
-            else if (rate > 0f)
-                t.rotation = Quaternion.RotateTowards(t.rotation, td.Rotation, rate * delta);
+            if (_smoothRotation)
+            {
+                rate = rd.Rotation;
+                if (rate == -1f)
+                    t.rotation = td.Rotation;
+                else if (rate > 0f)
+                    t.rotation = Quaternion.RotateTowards(t.rotation, td.Rotation, rate * delta);
+            }
 
             //Subtract time remaining for movement to complete.
             if (rd.TimeRemaining > 0f)
@@ -642,7 +629,7 @@ namespace FishNet.Component.Prediction
                 lastTick = (nextGoalData.LocalTick - 1);
 
             uint tickDifference = (nextGoalData.LocalTick - lastTick);
-            float timePassed = (float)_networkBehaviour.TimeManager.TicksToTime(tickDifference);
+            float timePassed = (float)_predictedObject.TimeManager.TicksToTime(tickDifference);
             RateData nextRd = nextGoalData.Rates;
 
             //Distance between properties.
@@ -678,7 +665,7 @@ namespace FishNet.Component.Prediction
         /// Creates a new goal data for tick. The result will be placed into the goalDatas queue at it's proper position.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void CreateGoalData(uint tick, bool postTick)
+        public void CreateGoalData(uint tick, bool postTick)
         {
             /* It's possible a removed entry would void further
              * logic so remove excess entires first. */
@@ -779,7 +766,7 @@ namespace FishNet.Component.Prediction
                 {
                     //Create a goaldata based on information. If it differs from pretick then throw.
                     GoalData gd = RetrieveGoalData();
-                    gd.Transforms.Update(_rigidbodyData);
+                    gd.Transforms.Update(_preTickTransformdata);
 
                     if (HasChanged(gd.Transforms))
                     {
@@ -821,6 +808,14 @@ namespace FishNet.Component.Prediction
             else
                 nextTd.Update(_rigidbody2d);
 
+            /* Reset properties if smoothing is not enabled
+             * for them. It's less checks and easier to do it
+             * after the nextGoalData is populated. */
+            if (!_smoothPosition)
+                nextTd.Position = _graphicalStartPosition;
+            if (!_smoothRotation)
+                nextTd.Rotation = _graphicalStartRotation;
+
             //Calculate rates for prev vs next data.
             SetCalculatedRates(prevGoalData, nextGoalData, Channel.Unreliable);
             /* If injectionIndex would place at the end
@@ -836,7 +831,7 @@ namespace FishNet.Component.Prediction
             {
                 GoalData gd = RetrieveGoalData();
                 //RigidbodyData contains the data from preTick.
-                gd.Transforms.Update(_rigidbodyData);
+                gd.Transforms.Update(_preTickTransformdata);
                 //No need to update rates because this is just a starting point reference for interpolation.
                 return gd;
             }

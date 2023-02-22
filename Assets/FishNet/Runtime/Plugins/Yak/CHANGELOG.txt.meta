@@ -5,3 +5,10 @@ TextScriptImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207815
+  packageName: 'Fish-Net: Networking Evolved'
+  packageVersion: 3.4.0
+  assetPath: Assets/FishNet/Runtime/Plugins/Yak/CHANGELOG.txt
+  uploadId: 564010

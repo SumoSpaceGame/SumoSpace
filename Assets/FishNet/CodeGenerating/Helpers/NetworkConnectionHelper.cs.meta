@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6d061dda8ed87ed48a08020942ad63f6
+guid: bcbcb288008d6da4eab7a5279dd6b4f8
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,3 +9,10 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207815
+  packageName: 'Fish-Net: Networking Evolved'
+  packageVersion: 3.4.0
+  assetPath: Assets/FishNet/CodeGenerating/Helpers/NetworkConnectionHelper.cs
+  uploadId: 564010

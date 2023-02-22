@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a066c51d748a04546875bd7d43118837
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207815
+  packageName: 'Fish-Net: Networking Evolved'
+  packageVersion: 3.4.0
+  assetPath: Assets/FishNet/Runtime/Utility/Performance/RingBuffer.cs
+  uploadId: 564010

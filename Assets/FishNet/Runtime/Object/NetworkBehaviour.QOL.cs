@@ -5,12 +5,13 @@ using FishNet.Component.ColliderRollback;
 using FishNet.Connection;
 using FishNet.Managing;
 using FishNet.Managing.Client;
-using FishNet.Managing.Logging;
 using FishNet.Managing.Observing;
+using FishNet.Managing.Predicting;
 using FishNet.Managing.Scened;
 using FishNet.Managing.Server;
 using FishNet.Managing.Timing;
 using FishNet.Managing.Transporting;
+using FishNet.Observing;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,8 +25,6 @@ namespace FishNet.Object
         /// True if the NetworkObject for this NetworkBehaviour is deinitializing.
         /// </summary>
         public bool IsDeinitializing => _networkObjectCache.IsDeinitializing;
-        [Obsolete("Use IsDeinitializing instead.")]
-        public bool Deinitializing => IsDeinitializing; //Remove on 2023/01/01.
         /// <summary>
         /// NetworkManager for this object.
         /// </summary>
@@ -55,9 +54,17 @@ namespace FishNet.Object
         /// </summary>
         public SceneManager SceneManager => _networkObjectCache.SceneManager;
         /// <summary>
+        /// PredictionManager for this object.
+        /// </summary>
+        public PredictionManager PredictionManager => _networkObjectCache.PredictionManager;
+        /// <summary>
         /// RollbackManager for this object.
         /// </summary>
         public RollbackManager RollbackManager => _networkObjectCache.RollbackManager;
+        /// <summary>
+        /// NetworkObserver on this object.
+        /// </summary>
+        public NetworkObserver NetworkObserver => _networkObjectCache.NetworkObserver;
         /// <summary>
         /// True if the client is active and authenticated.
         /// </summary>
@@ -131,10 +138,32 @@ namespace FishNet.Object
         {
             return (_networkObjectCache.Owner == connection);
         }
+
+        /// <summary>
+        /// Despawns a GameObject. Only call from the server.
+        /// </summary>
+        /// <param name="go">GameObject to despawn.</param>
+        /// <param name="despawnType">What happens to the object after being despawned.</param>
+        public void Despawn(GameObject go, DespawnType? despawnType = null)
+        {
+            if (!IsNetworkObjectNull(true))
+                _networkObjectCache.Despawn(go, despawnType);
+        }
+        /// <summary>
+        /// Despawns  a NetworkObject. Only call from the server.
+        /// </summary>
+        /// <param name="nob">NetworkObject to despawn.</param>
+        /// <param name="despawnType">What happens to the object after being despawned.</param>
+        public void Despawn(NetworkObject nob, DespawnType? despawnType = null)
+        {
+            if (!IsNetworkObjectNull(true))
+                _networkObjectCache.Despawn(nob, despawnType);
+        }
+
         /// <summary>
         /// Despawns this _networkObjectCache. Can only be called on the server.
         /// </summary>
-        /// <param name="cacheOnDespawnOverride">Overrides the default DisableOnDespawn value for this single despawn. Scene objects will never be destroyed.</param>
+        /// <param name="despawnType">What happens to the object after being despawned.</param>
         public void Despawn(DespawnType? despawnType = null)
         {
             if (!IsNetworkObjectNull(true))
@@ -171,10 +200,7 @@ namespace FishNet.Object
         {
             bool isNull = (_networkObjectCache == null);
             if (isNull && warn)
-            {
-                if (NetworkManager.CanLog(LoggingType.Warning))
-                    Debug.LogWarning($"NetworkObject is null. This can occur if this object is not spawned, or initialized yet.");
-            }
+                NetworkManager.LogWarning($"NetworkObject is null. This can occur if this object is not spawned, or initialized yet.");
 
             return isNull;
         }
@@ -193,6 +219,39 @@ namespace FishNet.Object
         {
             _networkObjectCache.GiveOwnership(newOwner, true);
         }
+
+        #region Registered components
+        /// <summary>
+        /// Invokes an action when a specified component becomes registered. Action will invoke immediately if already registered.
+        /// </summary>
+        /// <typeparam name="T">Component type.</typeparam>
+        /// <param name="handler">Action to invoke.</param>
+        public void RegisterInvokeOnInstance<T>(Action<UnityEngine.Component> handler) where T : UnityEngine.Component => _networkObjectCache.RegisterInvokeOnInstance<T>(handler);
+        /// <summary>
+        /// Removes an action to be invoked when a specified component becomes registered.
+        /// </summary>
+        /// <typeparam name="T">Component type.</typeparam>
+        /// <param name="handler">Action to invoke.</param>
+        public void UnregisterInvokeOnInstance<T>(Action<UnityEngine.Component> handler) where T : UnityEngine.Component => _networkObjectCache.UnregisterInvokeOnInstance<T>(handler);
+        /// <summary>
+        /// Returns class of type if found within CodegenBase classes.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T GetInstance<T>() where T : UnityEngine.Component => _networkObjectCache.GetInstance<T>();
+        /// <summary>
+        /// Registers a new component to this NetworkManager.
+        /// </summary>
+        /// <typeparam name="T">Type to register.</typeparam>
+        /// <param name="component">Reference of the component being registered.</param>
+        /// <param name="replace">True to replace existing references.</param>
+        public void RegisterInstance<T>(T component, bool replace = true) where T : UnityEngine.Component => _networkObjectCache.RegisterInstance<T>(component, replace);
+        /// <summary>
+        /// Unregisters a component from this NetworkManager.
+        /// </summary>
+        /// <typeparam name="T">Type to unregister.</typeparam>
+        public void UnregisterInstance<T>() where T : UnityEngine.Component => _networkObjectCache.UnregisterInstance<T>();
+        #endregion
     }
 
 

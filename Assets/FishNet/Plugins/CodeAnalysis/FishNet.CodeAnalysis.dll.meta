@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: 620557a5e202e644cb322b8fcc9422ea
+AssetOrigin:
+  serializedVersion: 1
+  productId: 207815
+  packageName: 'Fish-Net: Networking Evolved'
+  packageVersion: 3.4.0
+  assetPath: Assets/FishNet/Plugins/CodeAnalysis/FishNet.CodeAnalysis.dll
+  uploadId: 564010
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2

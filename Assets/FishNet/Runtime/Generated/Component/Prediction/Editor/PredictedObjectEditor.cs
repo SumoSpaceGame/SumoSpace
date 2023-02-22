@@ -10,7 +10,10 @@ namespace FishNet.Component.Prediction
     [CanEditMultipleObjects]
     public class PredictedObjectEditor : Editor
     {
+        private SerializedProperty _implementsPredictionMethods;
         private SerializedProperty _graphicalObject;
+        private SerializedProperty _ownerSmoothPosition;
+        private SerializedProperty _ownerSmoothRotation;
         private SerializedProperty _ownerInterpolation;
         private SerializedProperty _enableTeleport;
         private SerializedProperty _teleportThreshold;
@@ -18,7 +21,8 @@ namespace FishNet.Component.Prediction
 
         private SerializedProperty _rigidbody;
         private SerializedProperty _rigidbody2d;
-        private SerializedProperty _spectatorSmoothingDuration;
+        private SerializedProperty _spectatorSmoothPosition;
+        private SerializedProperty _spectatorSmoothRotation;
         private SerializedProperty _spectatorInterpolation;
         private SerializedProperty _overflowMultiplier;
         private SerializedProperty _maintainedVelocity;
@@ -29,22 +33,26 @@ namespace FishNet.Component.Prediction
 
         protected virtual void OnEnable()
         {
-            _graphicalObject = serializedObject.FindProperty("_graphicalObject");
-            _ownerInterpolation = serializedObject.FindProperty("_ownerInterpolation");
-            _enableTeleport = serializedObject.FindProperty("_enableTeleport");
-            _teleportThreshold = serializedObject.FindProperty("_teleportThreshold");
-            _predictionType = serializedObject.FindProperty("_predictionType");
+            _implementsPredictionMethods = serializedObject.FindProperty(nameof(_implementsPredictionMethods));
+            _graphicalObject = serializedObject.FindProperty(nameof(_graphicalObject));
+            _ownerSmoothPosition = serializedObject.FindProperty(nameof(_ownerSmoothPosition));
+            _ownerSmoothRotation = serializedObject.FindProperty(nameof(_ownerSmoothRotation));
+            _ownerInterpolation = serializedObject.FindProperty(nameof(_ownerInterpolation));
+            _enableTeleport = serializedObject.FindProperty(nameof(_enableTeleport));
+            _teleportThreshold = serializedObject.FindProperty(nameof(_teleportThreshold));
+            _predictionType = serializedObject.FindProperty(nameof(_predictionType));
 
-            _rigidbody = serializedObject.FindProperty("_rigidbody");
-            _rigidbody2d = serializedObject.FindProperty("_rigidbody2d");
-            _spectatorSmoothingDuration = serializedObject.FindProperty("_spectatorSmoothingDuration");
-            _spectatorInterpolation = serializedObject.FindProperty("_spectatorInterpolation");
-            _overflowMultiplier = serializedObject.FindProperty("_overflowMultiplier");
-            _maintainedVelocity = serializedObject.FindProperty("_maintainedVelocity");
-            _resendType = serializedObject.FindProperty("_resendType");
-            _resendInterval = serializedObject.FindProperty("_resendInterval");
+            _rigidbody = serializedObject.FindProperty(nameof(_rigidbody));
+            _rigidbody2d = serializedObject.FindProperty(nameof(_rigidbody2d));
+            _spectatorSmoothPosition = serializedObject.FindProperty(nameof(_spectatorSmoothPosition));
+            _spectatorSmoothRotation = serializedObject.FindProperty(nameof(_spectatorSmoothRotation));
+            _spectatorInterpolation = serializedObject.FindProperty(nameof(_spectatorInterpolation));
+            _overflowMultiplier = serializedObject.FindProperty(nameof(_overflowMultiplier));
+            _maintainedVelocity = serializedObject.FindProperty(nameof(_maintainedVelocity));
+            _resendType = serializedObject.FindProperty(nameof(_resendType));
+            _resendInterval = serializedObject.FindProperty(nameof(_resendInterval));
 
-            _networkTransform = serializedObject.FindProperty("_networkTransform");
+            _networkTransform = serializedObject.FindProperty(nameof(_networkTransform));
 
         }
 
@@ -56,6 +64,7 @@ namespace FishNet.Component.Prediction
             EditorGUILayout.ObjectField("Script:", MonoScript.FromMonoBehaviour((PredictedObject)target), typeof(PredictedObject), false);
             GUI.enabled = true;
 
+            EditorGUILayout.PropertyField(_implementsPredictionMethods);
             EditorGUILayout.PropertyField(_graphicalObject);
             EditorGUILayout.PropertyField(_enableTeleport);
             if (_enableTeleport.boolValue)
@@ -67,6 +76,8 @@ namespace FishNet.Component.Prediction
 
             EditorGUILayout.LabelField("Owner Settings");
             EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(_ownerSmoothPosition, new GUIContent("Smooth Position"));
+            EditorGUILayout.PropertyField(_ownerSmoothRotation, new GUIContent("Smooth Rotation"));
             EditorGUILayout.PropertyField(_ownerInterpolation, new GUIContent("Interpolation"));
             EditorGUI.indentLevel--;
 
@@ -83,9 +94,13 @@ namespace FishNet.Component.Prediction
 
                 EditorGUILayout.LabelField("Spectator Settings");
                 EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(_spectatorSmoothingDuration, new GUIContent("Smoothing Duration"));
+                EditorGUILayout.LabelField("Smoothing");
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(_spectatorSmoothPosition, new GUIContent("Smooth Position"));
+                EditorGUILayout.PropertyField(_spectatorSmoothRotation, new GUIContent("Smooth Rotation"));
                 EditorGUILayout.PropertyField(_spectatorInterpolation, new GUIContent("Interpolation"));
                 EditorGUILayout.PropertyField(_overflowMultiplier);
+                EditorGUI.indentLevel--;
                 EditorGUILayout.PropertyField(_maintainedVelocity);
 
                 EditorGUILayout.PropertyField(_resendType);

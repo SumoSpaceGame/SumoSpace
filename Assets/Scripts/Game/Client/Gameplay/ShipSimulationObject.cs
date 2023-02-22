@@ -7,4 +7,6 @@ public class ShipSimulationObject : SimulationObject {
         shipManager = sm;
         Create();
     }
+    
+    
 }
