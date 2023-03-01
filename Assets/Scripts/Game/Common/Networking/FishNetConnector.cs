@@ -1,13 +1,19 @@
 ﻿using System;
 using FishNet;
+using FishNet.Managing.Client;
 using FishNet.Object;
 using FishNet.Transporting;
+using LiteNetLib;
+using TMPro;
 using UnityEngine;
 
 namespace Game.Common.Networking
 {
+
     public class FishNetConnector : MonoBehaviour
     {
+        
+        
         public static void Host(ushort port)
         {
             var server = InstanceFinder.ServerManager;
@@ -31,9 +37,12 @@ namespace Game.Common.Networking
             server.StartConnection(port);
         }
 
-        private static bool Connecting = false;
+        public static bool Connecting { get; private set; } 
+        public static bool Connected { get; private set; }
+        
         public static void Connect(string host, ushort port)
-        { 
+        {
+            Connected = false;
             Connecting = true;
             var client = InstanceFinder.ClientManager;
             
@@ -43,22 +52,28 @@ namespace Game.Common.Networking
                 switch (args.ConnectionState)
                 {
                     case LocalConnectionState.Stopped:
-                        Connecting = false;
+                        Connected = false;
                         Debug.Log("Connection stopped " + connectionStr);
+                        
                         break;
                     case LocalConnectionState.Starting:
                         Debug.Log("Connection starting " + connectionStr + " " + InstanceFinder.IsServer);
                         break;
                     case LocalConnectionState.Started:
+                        Connected = true;
+                        Connecting = false;
                         Debug.Log("Connection started " + connectionStr);
                         break;
                     case LocalConnectionState.Stopping:
+                        Connected = false;
                         Debug.Log("Connection stopping " + connectionStr);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             };
+            
+            
             
             client.StartConnection(host, port);
         }

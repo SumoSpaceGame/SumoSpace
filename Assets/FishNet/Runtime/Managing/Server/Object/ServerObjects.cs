@@ -33,6 +33,11 @@ namespace FishNet.Managing.Server
         /// </summary>
         private Queue<int> _objectIdCache = new Queue<int>();
         /// <summary>
+        /// Returns the ObjectId cache.
+        /// </summary>
+        /// <returns></returns>
+        internal Queue<int> GetObjectIdCache() => _objectIdCache;
+        /// <summary>
         /// NetworkBehaviours which have dirty SyncVars.
         /// </summary>
         private List<NetworkBehaviour> _dirtySyncVarBehaviours = new List<NetworkBehaviour>(20);
@@ -61,7 +66,7 @@ namespace FishNet.Managing.Server
 
         internal ServerObjects(NetworkManager networkManager)
         {
-            base.NetworkManager = networkManager;
+            base.Initialize(networkManager);
             networkManager.SceneManager.OnLoadStart += SceneManager_OnLoadStart;
             networkManager.SceneManager.OnActiveSceneSetInternal += SceneManager_OnActiveSceneSet;
             networkManager.TimeManager.OnUpdate += TimeManager_OnUpdate;
@@ -146,7 +151,7 @@ namespace FishNet.Managing.Server
                 //If no servers are started then reset.
                 if (!base.NetworkManager.ServerManager.AnyServerStarted())
                 {
-                    base.DespawnSpawnedWithoutSynchronization(true);
+                    base.DespawnWithoutSynchronization(true);
                     base.SceneObjects.Clear();
                     _objectIdCache.Clear();
                     base.NetworkManager.ClearClientsCollection(base.NetworkManager.ServerManager.Clients);
@@ -207,7 +212,8 @@ namespace FishNet.Managing.Server
              * for clients to track spawned object
              * count. */
             List<int> shuffledCache = new List<int>();
-            for (int i = 0; i < short.MaxValue; i++)
+            //Ignore ushort.maxvalue as that indicates null.
+            for (int i = 0; i < (ushort.MaxValue - 1); i++)
                 shuffledCache.Add(i);
             /* Only shuffle when NOT in editor and not
              * development build.
@@ -224,24 +230,31 @@ namespace FishNet.Managing.Server
         /// <summary>
         /// Caches a NetworkObject ObjectId.
         /// </summary>
-        /// <param name="nob"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void CacheObjectId(NetworkObject nob)
         {
-            if (nob.ObjectId >= 0)
-                _objectIdCache.Enqueue(nob.ObjectId);
+            if (nob.ObjectId != NetworkObject.UNSET_OBJECTID_VALUE)
+                CacheObjectId(nob.ObjectId);
+        }
+        /// <summary>
+        /// Adds an ObjectId to objectId cache.
+        /// </summary>
+        /// <param name="id"></param>
+        internal void CacheObjectId(int id)
+        {
+            _objectIdCache.Enqueue(id);
         }
 
         /// <summary>
         /// Gets the next ObjectId to use for NetworkObjects.
         /// </summary>
         /// <returns></returns>
-        protected internal override int GetNextNetworkObjectId()
+        protected internal override int GetNextNetworkObjectId(bool errorCheck = true)
         {
-            //Either something went wrong or user actually managed to spawn ~32K networked objects.
+            //Either something went wrong or user actually managed to spawn ~64K networked objects.
             if (_objectIdCache.Count == 0)
             {
-                if (base.NetworkManager.CanLog(LoggingType.Error))
-                    Debug.LogError($"No more available ObjectIds. How the heck did you manage to have {short.MaxValue} objects spawned at once?");
+                base.NetworkManager.LogError($"No more available ObjectIds. How the heck did you manage to have {ushort.MaxValue} objects spawned at once?");
                 return -1;
             }
             else
@@ -334,7 +347,7 @@ namespace FishNet.Managing.Server
                 //Only setup if a scene object and not initialzied.
                 if (nob.IsNetworked && nob.IsSceneObject && nob.IsDeinitializing)
                 {
-                    base.UpdateNetworkBehaviours(nob, true);
+                    base.UpdateNetworkBehavioursForSceneObject(nob, true);
                     base.AddToSceneObjects(nob);
                     /* If was active in the editor (before hitting play), or currently active
                      * then PreInitialize without synchronizing to clients. There is no reason
@@ -358,15 +371,17 @@ namespace FishNet.Managing.Server
         /// <summary>
         /// Performs setup on a NetworkObject without synchronizing the actions to clients.
         /// </summary>
-        private void SetupWithoutSynchronization(NetworkObject nob, NetworkConnection ownerConnection = null)
+        /// <param name="objectId">Override ObjectId to use.</param>
+        private void SetupWithoutSynchronization(NetworkObject nob, NetworkConnection ownerConnection = null, int? objectId = null)
         {
             if (nob.IsNetworked)
             {
-                int objectId = GetNextNetworkObjectId();
-                nob.PreinitializeInternal(NetworkManager, objectId, ownerConnection, true);
+                if (objectId == null)
+                    objectId = GetNextNetworkObjectId();
+                nob.Preinitialize_Internal(NetworkManager, objectId.Value, ownerConnection, true);
                 base.AddToSpawned(nob, true);
                 nob.gameObject.SetActive(true);
-                nob.Initialize(true);
+                nob.Initialize(true, true);
             }
         }
         #endregion
@@ -378,50 +393,64 @@ namespace FishNet.Managing.Server
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void Spawn(NetworkObject networkObject, NetworkConnection ownerConnection = null)
         {
-            if (!NetworkManager.ServerManager.Started)
-            {
-                if (base.NetworkManager.CanLog(LoggingType.Warning))
-                    Debug.LogWarning("Cannot spawn object because the server is not active.");
-                return;
-            }
+            //Default as false, will change if needed.
+            bool predictedSpawn = false;
+
             if (networkObject == null)
             {
-                if (base.NetworkManager.CanLog(LoggingType.Error))
-                    Debug.LogError($"Specified networkObject is null.");
+                base.NetworkManager.LogError($"Specified networkObject is null.");
                 return;
+            }
+            if (!NetworkManager.ServerManager.Started)
+            {
+                //Neither server nor client are started.
+                if (!NetworkManager.ClientManager.Started)
+                {
+                    base.NetworkManager.LogWarning("Cannot spawn object because server nor client are active.");
+                    return;
+                }
+                //Server has predicted spawning disabled.
+                if (!NetworkManager.PredictionManager.GetAllowPredictedSpawning())
+                {
+                    base.NetworkManager.LogWarning("Cannot spawn object because server is not active and predicted spawning is not enabled.");
+                    return;
+                }
+                //Various predicted spawn checks.
+                if (!base.CanPredictedSpawn(networkObject, NetworkManager.ClientManager.Connection, ownerConnection, false))
+                    return;
+
+                predictedSpawn = true;
             }
             if (!networkObject.gameObject.scene.IsValid())
             {
-                if (base.NetworkManager.CanLog(LoggingType.Error))
-                    Debug.LogError($"{networkObject.name} is a prefab. You must instantiate the prefab first, then use Spawn on the instantiated copy.");
+                base.NetworkManager.LogError($"{networkObject.name} is a prefab. You must instantiate the prefab first, then use Spawn on the instantiated copy.");
                 return;
             }
-            if (ownerConnection != null && ownerConnection.IsActive && !ownerConnection.LoadedStartScenes)
+            if (ownerConnection != null && ownerConnection.IsActive && !ownerConnection.LoadedStartScenes(true))
             {
-                if (base.NetworkManager.CanLog(LoggingType.Warning))
-                    Debug.LogWarning($"{networkObject.name} was spawned but it's recommended to not spawn objects for connections until they have loaded start scenes. You can be notified when a connection loads start scenes by using connection.OnLoadedStartScenes on the connection, or SceneManager.OnClientLoadStartScenes.");
+                base.NetworkManager.LogWarning($"{networkObject.name} was spawned but it's recommended to not spawn objects for connections until they have loaded start scenes. You can be notified when a connection loads start scenes by using connection.OnLoadedStartScenes on the connection, or SceneManager.OnClientLoadStartScenes.");
             }
             if (networkObject.IsSpawned)
             {
-                if (base.NetworkManager.CanLog(LoggingType.Warning))
-                    Debug.LogWarning($"{networkObject.name} is already spawned.");
+                base.NetworkManager.LogWarning($"{networkObject.name} is already spawned.");
                 return;
             }
             if (networkObject.ParentNetworkObject != null && !networkObject.ParentNetworkObject.IsSpawned)
             {
-                if (base.NetworkManager.CanLog(LoggingType.Error))
-                    Debug.LogError($"{networkObject.name} cannot be spawned because it has a parent NetworkObject {networkObject.ParentNetworkObject} which is not spawned.");
+                base.NetworkManager.LogError($"{networkObject.name} cannot be spawned because it has a parent NetworkObject {networkObject.ParentNetworkObject} which is not spawned.");
                 return;
             }
 
-            SpawnWithoutChecks(networkObject, ownerConnection);
+            if (predictedSpawn)
+                base.NetworkManager.ClientManager.Objects.PredictedSpawn(networkObject, ownerConnection);
+            else
+                SpawnWithoutChecks(networkObject, ownerConnection);
         }
-
 
         /// <summary>
         /// Spawns networkObject without any checks.
         /// </summary>
-        private void SpawnWithoutChecks(NetworkObject networkObject, NetworkConnection ownerConnection = null)
+        private void SpawnWithoutChecks(NetworkObject networkObject, NetworkConnection ownerConnection = null, int? objectId = null)
         {
             /* Setup locally without sending to clients.
             * When observers are built for the network object
@@ -429,7 +458,7 @@ namespace FishNet.Managing.Server
             * be sent. */
             networkObject.SetIsNetworked(true);
             _spawnCache.AddValue(networkObject);
-            SetupWithoutSynchronization(networkObject, ownerConnection);
+            SetupWithoutSynchronization(networkObject, ownerConnection, objectId);
 
             foreach (NetworkObject item in networkObject.ChildNetworkObjects)
             {
@@ -467,190 +496,125 @@ namespace FishNet.Managing.Server
         }
 
         /// <summary>
-        /// Writes a spawn into writers.
+        /// Reads a predicted spawn.
         /// </summary>
-        /// <param name="nob"></param>
-        /// <param name="connection">Connection spawn is being written for.</param>
-        /// <param name="everyoneWriter"></param>
-        /// <param name="ownerWriter"></param>
-        private void WriteSpawn(NetworkObject nob, NetworkConnection connection, ref PooledWriter everyoneWriter, ref PooledWriter ownerWriter)
+        internal void ReadPredictedSpawn(PooledReader reader, NetworkConnection conn)
         {
-            /* Using a number of writers to prevent rebuilding the
-             * packets excessively for values that are owner only
-             * vs values that are everyone. To save performance the
-             * owner writer is only written to if owner is valid.
-             * This makes the code a little uglier but will scale
-             * significantly better with more connections.
-             * 
-             * EG:
-             * with this technique networkBehaviours are iterated
-             * twice if there is an owner; once for data to send to everyone
-             * and again for data only going to owner. 
-             *
-             * The alternative would be to iterate the networkbehaviours
-             * for every connection it's going to and filling a single
-             * writer with values based on if owner or not. This would
-             * result in significantly more iterations. */
-            PooledWriter headerWriter = WriterPool.GetWriter();
-            headerWriter.WritePacketId(PacketId.ObjectSpawn);
-            headerWriter.WriteNetworkObject(nob);
-            if (base.NetworkManager.ServerManager.ShareIds || connection == nob.Owner)
-                headerWriter.WriteNetworkConnection(nob.Owner);
-            else
-                headerWriter.WriteInt16(-1);
-
-            bool nested = nob.IsNested;
-            bool sceneObject = nob.IsSceneObject;
-            //Write type of spawn.
-            SpawnType st;
-            if (sceneObject)
-                st = SpawnType.Scene;
-            else
-                st = (nob.IsGlobal) ? SpawnType.InstantiatedGlobal : SpawnType.Instantiated;
-            headerWriter.WriteByte((byte)st);
-            //ComponentIndex for the nob. 0 is root but more appropriately there's a IsNested boolean as shown above.
-            headerWriter.WriteByte(nob.ComponentIndex);
-
-            /* When nested the parent nob needs to be written. */
-            if (nested)
+            sbyte initializeOrder;
+            ushort collectionId;
+            int prefabId;
+            int objectId = reader.ReadNetworkObjectForSpawn(out initializeOrder, out collectionId, out _);
+            //If objectId is not within predicted ids for conn.
+            if (!conn.PredictedObjectIds.Contains(objectId))
             {
-                headerWriter.WriteNetworkObject(nob.ParentNetworkObject);
+                reader.Clear();
+                conn.Kick(KickReason.ExploitAttempt, LoggingType.Common, $"Connection {conn.ClientId} used predicted spawning with a non-reserved objectId of {objectId}.");
+                return;
             }
-            //If not nested see if has a parent other than one configured at edit.
+
+            NetworkConnection owner = reader.ReadNetworkConnection();
+            SpawnType st = (SpawnType)reader.ReadByte();
+            //Not used at the moment.
+            byte componentIndex = reader.ReadByte();
+
+            //Read transform values which differ from serialized values.
+            Vector3? localPosition;
+            Quaternion? localRotation;
+            Vector3? localScale;
+            base.ReadTransformProperties(reader, out localPosition, out localRotation, out localScale);
+
+            NetworkObject nob;
+            bool isGlobal = false;
+            if (SpawnTypeEnum.Contains(st, SpawnType.Scene))
+            {
+                ulong sceneId = reader.ReadUInt64(AutoPackType.Unpacked);
+                nob = base.GetSceneNetworkObject(sceneId);
+                if (!base.CanPredictedSpawn(nob, conn, owner, true))
+                    return;
+            }
             else
             {
-                /* Writing a scene object. */
-                if (sceneObject)
+                //Not used right now.
+                SpawnParentType spt = (SpawnParentType)reader.ReadByte();
+                prefabId = reader.ReadNetworkObjectId();
+                //Invalid prefabId.
+                if (prefabId == NetworkObject.UNSET_PREFABID_VALUE)
                 {
-                    //Write Guid.
-                    headerWriter.WriteUInt64(nob.SceneId, AutoPackType.Unpacked);
+                    reader.Clear();
+                    conn.Kick(KickReason.UnusualActivity, LoggingType.Common, $"Spawned object has an invalid prefabId of {prefabId}. Make sure all objects which are being spawned over the network are within SpawnableObjects on the NetworkManager. Connection {conn.ClientId} will be kicked immediately.");
+                    return;
                 }
-                /* Writing a spawned object. */
-                else
+
+                PrefabObjects prefabObjects = NetworkManager.GetPrefabObjects<PrefabObjects>(collectionId, false);
+                //PrefabObjects not found.
+                if (prefabObjects == null)
                 {
-                    //Check to write parent behaviour or nob.
-                    NetworkBehaviour parentNb;
-                    Transform t = nob.transform.parent;
-                    if (t != null)
-                    {
-                        parentNb = t.GetComponent<NetworkBehaviour>();
-                        /* Check for a NetworkObject if there is no NetworkBehaviour.
-                         * There is a small chance the parent object will only contain
-                         * a NetworkObject. */
-                        if (parentNb == null)
-                        {
-                            //If null check if there is a nob.
-                            NetworkObject parentNob = t.GetComponent<NetworkObject>();
-                            //ParentNob is null or not spawned.
-                            if (!ParentIsSpawned(parentNob))
-                            {
-                                headerWriter.WriteByte((byte)SpawnParentType.Unset);
-                            }
-                            else
-                            {
-                                headerWriter.WriteByte((byte)SpawnParentType.NetworkObject);
-                                headerWriter.WriteNetworkObject(parentNob);
-                            }
-                        }
-                        //NetworkBehaviour found on parent.
-                        else
-                        {
-                            //ParentNb is null or not spawned.
-                            if (!ParentIsSpawned(parentNb.NetworkObject))
-                            {
-                                headerWriter.WriteByte((byte)SpawnParentType.Unset);
-                            }
-                            else
-                            {
-                                headerWriter.WriteByte((byte)SpawnParentType.NetworkBehaviour);
-                                headerWriter.WriteNetworkBehaviour(parentNb);
-                            }
-                        }
-
-                        //True if pNob is not null, and is spawned.
-                        bool ParentIsSpawned(NetworkObject pNob)
-                        {
-                            bool isNull = (pNob == null);
-                            if (isNull || !pNob.IsSpawned)
-                            {
-                                /* Only log if pNob exist. Otherwise this would print if the user 
-                                 * was parenting any object, which may not be desirable as they could be
-                                 * simply doing it for organization reasons. */
-                                if (!isNull && base.NetworkManager.CanLog(LoggingType.Warning))
-                                    Debug.LogWarning($"Parent {t.name} is not spawned. {nob.name} will not have it's parent sent in the spawn message.");
-                                return false;
-                            }
-
-                            return true;
-                        }
-
-                    }
-                    //No parent.
-                    else
-                    {
-                        headerWriter.WriteByte((byte)SpawnParentType.Unset);
-                    }
-
-                    headerWriter.WriteInt16(nob.PrefabId);
+                    reader.Clear();
+                    conn.Kick(KickReason.UnusualActivity, LoggingType.Common, $"PrefabObjects collection is not found for CollectionId {collectionId}. Be sure to add your addressables NetworkObject prefabs to the collection on server and client before attempting to spawn them over the network. Connection {conn.ClientId} will be kicked immediately.");
+                    return;
                 }
+                //Check if prefab allows predicted spawning.
+                NetworkObject nPrefab = prefabObjects.GetObject(true, prefabId);
+                if (!base.CanPredictedSpawn(nPrefab, conn, owner, true))
+                    return;
+
+                nob = NetworkManager.GetPooledInstantiated(prefabId, false);
+                isGlobal = SpawnTypeEnum.Contains(st, SpawnType.InstantiatedGlobal);
             }
 
-            /* Write changed transform properties. */
-            ChangedTransformProperties ctp;
-            //If a scene object then get it from scene properties.
-            if (sceneObject || nested)
-                ctp = nob.GetTransformChanges(nob.SerializedTransformProperties);
-            else
-                ctp = nob.GetTransformChanges(base.NetworkManager.SpawnablePrefabs.GetObject(true, nob.PrefabId).gameObject);
-            headerWriter.WriteByte((byte)ctp);
-            //If properties have changed.
-            if (ctp != ChangedTransformProperties.Unset)
-            {
-                //Write any changed properties.
-                if (Enums.TransformPropertiesContains(ctp, ChangedTransformProperties.LocalPosition))
-                    headerWriter.WriteVector3(nob.transform.localPosition);
-                if (Enums.TransformPropertiesContains(ctp, ChangedTransformProperties.LocalRotation))
-                    headerWriter.WriteQuaternion(nob.transform.localRotation, base.NetworkManager.ServerManager.SpawnPacking.Rotation);
-                if (Enums.TransformPropertiesContains(ctp, ChangedTransformProperties.LocalScale))
-                    headerWriter.WriteVector3(nob.transform.localScale);
-            }
+            Transform t = nob.transform;
+            //Parenting predicted spawns is not supported yet.
+            t.SetParent(null, true);
+            base.GetTransformProperties(localPosition, localRotation, localScale, t, out Vector3 pos, out Quaternion rot, out Vector3 scale);
+            t.SetLocalPositionRotationAndScale(pos, rot, scale);            
+            nob.SetIsGlobal(isGlobal);
 
-            //Write headers first.
-            everyoneWriter.WriteBytes(headerWriter.GetBuffer(), 0, headerWriter.Length);
-            if (nob.Owner.IsValid)
-                ownerWriter.WriteBytes(headerWriter.GetBuffer(), 0, headerWriter.Length);
+            //Initialize for prediction.
+            nob.InitializePredictedObject_Server(base.NetworkManager, conn);
 
-            /* Used to write latest data which must be sent to
-             * clients, such as SyncTypes and RpcLinks. */
-            PooledWriter tempWriter = WriterPool.GetWriter();
-            //Send RpcLinks first.
+            ArraySegment<byte> syncValues = reader.ReadArraySegmentAndSize();
+            PooledReader syncTypeReader = ReaderPool.GetReader(syncValues, base.NetworkManager);
             foreach (NetworkBehaviour nb in nob.NetworkBehaviours)
-                nb.WriteRpcLinks(tempWriter);
-            //Add to everyone/owner.
-            everyoneWriter.WriteBytesAndSize(tempWriter.GetBuffer(), 0, tempWriter.Length);
-            if (nob.Owner.IsValid)
-                ownerWriter.WriteBytesAndSize(tempWriter.GetBuffer(), 0, tempWriter.Length);
-
-            //Add most recent sync type values.
-            /* SyncTypes have to be populated for owner and everyone.
-            * The data may be unique for owner if synctypes are set
-            * to only go to owner. */
-            tempWriter.Reset();
-            foreach (NetworkBehaviour nb in nob.NetworkBehaviours)
-                nb.WriteSyncTypesForSpawn(tempWriter, false);
-            everyoneWriter.WriteBytesAndSize(tempWriter.GetBuffer(), 0, tempWriter.Length);
-            //If owner is valid then populate owner writer as well.
-            if (nob.Owner.IsValid)
             {
-                tempWriter.Reset();
-                foreach (NetworkBehaviour nb in nob.NetworkBehaviours)
-                    nb.WriteSyncTypesForSpawn(tempWriter, true);
-                ownerWriter.WriteBytesAndSize(tempWriter.GetBuffer(), 0, tempWriter.Length);
+                //SyncVars.
+                int length = syncTypeReader.ReadInt32();
+                nb.OnSyncType(syncTypeReader, length, false, true);
+                //SyncObjects
+                length = syncTypeReader.ReadInt32();
+                nb.OnSyncType(syncTypeReader, length, true, true);
+            }
+            syncTypeReader.Dispose();
+
+            SpawnWithoutChecks(nob, owner, objectId);
+
+            //Send the spawner a new reservedId.
+            WriteResponse(true);
+            //Writes a predicted spawn result to a client.
+            void WriteResponse(bool success)
+            {
+                PooledWriter writer = WriterPool.GetWriter();
+                writer.WritePacketId(PacketId.PredictedSpawnResult);
+                writer.WriteNetworkObjectId(nob.ObjectId);
+                writer.WriteBoolean(success);
+
+                if (success)
+                {
+                    Queue<int> objectIdCache = NetworkManager.ServerManager.Objects.GetObjectIdCache();
+                    //Write next objectId to use.
+                    int invalidId = NetworkObject.UNSET_OBJECTID_VALUE;
+                    int nextId = (objectIdCache.Count > 0) ? objectIdCache.Dequeue() : invalidId;
+                    writer.WriteNetworkObjectId(nextId);
+                    //If nextId is valid then also add it to spawners local cache.
+                    if (nextId != invalidId)
+                        conn.PredictedObjectIds.Enqueue(nextId);
+                    ////Update RPC links.
+                    //foreach (NetworkBehaviour nb in nob.NetworkBehaviours)
+                    //    nb.WriteRpcLinks(writer);
+                }
+
+                conn.SendToClient((byte)Channel.Reliable, writer.GetArraySegment());
             }
 
-            //Dispose of writers created in this method.
-            headerWriter.Dispose();
-            tempWriter.Dispose();
         }
         #endregion
 
@@ -692,12 +656,56 @@ namespace FishNet.Managing.Server
         /// <summary>
         /// Despawns an object over the network.
         /// </summary>
-        internal override void Despawn(NetworkObject nob, DespawnType despawnType, bool asServer)
+        internal override void Despawn(NetworkObject networkObject, DespawnType despawnType, bool asServer)
         {
-            if (nob.CanSpawnOrDespawn(true))
+            //Default as false, will change if needed.
+            bool predictedDespawn = false;
+
+            if (networkObject == null)
             {
-                FinalizeDespawn(nob, despawnType);
-                base.Despawn(nob, despawnType, true);
+                base.NetworkManager.LogWarning($"NetworkObject cannot be despawned because it is null.");
+                return;
+            }
+            if (networkObject.IsDeinitializing)
+            {
+                base.NetworkManager.LogWarning($"Object {networkObject.name} cannot be despawned because it is already deinitializing.");
+                return;
+            }
+
+            if (!NetworkManager.ServerManager.Started)
+            {
+                //Neither server nor client are started.
+                if (!NetworkManager.ClientManager.Started)
+                {
+                    base.NetworkManager.LogWarning("Cannot despawn object because server nor client are active.");
+                    return;
+                }
+                //Server has predicted spawning disabled.
+                if (!NetworkManager.PredictionManager.GetAllowPredictedSpawning())
+                {
+                    base.NetworkManager.LogWarning("Cannot despawn object because server is not active and predicted spawning is not enabled.");
+                    return;
+                }
+                //Various predicted despawn checks.
+                if (!base.CanPredictedDespawn(networkObject, NetworkManager.ClientManager.Connection, false))
+                    return;
+
+                predictedDespawn = true;
+            }
+            if (!networkObject.gameObject.scene.IsValid())
+            {
+                base.NetworkManager.LogError($"{networkObject.name} is a prefab. You must instantiate the prefab first, then use Spawn on the instantiated copy.");
+                return;
+            }
+
+            if (predictedDespawn)
+            {
+                base.NetworkManager.ClientManager.Objects.PredictedDepawn(networkObject);
+            }
+            else
+            {
+                FinalizeDespawn(networkObject, despawnType);
+                base.Despawn(networkObject, despawnType, asServer);
             }
         }
 
@@ -717,7 +725,7 @@ namespace FishNet.Managing.Server
         /// <param name="nob"></param>
         private void FinalizeDespawn(NetworkObject nob, DespawnType despawnType)
         {
-            if (nob != null && nob.ObjectId != -1)
+            if (nob != null && nob.ObjectId != NetworkObject.UNSET_OBJECTID_VALUE)
             {
                 nob.WriteDirtySyncTypes();
                 WriteDespawnAndSend(nob, despawnType);
@@ -732,7 +740,7 @@ namespace FishNet.Managing.Server
         private void WriteDespawnAndSend(NetworkObject nob, DespawnType despawnType)
         {
             PooledWriter everyoneWriter = WriterPool.GetWriter();
-            WriteDespawn(nob, despawnType, ref everyoneWriter);
+            WriteDespawn(nob, despawnType, everyoneWriter);
 
             ArraySegment<byte> despawnSegment = everyoneWriter.GetArraySegment();
 
@@ -755,21 +763,30 @@ namespace FishNet.Managing.Server
             ListCaches.StoreCache(cache);
         }
         /// <summary>
-        /// Writes a despawn.
+        /// Reads a predicted despawn.
         /// </summary>
-        /// <param name="nob"></param>
-        private void WriteDespawn(NetworkObject nob, DespawnType despawnType, ref PooledWriter everyoneWriter)
+        internal void ReadPredictedDespawn(Reader reader, NetworkConnection conn)
         {
-            everyoneWriter.WritePacketId(PacketId.ObjectDespawn);
-            everyoneWriter.WriteNetworkObject(nob);
-            everyoneWriter.WriteByte((byte)despawnType);
+            NetworkObject nob = reader.ReadNetworkObject();
+
+            //Maybe server destroyed the object so don't kick if null.
+            if (nob == null)
+            {
+                reader.Clear();
+                return;
+            }
+            //Does not allow predicted despawning.
+            if (!nob.AllowPredictedDespawning)
+            {
+                reader.Clear();
+                conn.Kick(KickReason.ExploitAttempt, LoggingType.Common, $"Connection {conn.ClientId} used predicted despawning for object {nob.name} when it does not support predicted despawning.");
+            }
+
+            //Despawn object.
+            nob.Despawn();
         }
-
-
-
+        #endregion
     }
-    #endregion
-
 
 
 }

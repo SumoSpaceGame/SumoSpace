@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 5
+  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -22,6 +22,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Util_Body_Unlit_Mat
   m_Shader: {fileID: -6465566751694194690, guid: 6d216ecd8929a044993d8511958fdf20, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 2
@@ -30,6 +32,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -79,6 +82,9 @@ Material:
     - Vector1_b029e587879d40d8832b1d8dd5d5ed3f: -0.025
     - Vector1_b111ce1ea8d34e3dad4f67eba544ccf5: 25
     - Vector1_caa78516ee424dcd8c611688de1c7d51: 0.5
+    - Vector1_fd83ec9133d84fbc9e6ff88d5f413cc7: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
     m_Colors:
     - Color_819d2760d06e4c3590a64ca05f18c1d5: {r: 2.9960785, g: 0, b: 0, a: 0}
     - Color_c5cbf6e9511d460e9b1d24c2d08982ca: {r: 2, g: 2, b: 2, a: 0}

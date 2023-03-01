@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+using Unity.Multiplayer.Playmode;
+
 namespace Game.Common.Settings
 {
     public class InitSettings : MonoBehaviour
@@ -9,6 +11,10 @@ namespace Game.Common.Settings
         public MasterSettings masterSettings;
         private void Awake()
         {
+
+
+            masterSettings.ClientDebugAutoConnect = false;
+
             var mapRegistry = masterSettings.mapRegistry;
             var matchSettings = masterSettings.matchSettings;
             
@@ -49,10 +55,30 @@ namespace Game.Common.Settings
                         // TODO: Add update interval
                         //network.updateInterval = UInt64.Parse(args[i + 1]);
                         break;
+                    case "-autoconnect":
+                        // TODO: Temporary way to auto connect
+                        masterSettings.ClientDebugAutoConnect = true;
+                        break;
                     
                 }
+
+#if UNITY_EDITOR
+                if (CurrentPlayer.Tag != "")
+                {
+                    var tag = CurrentPlayer.Tag.ToLower();
+
                 
-                
+                    if (tag.Contains("server"))
+                    {
+                        masterSettings.InitServer = true;
+                    }
+
+                    if (tag.Contains("player"))
+                    {
+                        masterSettings.ClientDebugAutoConnect = true;
+                    }
+                }
+#endif
             }
         }
     }

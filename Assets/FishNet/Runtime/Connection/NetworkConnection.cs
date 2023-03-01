@@ -35,7 +35,17 @@ namespace FishNet.Connection
         /// <summary>
         /// True if connection has loaded start scenes. Available to this connection and server.
         /// </summary>
-        public bool LoadedStartScenes => (_loadedStartScenesAsServer || _loadedStartScenesAsClient);
+        public bool LoadedStartScenes() => (_loadedStartScenesAsServer || _loadedStartScenesAsClient);
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool LoadedStartScenes(bool asServer)
+        {
+            if (asServer)
+                return _loadedStartScenesAsServer;
+            else
+                return _loadedStartScenesAsClient;
+        }
         /// <summary>
         /// True if loaded start scenes as server.
         /// </summary>
@@ -44,6 +54,10 @@ namespace FishNet.Connection
         /// True if loaded start scenes as client.
         /// </summary>
         private bool _loadedStartScenesAsClient;
+        /// <summary>
+        /// ObjectIds to use for predicted spawning.
+        /// </summary>
+        internal Queue<int> PredictedObjectIds = new Queue<int>();
         /// <summary>
         /// True if this connection is authenticated. Only available to server.
         /// </summary>
@@ -90,7 +104,7 @@ namespace FishNet.Connection
         /// </summary>
         public object CustomData = null;
         /// <summary>
-        /// Local tick of the server when this connection last replicated.
+        /// Local tick when the connection last replicated.
         /// </summary>
         public uint LocalReplicateTick { get; internal set; }
         /// <summary>
@@ -122,10 +136,12 @@ namespace FishNet.Connection
         /// Tick on the server when latestTick was set.
         /// </summary>
         private uint _serverLatestTick;
+        [Obsolete("Use LocalTick instead.")] //Remove on 2023/06/01
+        public uint Tick => LocalTick;
         /// <summary>
-        /// Current approximate network tick as it is on this connection.
+        /// Current approximate local tick as it is on this connection.
         /// </summary>
-        public uint Tick
+        public uint LocalTick
         {
             get
             {
@@ -139,8 +155,15 @@ namespace FishNet.Connection
                 //Fall through, could not process.
                 return 0;
             }
-        }
 
+        }
+        #endregion
+
+        #region Const.
+        /// <summary>
+        /// Value used when ClientId has not been set.
+        /// </summary>
+        public const int UNSET_CLIENTID_VALUE = -1;
         #endregion
 
         #region Comparers.
@@ -156,7 +179,7 @@ namespace FishNet.Connection
             if (nc is null)
                 return false;
             //If either is -1 Id.
-            if (this.ClientId == -1 || nc.ClientId == -1)
+            if (this.ClientId == NetworkConnection.UNSET_CLIENTID_VALUE || nc.ClientId == NetworkConnection.UNSET_CLIENTID_VALUE)
                 return false;
             //Same object.
             if (System.Object.ReferenceEquals(this, nc))
@@ -231,6 +254,7 @@ namespace FishNet.Connection
             _loadedStartScenesAsServer = false;
             SetDisconnecting(false);
             Scenes.Clear();
+            PredictedObjectIds.Clear();
             ResetPingPong();
         }
 

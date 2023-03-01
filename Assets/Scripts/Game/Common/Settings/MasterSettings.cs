@@ -5,6 +5,7 @@ using Game.Common.Instances;
 using Game.Common.Map;
 using Game.Common.Registry;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Game.Common.Settings
 {
@@ -46,6 +47,8 @@ namespace Game.Common.Settings
         /// Used to check if this is a server being initiated
         /// </summary>
         public bool InitServer = false;
+
+        [FormerlySerializedAs("ClientAutoConnect")] public bool ClientDebugAutoConnect = false;
 
         [Space(4)] 
         [Header("Network config")] 

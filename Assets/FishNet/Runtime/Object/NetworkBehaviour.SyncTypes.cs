@@ -1,4 +1,5 @@
-﻿using FishNet.Documenting;
+﻿using FishNet.Connection;
+using FishNet.Documenting;
 using FishNet.Managing.Logging;
 using FishNet.Managing.Transporting;
 using FishNet.Object.Synchronizing;
@@ -152,7 +153,7 @@ namespace FishNet.Object
         /// Reads a SyncVar.
         /// </summary>
         /// <param name="reader"></param>
-        internal void OnSyncType(PooledReader reader, int length, bool isSyncObject)
+        internal void OnSyncType(PooledReader reader, int length, bool isSyncObject, bool asServer = false)
         {
             int readerStart = reader.Position;
             while (reader.Position - readerStart < length)
@@ -161,14 +162,14 @@ namespace FishNet.Object
                 if (isSyncObject)
                 {
                     if (_syncObjects.TryGetValueIL2CPP(index, out SyncBase sb))
-                        sb.Read(reader);
+                        sb.Read(reader, asServer);
                     else
                         NetworkManager.LogWarning($"SyncObject not found for index {index} on {transform.name}. Remainder of packet may become corrupt.");
                 }
                 else
                 {
                     if (_syncVars.ContainsKey(index))
-                        ReadSyncVar(reader, index);
+                        ReadSyncVar(reader, index, asServer);
                     else
                         NetworkManager.LogWarning($"SyncVar not found for index {index} on {transform.name}. Remainder of packet may become corrupt.");
                 }
@@ -180,8 +181,9 @@ namespace FishNet.Object
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="index"></param>
+        /// <param name="asServer">True if reading into SyncVars for the server, false for client. This would be true for predicted spawning if the predicted spawner sent syncvars.</param>
         [APIExclude]
-        internal virtual bool ReadSyncVar(PooledReader reader, uint index) { return false; }
+        internal virtual bool ReadSyncVar(PooledReader reader, uint index, bool asServer) { return false; }
 
         /// <summary>
         /// Writers dirty SyncTypes if their write tick has been met.
@@ -195,10 +197,7 @@ namespace FishNet.Object
              * pushed through when despawn is called. */
             if (!IsSpawned)
             {
-                Dictionary<uint, SyncBase> c1 = (isSyncObject) ? _syncObjects : _syncVars;
-                foreach (SyncBase sb in c1.Values)
-                    sb.ResetDirty();
-
+                ResetSyncTypes();
                 return true;
             }
 
@@ -262,14 +261,9 @@ namespace FishNet.Object
                     }
 
                     if (writer == null)
-                    {
-                        if (NetworkManager.CanLog(LoggingType.Error))
-                            Debug.LogError($"Writer couldn't be found for permissions {sb.Settings.ReadPermission} on channel {channel}.");
-                    }
+                        NetworkManager.LogError($"Writer couldn't be found for permissions {sb.Settings.ReadPermission} on channel {channel}.");
                     else
-                    {
                         sb.WriteDelta(writer);
-                    }
                 }
             }
 
@@ -321,13 +315,24 @@ namespace FishNet.Object
                                 headerWriter.WriteArraySegment(dataWriter.GetArraySegment());
                                 dataWriter.Dispose();
 
-                                //If sending to observers.
-                                bool excludeOwnerPermission = (_syncTypeWriters[i].ReadPermission == ReadPermission.ExcludeOwner);
-                                if (excludeOwnerPermission || _syncTypeWriters[i].ReadPermission == ReadPermission.Observers)
-                                    _networkObjectCache.NetworkManager.TransportManager.SendToClients((byte)channel, headerWriter.GetArraySegment(), _networkObjectCache, excludeOwnerPermission);
-                                //Sending only to owner.
-                                else
+
+                                //If only sending to owner.
+                                if (_syncTypeWriters[i].ReadPermission == ReadPermission.OwnerOnly)
+                                {
                                     _networkObjectCache.NetworkManager.TransportManager.SendToClient(channel, headerWriter.GetArraySegment(), _networkObjectCache.Owner);
+                                }
+                                //Sending to observers.
+                                else
+                                {
+                                    bool excludeOwner = (_syncTypeWriters[i].ReadPermission == ReadPermission.ExcludeOwner);
+                                    SetNetworkConnectionCache(false, excludeOwner);
+                                    NetworkConnection excludedConnection = (excludeOwner) ? _networkObjectCache.Owner : null;
+                                    _networkObjectCache.NetworkManager.TransportManager.SendToClients((byte)channel, headerWriter.GetArraySegment(), _networkObjectCache.Observers, _networkConnectionCache);
+
+                                }
+
+
+
                             }
                         }
                     }
@@ -349,6 +354,9 @@ namespace FishNet.Object
                 item.Reset();
             foreach (SyncBase item in _syncObjects.Values)
                 item.Reset();
+
+            _syncObjectDirty = false;
+            _syncVarDirty = false;
         }
 
 
@@ -369,10 +377,10 @@ namespace FishNet.Object
         /// <summary>
         /// Writers syncVars for a spawn message.
         /// </summary>
-        /// <param name="writer"></param>
-        ///<param name="forOwner">True to also include syncVars which are for owner only.</param>
-        internal void WriteSyncTypesForSpawn(PooledWriter writer, bool forOwner)
+        internal void WriteSyncTypesForSpawn(PooledWriter writer, SyncTypeWriteType writeType)
         {
+            //Write for owner if writing all or owner, but not observers.
+            bool ownerWrite = (writeType != SyncTypeWriteType.Observers);
             WriteSyncType(_syncVars);
             WriteSyncType(_syncObjects);
 
@@ -386,7 +394,7 @@ namespace FishNet.Object
                     foreach (SyncBase sb in collection.Values)
                     {
                         //If not for owner and syncvar is owner only.
-                        if (!forOwner && sb.Settings.ReadPermission == ReadPermission.OwnerOnly)
+                        if (!ownerWrite && sb.Settings.ReadPermission == ReadPermission.OwnerOnly)
                         {
                             //If there is an owner then skip.
                             if (_networkObjectCache.Owner.IsValid)

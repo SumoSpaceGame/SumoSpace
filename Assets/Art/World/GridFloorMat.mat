@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 5
+  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -22,6 +22,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: GridFloorMat
   m_Shader: {fileID: -6465566751694194690, guid: 3161a48ff9bdd714080431a52912bddb, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -30,6 +32,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -65,6 +68,8 @@ Material:
     - Vector1_763c112a3e124adb8afa81e00f2ffe50: 1
     - Vector1_a93d4a2280454b5da6a23ac166fb076a: 0.003
     - Vector1_d19538bb0c514b5e8ff2fc202e2d506c: 0.15
+    - _QueueControl: 0
+    - _QueueOffset: 0
     m_Colors:
     - Color_591ec357610b4b22bb0e74587866e76f: {r: 0, g: 0.029372271, b: 0.21698111, a: 0}
     - Color_5b2946ee158247118bdef79df38ea354: {r: 1, g: 1, b: 1, a: 0}

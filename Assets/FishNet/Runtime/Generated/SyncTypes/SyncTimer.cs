@@ -1,6 +1,8 @@
-﻿using FishNet.Object.Synchronizing.Internal;
+﻿using FishNet.Documenting;
+using FishNet.Object.Synchronizing.Internal;
 using FishNet.Serializing;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace FishNet.Object.Synchronizing
 {
@@ -48,6 +50,14 @@ namespace FishNet.Object.Synchronizing
         /// </summary>
         public float Remaining { get; private set; }
         /// <summary>
+        /// How much time has passed since the timer started.
+        /// </summary>
+        public float Elapsed => (Duration - Remaining);
+        /// <summary>
+        /// Starting duration of the timer.
+        /// </summary>
+        public float Duration { get; private set; }
+        /// <summary>
         /// True if the SyncTimer is currently paused. Calls to Update(float) will be ignored when paused.
         /// </summary>
         public bool Paused { get; private set; }
@@ -76,10 +86,15 @@ namespace FishNet.Object.Synchronizing
         /// <param name="sendRemainingOnStop">True to include remaining time when automatically sending StopTimer.</param>
         public void StartTimer(float remaining, bool sendRemainingOnStop = true)
         {
+            if (!base.CanNetworkSetValues(true))
+                return;
+
             if (Remaining > 0f)
                 StopTimer(sendRemainingOnStop);
 
+            Paused = false;
             Remaining = remaining;
+            Duration = remaining;
             AddOperation(SyncTimerOperation.Start, -1f, remaining);
         }
 
@@ -92,6 +107,8 @@ namespace FishNet.Object.Synchronizing
             if (Remaining <= 0f)
                 return;
             if (Paused)
+                return;
+            if (!base.CanNetworkSetValues(true))
                 return;
 
             SyncTimerOperation op = (sendRemaining) ? SyncTimerOperation.PauseUpdated : SyncTimerOperation.Pause;
@@ -107,6 +124,8 @@ namespace FishNet.Object.Synchronizing
                 return;
             if (!Paused)
                 return;
+            if (!base.CanNetworkSetValues(true))
+                return;
 
             AddOperation(SyncTimerOperation.Unpause, -1f, -1f);
         }
@@ -118,9 +137,12 @@ namespace FishNet.Object.Synchronizing
         {
             if (Remaining <= 0f)
                 return;
+            if (!base.CanNetworkSetValues(true))
+                return;
 
+            bool asServer = true;
             float prev = Remaining;
-            StopTimer();
+            StopTimer_Internal(asServer);
             SyncTimerOperation op = (sendRemaining) ? SyncTimerOperation.StopUpdated : SyncTimerOperation.Stop;
             AddOperation(op, prev, 0f);
         }
@@ -130,24 +152,21 @@ namespace FishNet.Object.Synchronizing
         /// </summary>
         private void AddOperation(SyncTimerOperation operation, float prev, float next)
         {
-            //Syncbase has not initialized.
             if (!base.IsRegistered)
                 return;
-            //Networkmanager null or no write permissions.
-            if (base.NetworkManager != null && base.Settings.WritePermission == WritePermission.ServerOnly && !base.NetworkBehaviour.IsServer)
+
+            bool asServerInvoke = (!base.IsNetworkInitialized || base.NetworkBehaviour.IsServer);
+
+            if (asServerInvoke)
             {
-                NetworkManager.LogWarning($"Cannot complete operation as server when server is not active.");
-                return;
+                if (base.Dirty())
+                {
+                    ChangeData change = new ChangeData(operation, prev, next);
+                    _changed.Add(change);
+                }
             }
 
-            if (base.Dirty())
-            {
-                ChangeData change = new ChangeData(operation, prev, next);
-                _changed.Add(change);
-            }
-            //Data can currently only be set from server, so this is always asServer.
-            bool asServer = true;
-            OnChange?.Invoke(operation, prev, next, asServer);
+            OnChange?.Invoke(operation, prev, next, asServerInvoke);
         }
 
         /// <summary>
@@ -189,10 +208,13 @@ namespace FishNet.Object.Synchronizing
                 return;
 
             base.WriteDelta(writer, false);
-            //Write that there is one entry.
-            writer.WriteInt32(1);
-            //And the operation.
+            //There will be 1 or 2 entries. If paused 2, if not 1.
+            int entries = (Paused) ? 2 : 1;
+            writer.WriteInt32(entries);
+            //And the operations.
             WriteStartTimer(writer, true);
+            if (Paused)
+                writer.WriteByte((byte)SyncTimerOperation.Pause);
         }
 
         /// <summary>
@@ -205,13 +227,24 @@ namespace FishNet.Object.Synchronizing
             if (includeOperationByte)
                 w.WriteByte((byte)SyncTimerOperation.Start);
             w.WriteSingle(Remaining);
+            w.WriteSingle(Duration);
         }
+
         /// <summary>
-        /// Reads and sets the current values.
+        /// Returns if values can be updated.
         /// </summary>
-        public override void Read(PooledReader reader)
+        private bool CanSetValues(bool asServer)
         {
-            bool asServer = false;
+            return (asServer || !base.NetworkManager.IsServer);
+        }
+
+        /// <summary>
+        /// Reads and sets the current values for server or client.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [APIExclude]
+        public override void Read(PooledReader reader, bool asServer)
+        {
             int changes = reader.ReadInt32();
 
             for (int i = 0; i < changes; i++)
@@ -220,7 +253,13 @@ namespace FishNet.Object.Synchronizing
                 if (op == SyncTimerOperation.Start)
                 {
                     float next = reader.ReadSingle();
-                    Remaining = next;
+                    float duration = reader.ReadSingle();
+                    if (CanSetValues(asServer))
+                    {
+                        Paused = false;
+                        Remaining = next;
+                        Duration = duration;
+                    }
                     InvokeOnChange(op, -1f, next, asServer);
                 }
                 else if (op == SyncTimerOperation.Pause || op == SyncTimerOperation.PauseUpdated
@@ -231,7 +270,7 @@ namespace FishNet.Object.Synchronizing
                 else if (op == SyncTimerOperation.Stop)
                 {
                     float prev = Remaining;
-                    StopTimer();
+                    StopTimer_Internal(asServer);
                     InvokeOnChange(op, prev, 0f, false);
                 }
                 //
@@ -239,7 +278,7 @@ namespace FishNet.Object.Synchronizing
                 {
                     float prev = Remaining;
                     float next = reader.ReadSingle();
-                    Remaining = next;
+                    StopTimer_Internal(asServer);
                     InvokeOnChange(op, prev, next, asServer);
                 }
             }
@@ -256,15 +295,13 @@ namespace FishNet.Object.Synchronizing
                 {
                     prev = Remaining;
                     next = reader.ReadSingle();
-                    Remaining = next;
+                    if (CanSetValues(asServer))
+                        Remaining = next;
                 }
 
-                //If paused changed.
-                if (Paused != newPauseState)
-                {
+                if (CanSetValues(asServer))
                     Paused = newPauseState;
-                    InvokeOnChange(op, prev, next, asServer);
-                }
+                InvokeOnChange(op, prev, next, asServer);
             }
 
             if (changes > 0)
@@ -274,8 +311,11 @@ namespace FishNet.Object.Synchronizing
         /// <summary>
         /// Stops the timer and resets.
         /// </summary>
-        private void StopTimer()
+        private void StopTimer_Internal(bool asServer)
         {
+            if (!CanSetValues(asServer))
+                return;
+
             Paused = false;
             Remaining = 0f;
         }

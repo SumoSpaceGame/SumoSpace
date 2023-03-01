@@ -25,7 +25,7 @@ namespace FishNet.Transporting
         #region Initialization and unity.
         /// <summary>
         /// Initializes the transport. Use this instead of Awake.
-        /// <paramref name="transportIndex"/>Index this transport belongs to when using multiple transports at once.</param>
+        /// <param name="transportIndex">Index this transport belongs to when using multiple transports at once.</param>
         /// </summary>
         public virtual void Initialize(NetworkManager networkManager, int transportIndex)
         {
@@ -135,6 +135,7 @@ namespace FishNet.Transporting
         /// Returns if the transport is only run locally, offline.
         /// While true several security checks are disabled.
         /// </summary>
+        /// <param name="connectionid"></param>
         public virtual bool IsLocalTransport(int connectionid) => false;
         /// <summary>
         /// Gets how long in seconds until either the server or client socket must go without data before being timed out.
@@ -153,9 +154,12 @@ namespace FishNet.Transporting
         /// <returns>Maximum clients transport allows.</returns>
         public virtual int GetMaximumClients()
         {
-            bool canLog = (NetworkManager == null) ? NetworkManager.StaticCanLog(LoggingType.Warning) : NetworkManager.CanLog(LoggingType.Warning);
-            if (canLog)
-                Debug.LogWarning($"The current transport does not support this feature.");
+            string message = $"The current transport does not support this feature.";
+            if (NetworkManager == null)
+                NetworkManager.StaticLogWarning(message);
+            else
+                NetworkManager.LogWarning(message);
+
             return -1;
         }
         /// <summary>
@@ -164,9 +168,11 @@ namespace FishNet.Transporting
         /// <param name="value">Maximum clients to allow.</param>
         public virtual void SetMaximumClients(int value)
         {
-            bool canLog = (NetworkManager == null) ? NetworkManager.StaticCanLog(LoggingType.Warning) : NetworkManager.CanLog(LoggingType.Warning);
-            if (canLog)
-                Debug.LogWarning($"The current transport does not support this feature.");
+            string message = $"The current transport does not support this feature.";
+            if (NetworkManager == null)
+                NetworkManager.StaticLogWarning(message);
+            else
+                NetworkManager.LogWarning(message);
         }
         /// <summary>
         /// Sets which address the client will connect to.
@@ -177,17 +183,6 @@ namespace FishNet.Transporting
         /// Returns which address the client will connect to.
         /// </summary>
         public virtual string GetClientAddress() => string.Empty;
-        /// <summary>
-        /// Sets which address the server will bind to.
-        /// </summary>
-        /// <param name="address">Address server will bind to.</param>
-        [Obsolete("Use SetServerBindAddress(string, IPAddressType)")] //Remove on 01/01/2023
-        public virtual void SetServerBindAddress(string address) { }
-        /// <summary>
-        /// Gets which address the server will bind to.
-        /// </summary>
-        [Obsolete("Use GetServerBindAddress(IPAddressType)")] //Remove on 01/01/2023
-        public virtual string GetServerBindAddress() => string.Empty;
         /// <summary>
         /// Sets which address the server will bind to.
         /// </summary>

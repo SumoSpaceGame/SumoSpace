@@ -12,18 +12,26 @@ namespace FishNet.Managing.Server
 {
     public sealed partial class ServerManager : MonoBehaviour
     {
+        #region Public.
+        /// <summary>
+        /// Called when a client is removed from the server using Kick. This is invoked before the client is disconnected.
+        /// NetworkConnection when available, clientId, and KickReason are provided.
+        /// </summary>
+        public event Action<NetworkConnection, int, KickReason> OnClientKick;
+        #endregion
+
         /// <summary>
         /// Returns true if only one server is started.
         /// </summary>
         /// <returns></returns>
-        internal bool OneServerStarted()
+        public bool OneServerStarted()
         {
             int startedCount = 0;
             TransportManager tm = NetworkManager.TransportManager;
             //If using multipass check all transports.
             if (tm.Transport is Multipass mp)
             {
-                
+
                 foreach (Transport t in mp.Transports)
                 {
                     //Another transport is started, no need to load start scenes again.
@@ -46,7 +54,7 @@ namespace FishNet.Managing.Server
         /// </summary>
         /// <param name="excludedIndex">When set the transport on this index will be ignored. This value is only used with Multipass.</param>
         /// <returns></returns>
-        internal bool AnyServerStarted(int? excludedIndex = null)
+        public bool AnyServerStarted(int? excludedIndex = null)
         {
             TransportManager tm = NetworkManager.TransportManager;
             //If using multipass check all transports.
@@ -84,12 +92,9 @@ namespace FishNet.Managing.Server
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Spawn(GameObject go, NetworkConnection ownerConnection = null)
         {
-            if (!CanSpawnOrDespawn(true))
-                return;
             if (go == null)
             {
-                if (NetworkManager.CanLog(LoggingType.Warning))
-                    Debug.LogWarning($"GameObject cannot be spawned because it is null.");
+                NetworkManager.LogWarning($"GameObject cannot be spawned because it is null.");
                 return;
             }
 
@@ -105,59 +110,8 @@ namespace FishNet.Managing.Server
         /// <param name="ownerConnection">Connection to give ownership to.</param>
         public void Spawn(NetworkObject nob, NetworkConnection ownerConnection = null)
         {
-            if (!CanSpawnOrDespawn(true))
-                return;
-            if (nob == null)
-            {
-                if (NetworkManager.CanLog(LoggingType.Warning))
-                    Debug.LogWarning($"NetworkObject cannot be spawned because it is null.");
-                return;
-            }
-
             Objects.Spawn(nob, ownerConnection);
         }
-
-
-        /// <summary>
-        /// Spawns an object over the network. Can only be called on the server.
-        /// </summary>
-        /// <param name="nob">MetworkObject instance to spawn.</param>
-        /// <param name="ownerConnection">Connection to give ownership to.</param>
-        /// <param name="synchronizeParent">True to synchronize the parent object in the spawn message. The parent must have a NetworkObject or NetworkBehaviour component for this to work.</param>
-        [Obsolete("SynchronizeParent is now automatic, and no longer optional. Use Spawn(NetworkObject, NetworkConnection) instead.")] //Remove 2023/01/01.
-        public void Spawn(NetworkObject nob, NetworkConnection ownerConnection, bool synchronizeParent)
-        {
-            if (!CanSpawnOrDespawn(true))
-                return;
-            if (nob == null)
-            {
-                if (NetworkManager.CanLog(LoggingType.Warning))
-                    Debug.LogWarning($"NetworkObject cannot be spawned because it is null.");
-                return;
-            }
-
-            Objects.Spawn(nob, ownerConnection);
-        }
-
-
-        /// <summary>
-        /// Returns if Spawn can be called.
-        /// </summary>
-        /// <param name="warn">True to warn if not able to execute spawn or despawn.</param>
-        /// <returns></returns>
-        private bool CanSpawnOrDespawn(bool warn)
-        {
-            bool canLog = (warn && NetworkManager.CanLog(LoggingType.Warning));
-            if (!Started)
-            {
-                if (canLog)
-                    Debug.Log($"The server must be active to spawn or despawn networked objects.");
-                return false;
-            }
-
-            return true;
-        }
-
 
         /// <summary>
         /// Despawns an object over the network. Can only be called on the server.
@@ -167,13 +121,9 @@ namespace FishNet.Managing.Server
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Despawn(GameObject go, DespawnType? despawnType = null)
         {
-            if (!CanSpawnOrDespawn(true))
-                return;
-
             if (go == null)
             {
-                if (NetworkManager.CanLog(LoggingType.Warning))
-                    Debug.LogWarning($"GameObject cannot be despawned because it is null.");
+                NetworkManager.LogWarning($"GameObject cannot be despawned because it is null.");
                 return;
             }
 
@@ -185,22 +135,48 @@ namespace FishNet.Managing.Server
         /// Despawns an object over the network. Can only be called on the server.
         /// </summary>
         /// <param name="networkObject">NetworkObject instance to despawn.</param>
-        /// <param name="cacheOnDespawnOverride">Overrides the default DisableOnDespawn value for this single despawn. Scene objects will never be destroyed.</param>
+        /// <param name="despawnType">Despawn override type.</param>
         public void Despawn(NetworkObject networkObject, DespawnType? despawnType = null)
         {
-            if (!CanSpawnOrDespawn(true))
-                return;
-            if (networkObject == null)
-            {
-                if (NetworkManager.CanLog(LoggingType.Warning))
-                    Debug.LogWarning($"NetworkObject cannot be despawned because it is null.");
-                return;
-            }
-
             DespawnType resolvedDespawnType = (despawnType == null)
-                ? networkObject.GetDefaultDespawnType() 
+                ? networkObject.GetDefaultDespawnType()
                 : despawnType.Value;
             Objects.Despawn(networkObject, resolvedDespawnType, true);
+        }
+
+        /// <summary>
+        /// Kicks a connection immediately while invoking OnClientKick.
+        /// </summary>
+        /// <param name="conn">Client to kick.</param>
+        /// <param name="kickReason">Reason client is being kicked.</param>
+        /// <param name="loggingType">How to print logging as.</param>
+        /// <param name="log">Optional message to be debug logged.</param>
+        public void Kick(NetworkConnection conn, KickReason kickReason, LoggingType loggingType = LoggingType.Common, string log = "")
+        {
+            if (!conn.IsValid)
+                return;
+
+            OnClientKick?.Invoke(conn, conn.ClientId, kickReason);
+            if (conn.IsActive)
+                conn.Disconnect(true);
+
+            if (!string.IsNullOrEmpty(log))
+                NetworkManager.Log(loggingType, log);
+        }
+
+        /// <summary>
+        /// Kicks a connection immediately while invoking OnClientKick.
+        /// </summary>
+        /// <param name="clientId">ClientId to kick.</param>
+        /// <param name="kickReason">Reason client is being kicked.</param>
+        /// <param name="loggingType">How to print logging as.</param>
+        /// <param name="log">Optional message to be debug logged.</param>
+        public void Kick(int clientId, KickReason kickReason, LoggingType loggingType = LoggingType.Common, string log = "")
+        {
+            OnClientKick?.Invoke(null, clientId, kickReason);
+            NetworkManager.TransportManager.Transport.StopConnection(clientId, true);
+            if (!string.IsNullOrEmpty(log))
+                NetworkManager.Log(loggingType, log);
         }
     }
 
