@@ -132,7 +132,7 @@ namespace Game.Common.Gameplay.Ship
             {
                 var data = master.playerStaticDataRegistry.Get(this.playerMatchID);
                 
-                this.transform.position = shipSpawner.GetRespawnPoint(data.TeamPosition, data.TeamID).toSimulationPlane();
+                this.transform.position = shipSpawner.GetRespawnPoint(data.TeamID, data.TeamPosition).toSimulationPlane();
             }
             else
             {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Game.Common.Networking;
 using Game.Common.Settings;
 using Game.Common.Util;
@@ -40,6 +41,14 @@ namespace Game.Common.UI.DirectConnection
                 FishNetConnector.Host(masterSettings.ServerPort);
                 enableWhenServer.SetActive(true);
             }
+
+            if (masterSettings.ClientDebugAutoConnect)
+            {
+                DebugConnect();
+            }
+            
+            
+            
         }
 
         public void ProcessTextFields()
@@ -79,8 +88,24 @@ namespace Game.Common.UI.DirectConnection
         public void DebugConnect()
         {
             FishNetConnector.Connect(DEBUG_ServerAddress, masterSettings.ServerPort);
+            
+            if(masterSettings.ClientDebugAutoConnect) StartCoroutine(WaitForDebugConnect());
         }
+        
+        public IEnumerator WaitForDebugConnect()
+        {
+            while (!FishNetConnector.Connected)
+            {
+                yield return null;
 
+                if (!FishNetConnector.Connecting)
+                {
+                    FishNetConnector.Connect(DEBUG_ServerAddress, masterSettings.ServerPort);
+                }
+            }
+                
+        }
+        
         public void Host()
         {
             ProcessTextFields();
