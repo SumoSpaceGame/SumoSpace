@@ -167,5 +167,10 @@ namespace Game.Common.Gameplay.Ship
 
         // Gives the ship knockback.
         private void Knockback(Vector2 force, Vector2 position, ForceMode2D forceMode) => GetComponent<Rigidbody2D>().AddForceAtPosition(force, position, forceMode);
+
+        /*public void Move(Vector2 delta)
+        {
+            transform.position += delta;
+        }*/
     }
 }

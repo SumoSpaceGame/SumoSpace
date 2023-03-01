@@ -7,6 +7,7 @@ namespace Game.Ships.Agility.Client.CommandPerformers
     {
         public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData)
         {
+            
             shipManager.shipLoadout.PrimaryAbility.Execute(shipManager, false);
             return true;
         }

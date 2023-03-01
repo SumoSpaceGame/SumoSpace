@@ -12,14 +12,14 @@ namespace Game.Common.Networking.Entity.Types
 {
     public class MicroMissileEntity: ProjectileEntity
     {
-        private float maxMissileTime;
-        private float acceleration;
-        private float maxSpeed;
-        private float explosionRadius;
-        private float explosionForce;
-        private int team;
+        private float _maxMissileTime;
+        private float _acceleration;
+        private float _maxSpeed;
+        private float _explosionRadius;
+        private float _explosionForce;
+        private int _team;
 
-        private bool exploded;
+        private bool _exploded;
 
         [SerializeField] private Rigidbody2D rb;
         [SerializeField] private MatchCollisionFilter mcf;
@@ -32,30 +32,28 @@ namespace Game.Common.Networking.Entity.Types
             Vector2 launchVelocity,
             MatchCollisionFilter mcf)
         {
-            this.maxMissileTime = maxMissileTime;
-            this.acceleration = acceleration;
-            this.maxSpeed = maxSpeed;
-            this.explosionRadius = explosionRadius;
-            this.explosionForce = explosionForce;
+            _maxMissileTime = maxMissileTime;
+            _acceleration = acceleration;
+            _maxSpeed = maxSpeed;
+            _explosionRadius = explosionRadius;
+            _explosionForce = explosionForce;
             this.mcf.team = mcf.team;
 
-            if (InstanceFinder.IsServer)
-            {
-                rb.AddForce(launchVelocity * 0.5f, ForceMode2D.Impulse);
-                StartCoroutine(Move());
-            }
+            if (!InstanceFinder.IsServer) return;
+            rb.AddForce(launchVelocity * 0.5f, ForceMode2D.Impulse);
+            StartCoroutine(Move());
         }
 
         public void OnSpawnEvent()
         {
-            exploded = false;
+            _exploded = false;
         }
 
         private IEnumerator Move()
         {
             //var nearbyCols = new Collider2D[30];
             var startTime = Time.time;
-            while (startTime + maxMissileTime > Time.time)
+            while (startTime + _maxMissileTime > Time.time)
             {
                 // Turn to nearest target
                 // Currently disabled to re-evaluate if this is really wanted
@@ -100,10 +98,10 @@ namespace Game.Common.Networking.Entity.Types
                 }*/
 
 
-                rb.AddForce(transform.up * (acceleration * Time.deltaTime), ForceMode2D.Force);
-                if (rb.velocity.magnitude > maxSpeed)
+                rb.AddForce(transform.up * (_acceleration * Time.deltaTime), ForceMode2D.Force);
+                if (rb.velocity.magnitude > _maxSpeed)
                 {
-                    rb.velocity = rb.velocity.normalized * maxSpeed;
+                    rb.velocity = rb.velocity.normalized * _maxSpeed;
                 }
                 
                 yield return null;
@@ -113,13 +111,10 @@ namespace Game.Common.Networking.Entity.Types
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (InstanceFinder.IsServer)
+            if (!InstanceFinder.IsServer) return;
+            if (other.gameObject.TryGetComponent(out MatchCollisionFilter collisionMcf) && mcf.CanInteract(collisionMcf))
             {
-                if (other.gameObject.TryGetComponent(out MatchCollisionFilter collisionMcf)
-                    && this.mcf.CanInteract(collisionMcf))
-                {
-                    Explode();
-                }
+                Explode();
             }
         }
 
@@ -130,19 +125,20 @@ namespace Game.Common.Networking.Entity.Types
             rb.inertia = 0f;
         }
 
-        public void Explode()
+        private void Explode()
         {
-            Physics2D.OverlapCircleAll(transform.position, explosionRadius)
+            // ReSharper disable once Unity.PreferNonAllocApi
+            Physics2D.OverlapCircleAll(transform.position, _explosionRadius)
                 .Where(x => x.TryGetComponent(out MatchCollisionFilter otherMcf)
                     && this.mcf.CanInteract(otherMcf)).Select(x => x.attachedRigidbody).ToList()
                 .ForEach(x =>
                 {
-                    if (x.GetComponent<ShipManager>() != null)
-                        x.GetComponent<ShipManager>().OnHit((x.position - rb.position) * explosionForce, rb.position, ForceMode2D.Impulse);
+                    if (x.TryGetComponent<ShipManager>(out var shipManager))
+                        shipManager.OnHit((x.position - rb.position).normalized * _explosionForce, rb.position, ForceMode2D.Impulse);
                     else
-                        x.AddForce((x.position - rb.position) * explosionForce, ForceMode2D.Impulse);
+                        x.AddForce((x.position - rb.position) * _explosionForce, ForceMode2D.Impulse);
                 });
-            exploded = true;
+            _exploded = true;
             MainPersistantInstances.Get<EntityNetworkManager>().DespawnEntity(this);
         }
     }

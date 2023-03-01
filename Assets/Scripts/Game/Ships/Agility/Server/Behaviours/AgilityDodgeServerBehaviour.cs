@@ -6,10 +6,16 @@ namespace Game.Ships.Agility.Server.Behaviours
 {
     public class AgilityDodgeServerBehaviour : AbilityBehaviour<AgilityDodgeAbility>
     {
+        
+        private bool onCooldown = false;
 
         public override void Execute()
         {
-            shipManager.StartCoroutine(Dodge());
+            if (!onCooldown)
+            {
+                StartCoroutine(Dodge());
+                StartCoroutine(Cooldown());
+            }
         }
 
         private IEnumerator Dodge()
@@ -26,6 +32,14 @@ namespace Game.Ships.Agility.Server.Behaviours
                     Vector3.Lerp(startPos, targetPos, (Time.time - startTime) / Ability.Time);
                 yield return null;
             }
+        }
+        
+        private IEnumerator Cooldown()
+        {
+            onCooldown = true;
+            var startTime = Time.time;
+            while (startTime + Ability.Cooldown > Time.time) yield return null;
+            onCooldown = false;
         }
     }
 }

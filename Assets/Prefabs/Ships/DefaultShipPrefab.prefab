@@ -17,9 +17,10 @@ GameObject:
   - component: {fileID: 266858117316837251}
   - component: {fileID: 266858117316837255}
   - component: {fileID: 7190991688975852411}
+  - component: {fileID: -8469160279371457448}
   - component: {fileID: 154194094138703525}
   m_Layer: 0
-  m_Name: PlayerShipPrefab
+  m_Name: DefaultShipPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +34,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 266858117316837275}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.425, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -73,7 +74,7 @@ Rigidbody2D:
   m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -241,7 +242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementDirection: {x: 0, y: 0}
   movementRotation: 0
-  shipLoadout: {fileID: 0}
+  shipManager: {fileID: 266858117316837251}
 --- !u!114 &266858117316837250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,7 +255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a167acf415303e5479176ba7d0ab0a72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  representative: {fileID: 3655497651732392594, guid: eab8f55351db4444bab5638886f4430d, type: 3}
+  representative: {fileID: 0}
   create: 0
 --- !u!114 &266858117316837251
 MonoBehaviour:
@@ -320,6 +321,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-8469160279371457448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266858117316837275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6718b27a39441eab0a80aac51d878a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team: 0
+  isGhost: 0
+  pushable: 0
 --- !u!114 &154194094138703525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,3 +350,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   manager: {fileID: 266858117316837251}
   shipWarningSeconds: {fileID: 11400000, guid: 843563acaaa875443b270b5c3bd69539, type: 2}
+  currentWarningTimer: 0
