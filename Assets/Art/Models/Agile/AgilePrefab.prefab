@@ -288,6 +288,7 @@ VisualEffect:
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
   m_ResetSeedOnPlay: 1
+  m_AllowInstancing: 1
   m_ResourceVersion: 1
   m_PropertySheet:
     m_Float:
@@ -610,9 +611,17 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8518716994228362903}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &544389751279407035
@@ -620,6 +629,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 942806620020716536}
     m_Modifications:
     - target: {fileID: 4274573987647524822, guid: b1b1b578a364e52438e3f8d4f2f3eaeb, type: 3}
@@ -687,6 +697,9 @@ PrefabInstance:
       value: AgileShootEffect
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1b1b578a364e52438e3f8d4f2f3eaeb, type: 3}
 --- !u!4 &4922434575551408166 stripped
 Transform:
@@ -698,10 +711,11 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 4883752066882698525}
     m_Modifications:
     - target: {fileID: 554307473876923068, guid: dee1685e7ff450f438e457a729005620, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5461604237542505499, guid: dee1685e7ff450f438e457a729005620, type: 3}
@@ -765,6 +779,9 @@ PrefabInstance:
       value: MuzzlePrefab
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dee1685e7ff450f438e457a729005620, type: 3}
 --- !u!4 &5090267507457263829 stripped
 Transform:
@@ -776,6 +793,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 5729819864519291586}
     m_Modifications:
     - target: {fileID: 1178122372783539902, guid: bf56d6229277d1a419cc8ad4f325533e, type: 3}
@@ -827,6 +845,9 @@ PrefabInstance:
       value: SideTrailEffect
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf56d6229277d1a419cc8ad4f325533e, type: 3}
 --- !u!4 &2568581877350538544 stripped
 Transform:
@@ -838,6 +859,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 851621539088208829}
     m_Modifications:
     - target: {fileID: 1178122372783539902, guid: bf56d6229277d1a419cc8ad4f325533e, type: 3}
@@ -889,6 +911,9 @@ PrefabInstance:
       value: SideTrailEffect
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf56d6229277d1a419cc8ad4f325533e, type: 3}
 --- !u!4 &5957283657696946312 stripped
 Transform:
@@ -900,6 +925,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 829799979551614010}
     m_Modifications:
     - target: {fileID: 877413388980183766, guid: 20d8e6491978be34b85b55abe68d59b1, type: 3}
@@ -907,7 +933,7 @@ PrefabInstance:
       value: SmokeEffect
       objectReference: {fileID: 0}
     - target: {fileID: 4657854617780709850, guid: 20d8e6491978be34b85b55abe68d59b1, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8181726139367672906, guid: 20d8e6491978be34b85b55abe68d59b1, type: 3}
@@ -967,6 +993,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20d8e6491978be34b85b55abe68d59b1, type: 3}
 --- !u!4 &2973289953084708191 stripped
 Transform:
