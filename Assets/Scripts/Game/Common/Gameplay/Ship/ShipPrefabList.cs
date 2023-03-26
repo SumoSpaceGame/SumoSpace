@@ -20,5 +20,18 @@ namespace Game.Common.Gameplay.Ship
             
             return shipPrefabs[shipIndex];
         }
+        
+        #if UNITY_EDITOR
+        public void AddShip(GameObject newShip)
+        {
+            shipPrefabs.Add(newShip);
+        }
+
+        public List<GameObject> GetAllShips()
+        {
+            return shipPrefabs;
+        }
+        
+        #endif
     }
 }

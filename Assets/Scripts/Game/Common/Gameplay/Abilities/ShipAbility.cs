@@ -51,5 +51,19 @@ namespace Game.Common.Gameplay.Abilities
             }
             shipManager.behaviours[(int)type].Init(shipManager);
         }
+        
+        #if UNITY_EDITOR
+
+        public void SetClientBehaviour(GameObject cb)
+        {
+            clientBehaviour = cb;
+        }
+        
+        public void SetServerBehaviour(GameObject sb)
+        {
+            serverBehaviour = sb;
+        }
+
+        #endif
     }
 }

@@ -6,9 +6,18 @@ namespace Game.Ships.Agility.Client
 {
     public class AgilityRenderer: ShipRenderer
     {
+
+        private float lrTilt;
+        
         public void PrimaryMuzzleFlash()
         {
             transform.Find("../Sphere/BulletSpawn/MuzzlePrefab").GetComponent<VisualEffect>().Play();
+        }
+
+        public void Tilt(float lrMovement)
+        {
+            lrTilt += lrMovement * Time.deltaTime;
+            lrTilt = Mathf.Clamp(lrTilt, -1, 1);
         }
 
         public void DodgeEffect()

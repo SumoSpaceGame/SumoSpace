@@ -1,0 +1,16 @@
+﻿using Game.Common.Gameplay.Commands;
+using Game.Common.Gameplay.Ship;
+
+namespace Game.Ships.#SHIP_NAME#.Server.Commands
+{
+    public class #SHIP_NAME##ABILITY_NAME#ServerCommand : ICommand
+    {
+        public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData)
+        {
+            shipManager.shipLoadout.#ABILITY_SLOT#.Execute(shipManager, true);
+            networker.SendData(packetData, CommandType.#SHIP_NAME#_#ABILITY_NAME#,
+                            shipManager.playerMatchID);
+            return true;
+        }
+    }
+}

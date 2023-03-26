@@ -15,4 +15,5 @@ MonoBehaviour:
   shipPrefabs:
   - {fileID: 2025401133792490111, guid: 4dd2e7444c6bcf74a9ba7d0b695e2752, type: 3}
   - {fileID: 2025401133792490111, guid: 75241b82d6e19cc4e959d2584e034f49, type: 3}
-  - {fileID: 2025401133792490111, guid: 75241b82d6e19cc4e959d2584e034f49, type: 3}
+  - {fileID: 3109452204203839674, guid: a213bbcb263e87c498abf9e958382639, type: 3}
+  - {fileID: 3950801884311188447, guid: 33caaf1aecd92d148a1984ec6b86f928, type: 3}
