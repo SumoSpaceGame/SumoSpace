@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Game.Common.Gameplay.Abilities;
+using Game.Common.Gameplay.Commands;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,6 +10,11 @@ namespace Game.Ships.Agility.Common.Abilities
     [CreateAssetMenu(menuName="Ship Abilities/Agility Abilities/Agility Micro Missile", fileName = "Agility Micro Missile", order=1)]
     public class AgilityMicroMissileAbility: ShipAbility
     {
+        protected override void OnInit()
+        {
+            this.executeCommand = CommandTypes.COMMAND_AGILITY_MICRO_MISSILES;
+        }
+        
         [SerializeField] private float maxMissileTime;
         public float MaxMissileTime => maxMissileTime;
 

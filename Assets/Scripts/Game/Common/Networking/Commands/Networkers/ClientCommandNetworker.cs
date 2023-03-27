@@ -12,7 +12,7 @@ namespace Game.Common.Gameplay.Commands.Networkers
             networker = clientNetworker;
         }
         
-        public bool SendData(CommandPacketData data, CommandType commandID, PlayerID shipID)
+        public bool SendData(CommandPacketData data, string commandID, PlayerID shipID)
         {
             if (networker.IsServer || networker == null) return false;
 

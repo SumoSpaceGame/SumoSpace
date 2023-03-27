@@ -7,17 +7,17 @@ namespace Game.Common.Gameplay.Commands
     public class CommandHandler
     {
 
-        private Dictionary<CommandType, ICommandPerformer> commandPerformers =
-            new Dictionary<CommandType, ICommandPerformer>();
+        private Dictionary<string, ICommandPerformer> commandPerformers =
+            new Dictionary<string, ICommandPerformer>();
 
-        private Dictionary<CommandType, ICommand> commandReceivers = new Dictionary<CommandType, ICommand>();
+        private Dictionary<string, ICommand> commandReceivers = new Dictionary<string, ICommand>();
 
 
         /// <summary>
         /// Initialize performer commands (commands that perform actions, aka client commands)
         /// </summary>
         /// <param name="commands"></param>
-        public void InitializePerformers(IList<KeyValuePair<CommandType, ICommandPerformer>> commands)
+        public void InitializePerformers(IList<KeyValuePair<string, ICommandPerformer>> commands)
         {
             foreach (var commandPair in commands)
             {
@@ -29,7 +29,7 @@ namespace Game.Common.Gameplay.Commands
         /// Initialize receiver commands. You should only supply server side commands, ICommandPerformers are already made into
         /// </summary>
         /// <param name="commands"></param>
-        public void InitializeReceivers(IList<KeyValuePair<CommandType, ICommand>> commands)
+        public void InitializeReceivers(IList<KeyValuePair<string, ICommand>> commands)
         {
             foreach (var commandPair in commands)
             {
@@ -51,11 +51,11 @@ namespace Game.Common.Gameplay.Commands
         /// <param name="networker">Networker to transfer data between performers and receivers, and then from receivers to performer's receiver</param>
         /// <param name="arguments">Any extra data to pass along, E.X. bool to toggle</param>
         /// <returns>If successfully executed or not</returns>
-        public bool Perform(CommandType commandType, ShipManager shipManager, ICommandNetworker networker, params object[] arguments)
+        public bool Perform(string commandType, ShipManager shipManager, ICommandNetworker networker, params object[] arguments)
         {
             if (commandPerformers.TryGetValue(commandType, out var commandPerformer))
             {
-                return commandPerformer.Perform(shipManager, networker, arguments);
+                return commandPerformer.Perform(shipManager,  new CommandNetworkerData(networker, shipManager.playerMatchID, commandType), arguments);
             }
             Debug.LogError("Failed to grab command type from client performer- " + commandType);
             return false;
@@ -69,14 +69,16 @@ namespace Game.Common.Gameplay.Commands
         /// <param name="networker">Networker to transfer data between performers and receivers, and then from receivers to performer's receiver</param>
         /// <param name="data">Data packet, information that is being sent between the network</param>
         /// <returns>If successfully executed or not</returns>
-        public bool ReceiveServer(CommandType commandType, ShipManager shipManager, ICommandNetworker networker, CommandPacketData data)
+        public bool ReceiveServer(string commandType, ShipManager shipManager, ICommandNetworker networker, CommandPacketData data)
         {
             if (shipManager == null) return false;
             
+            
             if (commandReceivers.TryGetValue(commandType, out var command))
             {
-                return command.Receive(shipManager, networker, data);
+                return command.Receive(shipManager,  new CommandNetworkerData(networker, shipManager.playerMatchID, commandType), data);
             }
+            
             Debug.LogError("Failed to grab command type from server - " + commandType);
             return false;
         }
@@ -89,12 +91,12 @@ namespace Game.Common.Gameplay.Commands
         /// <param name="networker">Networker to transfer data between performers and receivers, and then from receivers to performer's receiver</param>
         /// <param name="data">Data packet, information that is being sent between the network</param>
         /// <returns>If successfully executed or not</returns>
-        public bool ReceiveClient(CommandType commandType, ShipManager shipManager, ICommandNetworker networker, CommandPacketData data)
+        public bool ReceiveClient(string commandType, ShipManager shipManager, ICommandNetworker networker, CommandPacketData data)
         {
             
             if (commandPerformers.TryGetValue(commandType, out var commandPerformer))
             {
-                return commandPerformer.Receive(shipManager, networker, data);
+                return commandPerformer.Receive(shipManager, new CommandNetworkerData(networker, shipManager.playerMatchID, commandType), data);
             }
             
             Debug.LogError("Failed to grab command type from client - " + commandType);

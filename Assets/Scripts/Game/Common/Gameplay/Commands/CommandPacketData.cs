@@ -56,6 +56,17 @@ namespace Game.Common.Gameplay.Commands
             return data;
         }
         
+        /// <summary>
+        /// Creates an empty packet (used for pinging)
+        /// </summary>
+        /// <param name="byteData"></param>
+        public static CommandPacketData Empty()
+        {
+            CommandPacketData data = new CommandPacketData();
+            data.Set(new byte[]{});
+            return data;
+        }
+        
         
         /// <summary>
         /// Get the raw byte array back.

@@ -1,4 +1,5 @@
 ﻿using Game.Common.Gameplay.Abilities;
+using Game.Common.Gameplay.Commands;
 using Game.Common.Gameplay.Ship;
 using UnityEngine;
 
@@ -7,6 +8,11 @@ namespace Game.Ships.Heavy.Common.Abilities
     [CreateAssetMenu(menuName = "Ship Abilities/Heavy Abilities/Heavy Burst", fileName = "Heavy Burst", order = 3)]
     public class HeavyBurstAbility : ShipAbility
     {
+        protected override void OnInit()
+        {
+            this.executeCommand = CommandTypes.COMMAND_HEAVY_BURST;
+        }
+        
         [Tooltip("How much knockback is needed for one unit of charge")]
         [SerializeField] private float _knockbackToCharge;
         [Tooltip("Energy of burst at minimum charge.")]

@@ -9,6 +9,8 @@ namespace Game.Common.Networking
 {
     public partial class InputLayerNetworkManager : NetworkBehaviour, IGamePersistantInstance
     {
+        
+        /*
         partial void ServerStart()
         {
             var receivers = new List<KeyValuePair<CommandType, ICommand>>();
@@ -23,7 +25,7 @@ namespace Game.Common.Networking
             receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_BURST, new ServerHeavyBurst()));
 
             _commandHandlerNetworkManager.InitializeServerCommands(receivers);
-        }
+        }*/
 
         
         /*

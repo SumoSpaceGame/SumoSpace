@@ -15,6 +15,8 @@ namespace Game.Common.Gameplay.Commands
         /// <param name="networker"></param>
         /// <param name="arguments"></param>
         /// <returns></returns>
-        bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments);
+        bool Perform(ShipManager shipManager, CommandNetworkerData networker, params object[] arguments);
     }
+    
+    
 }

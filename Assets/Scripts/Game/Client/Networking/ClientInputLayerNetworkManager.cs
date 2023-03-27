@@ -10,6 +10,7 @@ namespace Game.Common.Networking
 {
     public partial class InputLayerNetworkManager : NetworkBehaviour, IGamePersistantInstance
     {
+        /*
         partial void ClientStart()
         {
             var performers = new List<KeyValuePair<CommandType, ICommandPerformer>>();
@@ -24,13 +25,17 @@ namespace Game.Common.Networking
             performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_BURST, new ClientHeavyBurst()));
 
             _commandHandlerNetworkManager.InitializeClientCommands(performers);
+        }*/
+
+        public void PerformCommand(string type) {
+            _commandHandlerNetworkManager.Perform(type, new byte[]{});
         }
 
-        public void PerformCommand(CommandType type, byte[] data) {
+        public void PerformCommand(string type, byte[] data) {
             _commandHandlerNetworkManager.Perform(type, data);
         }
 
-        public void SendCommand(CommandType type, byte[] extra) {
+        public void SendCommand(string type, byte[] extra) {
             PerformCommand(type, extra);
         }
     }

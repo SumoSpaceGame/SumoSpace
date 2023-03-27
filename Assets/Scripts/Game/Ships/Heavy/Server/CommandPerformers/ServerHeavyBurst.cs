@@ -5,10 +5,10 @@ namespace Game.Ships.Heavy.Server.CommandPerformers
 {
     public class ServerHeavyBurst : ICommand
     {
-        public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData)
+        public bool Receive(ShipManager shipManager, CommandNetworkerData networker, CommandPacketData packetData)
         {
             shipManager.shipLoadout.SecondaryAbility.Execute(shipManager, true);
-            networker.SendData(packetData, CommandType.HEAVY_BURST, shipManager.playerMatchID);
+            networker.Send(packetData);
             return true;
         }
     }

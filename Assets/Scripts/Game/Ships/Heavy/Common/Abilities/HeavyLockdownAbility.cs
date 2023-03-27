@@ -1,4 +1,5 @@
 ﻿using Game.Common.Gameplay.Abilities;
+using Game.Common.Gameplay.Commands;
 using UnityEngine;
 
 namespace Game.Ships.Heavy.Common.Abilities
@@ -6,6 +7,11 @@ namespace Game.Ships.Heavy.Common.Abilities
     [CreateAssetMenu(menuName = "Ship Abilities/Heavy Abilities/Heavy Lockdown", fileName = "Heavy Lockdown", order = 2)]
     public class HeavyLockdownAbility : ShipAbility
     {
+        protected override void OnInit()
+        {
+            this.executeCommand = CommandTypes.COMMAND_HEAVY_LOCKDOWN;
+        }
+
         [Tooltip("Multiplier applied to the Heavy Primary Fire during Lockdown")]
         [SerializeField] private float _knockbackMultiplier;
         [Tooltip("Multiplier applied to the ship's max force.")]

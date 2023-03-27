@@ -38,24 +38,24 @@ namespace Game.Common.Networking.Commands
             }
         }
 
-        public void InitializeClientCommands(IList<KeyValuePair<CommandType, ICommandPerformer>> commands)
+        public void InitializeClientCommands(IList<KeyValuePair<string, ICommandPerformer>> commands)
         {
             _commandHandler.InitializePerformers(commands);
         }
         
-        public void InitializeServerCommands(IList<KeyValuePair<CommandType, ICommand>> commands)
+        public void InitializeServerCommands(IList<KeyValuePair<string, ICommand>> commands)
         {
             _commandHandler.InitializeReceivers(commands);
         }
 
-        public bool Perform(CommandType commandType, params object[] arguments)
+        public bool Perform(string commandType, params object[] arguments)
         {
             var ship = GetCurrentShip();
 
             return _commandHandler.Perform(commandType, ship, _commandNetworker);
         }
 
-        public void HandleRPC(CommandType commandType, byte[] commandData, ushort shipID, NetworkConnection conn = null)
+        public void HandleRPC(string commandType, byte[] commandData, ushort shipID, NetworkConnection conn = null)
         {
             
 

@@ -13,11 +13,9 @@ MonoBehaviour:
   m_Name: Agility Dodge
   m_EditorClassIdentifier: 
   cooldown: 5
-  executeCommand: 0
-  stopCommand: 0
   clientBehaviour: {fileID: 3771484431864915088, guid: e249a5ea55bf09349a9dd8912948faca, type: 3}
   serverBehaviour: {fileID: 1723777182412283189, guid: d82e000b6fab1f14683be6aec5f778c4, type: 3}
   slot: 1
   distance: 10
   time: 0.2
-  speed: 0
+  speed: 10

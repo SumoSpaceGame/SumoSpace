@@ -1,4 +1,5 @@
 using Game.Common.Gameplay.Abilities;
+using Game.Common.Gameplay.Commands;
 using UnityEngine;
 
 namespace Game.Ships.Heavy.Common.Abilities
@@ -6,6 +7,12 @@ namespace Game.Ships.Heavy.Common.Abilities
     [CreateAssetMenu(menuName = "Ship Abilities/Heavy Abilities/Heavy Primary Fire", fileName = "Heavy Primary Fire", order = 1)]
     public class HeavyPrimaryFireAbility : ShipAbility {
 
+        protected override void OnInit()
+        {
+            this.executeCommand = CommandTypes.COMMAND_HEAVY_PRIMARY_FIRE_START;
+            this.stopCommand = CommandTypes.COMMAND_HEAVY_PRIMARY_FIRE_END;
+        }
+        
         [SerializeField] private float minKnockback;
         /// <summary>
         /// Minimum knockback after applying multipliers.

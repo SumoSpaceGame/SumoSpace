@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Game.Common.Gameplay.Abilities;
 using Game.Common.Gameplay.Ship;
 using UnityEngine;
@@ -30,6 +31,40 @@ public class ShipLoadout : ScriptableObject {
         for (int i = 0; i < abilities.Count; i++) {
             abilities[i].AddBehaviour(shipManager, (AbilityType)i);
         }
+    }
+
+    /// <summary>
+    /// Activates a command whether is stopping, executing, or quick executing
+    /// </summary>
+    /// <param name="shipManager"></param>
+    /// <param name="isServer">Abilities may do different behaviours based on if they are servers or not</param>
+    /// <param name="commandType"></param>
+    /// <param name="useQuickExecute"></param>
+    public void ActivateCommand(ShipManager shipManager, bool isServer, string commandType, bool useQuickExecute = false)
+    {
+        foreach(var ability in abilities)
+        {
+            if (ability.ExecuteCommand == commandType)
+            {
+                if (useQuickExecute)
+                {
+                    ability.QuickExecute(shipManager, isServer);
+                }
+                else
+                {
+                    ability.Execute(shipManager, isServer);
+                }
+                return;
+            }
+
+            if (ability.StopCommand == commandType)
+            {
+                ability.Stop(shipManager, isServer);
+                return;
+            }
+        }
+        
+        Debug.Log("Failed to activate command - " + commandType);
     }
 
     public enum AbilityType {

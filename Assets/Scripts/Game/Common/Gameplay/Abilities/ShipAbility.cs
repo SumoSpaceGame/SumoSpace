@@ -5,20 +5,29 @@ using UnityEngine;
 //[CreateAssetMenu(menuName = "Ship Abilities", fileName = "New Ability", order = 1)]
 namespace Game.Common.Gameplay.Abilities
 {
-    public abstract class ShipAbility : ScriptableObject {
+    public abstract class ShipAbility : ScriptableObject
+    {
+
+        public void Init()
+        {
+            this.executeCommand = "";
+            this.stopCommand = "";
+        }
+        
+        protected abstract void OnInit();
 
         [SerializeField] protected float cooldown;
         // The command that triggers execution of this ability
-        [SerializeField] protected CommandType executeCommand;
+        protected string executeCommand = "";
         // The command that triggers this ability to stop
-        [SerializeField] protected CommandType stopCommand;
+        protected string stopCommand = "";
     
         [SerializeField] protected GameObject clientBehaviour;
         [SerializeField] protected GameObject serverBehaviour;
 
         [SerializeField] protected ShipLoadout.AbilityType slot;
-        public CommandType ExecuteCommand => executeCommand;
-        public CommandType StopCommand => stopCommand;
+        public string ExecuteCommand => executeCommand;
+        public string StopCommand => stopCommand;
         public float Cooldown => cooldown;
         public GameObject ClientBehaviour => clientBehaviour;
         public GameObject ServerBehaviour => serverBehaviour;

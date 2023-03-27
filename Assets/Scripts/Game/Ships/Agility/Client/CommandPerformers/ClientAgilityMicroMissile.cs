@@ -8,16 +8,15 @@ namespace Game.Ships.Agility.Client.CommandPerformers
 {
     public class ClientAgilityMicroMissile : ICommandPerformer
     {
-        public bool Receive(ShipManager shipManager, ICommandNetworker networker, CommandPacketData packetData)
+        public bool Receive(ShipManager shipManager, CommandNetworkerData networker, CommandPacketData packetData)
         {
             shipManager.shipLoadout.SecondaryAbility.Execute(shipManager, false);
             return true;
         }
 
-        public bool Perform(ShipManager shipManager, ICommandNetworker networker, params object[] arguments)
+        public bool Perform(ShipManager shipManager, CommandNetworkerData networker, params object[] arguments)
         {
-            networker.SendData(CommandPacketData.Create(new byte[] { }), CommandType.AGILITY_MICRO_MISSLES,
-                shipManager.playerMatchID);
+            networker.Send();
             return true;
         }
     }
