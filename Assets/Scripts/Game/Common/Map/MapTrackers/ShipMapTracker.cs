@@ -12,7 +12,8 @@ namespace Game.Common.Map
         public FloatScriptableData shipWarningSeconds;
         
         [SerializeField]
-        private float currentWarningTimer;
+        public float currentWarningTimer { get; private set; }
+
         
         public override Vector2 GetPosition()
         {

@@ -47,6 +47,10 @@ namespace FishNet.Managing.Timing
 
         #region Public.
         /// <summary>
+        /// Called when the local clients ping is updated.
+        /// </summary>
+        public event Action<long> OnRoundTripTimeUpdated;
+        /// <summary>
         /// Called right before a tick occurs, as well before data is read.
         /// </summary>
         public event Action OnPreTick;
@@ -222,10 +226,6 @@ namespace FishNet.Managing.Timing
         /// </summary>
         private uint _pingTicks;
         /// <summary>
-        /// Next tick when a network LOD update may send from the client.
-        /// </summary>
-        private uint _nextLodTick;
-        /// <summary>
         /// MovingAverage instance used to calculate mean ping.
         /// </summary>
         private MovingAverage _pingAverage = new MovingAverage(5);
@@ -391,10 +391,13 @@ namespace FishNet.Managing.Timing
             {
                 _pingStopwatch.Stop();
                 ClientUptime = 0f;
-                LocalTick = 0;
-                //Also reset Tick if not running as host.
+
+                //Only reset ticks if also not server.
                 if (!_networkManager.IsServer)
+                {
+                    LocalTick = 0;
                     Tick = 0;
+                }
             }
             //Started.
             else
@@ -537,19 +540,8 @@ namespace FishNet.Managing.Timing
             double averageInTime = (_pingAverage.Average * TickDelta * 1000);
             RoundTripTime = (long)Math.Round(averageInTime);
             _receivedPong = true;
-        }
 
-        /// <summary>
-        /// Sends a LOD update to the server.
-        /// </summary>
-        private void TrySendNetworkLOD()
-        {
-            //Protect against excessive sends. Ect, consider looking at TrySendPing.
-            if (LocalTick < _nextLodTick)
-                return;
-
-            _nextLodTick += TickRate;
-            _networkManager.ClientManager.SendNetworkLODUpdate();
+            OnRoundTripTimeUpdated?.Invoke(RoundTripTime);
         }
 
         /// <summary>
@@ -671,7 +663,7 @@ namespace FishNet.Managing.Timing
                      * last tick during this loop. */
                     if (isClient && (_elapsedTickTime < timePerSimulation))
                     {
-                        TrySendNetworkLOD();
+                        _networkManager.ClientManager.SendLodUpdate(false);
                         TrySendPing(LocalTick + 1);
                     }
 

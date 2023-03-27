@@ -49,13 +49,33 @@ CircleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2025401133792490111}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 6200000, guid: 58d2f12522b5c784d85a9c58ee4f3f2b, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
   m_Radius: 1.75
 --- !u!50 &-6591932524663397018
 Rigidbody2D:
@@ -74,6 +94,12 @@ Rigidbody2D:
   m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -118,7 +144,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 70bde7f0-950b-4c77-b686-88fc03c44c51
-    m_ActionName: Gameplay/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+    m_ActionName: 'Gameplay/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8162458709843036457}
@@ -146,7 +172,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 97abc713-808c-4a09-99a3-814c91a373b6
-    m_ActionName: Gameplay/Rotate Raw[/Mouse/position]
+    m_ActionName: 'Gameplay/Rotate Raw[/Mouse/position]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8162458709843036457}
@@ -190,7 +216,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 93c29028-de7b-4e8e-97c0-b5c85b7e2c0d
-    m_ActionName: Gameplay/Dodge[/Keyboard/leftShift]
+    m_ActionName: 'Gameplay/Dodge[/Keyboard/leftShift]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8162458709843036457}
@@ -206,7 +232,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: b45102f7-59db-4e94-9b31-a0eef33fd402
-    m_ActionName: Gameplay/Fire[/Mouse/leftButton]
+    m_ActionName: 'Gameplay/Fire[/Mouse/leftButton]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8162458709843036457}
@@ -222,7 +248,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: a86e3a37-06f1-4fc6-8245-2a4080c82b81
-    m_ActionName: Gameplay/SecondaryAbility[/Keyboard/2,/Keyboard/ctrl]
+    m_ActionName: 'Gameplay/SecondaryAbility[/Keyboard/2,/Keyboard/ctrl]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Mouse and Keyboard
   m_DefaultActionMap: Gameplay
@@ -242,7 +268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementDirection: {x: 0, y: 0}
   movementRotation: 0
-  shipLoadout: {fileID: 11400000, guid: a99ede615317bd0409742db9825b5dc8, type: 2}
+  shipManager: {fileID: 1452283217186146463}
 --- !u!114 &8860599951211358576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,6 +306,7 @@ MonoBehaviour:
   virtualCursorPrefab: {fileID: 7368730354526697921, guid: 60cf878beb180f2428456ccfef098402, type: 3}
   virtualCursor: {fileID: 9146286379313495491, guid: 60cf878beb180f2428456ccfef098402, type: 3}
   matchCollisionFilter: {fileID: -5980928553281968811}
+  mapTracker: {fileID: 4181980132902638313}
   behaviours:
   - {fileID: 0}
   - {fileID: 0}
@@ -306,7 +333,7 @@ MonoBehaviour:
   targetAngle: 0
 --- !u!95 &4336934462001359146
 Animator:
-  serializedVersion: 4
+  serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -320,10 +347,11 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &-5980928553281968811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,3 +381,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   manager: {fileID: 1452283217186146463}
   shipWarningSeconds: {fileID: 11400000, guid: 843563acaaa875443b270b5c3bd69539, type: 2}
+  currentWarningTimer: 0

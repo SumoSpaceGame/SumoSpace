@@ -22,7 +22,7 @@ namespace Game.Client.Phases
         
         public void PhaseStart()
         {
-            
+            _gamePhaseNetworkManager.masterSettings.matchSettings.timerIDs.mainMatchTimer = 0;
         }
 
         private bool sentReady = false;
@@ -34,6 +34,17 @@ namespace Game.Client.Phases
                 sentReady = true;
                 _gamePhaseNetworkManager.SendPhaseUpdate(Phase.MATCH_START_COUNTDOWN, new byte[] {1});
             }
+            
+            if (MainInstances.HasType(typeof(GameMapManager)) && _gamePhaseNetworkManager.masterSettings.matchSettings.timerIDs.mainMatchTimer != 0)
+            {
+                var map = MainInstances.Get<GameMapManager>();
+
+                if (!map.running)
+                {
+                    map.ActivateMap(_gamePhaseNetworkManager.masterSettings.matchSettings.timerIDs.mainMatchTimer);
+                }
+            }
+            
         }
 
         public void PhaseCleanUp()
@@ -52,7 +63,8 @@ namespace Game.Client.Phases
                 case 0:
                     // Activate map
                     _gamePhaseNetworkManager.masterSettings.matchSettings.timerIDs.mainMatchTimer = BitConverter.ToUInt32(data.Skip(1).ToArray());
-
+                    
+                    
                     break;
             }
         }

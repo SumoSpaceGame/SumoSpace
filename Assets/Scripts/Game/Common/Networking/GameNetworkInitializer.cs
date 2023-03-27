@@ -34,6 +34,7 @@ namespace Game.Common.Networking
                 {
                     // They will automatically get cleaned up on disconnect
                     var go = Instantiate(obj);
+                    Debug.Log("Spawning " + go);
                     InstanceFinder.ServerManager.Spawn(go, null);
                 }
             }

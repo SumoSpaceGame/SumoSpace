@@ -49,13 +49,33 @@ CircleCollider2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 266858117316837275}
   m_Enabled: 1
+  serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 6200000, guid: 58d2f12522b5c784d85a9c58ee4f3f2b, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_UsedByComposite: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
   m_Radius: 1.25
 --- !u!50 &266858117316837253
 Rigidbody2D:
@@ -74,6 +94,12 @@ Rigidbody2D:
   m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -118,7 +144,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 70bde7f0-950b-4c77-b686-88fc03c44c51
-    m_ActionName: Gameplay/Move[/XInputControllerWindows/leftStick,/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+    m_ActionName: 'Gameplay/Move[/XInputControllerWindows/leftStick,/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 266858117316837273}
@@ -146,7 +172,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 97abc713-808c-4a09-99a3-814c91a373b6
-    m_ActionName: Gameplay/Rotate Raw[/Mouse/position]
+    m_ActionName: 'Gameplay/Rotate Raw[/Mouse/position]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 266858117316837273}
@@ -174,7 +200,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 9695a1ea-6560-4821-a775-cea683cc502b
-    m_ActionName: Gameplay/Rotate Vec[/XInputControllerWindows/rightStick]
+    m_ActionName: 'Gameplay/Rotate Vec[/XInputControllerWindows/rightStick]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 266858117316837273}
@@ -202,7 +228,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: 93c29028-de7b-4e8e-97c0-b5c85b7e2c0d
-    m_ActionName: Gameplay/Dodge[/Keyboard/leftShift]
+    m_ActionName: 'Gameplay/Dodge[/Keyboard/leftShift]'
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 266858117316837273}
@@ -218,11 +244,11 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
     m_ActionId: b45102f7-59db-4e94-9b31-a0eef33fd402
-    m_ActionName: Gameplay/Fire[/Mouse/leftButton]
+    m_ActionName: 'Gameplay/Fire[/Mouse/leftButton]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: a86e3a37-06f1-4fc6-8245-2a4080c82b81
-    m_ActionName: Gameplay/SecondaryAbility[/Keyboard/2,/Keyboard/ctrl]
+    m_ActionName: 'Gameplay/SecondaryAbility[/Keyboard/2,/Keyboard/ctrl]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Mouse and Keyboard
   m_DefaultActionMap: Gameplay
@@ -280,6 +306,7 @@ MonoBehaviour:
   virtualCursorPrefab: {fileID: 7368730354526697921, guid: 60cf878beb180f2428456ccfef098402, type: 3}
   virtualCursor: {fileID: 9146286379313495491, guid: 60cf878beb180f2428456ccfef098402, type: 3}
   matchCollisionFilter: {fileID: 0}
+  mapTracker: {fileID: 154194094138703525}
   behaviours: []
   isServer: 0
   isPlayer: 0
@@ -303,7 +330,7 @@ MonoBehaviour:
   targetAngle: 0
 --- !u!95 &7190991688975852411
 Animator:
-  serializedVersion: 4
+  serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -317,10 +344,11 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &-8469160279371457448
 MonoBehaviour:
   m_ObjectHideFlags: 0

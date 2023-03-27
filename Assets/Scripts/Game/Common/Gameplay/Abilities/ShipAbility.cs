@@ -12,6 +12,8 @@ namespace Game.Common.Gameplay.Abilities
         {
             this.executeCommand = "";
             this.stopCommand = "";
+            
+            OnInit();
         }
         
         protected abstract void OnInit();

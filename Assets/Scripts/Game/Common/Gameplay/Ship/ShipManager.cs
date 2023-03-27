@@ -32,6 +32,7 @@ namespace Game.Common.Gameplay.Ship
         public VirtualCursor virtualCursor;
 
         public MatchCollisionFilter matchCollisionFilter;
+        public ShipMapTracker mapTracker;
 
         [EnumNamedList(typeof(ShipLoadout.AbilityType))]
         public List<AbilityBehaviourComponent> behaviours = new List<AbilityBehaviourComponent>(Enum.GetValues(typeof(ShipLoadout.AbilityType)).Length);

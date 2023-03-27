@@ -28,7 +28,7 @@ Transform:
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2568581877350538544}
+  - {fileID: 80700903552104661}
   m_Father: {fileID: 829799979551614010}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -41,7 +41,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 942806620020716536}
-  - component: {fileID: 5956923771608960761}
   m_Layer: 0
   m_Name: AgilePrefab
   m_TagString: Untagged
@@ -66,36 +65,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5956923771608960761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 458897725095209282}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <IsNested>k__BackingField: 0
-  <ComponentIndex>k__BackingField: 0
-  <PredictedSpawn>k__BackingField: {fileID: 0}
-  _networkBehaviours:
-  - {fileID: 2722980902385554547}
-  <ParentNetworkObject>k__BackingField: {fileID: 0}
-  <ChildNetworkObjects>k__BackingField: []
-  _isNetworked: 1
-  _isGlobal: 0
-  _initializeOrder: 0
-  _defaultDespawnType: 0
-  NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 0
-  <SpawnableCollectionId>k__BackingField: 0
-  _scenePathHash: 0
-  <SceneId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 12567548481334959641
-  _sceneNetworkObjects: []
 --- !u!1 &903060703016125763
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,7 +238,7 @@ Transform:
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5957283657696946312}
+  - {fileID: 2568581877350538544}
   m_Father: {fileID: 829799979551614010}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -468,7 +437,6 @@ GameObject:
   - component: {fileID: 5222748134039440695}
   - component: {fileID: 1229994751597394389}
   - component: {fileID: 3450471800455577725}
-  - component: {fileID: 2722980902385554547}
   m_Layer: 0
   m_Name: AgileShip
   m_TagString: Untagged
@@ -564,27 +532,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!114 &2722980902385554547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6878962762258328026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8cac635f24954048aad3a6ff9110beb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 5956923771608960761}
-  _networkObjectCache: {fileID: 5956923771608960761}
-  IgnoredParameters: []
-  _animator: {fileID: 3450471800455577725}
-  _smoothFloats: 1
-  _interpolation: 2
-  _clientAuthoritative: 1
-  _sendToOwner: 0
 --- !u!1 &8518716994228362903
 GameObject:
   m_ObjectHideFlags: 0
@@ -863,7 +810,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5461604237542505499, guid: dee1685e7ff450f438e457a729005620, type: 3}
   m_PrefabInstance: {fileID: 968211566149842126}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &3746123619823524750
+--- !u!1001 &1245030913859042923
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -924,12 +871,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf56d6229277d1a419cc8ad4f325533e, type: 3}
---- !u!4 &2568581877350538544 stripped
+--- !u!4 &80700903552104661 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1178122372783539902, guid: bf56d6229277d1a419cc8ad4f325533e, type: 3}
-  m_PrefabInstance: {fileID: 3746123619823524750}
+  m_PrefabInstance: {fileID: 1245030913859042923}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &4824777840797953590
+--- !u!1001 &3746123619823524750
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -990,10 +937,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf56d6229277d1a419cc8ad4f325533e, type: 3}
---- !u!4 &5957283657696946312 stripped
+--- !u!4 &2568581877350538544 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1178122372783539902, guid: bf56d6229277d1a419cc8ad4f325533e, type: 3}
-  m_PrefabInstance: {fileID: 4824777840797953590}
+  m_PrefabInstance: {fileID: 3746123619823524750}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6397481909241501973
 PrefabInstance:

@@ -86,6 +86,7 @@ namespace FishNet.Managing.Client
                  * was called but it won't hurt anything clearing an empty collection. */
                 base.Spawned.Clear();
                 base.SceneObjects.Clear();
+                base.LocalClientSpawned.Clear();
             }
         }
 
@@ -171,26 +172,30 @@ namespace FishNet.Managing.Client
 
             writer.WriteBytes(headerWriter.GetBuffer(), 0, headerWriter.Length);
 
-            PooledWriter tempWriter = WriterPool.GetWriter();
-            WriteSyncTypes(writer, tempWriter, SyncTypeWriteType.All);
-            void WriteSyncTypes(Writer finalWriter, PooledWriter tWriter, SyncTypeWriteType writeType)
+            //If allowed to write synctypes.
+            if (nob.AllowPredictedSyncTypes)
             {
-                tWriter.Reset();
-                foreach (NetworkBehaviour nb in nob.NetworkBehaviours)
-                    nb.WriteSyncTypesForSpawn(tWriter, writeType);
-                finalWriter.WriteBytesAndSize(tWriter.GetBuffer(), 0, tWriter.Length);
+                PooledWriter tempWriter = WriterPool.GetWriter();
+                WriteSyncTypes(writer, tempWriter, SyncTypeWriteType.All);
+                void WriteSyncTypes(Writer finalWriter, PooledWriter tWriter, SyncTypeWriteType writeType)
+                {
+                    tWriter.Reset();
+                    foreach (NetworkBehaviour nb in nob.NetworkBehaviours)
+                        nb.WriteSyncTypesForSpawn(tWriter, writeType);
+                    finalWriter.WriteBytesAndSize(tWriter.GetBuffer(), 0, tWriter.Length);
+                }
+                tempWriter.Dispose();
             }
 
             //Dispose of writers created in this method.
             headerWriter.Dispose();
-            tempWriter.Dispose();
         }
 
 
         /// <summary>
         /// Sends a predicted despawn to the server.
         /// </summary>
-        internal void PredictedDepawn(NetworkObject networkObject)
+        internal void PredictedDespawn(NetworkObject networkObject)
         {
             PooledWriter writer = WriterPool.GetWriter();
             WriteDepawn(networkObject, writer);
@@ -251,10 +256,10 @@ namespace FishNet.Managing.Client
         /// Called when a NetworkObject runs Deactivate.
         /// </summary>
         /// <param name="nob"></param>
-        internal override void NetworkObjectUnexpectedlyDestroyed(NetworkObject nob)
+        internal override void NetworkObjectUnexpectedlyDestroyed(NetworkObject nob, bool asServer)
         {
             nob.RemoveClientRpcLinkIndexes();
-            base.NetworkObjectUnexpectedlyDestroyed(nob);
+            base.NetworkObjectUnexpectedlyDestroyed(nob, asServer);
         }
 
         /// <summary>
