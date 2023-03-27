@@ -8,5 +8,6 @@ namespace Game.Common.Gameplay.Commands
     public interface ICommand
     {
         bool Receive(ShipManager shipManager, CommandNetworkerData networker, CommandPacketData packetData);
+        
     }
 }

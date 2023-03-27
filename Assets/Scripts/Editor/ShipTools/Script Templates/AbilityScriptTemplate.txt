@@ -1,0 +1,11 @@
+﻿using Game.Common.Gameplay.Abilities;
+using UnityEngine;
+
+namespace Game.Ships.#SHIP_NAME#.Common.Abilities
+{
+    [CreateAssetMenu(menuName="Ship Abilities/#SHIP_NAME# Abilities/#SHIP_NAME# #ABILITY_NAME#", fileName = "#SHIP_NAME# #ABILITY_NAME#", order=1)]
+    public class #SHIP_NAME##ABILITY_NAME#Ability: ShipAbility
+    {
+        
+    }
+}

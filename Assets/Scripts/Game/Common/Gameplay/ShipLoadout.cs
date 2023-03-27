@@ -6,14 +6,14 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName="Ship Abilities", fileName = "New Loadout",order = 0)]
 public class ShipLoadout : ScriptableObject {
-    //TODO make a list of ship abilities, maybe make list in manager of behaviours?
+    // TODO make a list of ship abilities, maybe make list in manager of behaviours?
     public ShipMovement ShipMovement;
 
     [Space(2)]
     [Header("Ability list")]
     [Tooltip("First index is Primary Fire ability, second is Primary ability, etc.")]
     [EnumNamedList(typeof(AbilityType))]
-    [SerializeField] private List<ShipAbility> abilities;
+    [SerializeField] private List<ShipAbility> abilities = new(Enum.GetValues(typeof(AbilityType)).Length);
     public ShipAbility PrimaryFire => abilities[(int)AbilityType.PrimaryFire];
     public ShipAbility PrimaryAbility => abilities[(int)AbilityType.PrimaryAbility];
     public ShipAbility SecondaryAbility => abilities[(int)AbilityType.SecondaryAbility];
@@ -69,7 +69,24 @@ public class ShipLoadout : ScriptableObject {
 
     public enum AbilityType {
         PrimaryFire = 0,
-        PrimaryAbility,
-        SecondaryAbility,
+        PrimaryAbility = 1,
+        SecondaryAbility = 2,
     }
+    
+    #if UNITY_EDITOR
+
+    public void AddAbility(ShipAbility ability, AbilityType slot)
+    {
+        abilities[(int)slot] = ability;
+    }
+    
+    public void InitList() 
+    {
+        while(abilities.Count < Enum.GetValues(typeof(AbilityType)).Length)
+        {
+            abilities.Add(null);
+        }
+    }
+
+    #endif
 }

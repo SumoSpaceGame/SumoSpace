@@ -15,14 +15,14 @@ namespace Game.Common.Networking
         {
             var performers = new List<KeyValuePair<CommandType, ICommandPerformer>>();
             
-            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_DODGE, new ClientAgilityDodge()));
-            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_PRIMARY_FIRE_START, new ClientAgilityBeginPrimaryFire()));
-            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_PRIMARY_FIRE_END, new ClientAgilityEndPrimaryFire()));
-            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_MICRO_MISSLES, new ClientAgilityMicroMissile()));
-            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_PRIMARY_FIRE_START, new ClientHeavyBeginPrimaryFire()));
-            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_PRIMARY_FIRE_END, new ClientHeavyEndPrimaryFire()));
-            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_LOCKDOWN, new ClientHeavyLockdown()));
-            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_BURST, new ClientHeavyBurst()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_DODGE, new AgilityDodgeClientCommand()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_PRIMARY_FIRE_START, new AgilityBeginPrimaryFireClientCommand()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_PRIMARY_FIRE_END, new AgilityEndPrimaryFireClientCommand()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.AGILITY_MICRO_MISSLES, new AgilityMicroMissileClientCommand()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_PRIMARY_FIRE_START, new HeavyBeginPrimaryFireClientCommand()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_PRIMARY_FIRE_END, new HeavyEndPrimaryFireClientCommand()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_LOCKDOWN, new HeavyLockdownClientCommand()));
+            performers.Add(new KeyValuePair<CommandType, ICommandPerformer>(CommandType.HEAVY_BURST, new HeavyBurstClientCommand()));
 
             _commandHandlerNetworkManager.InitializeClientCommands(performers);
         }*/

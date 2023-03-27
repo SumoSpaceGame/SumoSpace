@@ -1,4 +1,5 @@
 using System.Collections;
+using Game.Common.Gameplay.Ship;
 using Game.Common.Instances;
 using Game.Common.Networking;
 using UnityEngine;
@@ -12,17 +13,13 @@ namespace Game.Client.Gameplay.Movement
     [RequireComponent(typeof(PlayerInput))]
     public class ClientControls : MonoBehaviour 
     {
-
-        // TODO: MOVE PLAYER INPUT AND CLIENT CONTROLS INTO A SECONDARY GAMEOBJECT, SO WE CAN CHANGE ONE PREFAB MORE EASILY
-        //public ShipMovement ShipMovement => shipMovement;
-        private ShipLoadout ShipLoadout => shipLoadout;
+        private ShipManager ShipManager => shipManager;
 
         public Vector2 movementDirection;
         public float movementRotation;
         
-        
-        //[SerializeField] private ShipMovement shipMovement;
-        [SerializeField] private ShipLoadout shipLoadout;
+        [SerializeField] private ShipManager shipManager;
+        private ShipLoadout _shipLoadout;
 
         private Vector2 movementVector = Vector2.zero;
 
@@ -56,6 +53,7 @@ namespace Game.Client.Gameplay.Movement
         private InputLayerNetworkManager inputLayer; 
     
         private void Start() {
+            // TODO: Don't use Camera.main
             _camera = Camera.main;
             inputLayer = MainPersistantInstances.Get<InputLayerNetworkManager>();
             
@@ -63,6 +61,7 @@ namespace Game.Client.Gameplay.Movement
             Cursor.lockState = CursorLockMode.Confined;
             sendPrimaryAbility = false;
             sendSecondaryAbility = false;
+            _shipLoadout = shipManager.shipLoadout;
         }
 
         private void OnDestroy()
@@ -86,14 +85,14 @@ namespace Game.Client.Gameplay.Movement
             {
                 sendPrimaryAbility = false;
                 
-                if (ShipLoadout.PrimaryAbility == null)
+                if (_shipLoadout.PrimaryAbility == null)
                 {
                     Debug.LogError("Failed to execute primary ability. None set");
                 }
                 else
                 {
                     //inputLayer.PerformCommand(CommandType.AGILITY_DODGE, new byte[] { });
-                    inputLayer.PerformCommand(ShipLoadout.PrimaryAbility.ExecuteCommand, new byte[] {});
+                    inputLayer.PerformCommand(_shipLoadout.PrimaryAbility.ExecuteCommand, new byte[] {});
                 }
                 
             }
@@ -102,14 +101,14 @@ namespace Game.Client.Gameplay.Movement
             {
                 sendSecondaryAbility = false;
                 
-                if (ShipLoadout.SecondaryAbility == null)
+                if (_shipLoadout.SecondaryAbility == null)
                 {
                     Debug.LogError("Failed to execute secondary ability. None set");
                 }
                 else
                 {
                     //inputLayer.PerformCommand(CommandType.AGILITY_DODGE, new byte[] { });
-                    inputLayer.PerformCommand(ShipLoadout.SecondaryAbility.ExecuteCommand, new byte[] {});
+                    inputLayer.PerformCommand(_shipLoadout.SecondaryAbility.ExecuteCommand, new byte[] {});
                 }
             }
         }
@@ -122,7 +121,7 @@ namespace Game.Client.Gameplay.Movement
                 
                 //yield return new WaitForSeconds(ShipMovement.timeBetweenShots);
                 Debug.Log("Shooting");
-                yield return new WaitForSeconds(ShipLoadout.PrimaryFire.Cooldown);
+                yield return new WaitForSeconds(_shipLoadout.PrimaryFire.Cooldown);
             }
         }
 
@@ -187,10 +186,10 @@ namespace Game.Client.Gameplay.Movement
         public void OnFire(InputAction.CallbackContext ctx) {
             if (ctx.started) {
                 //fireCoroutine = StartCoroutine(Shoot());
-                inputLayer.PerformCommand(ShipLoadout.PrimaryFire.ExecuteCommand, new byte[] {});
+                inputLayer.PerformCommand(_shipLoadout.PrimaryFire.ExecuteCommand, new byte[] {});
             } else if (ctx.canceled) {
                 //StopCoroutine(fireCoroutine);
-                inputLayer.PerformCommand(ShipLoadout.PrimaryFire.StopCommand, new byte[] {});
+                inputLayer.PerformCommand(_shipLoadout.PrimaryFire.StopCommand, new byte[] {});
             }
         }
     }

@@ -14,18 +14,12 @@ namespace Game.Ships.Agility.Server.Behaviours
         public override void Execute()
         {
             coroutine ??= shipManager.StartCoroutine(ServerSide());
-            if (++oooCounter == 1)
-            {
-                executing = true;
-            }
+            executing = true;
         }
 
         public override void Stop()
         {
-            if (--oooCounter == 0)
-            {
-                executing = false;
-            }
+            executing = false;
         }
 
         // TODO shoot from the correct points (not out front)

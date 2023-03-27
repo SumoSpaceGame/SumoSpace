@@ -1,5 +1,4 @@
 ﻿using Game.Ships.Agility.Common.Abilities;
-using UnityEngine;
 
 namespace Game.Ships.Agility.Client.Behaviours
 {

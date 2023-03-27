@@ -1,0 +1,17 @@
+﻿using Game.Ships.#SHIP_NAME#.Common.Abilities;
+
+namespace Game.Ships.#SHIP_NAME#.Server.Behaviours
+{
+    public class #SHIP_NAME##ABILITY_NAME#ServerBehaviour : AbilityBehaviour<#SHIP_NAME##ABILITY_NAME#Ability>
+    {
+        public override void Execute()
+        {
+            
+        }
+        
+        public override void Stop()
+        {
+            
+        }
+    }
+}

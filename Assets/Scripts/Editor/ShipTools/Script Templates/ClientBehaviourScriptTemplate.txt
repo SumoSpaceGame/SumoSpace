@@ -1,0 +1,22 @@
+﻿using Game.Ships.#SHIP_NAME#.Common.Abilities;
+
+namespace Game.Ships.#SHIP_NAME#.Client.Behaviours
+{
+    public class #SHIP_NAME##ABILITY_NAME#ClientBehaviour : #RENDERABLE#AbilityBehaviour<#SHIP_NAME##ABILITY_NAME#Ability>
+    {
+        public override void Execute()
+        {
+            
+        }
+        
+        public override void QuickExecute()
+        {
+            
+        }
+        
+        public override void Stop()
+        {
+            
+        }
+    }
+}

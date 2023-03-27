@@ -15,14 +15,14 @@ namespace Game.Common.Networking
         {
             var receivers = new List<KeyValuePair<CommandType, ICommand>>();
             
-            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_DODGE, new ServerAgilityShipDodge()));
-            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_PRIMARY_FIRE_START, new ServerAgilityBeginPrimaryFire()));
-            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_PRIMARY_FIRE_END, new ServerAgilityEndPrimaryFire()));
-            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_MICRO_MISSLES, new ServerAgilityMicroMissile()));
-            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_PRIMARY_FIRE_START, new ServerHeavyBeginPrimaryFire()));
-            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_PRIMARY_FIRE_END, new ServerHeavyEndPrimaryFire()));
-            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_LOCKDOWN, new ServerHeavyLockdown()));
-            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_BURST, new ServerHeavyBurst()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_DODGE, new AgilityShipDodgeServerCommand()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_PRIMARY_FIRE_START, new AgilityBeginPrimaryFireServerCommand()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_PRIMARY_FIRE_END, new AgilityEndPrimaryFireServerCommand()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.AGILITY_MICRO_MISSLES, new AgilityMicroMissileServerCommand()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_PRIMARY_FIRE_START, new HeavyBeginPrimaryFireServerCommand()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_PRIMARY_FIRE_END, new HeavyEndPrimaryFireServerCommand()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_LOCKDOWN, new HeavyLockdownServerCommand()));
+            receivers.Add(new KeyValuePair<CommandType, ICommand>(CommandType.HEAVY_BURST, new HeavyBurstServerCommand()));
 
             _commandHandlerNetworkManager.InitializeServerCommands(receivers);
         }*/

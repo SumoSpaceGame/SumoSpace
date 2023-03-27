@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d52b3669c8c06640b1bd34af8b8b424, type: 3}
+  m_Name: asdsadsasdaTestABility
+  m_EditorClassIdentifier: 
+  cooldown: 0
+  executeCommand: 0
+  stopCommand: 0
+  clientBehaviour: {fileID: 2998147458556781508, guid: 3444eab7f772aab41af0681d079ef990, type: 3}
+  serverBehaviour: {fileID: 5402982267068508501, guid: 1b2e6d71fd01c1c4db5bef8fe3fcebef, type: 3}
+  slot: 0
