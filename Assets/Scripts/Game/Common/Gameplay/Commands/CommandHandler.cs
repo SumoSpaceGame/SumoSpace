@@ -21,6 +21,12 @@ namespace Game.Common.Gameplay.Commands
         {
             foreach (var commandPair in commands)
             {
+                if (commandPerformers.ContainsKey(commandPair.Key))
+                {
+                    Debug.LogError("Tried to add performer that already has been registered - " + commandPair.Key);
+                    continue;
+                }
+                
                 commandPerformers.Add(commandPair.Key, commandPair.Value);
             }
         }
@@ -37,6 +43,12 @@ namespace Game.Common.Gameplay.Commands
                 {
                     Debug.LogError("Tried to add performer to receivers");
                     return;
+                }
+
+                if (commandReceivers.ContainsKey(commandPair.Key))
+                {
+                    Debug.LogError("Tried to add receiver that already has been registered - " + commandPair.Key);
+                    continue;
                 }
                 
                 commandReceivers.Add(commandPair.Key, commandPair.Value);

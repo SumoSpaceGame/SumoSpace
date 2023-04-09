@@ -28,15 +28,27 @@ namespace Game.Common.Networking
             _commandHandlerNetworkManager = new CommandHandlerNetworkManager(this, masterSettings);
 
             var commands = CommandTypes.GetList();
+            RegisterAllCommands(commands);
+
+        }
+
+
+        public void RegisterAllCommands( CommandTypes.CommandInfo[] commands)
+        {
+            foreach (var command in commands)
+            {
+                this.RegisterCommand(command);
+            }
+        }
+
+        public void RegisterCommand( CommandTypes.CommandInfo command)
+        {
             
             if (InstanceFinder.IsServer)
             {
                 List<KeyValuePair<string, ICommand>> receivers = new List<KeyValuePair<string, ICommand>>();
                 
-                foreach(var receiver in commands)
-                {
-                    receivers.Add((new KeyValuePair<string, ICommand>(receiver.key, receiver.receiver)));
-                }
+                receivers.Add((new KeyValuePair<string, ICommand>(command.key, command.receiver)));
                 
                 _commandHandlerNetworkManager.InitializeServerCommands(receivers);
                 
@@ -45,17 +57,12 @@ namespace Game.Common.Networking
             {
                 List<KeyValuePair<string, ICommandPerformer>> performers = new List<KeyValuePair<string, ICommandPerformer>>();
                 
-                foreach(var receiver in commands)
-                {
-                    performers.Add((new KeyValuePair<string, ICommandPerformer>(receiver.key, receiver.performer)));
-                }
-                
+                performers.Add((new KeyValuePair<string, ICommandPerformer>(command.key, command.performer)));
+               
                 _commandHandlerNetworkManager.InitializeClientCommands(performers);
             }
-            
-            
         }
-        
+
 
 
         [ServerRpc(RequireOwnership = false)]
