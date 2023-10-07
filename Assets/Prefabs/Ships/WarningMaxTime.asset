@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: WarningMaxTime
   m_EditorClassIdentifier: 
   HasChanged: 0
-  _value: 5
+  _value: 2.5
