@@ -31,5 +31,6 @@ namespace Game.Common.Registry
     public class PlayerGameData
     {
         public ShipCreationData shipCreationData;
+        public ScoreCard score;
     }
 }
