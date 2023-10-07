@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using Game.Common.Instances;
 using Game.Common.Networking;
 using Game.Common.Settings;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Game.Common.Map.Objectives
 {
@@ -36,7 +38,7 @@ namespace Game.Common.Map.Objectives
         {
             CurrentTeamPoints = new Dictionary<int, int>();
             CurrentTeamTaken = -1;
-            CurrentCapture = 0;
+            CurrentCapture = CaptureTime;
             CurrentTeamTaken = -3;
         }
 
@@ -59,7 +61,8 @@ namespace Game.Common.Map.Objectives
                     CurrentCapture += Time.deltaTime * TakingTimeMultiplier * sum;
                 }
 
-
+                
+                // Team has started capturing of the point, move it upwards!
                 if (CurrentCapture <= 0)
                 {
                     CurrentTeamTaken = -3;
@@ -67,13 +70,20 @@ namespace Game.Common.Map.Objectives
                     
                     if (team != -1)
                     {
+                        Debug.Log($"Team {team} has started to take the point!");
                         CurrentTeamTaken = team;
                     }
+                    else
+                    {
+                        Debug.Log("Point is now neutral");
+                    }
                 }
-            }
 
-            if (CurrentCapture >= CaptureTime)
+                if (CurrentCapture > CaptureTime) CurrentCapture = CaptureTime;
+            } 
+            else if (CurrentCapture >= CaptureTime)
             {
+                // If it has just been captured
                 if (lastCurrentCapture < CaptureTime)
                 {
                     CurrentCapture = CaptureTime;
@@ -82,6 +92,8 @@ namespace Game.Common.Map.Objectives
                     {
                         CurrentTeamPoints.Add(CurrentTeamTaken, 0);
                     }
+                    
+                    Debug.Log($"Team {CurrentTeamTaken} has taken the point!");
                     
                     stopwatch.Restart();
                     stopwatch.Start();
@@ -95,6 +107,7 @@ namespace Game.Common.Map.Objectives
                             CurrentTeamPoints[CurrentTeamTaken] += 1;
                             stopwatch.Restart();
                             stopwatch.Start();
+                            Debug.Log($"Team {CurrentTeamTaken} has gained a point!");
                         }
                     }
                 }
@@ -151,9 +164,22 @@ namespace Game.Common.Map.Objectives
 
                 }
             }
-
+            
+            sum = Mathf.Abs(sum);
+            
             if (team == -2) team = -1;
+            
+            Debug.Log(sum + " " +  team);
+        }
 
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(this.transform.position, Radius);
+        }
+        private void OnDrawGizmosSelected()
+        {
+            OnDrawGizmos();
         }
     }
 }
