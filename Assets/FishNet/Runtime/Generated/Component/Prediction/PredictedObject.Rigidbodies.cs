@@ -12,6 +12,7 @@ namespace FishNet.Component.Prediction
 {
     public partial class PredictedObject : NetworkBehaviour
     {
+#if !PREDICTION_V2
         #region Types.
         [System.Serializable]
         public struct SmoothingData
@@ -158,7 +159,7 @@ namespace FishNet.Component.Prediction
             if (c.IsLocalClient)
                 return;
 
-            uint tick = c.LastPacketTick;
+            uint tick = c.PacketTick.RemoteTick;
             if (_predictionType == PredictionType.Rigidbody)
                 SendRigidbodyState(tick, c, true);
             else
@@ -202,7 +203,11 @@ namespace FishNet.Component.Prediction
             if (_graphicalAnimators.Length > 0)
             {
                 for (int i = 0; i < _graphicalAnimators.Length; i++)
+#if UNITY_2022_1_OR_NEWER
+                    _graphicalAnimators[i].keepAnimatorStateOnDisable = true;
+#else
                     _graphicalAnimators[i].keepAnimatorControllerStateOnDisable = true;
+#endif
 
                 /* True if at least one animator is on the graphical root. 
                 * Unity gets components in order so it's safe to assume
@@ -296,7 +301,6 @@ namespace FishNet.Component.Prediction
             bool is2D = (_predictionType == PredictionType.Rigidbody2D);
             uint lastNbTick = nb.GetLastReconcileTick();
             int stateIndex = GetCachedStateIndex(lastNbTick, is2D);
-
             /* If running again on the same reconcile or state is for a different
              * tick then do make RBs kinematic. Resetting to a different state
              * could cause a desync and there's no reason to run the same
@@ -358,9 +362,9 @@ namespace FishNet.Component.Prediction
                 _preReplicateReplayCacheIndex = GetCachedStateIndex(tick, true);
                 if (_preReplicateReplayCacheIndex != -1)
                 {
-                    bool prevSimulated = _rigidbody2dStates[_preReplicateReplayCacheIndex].Simulated;
-                    _rigidbody2d.simulated = prevSimulated;
-                    _rigidbody2d.isKinematic = !prevSimulated;
+                    Rigidbody2DState state = _rigidbody2dStates[_preReplicateReplayCacheIndex];
+                    _rigidbody2d.simulated = state.Simulated;
+                    _rigidbody2d.isKinematic = state.IsKinematic;
                 }
                 PredictVelocity(ps2d);
             }
@@ -567,7 +571,7 @@ namespace FishNet.Component.Prediction
             if (!base.Observers.Contains(nbOwner))
                 return;
 
-            bool hasChanged = base.TransformMayChange();
+            bool hasChanged = base.PredictedTransformMayChange();
             if (!hasChanged)
             {
                 //Not changed but was previous tick. Reset resends.
@@ -902,7 +906,7 @@ namespace FishNet.Component.Prediction
             //No need to send to owner if they implement prediction methods.
             if (_isPredictingOwner(conn))
                 return;
-            reconcileTick = (conn == base.NetworkObject.PredictedSpawner) ? conn.LastPacketTick : reconcileTick;
+            reconcileTick = (conn == base.NetworkObject.PredictedSpawner) ? conn.PacketTick.RemoteTick : reconcileTick;
             RigidbodyState state = new RigidbodyState(_rigidbody, reconcileTick);
             TargetSendRigidbodyState(conn, state, applyImmediately);
         }
@@ -1035,7 +1039,7 @@ namespace FishNet.Component.Prediction
             _rigidbody2d.transform.rotation = state.Rotation;
             bool simulated = state.Simulated;
             _rigidbody2d.simulated = simulated;
-            _rigidbody2d.isKinematic = !simulated;
+            _rigidbody2d.isKinematic = state.IsKinematic;
             if (simulated)
             {
                 _rigidbody2d.velocity = state.Velocity;
@@ -1141,7 +1145,7 @@ namespace FishNet.Component.Prediction
             return true;
         }
         #endregion
-
+#endif
     }
 
 

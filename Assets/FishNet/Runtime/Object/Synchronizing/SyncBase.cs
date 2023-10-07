@@ -45,7 +45,16 @@ namespace FishNet.Object.Synchronizing.Internal
         /// </summary>
         public NetworkBehaviour NetworkBehaviour = null;
         /// <summary>
-        /// Next time a SyncVar may send data/
+        /// True if the server side has initialized this SyncType.
+        /// </summary>
+        public bool OnStartServerCalled { get; private set; }
+        /// <summary>
+        /// True if the client side has initialized this SyncType.
+        /// </summary>
+        public bool OnStartClientCalled { get; private set; }
+        /// <summary>
+        /// Next time this SyncType may send data.
+        /// This is also the next time a client may send to the server when using client-authoritative SyncTypes.
         /// </summary>
         public uint NextSyncTick = 0;
         /// <summary>
@@ -119,10 +128,27 @@ namespace FishNet.Object.Synchronizing.Internal
         }
 
         /// <summary>
-        /// Called after OnStartXXXX has occurred.
+        /// Called after OnStartXXXX has occurred for the NetworkBehaviour.
         /// </summary>
         /// <param name="asServer">True if OnStartServer was called, false if OnStartClient.</param>
-        public virtual void OnStartCallback(bool asServer) { }
+        public virtual void OnStartCallback(bool asServer)
+        {
+            if (asServer)
+                OnStartServerCalled = true;
+            else
+                OnStartClientCalled = true;
+        }
+        /// <summary>
+        /// Called before OnStopXXXX has occurred for the NetworkBehaviour.
+        /// </summary>
+        /// <param name="asServer">True if OnStopServer was called, false if OnStopClient.</param>
+        public virtual void OnStopCallback(bool asServer)
+        {
+            if (asServer)
+                OnStartServerCalled = false;
+            else
+                OnStartClientCalled = false;
+        }
 
         protected bool CanNetworkSetValues(bool warn = true)
         {
@@ -147,7 +173,7 @@ namespace FishNet.Object.Synchronizing.Internal
                 return true;
             /* If here then server is not active and additional
              * checks must be performed. */
-            bool result = (Settings.ReadPermission == ReadPermission.ExcludeOwner && NetworkBehaviour.IsOwner);
+            bool result = (Settings.WritePermission == WritePermission.ClientUnsynchronized) || (Settings.ReadPermission == ReadPermission.ExcludeOwner && NetworkBehaviour.IsOwner);
             if (!result && warn)
                 LogServerNotActiveWarning();
 
@@ -160,7 +186,7 @@ namespace FishNet.Object.Synchronizing.Internal
         protected void LogServerNotActiveWarning()
         {
             if (NetworkManager != null)
-                NetworkManager.LogWarning($"Cannot complete operation as server when server is not active.");
+                NetworkManager.LogWarning($"Cannot complete operation as server when server is not active. You can disable this warning by setting WritePermissions to {WritePermission.ClientUnsynchronized.ToString()}.");
         }
 
         /// <summary>
@@ -208,7 +234,7 @@ namespace FishNet.Object.Synchronizing.Internal
         /// </summary>
         /// <param name="tick"></param>
         /// <returns></returns>
-        internal bool WriteTimeMet(uint tick)
+        internal bool SyncTimeMet(uint tick)
         {
             return (IsDirty && tick >= NextSyncTick);
         }
@@ -230,7 +256,7 @@ namespace FishNet.Object.Synchronizing.Internal
         protected virtual void WriteHeader(PooledWriter writer, bool resetSyncTick = true)
         {
             if (resetSyncTick)
-                NextSyncTick = NetworkManager.TimeManager.Tick + _timeToTicks;
+                NextSyncTick = NetworkManager.TimeManager.LocalTick + _timeToTicks;
 
             writer.WriteByte((byte)SyncIndex);
         }
@@ -243,7 +269,7 @@ namespace FishNet.Object.Synchronizing.Internal
         /// Sets current value as client.
         /// </summary>
         /// <param name="reader"></param>
-        [Obsolete("Use Read(PooledReader, bool).")]
+        [Obsolete("Use Read(PooledReader, bool).")] //Remove on 2023/06/01
         public virtual void Read(PooledReader reader) { }
         /// <summary>
         /// Sets current value as server or client.
@@ -254,7 +280,12 @@ namespace FishNet.Object.Synchronizing.Internal
         /// <summary>
         /// Resets to initialized values.
         /// </summary>
-        public virtual void Reset()
+        [Obsolete("Use ResetState().")]
+        public virtual void Reset() { }
+        /// <summary>
+        /// Resets initialized values.
+        /// </summary>
+        public virtual void ResetState()
         {
             NextSyncTick = 0;
             ResetDirty();

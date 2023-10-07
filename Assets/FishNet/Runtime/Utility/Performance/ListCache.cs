@@ -1,7 +1,5 @@
 ﻿using FishNet.Connection;
-using FishNet.Managing;
 using FishNet.Object;
-using FishNet.Serializing.Helping;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -9,9 +7,11 @@ using UnityEngine;
 
 namespace FishNet.Utility.Performance
 {
+
     /// <summary>
     /// Various ListCache instances that may be used on the Unity thread.
     /// </summary>
+    [Obsolete("ListCache has been discovered potentially contain a small memory leak depending on the type being cached. Use ObjectCaches, ResettableObjectCaches, CollectionCaches, ResettableCollectionCaches instead.")] //remove on 2023/01/01
     public static class ListCaches
     {
 
@@ -20,7 +20,7 @@ namespace FishNet.Utility.Performance
         /// </summary>
         private static Stack<ListCache<NetworkObject>> _networkObjectCaches = new Stack<ListCache<NetworkObject>>();
         /// <summary>
-        /// Cache collection for NetworkObjects.
+        /// Cache collection for NetworkBehaviours.
         /// </summary>
         private static Stack<ListCache<NetworkBehaviour>> _networkBehaviourCaches = new Stack<ListCache<NetworkBehaviour>>();
         /// <summary>
@@ -38,11 +38,13 @@ namespace FishNet.Utility.Performance
 
 
         #region GetCache.
+        [Obsolete("Use RetrieveNetworkObjectCache().")] //Remove on 2024/01/01
+        public static ListCache<NetworkObject> GetNetworkObjectCache() => RetrieveNetworkObjectCache();
         /// <summary>
         /// Returns a NetworkObject cache. Use StoreCache to return the cache.
         /// </summary>
         /// <returns></returns>
-        public static ListCache<NetworkObject> GetNetworkObjectCache()
+        public static ListCache<NetworkObject> RetrieveNetworkObjectCache()
         {
             ListCache<NetworkObject> result;
             if (_networkObjectCaches.Count == 0)
@@ -52,11 +54,13 @@ namespace FishNet.Utility.Performance
 
             return result;
         }
+        [Obsolete("Use RetrieveNetworkConnectionCache().")] //Remove on 2024/01/01
+        public static ListCache<NetworkConnection> GetNetworkConnectionCache() => RetrieveNetworkConnectionCache();
         /// <summary>
         /// Returns a NetworkConnection cache. Use StoreCache to return the cache.
         /// </summary>
         /// <returns></returns>
-        public static ListCache<NetworkConnection> GetNetworkConnectionCache()
+        public static ListCache<NetworkConnection> RetrieveNetworkConnectionCache()
         {
             ListCache<NetworkConnection> result;
             if (_networkConnectionCaches.Count == 0)
@@ -66,11 +70,13 @@ namespace FishNet.Utility.Performance
 
             return result;
         }
+        [Obsolete("Use RetrieveTransformCache().")] //Remove on 2024/01/01
+        public static ListCache<Transform> GetTransformCache() => RetrieveTransformCache();
         /// <summary>
         /// Returns a Transform cache. Use StoreCache to return the cache.
         /// </summary>
         /// <returns></returns>
-        public static ListCache<Transform> GetTransformCache()
+        public static ListCache<Transform> RetrieveTransformCache()
         {
             ListCache<Transform> result;
             if (_transformCaches.Count == 0)
@@ -80,11 +86,13 @@ namespace FishNet.Utility.Performance
 
             return result;
         }
+        [Obsolete("Use RetrieveNetworkBehaviourCache().")] //Remove on 2024/01/01
+        public static ListCache<NetworkBehaviour> GetNetworkBehaviourCache() => RetrieveNetworkBehaviourCache();
         /// <summary>
         /// Returns a NetworkBehaviour cache. Use StoreCache to return the cache.
         /// </summary>
         /// <returns></returns>
-        public static ListCache<NetworkBehaviour> GetNetworkBehaviourCache()
+        public static ListCache<NetworkBehaviour> RetrieveNetworkBehaviourCache()
         {
             ListCache<NetworkBehaviour> result;
             if (_networkBehaviourCaches.Count == 0)
@@ -94,11 +102,13 @@ namespace FishNet.Utility.Performance
 
             return result;
         }
+        [Obsolete("Use RetrieveGetIntCache().")] //Remove on 2024/01/01
+        public static ListCache<int> GetIntCache() => RetrieveIntCache();
         /// <summary>
         /// Returns an int cache. Use StoreCache to return the cache.
         /// </summary>
         /// <returns></returns>
-        public static ListCache<int> GetIntCache()
+        public static ListCache<int> RetrieveIntCache()
         {
             ListCache<int> result;
             if (_intCaches.Count == 0)
@@ -163,6 +173,7 @@ namespace FishNet.Utility.Performance
     /// <summary>
     /// Creates a reusable cache of T which auto expands.
     /// </summary>
+    [Obsolete("Use CollectionCache<T> instead.")] //Remove on 2024/01/01.
     public class ListCache<T>
     {
         #region Public.
@@ -316,7 +327,7 @@ namespace FishNet.Utility.Performance
 
         /// <summary>
         /// Adds values to Collection.
-        /// </summary>
+        /// </summary> 
         /// <param name="value"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddValues(IReadOnlyCollection<T> values)
@@ -324,7 +335,6 @@ namespace FishNet.Utility.Performance
             foreach (T item in values)
                 AddValue(item);
         }
-
 
         /// <summary>
         /// Resets cache.

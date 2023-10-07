@@ -9,6 +9,7 @@ namespace FishNet.Demo.NetworkLod
 
     public class NetworkLodTester : NetworkBehaviour
     {
+        [Header("General")]
         [SerializeField]
         private NetworkObject _prefab;
         [SerializeField]
@@ -17,12 +18,26 @@ namespace FishNet.Demo.NetworkLod
         [SerializeField]
         private byte _lodLevel = 8;
 
-        private const int _count = 500;
-        private const float _xyRange = 15f;
-        private const float _zRange = 100f;
+        [Header("Spawning")]
+        [SerializeField]
+        private int _count = 500;
+        [SerializeField]
+        private float _xyRange = 15f;
+        [SerializeField]
+        private float _zRange = 100f;
 
         private void Awake()
         {
+            //Check for pro...this will stay false if not on a pro package.
+            bool isPro = false;
+            
+            if (!isPro)
+            {
+                Debug.LogError($"Network Level of Detail demo requires Fish-Networking Pro to work.");
+                DestroyImmediate(this);
+                return;
+            }
+
             List<float> distances = _observerManager.GetLevelOfDetailDistances();
             while (distances.Count > _lodLevel)
                 distances.RemoveAt(distances.Count - 1);
@@ -30,21 +45,29 @@ namespace FishNet.Demo.NetworkLod
 
         public override void OnStartServer()
         {
-            base.OnStartServer();
+            //Spawn objects going down the range to make it easier to debug.
+            float xySpacing = (_xyRange / _count);
+            float zSpacing = (_zRange / _count);
+            float x = 0f;
+            float y = 0f;
+            float z = 0f;
 
             for (int i = 0; i < _count; i++)
             {
-                float x = Random.Range(-_xyRange, _xyRange);
-                float y = Random.Range(-_xyRange, _xyRange);
-                float z = Random.Range(0f, _zRange);
+                //Z cannot be flipped.
+                float nextZ = z;
 
-                Vector3 position = new Vector3(x, y, z);
+                x += xySpacing;
+                y += xySpacing;
+                z += zSpacing;
+                float nextX = 0;
+                float nextY = 0;
+                Vector3 position = new Vector3(nextX, nextY, nextZ);
                 NetworkObject obj = Instantiate(_prefab, position, Quaternion.identity);
-                obj.name = $"Obj {i.ToString("0000")}";
                 base.Spawn(obj);
             }
-
         }
+
 
     }
 

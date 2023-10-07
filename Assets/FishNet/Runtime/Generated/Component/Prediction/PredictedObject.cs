@@ -11,6 +11,7 @@ namespace FishNet.Component.Prediction
     [AddComponentMenu("FishNet/Component/PredictedObject")]
     public partial class PredictedObject : NetworkBehaviour
     {
+#if !PREDICTION_V2
         #region Types.
         /// <summary>
         /// How to favor smoothing for predicted objects.
@@ -304,9 +305,7 @@ namespace FishNet.Component.Prediction
         }
 
         public override void OnStartNetwork()
-        {
-            base.OnStartNetwork();
-
+        {           
             /* If host then initialize owner smoother.
              * Host will use owner smoothing settings for more
              * accurate results. */
@@ -327,14 +326,12 @@ namespace FishNet.Component.Prediction
 
         public override void OnStartClient()
         {
-            base.OnStartClient();
             ChangeSubscriptions(true);
             Rigidbodies_OnStartClient();
         }
 
         public override void OnOwnershipClient(NetworkConnection prevOwner)
         {
-            base.OnOwnershipClient(prevOwner);
             /* If owner or host then use the
              * owner smoother. The owner smoother
              * is not predictive and is preferred
@@ -361,9 +358,7 @@ namespace FishNet.Component.Prediction
         }
 
         public override void OnStopNetwork()
-        {
-            base.OnStopNetwork();
-
+        {          
             ChangeSubscriptions(false);
             UpdateRigidbodiesCount(false);
             base.TimeManager.OnPostTick -= TimeManager_OnPostTick;
@@ -598,6 +593,7 @@ namespace FishNet.Component.Prediction
                     _preconfiguredSmoothingDataPreview = _gradualSmoothingData;
             }
         }
+#endif
 #endif
     }
 

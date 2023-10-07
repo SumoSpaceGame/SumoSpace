@@ -14,3 +14,4 @@ public class Ship3D : MonoBehaviour {
         transform.position = position;
     }
 }
+ 

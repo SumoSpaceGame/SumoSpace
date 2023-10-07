@@ -6,10 +6,3 @@ NativeFormatImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 207815
-  packageName: 'Fish-Net: Networking Evolved'
-  packageVersion: 3.4.0
-  assetPath: Assets/FishNet/Runtime/Observing/Conditions/ScriptableObjects/HostOnlyCondition.asset
-  uploadId: 564010

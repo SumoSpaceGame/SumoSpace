@@ -1,4 +1,7 @@
-﻿using FishNet.Connection;
+﻿#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#define DEVELOPMENT
+#endif
+using FishNet.Connection;
 using FishNet.Managing.Logging;
 using FishNet.Managing.Object;
 using FishNet.Managing.Timing;
@@ -8,6 +11,8 @@ using FishNet.Transporting;
 using FishNet.Utility;
 using FishNet.Utility.Extension;
 using FishNet.Utility.Performance;
+using GameKit.Utilities;
+using GameKit.Utilities.Types;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -69,7 +74,7 @@ namespace FishNet.Managing.Server
         /// <summary>
         /// Cache of spawning objects, used for recursively spawning nested NetworkObjects.
         /// </summary>
-        private ListCache<NetworkObject> _spawnCache = new ListCache<NetworkObject>();
+        private List<NetworkObject> _spawnCache = new List<NetworkObject>();
         /// <summary>
         /// True if one or more scenes are currently loading through the SceneManager.
         /// </summary>
@@ -170,9 +175,15 @@ namespace FishNet.Managing.Server
                 if (!base.NetworkManager.ServerManager.AnyServerStarted())
                 {
                     base.DespawnWithoutSynchronization(true);
-                    base.SceneObjects.Clear();
+                    base.SceneObjects_Internal.Clear();
                     _objectIdCache.Clear();
                     base.NetworkManager.ClearClientsCollection(base.NetworkManager.ServerManager.Clients);
+                }
+                //If at least one server is started then only clear for disconnecting server.
+                else
+                {
+                    //Remove connections only for transportIndex.
+                    base.NetworkManager.ClearClientsCollection(base.NetworkManager.ServerManager.Clients, args.TransportIndex);
                 }
             }
         }
@@ -190,13 +201,12 @@ namespace FishNet.Managing.Server
             /* A cache is made because the Objects
              * collection would end up modified during
              * iteration from removing ownership and despawning. */
-            ListCache<NetworkObject> cache = ListCaches.GetNetworkObjectCache();
+            List<NetworkObject> nobs = CollectionCaches<NetworkObject>.RetrieveList();
             foreach (NetworkObject nob in connection.Objects)
-                cache.AddValue(nob);
+                nobs.Add(nob);
 
-            int written = cache.Written;
-            List<NetworkObject> collection = cache.Collection;
-            for (int i = 0; i < written; i++)
+            int nobsCount = nobs.Count;
+            for (int i = 0; i < nobsCount; i++)
             {
                 /* Objects may already be deinitializing when a client disconnects
                  * because the root object could have been despawned first, and in result
@@ -210,11 +220,11 @@ namespace FishNet.Managing.Server
                  * in collection. Should A despawn first B will recursively despawn
                  * from it. Then once that finishes and the next index of collection
                  * is run, which would B, the object B would have already been deinitialized. */
-                if (!collection[i].IsDeinitializing)
-                    base.NetworkManager.ServerManager.Despawn(collection[i]);
+                if (!nobs[i].IsDeinitializing)
+                    base.NetworkManager.ServerManager.Despawn(nobs[i]);
             }
 
-            ListCaches.StoreCache(cache);
+            CollectionCaches<NetworkObject>.Store(nobs);
         }
         #endregion
 
@@ -343,7 +353,7 @@ namespace FishNet.Managing.Server
             for (int i = 0; i < SceneManager.sceneCount; i++)
                 SetupSceneObjects(SceneManager.GetSceneAt(i));
 
-            Scene ddolScene = DDOLFinder.GetDDOL().gameObject.scene;
+            Scene ddolScene = DDOL.GetDDOL().gameObject.scene;
             if (ddolScene.isLoaded)
                 SetupSceneObjects(ddolScene);
         }
@@ -354,14 +364,26 @@ namespace FishNet.Managing.Server
         /// <param name="s"></param>
         private void SetupSceneObjects(Scene s)
         {
-            ListCache<NetworkObject> nobs;
-            SceneFN.GetSceneNetworkObjects(s, false, out nobs);
+            if (!s.IsValid())
+                return;
+
+            List<NetworkObject> sceneNobs = CollectionCaches<NetworkObject>.RetrieveList();
+            Scenes.GetSceneNetworkObjects(s, false, ref sceneNobs);
+
+            //Sort the nobs based on initialization order.
+            bool initializationOrderChanged = false;
+            List<NetworkObject> cache = CollectionCaches<NetworkObject>.RetrieveList();
+            foreach (NetworkObject item in sceneNobs)
+                OrderRootByInitializationOrder(item, cache, ref initializationOrderChanged);
+            OrderNestedByInitializationOrder(cache);
+            //Store sceneNobs.
+            CollectionCaches<NetworkObject>.Store(sceneNobs);
 
             bool isHost = base.NetworkManager.IsHost;
-
-            for (int i = 0; i < nobs.Written; i++)
+            int nobsCount = cache.Count;
+            for (int i = 0; i < nobsCount; i++)
             {
-                NetworkObject nob = nobs.Collection[i];
+                NetworkObject nob = cache[i];
                 //Only setup if a scene object and not initialzied.
                 if (nob.IsNetworked && nob.IsSceneObject && nob.IsDeinitializing)
                 {
@@ -383,7 +405,7 @@ namespace FishNet.Managing.Server
                 }
             }
 
-            ListCaches.StoreCache(nobs);
+            CollectionCaches<NetworkObject>.Store(cache);
         }
 
         /// <summary>
@@ -409,7 +431,7 @@ namespace FishNet.Managing.Server
         /// Spawns an object over the network.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void Spawn(NetworkObject networkObject, NetworkConnection ownerConnection = null)
+        internal void Spawn(NetworkObject networkObject, NetworkConnection ownerConnection = null, UnityEngine.SceneManagement.Scene scene = default)
         {
             //Default as false, will change if needed.
             bool predictedSpawn = false;
@@ -458,6 +480,20 @@ namespace FishNet.Managing.Server
                 base.NetworkManager.LogError($"{networkObject.name} cannot be spawned because it has a parent NetworkObject {networkObject.ParentNetworkObject} which is not spawned.");
                 return;
             }
+            /* If scene is specified make sure the object is root,
+             * and if not move it before network spawning. */
+            if (scene.IsValid())
+            {
+                if (networkObject.transform.parent != null)
+                {
+                    base.NetworkManager.LogError($"{networkObject.name} cannot be moved to scene name {scene.name}, handle {scene.handle} because {networkObject.name} is not root and only root objects may be moved.");
+                    return;
+                }
+                else
+                {
+                    UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(networkObject.gameObject, scene);
+                }
+            }
 
             if (predictedSpawn)
                 base.NetworkManager.ClientManager.Objects.PredictedSpawn(networkObject, ownerConnection);
@@ -475,7 +511,7 @@ namespace FishNet.Managing.Server
             * during initialization spawn messages will
             * be sent. */
             networkObject.SetIsNetworked(true);
-            _spawnCache.AddValue(networkObject);
+            _spawnCache.Add(networkObject);
             SetupWithoutSynchronization(networkObject, ownerConnection, objectId);
 
             foreach (NetworkObject item in networkObject.ChildNetworkObjects)
@@ -494,23 +530,23 @@ namespace FishNet.Managing.Server
              * the same objects would be rebuilt again. This likely
              * would not affect anything other than perf but who
              * wants that. */
-            ListCache<NetworkObject> spawnCacheCopy = ListCaches.GetNetworkObjectCache();
-            spawnCacheCopy.AddValues(_spawnCache);
-            _spawnCache.Reset();
+            List<NetworkObject> spawnCacheCopy = CollectionCaches<NetworkObject>.RetrieveList();
+            spawnCacheCopy.AddRange(_spawnCache);
+            _spawnCache.Clear();
             //Also rebuild observers for the object so it spawns for others.
             RebuildObservers(spawnCacheCopy);
 
+            int spawnCacheCopyCount = spawnCacheCopy.Count;
             /* If also client then we need to make sure the object renderers have correct visibility.
              * Set visibility based on if the observers contains the clientHost connection. */
             if (NetworkManager.IsClient)
             {
-                int count = spawnCacheCopy.Written;
-                List<NetworkObject> collection = spawnCacheCopy.Collection;
+                int count = spawnCacheCopyCount;
                 for (int i = 0; i < count; i++)
-                    collection[i].SetRenderersVisible(networkObject.Observers.Contains(NetworkManager.ClientManager.Connection));
+                    spawnCacheCopy[i].SetRenderersVisible(networkObject.Observers.Contains(NetworkManager.ClientManager.Connection));
             }
 
-            ListCaches.StoreCache(spawnCacheCopy);
+            CollectionCaches<NetworkObject>.Store(spawnCacheCopy);
         }
 
         /// <summary>
@@ -546,7 +582,14 @@ namespace FishNet.Managing.Server
             if (SpawnTypeEnum.Contains(st, SpawnType.Scene))
             {
                 ulong sceneId = reader.ReadUInt64(AutoPackType.Unpacked);
+#if DEVELOPMENT
+                string sceneName = string.Empty;
+                string objectName = string.Empty;
+                CheckReadSceneObjectDetails(reader, ref sceneName, ref objectName);
+                nob = base.GetSceneNetworkObject(sceneId, sceneName, objectName);
+#else
                 nob = base.GetSceneNetworkObject(sceneId);
+#endif
                 if (!base.CanPredictedSpawn(nob, conn, owner, true))
                     return;
             }
@@ -576,7 +619,7 @@ namespace FishNet.Managing.Server
                 if (!base.CanPredictedSpawn(nPrefab, conn, owner, true))
                     return;
 
-                nob = NetworkManager.GetPooledInstantiated(prefabId, false);
+                nob = NetworkManager.GetPooledInstantiated(prefabId, collectionId, false);
                 isGlobal = SpawnTypeEnum.Contains(st, SpawnType.InstantiatedGlobal);
             }
 
@@ -597,7 +640,7 @@ namespace FishNet.Managing.Server
             if (nob.AllowPredictedSyncTypes)
             {
                 ArraySegment<byte> syncValues = reader.ReadArraySegmentAndSize();
-                PooledReader syncTypeReader = ReaderPool.GetReader(syncValues, base.NetworkManager);
+                PooledReader syncTypeReader = ReaderPool.Retrieve(syncValues, base.NetworkManager);
                 foreach (NetworkBehaviour nb in nob.NetworkBehaviours)
                 {
                     //SyncVars.
@@ -607,7 +650,7 @@ namespace FishNet.Managing.Server
                     length = syncTypeReader.ReadInt32();
                     nb.OnSyncType(syncTypeReader, length, true, true);
                 }
-                syncTypeReader.Dispose();
+                syncTypeReader.Store();
             }
 
             SpawnWithoutChecks(nob, owner, objectId);
@@ -617,7 +660,7 @@ namespace FishNet.Managing.Server
             //Writes a predicted spawn result to a client.
             void WriteResponse(bool success)
             {
-                PooledWriter writer = WriterPool.GetWriter();
+                PooledWriter writer = WriterPool.Retrieve();
                 writer.WritePacketId(PacketId.PredictedSpawnResult);
                 writer.WriteNetworkObjectId(nob.ObjectId);
                 writer.WriteBoolean(success);
@@ -653,7 +696,7 @@ namespace FishNet.Managing.Server
             if (!base.NetworkManager.TimeManager.FrameTicked)
                 return;
 
-            ListCache<int> intCache = ListCaches.GetIntCache();
+            List<int> intCache = CollectionCaches<int>.RetrieveList();
 
             uint requiredTicks = _cleanRecentlyDespawnedMaxTicks;
             uint currentTick = base.NetworkManager.TimeManager.LocalTick;
@@ -669,7 +712,7 @@ namespace FishNet.Managing.Server
                 long result = (currentTick - kvp.Value);
                 //If enough ticks have passed to remove.
                 if (result > requiredTicks)
-                    intCache.AddValue(kvp.Key);
+                    intCache.Add(kvp.Key);
 
                 count++;
                 if (count == iterations)
@@ -677,13 +720,13 @@ namespace FishNet.Managing.Server
             }
 
             //Remove cached entries.
-            List<int> collection = intCache.Collection;
-            int cCount = collection.Count;
+            int cCount = intCache.Count;
             for (int i = 0; i < cCount; i++)
-                RecentlyDespawnedIds.Remove(collection[i]);
+                RecentlyDespawnedIds.Remove(intCache[i]);
 
-            ListCaches.StoreCache(intCache);
+            CollectionCaches<int>.Store(intCache);
         }
+
         /// <summary>
         /// Returns if an objectId was recently despawned.
         /// </summary>
@@ -823,28 +866,27 @@ namespace FishNet.Managing.Server
         /// <param name="nob"></param>
         private void WriteDespawnAndSend(NetworkObject nob, DespawnType despawnType)
         {
-            PooledWriter everyoneWriter = WriterPool.GetWriter();
+            PooledWriter everyoneWriter = WriterPool.Retrieve();
             WriteDespawn(nob, despawnType, everyoneWriter);
 
             ArraySegment<byte> despawnSegment = everyoneWriter.GetArraySegment();
 
             //Add observers to a list cache.
-            ListCache<NetworkConnection> cache = ListCaches.GetNetworkConnectionCache();
-            cache.Reset();
-            cache.AddValues(nob.Observers);
-            int written = cache.Written;
-            for (int i = 0; i < written; i++)
+            List<NetworkConnection> cache = CollectionCaches<NetworkConnection>.RetrieveList();
+            cache.AddRange(nob.Observers);
+            int cacheCount = cache.Count;
+            for (int i = 0; i < cacheCount; i++)
             {
                 //Invoke ondespawn and send despawn.
-                NetworkConnection conn = cache.Collection[i];
+                NetworkConnection conn = cache[i];
                 nob.InvokeOnServerDespawn(conn);
                 NetworkManager.TransportManager.SendToClient((byte)Channel.Reliable, despawnSegment, conn);
                 //Remove from observers.
                 //nob.Observers.Remove(conn);
             }
 
-            everyoneWriter.Dispose();
-            ListCaches.StoreCache(cache);
+            everyoneWriter.Store();
+            CollectionCaches<NetworkConnection>.Store(cache);
         }
         /// <summary>
         /// Reads a predicted despawn.

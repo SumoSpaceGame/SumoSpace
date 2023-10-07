@@ -1,4 +1,5 @@
 ﻿using FishNet.Documenting;
+using FishNet.Managing.Transporting;
 using FishNet.Serializing.Helping;
 using FishNet.Utility.Constant;
 using System.Runtime.CompilerServices;
@@ -12,6 +13,7 @@ namespace FishNet.Object
     /// </summary>
     public abstract partial class NetworkBehaviour : MonoBehaviour
     {
+        #region Public.
         /// <summary>
         /// True if this NetworkBehaviour is initialized for the network.
         /// </summary>
@@ -37,6 +39,10 @@ namespace FishNet.Object
         private NetworkObject _addedNetworkObject;
 #endif 
         /// <summary>
+        /// Cache of the TransportManager.
+        /// </summary>
+        private TransportManager _transportManagerCache;
+        /// <summary>
         /// 
         /// </summary>
         [SerializeField, HideInInspector]
@@ -45,18 +51,79 @@ namespace FishNet.Object
         /// NetworkObject this behaviour is for.
         /// </summary>
         public NetworkObject NetworkObject => _networkObjectCache;
+        #endregion
+
+        #region Private.
+        /// <summary>
+        /// True if initialized at some point asServer.
+        /// </summary>
+        private bool _initializedOnceServer;
+#pragma warning disable CS0414
+        /// <summary>
+        /// True if initialized at some point not asServer.
+        /// </summary>
+        private bool _initializedOnceClient;
+#pragma warning restore CS0414
+        #endregion
 
         /// <summary>
-        /// Initializes this script. This will only run once even as host.
+        /// Outputs data about this NetworkBehaviour to string.
         /// </summary>
-        /// <param name="networkObject"></param>
-        /// <param name="componentIndex"></param>
-        internal void InitializeOnce_Internal()
+        /// <returns></returns>
+        public override string ToString()
         {
-            InitializeOnceSyncTypes();
-            InitializeOnceRpcLinks();
+            return $"Name [{gameObject.name}] ComponentId [{ComponentIndex}] NetworkObject Name [{_networkObjectCache.name}] NetworkObject Id [{_networkObjectCache.ObjectId}]";
         }
 
+
+
+#if !PREDICTION_V2
+        /// <summary>
+        /// Preinitializes this script for the network.
+        /// </summary>
+        internal void Preinitialize_Internal(NetworkObject nob, bool asServer)
+        {
+            _transportManagerCache = nob.TransportManager;
+
+            InitializeOnceSyncTypes(asServer);
+            if (asServer)
+            {                
+                InitializeRpcLinks();
+                _initializedOnceServer = true;
+            }
+            else
+            {
+                _initializedOnceClient = true;
+            }
+        }
+#else
+        /// <summary>
+        /// Preinitializes this script for the network.
+        /// </summary>
+        internal void Preinitialize_Internal(NetworkObject nob, bool asServer)
+        {
+            _transportManagerCache = nob.TransportManager;
+            
+            InitializeOnceSyncTypes(asServer);
+            if (asServer)
+            {
+                InitializeRpcLinks();
+                _initializedOnceServer = true;
+            }
+            else
+            {
+                if (!_initializedOnceClient && nob.EnablePrediction)
+                    nob.RegisterPredictionBehaviourOnce(this);
+
+                _initializedOnceClient = true;
+            }
+        }
+
+#endif
+        internal void Deinitialize(bool asServer)
+        {
+
+        }
 
         /// <summary>
         /// Serializes information for network components.
@@ -99,7 +166,7 @@ namespace FishNet.Object
         {
 #if UNITY_EDITOR
             if (Application.isPlaying)
-                return; 
+                return;
 
             TryAddNetworkObject();
 #endif
@@ -108,9 +175,9 @@ namespace FishNet.Object
         /// <summary>
         /// Resets this NetworkBehaviour so that it may be added to an object pool.
         /// </summary>
-        internal void ResetForObjectPool()
+        internal void ResetState()
         {
-            ResetSyncTypes();
+            SyncTypes_ResetState();
             ClearReplicateCache();
             ClearBuffedRpcs();
         }
@@ -165,10 +232,10 @@ namespace FishNet.Object
                 NetworkObject[] nobs = t.GetComponents<NetworkObject>();
                 //This shouldn't be possible but does occur sometimes; maybe a unity bug?
                 if (nobs.Length > 1)
-                { 
+                {
                     //Update added to first entryt.
                     _addedNetworkObject = nobs[0];
- 
+
                     string useMenu = " You may also use the Fish-Networking menu to automatically remove duplicate NetworkObjects.";
                     string sceneName = t.gameObject.scene.name;
                     if (string.IsNullOrEmpty(sceneName))
@@ -177,7 +244,7 @@ namespace FishNet.Object
                         Debug.LogError($"Object {t.name} in scene {sceneName} has multiple NetworkObject components. Please remove the extra component(s) to prevent errors.{useMenu}");
                 }
 
-            } 
+            }
 #else
             return null;
 #endif

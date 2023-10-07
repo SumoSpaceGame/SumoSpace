@@ -39,7 +39,7 @@ namespace FishNet.Component.Spawning
         /// Areas in which players may spawn.
         /// </summary>
         [Tooltip("Areas in which players may spawn.")]
-        [FormerlySerializedAs("_spawns")]
+        [FormerlySerializedAs("_spawns")]//Remove on 2024/01/01
         public Transform[] Spawns = new Transform[0];
         #endregion
 
@@ -64,7 +64,7 @@ namespace FishNet.Component.Spawning
             if (_networkManager != null)
                 _networkManager.SceneManager.OnClientLoadedStartScenes -= SceneManager_OnClientLoadedStartScenes;
         }
-
+ 
 
         /// <summary>
         /// Initializes this script for use.
@@ -98,8 +98,7 @@ namespace FishNet.Component.Spawning
             Quaternion rotation;
             SetSpawn(_playerPrefab.transform, out position, out rotation);
 
-            NetworkObject nob = _networkManager.GetPooledInstantiated(_playerPrefab, true);
-            nob.transform.SetPositionAndRotation(position, rotation);
+            NetworkObject nob = _networkManager.GetPooledInstantiated(_playerPrefab, position, rotation, true);
             _networkManager.ServerManager.Spawn(nob, conn);
 
             //If there are no global scenes 

@@ -61,17 +61,16 @@ namespace FishNet.CodeGenerating.Processing
         internal const string LATE_INITIALIZED_NAME = "NetworkInitializeLate_";
         internal const string NETWORKINITIALIZE_EARLY_INTERNAL_NAME = "NetworkInitialize___Early";
         internal const string NETWORKINITIALIZE_LATE_INTERNAL_NAME = "NetworkInitialize__Late";
-        private MethodAttributes PUBLIC_VIRTUAL_ATTRIBUTES = (MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig);
-#pragma warning disable CS0414
-        private MethodAttributes PROTECTED_VIRTUAL_ATTRIBUTES = (MethodAttributes.Family | MethodAttributes.Virtual | MethodAttributes.HideBySig);
-#pragma warning restore CS0414
         #endregion
 
-        internal bool Process(TypeDefinition typeDef, List<(SyncType, ProcessedSync)> allProcessedSyncs, Dictionary<TypeDefinition, uint> childSyncTypeCounts, Dictionary<TypeDefinition, uint> childRpcCounts)
+        internal bool ProcessLocal(TypeDefinition typeDef, List<(SyncType, ProcessedSync)> allProcessedSyncs)
         {
             bool modified = false;
             TypeDefinition copyTypeDef = typeDef;
             TypeDefinition firstTypeDef = typeDef;
+
+            //TypeDefs which are using prediction.
+            List<TypeDefinition> _usesPredictionTypeDefs = new List<TypeDefinition>();
 
             //Make collection of NBs to processor.
             List<TypeDefinition> typeDefs = new List<TypeDefinition>();
@@ -115,7 +114,12 @@ namespace FishNet.CodeGenerating.Processing
             /* Reverse and do RPCs/SyncTypes.
              * This counts up on children instead of the
              * parent, so we do not have to rewrite
-             * parent numbers. */
+             * parent numbers. 
+             *
+             * This is no longer needed for RPC/SyncTypes but
+             * might still be for base calling content. Probably not,
+             * but leaving it alone until a variety of codegen things
+             * can be rewritten. */
             typeDefs.Reverse();
 
             foreach (TypeDefinition td in typeDefs)
@@ -127,44 +131,44 @@ namespace FishNet.CodeGenerating.Processing
                 if (HasClassBeenProcessed(td))
                     continue;
 
-                //No longer used...remove in rework.
-                uint rpcCount = 0;
-                childRpcCounts.TryGetValue(td, out rpcCount);
+                
+
                 /* Prediction. */
                 /* Run prediction first since prediction will modify
                  * user data passed into prediction methods. Because of this
                  * other RPCs should use the modified version and reader/writers
                  * made for prediction. */
-                modified |= base.GetClass<PredictionProcessor>().Process(td, ref rpcCount);
+                if (base.GetClass<PredictionProcessor>().Process(td))
+                {
+                    _usesPredictionTypeDefs.Add(td);
+                    modified = true;
+                }
                 //25ms 
 
                 /* RPCs. */
-                modified |= base.GetClass<RpcProcessor>().ProcessLocal(td, ref rpcCount);
+                modified |= base.GetClass<RpcProcessor>().ProcessLocal(td);
                 //30ms
                 /* //perf rpcCounts can be optimized by having different counts
                  * for target, observers, server, replicate, and reoncile rpcs. Since
                  * each registers to their own delegates this is possible. */
 
-                
-
                 /* SyncTypes. */
-                uint syncTypeStartCount;
-                childSyncTypeCounts.TryGetValue(td, out syncTypeStartCount);
-                modified |= base.GetClass<NetworkBehaviourSyncProcessor>().Process(td, allProcessedSyncs, ref syncTypeStartCount);
+                modified |= base.GetClass<NetworkBehaviourSyncProcessor>().ProcessLocal(td, allProcessedSyncs);
                 //70ms
                 _processedClasses.Add(td);
             }
 
-            int maxAllowSyncTypes = 256;
-            if (allProcessedSyncs.Count > maxAllowSyncTypes)
+            if (allProcessedSyncs.Count > NetworkBehaviourHelper.MAX_SYNCTYPE_ALLOWANCE)
             {
-                base.LogError($"Found {allProcessedSyncs.Count} SyncTypes within {firstTypeDef.FullName}. The maximum number of allowed SyncTypes within type and inherited types is {maxAllowSyncTypes}. Remove SyncTypes or condense them using data containers, or a custom SyncObject.");
+                base.LogError($"Found {allProcessedSyncs.Count} SyncTypes within {firstTypeDef.FullName}. The maximum number of allowed SyncTypes within type and inherited types is {NetworkBehaviourHelper.MAX_SYNCTYPE_ALLOWANCE}. Remove SyncTypes or condense them using data containers, or a custom SyncObject.");
                 return false;
             }
 
             /* If here then all inerited classes for firstTypeDef have
              * been processed. */
             PrepareNetworkInitializeMethods(firstTypeDef);
+            //Sets UsesPrediction in NetworkBehaviours.
+            SetUsesPrediction(_usesPredictionTypeDefs);
 
             /* Make awake methods for all inherited classes
             * public and virtual. This is so I can add logic
@@ -187,8 +191,6 @@ namespace FishNet.CodeGenerating.Processing
             //Since awake methods are erased ret has to be added at the end.
             AddReturnsToAwake(awakeDatas);
 
-            base.GetClass<NetworkBehaviourSyncProcessor>().CallBaseReadSyncVar(firstTypeDef);
-
             return modified;
         }
 
@@ -210,7 +212,9 @@ namespace FishNet.CodeGenerating.Processing
         /// <returns></returns>
         internal bool NonNetworkBehaviourHasInvalidAttributes(Collection<TypeDefinition> typeDefs)
         {
-            bool error = false;
+            NetworkBehaviourSyncProcessor nbSyncProcessor = base.GetClass<NetworkBehaviourSyncProcessor>();
+            RpcProcessor rpcProcessor = base.GetClass<RpcProcessor>();
+
             foreach (TypeDefinition typeDef in typeDefs)
             {
                 //Inherits, don't need to check.
@@ -221,24 +225,25 @@ namespace FishNet.CodeGenerating.Processing
                 foreach (MethodDefinition md in typeDef.Methods)
                 {
                     //Has RPC attribute but doesn't inherit from NB.
-                    if (base.GetClass<RpcProcessor>().Attributes.HasRpcAttributes(md))
+                    if (rpcProcessor.Attributes.HasRpcAttributes(md))
                     {
                         base.LogError($"{typeDef.FullName} has one or more RPC attributes but does not inherit from NetworkBehaviour.");
-                        error = true;
+                        return true;
                     }
                 }
                 //Check fields for attribute.
                 foreach (FieldDefinition fd in typeDef.Fields)
                 {
-                    if (base.GetClass<NetworkBehaviourSyncProcessor>().GetSyncType(fd, false, out _) != SyncType.Unset)
+                    if (nbSyncProcessor.IsSyncType(fd))
                     {
-                        base.LogError($"{typeDef.FullName} has one or more SyncType attributes but does not inherit from NetworkBehaviour.");
-                        error = true;
+                        base.LogError($"{typeDef.FullName} implements one or more SyncTypes but does not inherit from NetworkBehaviour.");
+                        return true;
                     }
                 }
             }
 
-            return error;
+            //Fallthrough / pass.
+            return false;
         }
 
         
@@ -380,15 +385,13 @@ namespace FishNet.CodeGenerating.Processing
                 }
             }
         }
+
         /// <summary>
         /// Gets the top-most parent away method.
         /// </summary>
-        /// <param name="typeDef"></param>
-        /// <returns></returns>
         private void PrepareNetworkInitializeMethods(TypeDefinition firstTypeDef)
         {
             TypeDefinition thisTypeDef = firstTypeDef;
-
             string[] initializeMethodNames = new string[] { NETWORKINITIALIZE_EARLY_INTERNAL_NAME, NETWORKINITIALIZE_LATE_INTERNAL_NAME };
 
             do
@@ -397,6 +400,11 @@ namespace FishNet.CodeGenerating.Processing
 
                 foreach (string mdName in initializeMethodNames)
                 {
+                    /* Awake will always exist because it was added previously.
+                    * Get awake for copy and base of copy. */
+                    MethodDefinition thisMd = thisTypeDef.GetMethod(mdName);
+                    ILProcessor processor = thisMd.Body.GetILProcessor();
+
                     /* There are no more base calls to make but we still
                     * need to check if the initialize methods have already ran, so do that
                     * here. */
@@ -404,10 +412,8 @@ namespace FishNet.CodeGenerating.Processing
                     {
                         /* Awake will always exist because it was added previously.
                          * Get awake for copy and base of copy. */
-                        MethodDefinition thisMd = thisTypeDef.GetMethod(mdName);
                         MethodReference baseMr = thisTypeDef.GetMethodReferenceInBase(base.Session, mdName);
                         MethodDefinition baseMd = baseMr.CachedResolve(base.Session);
-                        ILProcessor processor = thisMd.Body.GetILProcessor();
 
                         bool alreadyHasBaseCall = false;
                         //Check if already calls baseAwake.
@@ -443,6 +449,34 @@ namespace FishNet.CodeGenerating.Processing
 
                 thisTypeDef = TypeDefinitionExtensionsOld.GetNextBaseClassToProcess(thisTypeDef, base.Session);
             } while (thisTypeDef != null);
+        }
+
+
+        /// <summary>
+        /// Sets UsesPrediction to true on NetworkBehaviours.
+        /// </summary>
+        private void SetUsesPrediction(List<TypeDefinition> typeDefs)
+        {
+#if PREDICTION_V2
+            NetworkBehaviourHelper nbh = base.GetClass<NetworkBehaviourHelper>();
+
+            foreach (TypeDefinition td in typeDefs)
+            {
+                MethodDefinition md = td.GetMethod(NETWORKINITIALIZE_EARLY_INTERNAL_NAME);
+                ILProcessor processor = md.Body.GetILProcessor();
+
+                int lastInstructionIndex = (md.Body.Instructions.Count - 1);
+                //Remove opcode if present. It will be added back on after.
+                if (lastInstructionIndex >= 0 && md.Body.Instructions[lastInstructionIndex].OpCode == OpCodes.Ret)
+                    md.Body.Instructions.RemoveAt(lastInstructionIndex);
+
+                //Set field.
+                processor.Emit(OpCodes.Ldarg_0); //base.
+                processor.Emit(OpCodes.Ldc_I4_1); //true.
+                processor.Emit(OpCodes.Stfld, nbh.UsesPrediction_FieldRef);
+                processor.Emit(OpCodes.Ret);
+            }
+#endif
         }
 
         /// <summary>
@@ -494,18 +528,12 @@ namespace FishNet.CodeGenerating.Processing
         {
             CreateMethod(NETWORKINITIALIZE_EARLY_INTERNAL_NAME);
             CreateMethod(NETWORKINITIALIZE_LATE_INTERNAL_NAME);
-
-            MethodDefinition baseInitIfDisabled = base.GetClass<NetworkBehaviourHelper>().NetworkInitializeIfDisabled_MethodRef.CachedResolve(base.Session);
-            networkInitializeIfDisabledMd = CreateMethod(baseInitIfDisabled.Name, baseInitIfDisabled);
+            networkInitializeIfDisabledMd = CreateMethod(nameof(NetworkBehaviour.NetworkInitializeIfDisabled));
 
             MethodDefinition CreateMethod(string name, MethodDefinition copied = null)
             {
-                MethodDefinition md;
                 bool created;
-                if (copied == null)
-                    md = typeDef.GetOrCreateMethodDefinition(base.Session, name, PUBLIC_VIRTUAL_ATTRIBUTES, typeDef.Module.TypeSystem.Void, out created);
-                else
-                    md = typeDef.GetOrCreateMethodDefinition(base.Session, name, copied, true, out created);
+                MethodDefinition md = typeDef.GetOrCreateMethodDefinition(base.Session, name, MethodDefinitionExtensions.PUBLIC_VIRTUAL_ATTRIBUTES, typeDef.Module.TypeSystem.Void, out created);
 
                 if (created)
                 {
@@ -552,7 +580,7 @@ namespace FishNet.CodeGenerating.Processing
             do
             {
                 bool created;
-                MethodDefinition awakeMd = copyTypeDef.GetOrCreateMethodDefinition(base.Session, NetworkBehaviourHelper.AWAKE_METHOD_NAME, PUBLIC_VIRTUAL_ATTRIBUTES, copyTypeDef.Module.TypeSystem.Void, out created);
+                MethodDefinition awakeMd = copyTypeDef.GetOrCreateMethodDefinition(base.Session, NetworkBehaviourHelper.AWAKE_METHOD_NAME, MethodDefinitionExtensions.PUBLIC_VIRTUAL_ATTRIBUTES, copyTypeDef.Module.TypeSystem.Void, out created);
 
                 //Awake is found. Check for invalid return type.
                 if (!created)
@@ -562,7 +590,7 @@ namespace FishNet.CodeGenerating.Processing
                         base.LogError($"IEnumerator Awake methods are not supported within NetworkBehaviours.");
                         return false;
                     }
-                    awakeMd.Attributes = PUBLIC_VIRTUAL_ATTRIBUTES;
+                    awakeMd.SetPublicAttributes();
                 }
                 //Aways was made.
                 else
@@ -600,7 +628,7 @@ namespace FishNet.CodeGenerating.Processing
             {
                 created = true;
 
-                thisAwakeMethodDef = new MethodDefinition(NetworkBehaviourHelper.AWAKE_METHOD_NAME, PUBLIC_VIRTUAL_ATTRIBUTES,
+                thisAwakeMethodDef = new MethodDefinition(NetworkBehaviourHelper.AWAKE_METHOD_NAME, MethodDefinitionExtensions.PUBLIC_VIRTUAL_ATTRIBUTES,
                     typeDef.Module.TypeSystem.Void);
                 thisAwakeMethodDef.Body.InitLocals = true;
                 typeDef.Methods.Add(thisAwakeMethodDef);

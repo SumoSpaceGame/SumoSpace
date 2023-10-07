@@ -114,10 +114,3 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 207815
-  packageName: 'Fish-Net: Networking Evolved'
-  packageVersion: 3.4.0
-  assetPath: Assets/FishNet/Runtime/Editor/Textures/UI/Button_Dark_Server_Background.png
-  uploadId: 564010
