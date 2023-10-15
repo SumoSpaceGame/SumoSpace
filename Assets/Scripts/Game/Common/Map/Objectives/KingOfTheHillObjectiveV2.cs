@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Game.Common.Gameplay.Ship;
+using System.Diagnostics;
 using Game.Common.Instances;
 using Game.Common.Networking;
 using Game.Common.Settings;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Game.Common.Map.Objectives
 {
@@ -29,7 +30,12 @@ namespace Game.Common.Map.Objectives
 
             public int CaptureIncome; // How much points to gather while capturing
             public int CircleRadius;
-            public float TickRate;
+            
+            [Space(4)]
+            [Header("Tick Rates in Seconds")]
+            public float CaptureTickRate;
+            public float FreeTickRate;
+            public float PointTickRate;
         }
 
         public Transform circleCenter;
@@ -42,6 +48,10 @@ namespace Game.Common.Map.Objectives
         private int CurrentCapturePoints = 0;
         
         public KingOfTheHillSettings settings = new KingOfTheHillSettings();
+
+        public Stopwatch capturePointTimer = new Stopwatch();
+        public Stopwatch freePointTimer = new Stopwatch();
+        public Stopwatch scorePointTimer = new Stopwatch();
         
         private void Awake()
         {
@@ -69,13 +79,18 @@ namespace Game.Common.Map.Objectives
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            if (scorePointTimer.ElapsedMilliseconds >= settings.PointTickRate * 1000)
+            {
+                Debug.Log("Team " + focalTeam + " gained "  + settings.CaptureIncome +" points");
+                // TODO: Add proper score counting here
+            }
         }
 
         private void UpdateIdle(ShipsWithinInfo withinInfo)
         {
             if (state != KingOfTheHillState.IDLE)
             {
-                // TODO: Stop all point calculations and timers
                 state = KingOfTheHillState.IDLE;
             }
 
@@ -127,27 +142,36 @@ namespace Game.Common.Map.Objectives
         {
             if (state != KingOfTheHillState.CAPTURING)
             {
-                // TODO: Start giving capturing points
                 state = KingOfTheHillState.CAPTURING;
+                capturePointTimer.Restart();
             }
-            
+
+            if (capturePointTimer.ElapsedMilliseconds >= settings.CaptureTickRate * 1000)
+            {
+                capturePointTimer.Restart();
+                this.CurrentCapturePoints += settings.CaptureRate;
+            }
             
             
             switch (withinInfo.status)
             {
                 case PointStatus.LOSING:
+                    capturePointTimer.Stop();
                     UpdateFreeing(withinInfo);
                     break;
                 case PointStatus.CONTESTED:
+                    capturePointTimer.Stop();
                     UpdateContested(withinInfo);
                     break;
                 case PointStatus.WINNING:
                     if (IsCaptureRequirementMet())
                     {
+                        capturePointTimer.Stop();
                         UpdateIdle(withinInfo);
                     }
                     break;
                 case PointStatus.IDLE:
+                    capturePointTimer.Stop();
                     UpdateIdle(withinInfo);
                     break;
                 default:
@@ -160,10 +184,15 @@ namespace Game.Common.Map.Objectives
         {
             if (state != KingOfTheHillState.FREEING)
             {
-                // TODO: Start removing the points
+                freePointTimer.Restart();
                 state = KingOfTheHillState.FREEING;
             }
-            
+
+            if (freePointTimer.ElapsedMilliseconds >= settings.FreeTickRate * 1000)
+            {
+                freePointTimer.Restart();
+                CurrentCapturePoints -= settings.FreeRate;
+            }
             
             switch (withinInfo.status)
             {
@@ -171,18 +200,22 @@ namespace Game.Common.Map.Objectives
                     // Keep on trucking along
                     if (CurrentCapturePoints <= 0)
                     {
+                        freePointTimer.Stop();
                         CurrentCapturePoints = 0;
                         RemoveFocalTeam();
                         UpdateIdle(withinInfo);
                     }
                     break;
                 case PointStatus.CONTESTED:
+                    freePointTimer.Stop();
                     UpdateContested(withinInfo);
                     break;
                 case PointStatus.WINNING:
+                    freePointTimer.Stop();
                     UpdateCapturing(withinInfo);
                     break;
                 case PointStatus.IDLE:
+                    freePointTimer.Stop();
                     UpdateIdle(withinInfo);
                     break;
                 default:
@@ -197,12 +230,9 @@ namespace Game.Common.Map.Objectives
         {
             if (state != KingOfTheHillState.CONTESTED)
             {
-                // TODO: Stop all point calculations and timers
                 state = KingOfTheHillState.CONTESTED;
             }
-            
-            // TODO: Start contested graphics
-            
+
             switch (withinInfo.status)
             {
                 case PointStatus.LOSING:
@@ -220,6 +250,7 @@ namespace Game.Common.Map.Objectives
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+            
             
         }
 
@@ -348,12 +379,14 @@ namespace Game.Common.Map.Objectives
 
         public void SetFocalTeam(int focalTeam)
         {
+            scorePointTimer.Restart();
             taken = true;
             focalTeam = focalTeam;
         }
 
         public void RemoveFocalTeam()
         {
+            scorePointTimer.Reset();
             taken = false;
             focalTeam = -1;
         }
