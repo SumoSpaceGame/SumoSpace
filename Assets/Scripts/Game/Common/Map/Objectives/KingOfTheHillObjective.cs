@@ -14,7 +14,10 @@ namespace Game.Common.Map.Objectives
     public class KingOfTheHillObjective : MonoBehaviour
     {
         
-        public float Radius;
+        public float Radius;   
+        
+        
+        
         private Dictionary<int, int> CurrentTeamPoints = new Dictionary<int, int>();
 
         public float CaptureTime; // How long it takes for capture the point from -1
