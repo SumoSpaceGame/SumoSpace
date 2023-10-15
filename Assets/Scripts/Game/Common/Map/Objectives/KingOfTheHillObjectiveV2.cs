@@ -377,18 +377,39 @@ namespace Game.Common.Map.Objectives
         }
 
 
-        public void SetFocalTeam(int focalTeam)
+        private void SetFocalTeam(int focalTeam)
         {
+            Debug.Log("Team " + focalTeam + " has gained the point");
             scorePointTimer.Restart();
             taken = true;
             focalTeam = focalTeam;
         }
 
-        public void RemoveFocalTeam()
+        private void RemoveFocalTeam()
         {
+            Debug.Log("Team " + focalTeam + " has lost the point");
             scorePointTimer.Reset();
             taken = false;
             focalTeam = -1;
+        }
+
+
+
+        public bool IsTaken()
+        {
+            return taken;
+        }
+
+        public int GetFocalTeam()
+        {
+            return focalTeam;
+        }
+
+        public float GetRadiusScale()
+        {
+            float progress = (float)CurrentCapturePoints / (float)settings.CaptureRequirement;
+
+            return progress * settings.CircleRadius;
         }
     }
 }
