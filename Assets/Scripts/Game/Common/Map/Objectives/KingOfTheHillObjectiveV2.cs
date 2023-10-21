@@ -22,6 +22,7 @@ namespace Game.Common.Map.Objectives
 
         private MasterSettings masterSettings;
 
+        [Serializable]
         public struct KingOfTheHillSettings
         {
             public int CaptureRate;   // How main points per ship will start capturing this
@@ -85,6 +86,12 @@ namespace Game.Common.Map.Objectives
                 Debug.Log("Team " + focalTeam + " gained "  + settings.CaptureIncome +" points");
                 // TODO: Add proper score counting here
             }
+        }
+
+        public void OnDrawGizmos()
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(this.transform.position, this.settings.CircleRadius);
         }
 
         private void UpdateIdle(ShipsWithinInfo withinInfo)
