@@ -92,10 +92,13 @@ namespace Game.Common.Map.Objectives
         {
             Gizmos.color = Color.magenta;
             Gizmos.DrawWireSphere(this.transform.position, this.settings.CircleRadius);
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(this.transform.position, this.GetRadiusScale());
         }
 
         private void UpdateIdle(ShipsWithinInfo withinInfo)
         {
+            Debug.Log("Idle");
             if (state != KingOfTheHillState.IDLE)
             {
                 state = KingOfTheHillState.IDLE;
@@ -139,6 +142,8 @@ namespace Game.Common.Map.Objectives
                     // TODO: Start score point incrementor once this team reaches full capture
                     // Or maybe not, maybe it should start right away
                     SetFocalTeam(withinInfo.teamMajority);
+                    CurrentCapturePoints += settings.CaptureRate;
+                    withinInfo = GetShipsWithin();
                     UpdateCapturing(withinInfo); // Start capturing
                 }
                             
@@ -147,6 +152,7 @@ namespace Game.Common.Map.Objectives
         
         private void UpdateCapturing(ShipsWithinInfo withinInfo)
         {
+            Debug.Log("Capturing");
             if (state != KingOfTheHillState.CAPTURING)
             {
                 state = KingOfTheHillState.CAPTURING;
@@ -189,6 +195,7 @@ namespace Game.Common.Map.Objectives
 
         private void UpdateFreeing(ShipsWithinInfo withinInfo)
         {
+            Debug.Log("Freeing");
             if (state != KingOfTheHillState.FREEING)
             {
                 freePointTimer.Restart();
@@ -235,6 +242,7 @@ namespace Game.Common.Map.Objectives
 
         private void UpdateContested(ShipsWithinInfo withinInfo)
         {
+            Debug.Log("Contested");
             if (state != KingOfTheHillState.CONTESTED)
             {
                 state = KingOfTheHillState.CONTESTED;
@@ -281,8 +289,8 @@ namespace Game.Common.Map.Objectives
         private ShipsWithinInfo GetShipsWithin()
         {
             var ships = masterSettings.playerShips.GetAll();
-
-            float sqrRadius = settings.CircleRadius;
+            
+            float sqrRadius = settings.CircleRadius * settings.CircleRadius;
             Vector2 currentPosition = new Vector2(circleCenter.position.x, circleCenter.position.z);
 
             Dictionary<int, int> shipsWithin = new Dictionary<int, int>();
@@ -337,7 +345,12 @@ namespace Game.Common.Map.Objectives
                 {
                     status = PointStatus.CONTESTED;
                 }
+                
+                Debug.Log("Ships found");
             }
+            
+            Debug.Log(status);
+            
 
             bool contested = false;
             int biggestTeam = -1;
@@ -389,7 +402,7 @@ namespace Game.Common.Map.Objectives
             Debug.Log("Team " + focalTeam + " has gained the point");
             scorePointTimer.Restart();
             taken = true;
-            focalTeam = focalTeam;
+            this.focalTeam = focalTeam;
         }
 
         private void RemoveFocalTeam()
