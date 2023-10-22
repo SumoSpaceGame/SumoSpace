@@ -3973,8 +3973,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1102543996}
-  - component: {fileID: 1102543998}
   - component: {fileID: 1102543997}
+  - component: {fileID: 1102543998}
   m_Layer: 0
   m_Name: KingOfTheHill
   m_TagString: Untagged
@@ -4020,10 +4020,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1102543995}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dd4df751836485f9d2b7755ed4edeb3, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f51b6d5465b4785b7df5b006fcf081e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circleCenter: {fileID: 1102543996}
+  circleCenter: {fileID: 0}
   state: 0
   settings:
     CaptureRate: 5
@@ -4031,9 +4031,9 @@ MonoBehaviour:
     CaptureRequirement: 100
     CaptureIncome: 5
     CircleRadius: 25
-    CaptureTickRate: 1
-    FreeTickRate: 1
-    PointTickRate: 1
+    CaptureTickRate: 0.4
+    FreeTickRate: 0.4
+    PointTickRate: 0.4
 --- !u!1001 &1117644713
 PrefabInstance:
   m_ObjectHideFlags: 0

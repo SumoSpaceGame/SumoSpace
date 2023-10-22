@@ -4,7 +4,7 @@ namespace Game.Common.Map.Objectives
 {
     public class KingOfTheHillRenderer : MonoBehaviour
     {
-        public KingOfTheHillObjectiveV2 objective;
+        public KingOfTheHillObjective objective;
 
         // TODO: Temporary graphics that should be redesigned later
         public GameObject[] TeamCircles;
