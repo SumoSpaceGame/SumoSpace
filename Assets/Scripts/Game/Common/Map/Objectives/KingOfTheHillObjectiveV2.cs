@@ -59,6 +59,10 @@ namespace Game.Common.Map.Objectives
             masterSettings = MainPersistantInstances.Get<GameNetworkManager>().masterSettings;
         }
 
+        /// <summary>
+        /// Calls the states functions and gets the ships within information
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void Update()
         {
             var shipsWithinInfo = GetShipsWithin();
@@ -96,6 +100,12 @@ namespace Game.Common.Map.Objectives
             Gizmos.DrawWireSphere(this.transform.position, this.GetRadiusScale());
         }
 
+        /// <summary>
+        /// Idle state logic
+        /// If the point is free and idle, it immediately gets captured
+        /// </summary>
+        /// <param name="withinInfo"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private void UpdateIdle(ShipsWithinInfo withinInfo)
         {
             Debug.Log("Idle");
@@ -150,6 +160,12 @@ namespace Game.Common.Map.Objectives
             }
         }
         
+        /// <summary>
+        /// Capturing point state logic
+        /// Starts capture points timer
+        /// </summary>
+        /// <param name="withinInfo"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private void UpdateCapturing(ShipsWithinInfo withinInfo)
         {
             Debug.Log("Capturing");
@@ -193,6 +209,11 @@ namespace Game.Common.Map.Objectives
             
         }
 
+        /// <summary>
+        /// Starts freeing the point when the point is overwhelmed by enemies
+        /// </summary>
+        /// <param name="withinInfo"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private void UpdateFreeing(ShipsWithinInfo withinInfo)
         {
             Debug.Log("Freeing");
@@ -239,7 +260,13 @@ namespace Game.Common.Map.Objectives
                
             
         }
-
+        
+        /// <summary>
+        /// Handles contested state logic
+        /// (So far not much, aside from stopping being contested when other teams are on the point)
+        /// </summary>
+        /// <param name="withinInfo"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private void UpdateContested(ShipsWithinInfo withinInfo)
         {
             Debug.Log("Contested");
@@ -269,7 +296,9 @@ namespace Game.Common.Map.Objectives
             
         }
 
-
+        /// <summary>
+        /// How is the focal team doing on the point (are the losing/winning, etc)
+        /// </summary>
         private enum PointStatus
         {
             LOSING = 0,
@@ -277,6 +306,10 @@ namespace Game.Common.Map.Objectives
             WINNING,
             IDLE
         }
+        
+        /// <summary>
+        /// Information about the ships that are currently within the point, and how they are affecting the point
+        /// </summary>
         private struct ShipsWithinInfo
         {
             public Dictionary<int, int> perTeamShipsCount;
@@ -286,6 +319,12 @@ namespace Game.Common.Map.Objectives
             public bool freePointContested;
         }
         
+        /// <summary>
+        /// Calculates ships within the radius of the king of the hill objective
+        /// 
+        /// Also calculates statuses like if the focal team is winning or losing, or if the point is contested.
+        /// </summary>
+        /// <returns></returns>
         private ShipsWithinInfo GetShipsWithin()
         {
             var ships = masterSettings.playerShips.GetAll();
@@ -389,7 +428,12 @@ namespace Game.Common.Map.Objectives
 
         }
 
-
+    
+        /// <summary>
+        /// Has the point been fully captured?
+        /// (Not sure if this should affect points generation)
+        /// </summary>
+        /// <returns></returns>
         private bool IsCaptureRequirementMet()
         {
             if (CurrentCapturePoints > settings.CaptureRequirement) CurrentCapturePoints = settings.CaptureRequirement;
@@ -397,6 +441,10 @@ namespace Game.Common.Map.Objectives
         }
 
 
+        /// <summary>
+        /// Sets all state values to work on the focal team that has the point currently
+        /// </summary>
+        /// <param name="focalTeam"> Team ID of team capturing/captured point</param>
         private void SetFocalTeam(int focalTeam)
         {
             Debug.Log("Team " + focalTeam + " has gained the point");
@@ -405,6 +453,9 @@ namespace Game.Common.Map.Objectives
             this.focalTeam = focalTeam;
         }
 
+        /// <summary>
+        /// Removes the focal team and makes the point neutral again
+        /// </summary>
         private void RemoveFocalTeam()
         {
             Debug.Log("Team " + focalTeam + " has lost the point");
@@ -413,18 +464,28 @@ namespace Game.Common.Map.Objectives
             focalTeam = -1;
         }
 
-
-
+        /// <summary>
+        /// Is the point taken or not
+        /// </summary>
+        /// <returns>Boolean</returns>
         public bool IsTaken()
         {
             return taken;
         }
 
+        /// <summary>
+        /// What team is capturing/captured the point
+        /// </summary>s
+        /// <returns></returns>
         public int GetFocalTeam()
         {
             return focalTeam;
         }
 
+        /// <summary>
+        /// The radius units of how big the circle is currently based on capture progression
+        /// </summary>
+        /// <returns></returns>
         public float GetRadiusScale()
         {
             float progress = (float)CurrentCapturePoints / (float)settings.CaptureRequirement;
