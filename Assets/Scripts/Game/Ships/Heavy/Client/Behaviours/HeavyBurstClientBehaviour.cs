@@ -24,6 +24,7 @@ namespace Game.Ships.Heavy.Client.Behaviours
         private void Start()
         {
             _representative = shipManager.simulationObject.representative;
+            _animator = _representative.transform.GetChild(0).GetComponent<Animator>(); // TODO: Move animator to _representative or some other more convenient location.
             Transform chargeBar = MainPersistantInstances.Get<MasterUIController>().transform.GetChild(0).Find("TempChargeBar");
             if (!shipManager.isPlayer)
                 return;
@@ -34,8 +35,6 @@ namespace Game.Ships.Heavy.Client.Behaviours
             _innerBar = chargeBar.GetChild(0).GetComponent<RectTransform>();
             _innerBar.anchoredPosition = new Vector2(_innerBar.anchoredPosition.x, 0);
             _innerBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
-
-            _animator = _representative.transform.GetChild(0).GetComponent<Animator>(); // TODO: Move animator to _representative or some other more convenient location.
         }
 
         // Maintain progress bar for charge.
