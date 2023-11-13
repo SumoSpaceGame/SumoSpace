@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Game.Ships.Heavy.Common.Abilities;
+using TMPro;
 using UnityEngine;
 
 namespace Game.Ships.Heavy.Client.Behaviours
@@ -12,8 +13,14 @@ namespace Game.Ships.Heavy.Client.Behaviours
         private GameObject _shootVFX;
         private GameObject _representative;
         private bool _hasRunLocally;
+        
+        private Animator _animator;
 
-        private void Start() => _representative = shipManager.simulationObject.representative;
+        private void Start()
+        {
+            _representative = shipManager.simulationObject.representative;
+            _animator = _representative.transform.GetChild(0).GetComponent<Animator>(); // TODO: Move animator to _representative or some other more convenient location.
+        }
 
         public override void Execute()
         {
@@ -26,8 +33,9 @@ namespace Game.Ships.Heavy.Client.Behaviours
             {
                 //ShipRenderer.StartBeam();
                 //_fireEffect.Reinit();
-                _shootVFX ??= Instantiate(_shootVFXPrefab, _representative.transform.GetChild(0).GetChild(0));
-                coroutine = shipManager.StartCoroutine(ClientSide());
+                //_shootVFX ??= Instantiate(_shootVFXPrefab, _representative.transform.GetChild(0).GetChild(0));
+                _animator.SetBool("IsFiring", true);
+                //coroutine = shipManager.StartCoroutine(ClientSide());
             }
             else
                 _shouldBeamStart = true;
@@ -47,7 +55,8 @@ namespace Game.Ships.Heavy.Client.Behaviours
             //ShipRenderer.EndBeam();
             //_fireEffect.SendEvent("OnStop");
             //_fireEffect.Stop();
-            Destroy(_shootVFX);
+            _animator.SetBool("IsFiring", false);
+            // Destroy(_shootVFX);
             _shootVFX = null;
             _shouldBeamStart = false;
             if (--oooCounter == 0) {

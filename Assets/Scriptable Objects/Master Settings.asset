@@ -15,7 +15,7 @@ MonoBehaviour:
   _debug: 0
   matchSettings: {fileID: 11400000, guid: 7b7c161bfd2f92949ac964df79581d2a, type: 2}
   network:
-    isServer: 1
+    isServer: 0
   InitServer: 1
   ClientDebugAutoConnect: 0
   ServerAddress: localhost
