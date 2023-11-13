@@ -18,6 +18,8 @@ namespace Game.Ships.Heavy.Client.Behaviours
         [SerializeField]
         private GameObject _burstVFXPrefab;
 
+        private Animator _animator;
+
         // Set up progress bar for charge.
         private void Start()
         {
@@ -32,6 +34,8 @@ namespace Game.Ships.Heavy.Client.Behaviours
             _innerBar = chargeBar.GetChild(0).GetComponent<RectTransform>();
             _innerBar.anchoredPosition = new Vector2(_innerBar.anchoredPosition.x, 0);
             _innerBar.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 0);
+
+            _animator = _representative.transform.GetChild(0).GetComponent<Animator>(); // TODO: Move animator to _representative or some other more convenient location.
         }
 
         // Maintain progress bar for charge.
@@ -50,8 +54,9 @@ namespace Game.Ships.Heavy.Client.Behaviours
             ushort charge = _networkMovement.TempPassiveCharge;
             if (charge < Ability.MinCharge)
                 return;
-            GameObject go = Instantiate(_burstVFXPrefab, _representative.transform.GetChild(0));
-            StartCoroutine(AnimateAndDestroy(go));
+            //GameObject go = Instantiate(_burstVFXPrefab, _representative.transform.GetChild(0));
+            //StartCoroutine(AnimateAndDestroy(go));
+            _animator.SetTrigger("OnBurst");
         }
 
         // Destroy the effect after the animation is complete.

@@ -14,7 +14,13 @@ namespace Game.Ships.Heavy.Client.Behaviours
         private Coroutine _coroutine;
         private bool _hasRunLocally;
 
-        private void Start() => _representative = shipManager.simulationObject.representative;
+        private Animator _animator;
+
+        private void Start()
+        {
+            _representative = shipManager.simulationObject.representative;
+            _animator = _representative.transform.GetChild(0).GetComponent<Animator>(); // TODO: Move animator to _representative or some other more convenient location.
+        }
 
         /// <summary>
         /// Enable or disable the lockdown.
@@ -37,15 +43,17 @@ namespace Game.Ships.Heavy.Client.Behaviours
             }
             if (heavyFire.IsDisabled)
                 return;
+            _animator.SetTrigger("OnLockdown");
             if (!executing)
             {
-                /*_coroutine = */shipManager.StartCoroutine(ClientSideStart());
+                ///*_coroutine = */shipManager.StartCoroutine(ClientSideStart());
+                ///
                 executing = true;
-                _lockdownVFX ??= Instantiate(_lockdownVFXPrefab, _representative.transform.GetChild(0));
+                //_lockdownVFX ??= Instantiate(_lockdownVFXPrefab, _representative.transform.GetChild(0));
             }
             else
             {
-                /*_coroutine = */shipManager.StartCoroutine(ClientSideStop());
+                ///*_coroutine = */shipManager.StartCoroutine(ClientSideStop());
             }
         }
 
