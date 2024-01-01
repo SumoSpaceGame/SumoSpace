@@ -13,6 +13,9 @@ namespace Game.Ships.Heavy.Client.Behaviours
         private GameObject _shootVFX;
         private GameObject _representative;
         private bool _hasRunLocally;
+        private float _time;
+        [SerializeField]
+        private float _scale = .25f;
         
         private Animator _animator;
 
@@ -35,7 +38,7 @@ namespace Game.Ships.Heavy.Client.Behaviours
                 //_fireEffect.Reinit();
                 //_shootVFX ??= Instantiate(_shootVFXPrefab, _representative.transform.GetChild(0).GetChild(0));
                 _animator.SetBool("IsFiring", true);
-                //coroutine = shipManager.StartCoroutine(ClientSide());
+                coroutine = shipManager.StartCoroutine(ClientSide());
             }
             else
                 _shouldBeamStart = true;
@@ -52,6 +55,7 @@ namespace Game.Ships.Heavy.Client.Behaviours
 
         public override void Stop() {
             if (coroutine != null) shipManager.StopCoroutine(coroutine);
+            _time = 0;
             //ShipRenderer.EndBeam();
             //_fireEffect.SendEvent("OnStop");
             //_fireEffect.Stop();
@@ -69,16 +73,24 @@ namespace Game.Ships.Heavy.Client.Behaviours
                 if (Ability.IsDisabled)
                 {
                     executing = false;
+                    _time = 0;
                     //ShipRenderer.EndBeam();
                     //_fireEffect.SendEvent("OnStop");
                     //_fireEffect.Stop();
-                    Destroy(_shootVFX);
-                    _shootVFX = null;
+                    //Destroy(_shootVFX);
+                    print("this is running");
+                    //_shootVFX = null;
+                    _animator.SetBool("IsFiring", false);
                     _shouldBeamStart = true;
                     shipManager.StopCoroutine(coroutine);
                 }
                 else
                 {
+                    _time += Time.deltaTime;
+                    print(_representative.transform.GetChild(0).name);
+                    print(_representative.transform.GetChild(0).GetChild(0).name);
+                    print(_representative.transform.GetChild(0).GetChild(0).GetChild(0).name);
+                    _representative.transform.GetChild(0).GetChild(0).GetChild(0).localScale = new Vector3(0, 1, 1) * (1 + _scale * Mathf.Clamp(_time, 0, Ability.RampTime)) + Vector3.right;
                     //ShipRenderer.Beam();
                 }
                 yield return null;
@@ -91,7 +103,7 @@ namespace Game.Ships.Heavy.Client.Behaviours
             if (!Ability.IsDisabled && _shouldBeamStart)
             {
                 _shouldBeamStart = false;
-                QuickExecute();
+                Execute();
             }
         }
     }

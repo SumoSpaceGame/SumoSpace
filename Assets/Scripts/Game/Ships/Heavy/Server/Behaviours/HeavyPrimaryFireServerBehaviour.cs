@@ -30,7 +30,7 @@ namespace Game.Ships.Heavy.Server.Behaviours
                 timer = executing && !Ability.IsDisabled ? timer + Time.deltaTime : 0f;
                 if (counter > 1 && executing && !Ability.IsDisabled) {
                     var t = shipManager.transform;
-                    var hit = Physics2D.Raycast(t.position + t.up * 2, t.up);
+                    var hit = Physics2D.Raycast(t.position + t.up * 2, t.up, 10f);
                     if (hit.rigidbody) 
                     {
                         hit.rigidbody.GetComponent<ShipManager>().OnHit(t.up * Ability.CurrentKnockback(timer) * Time.deltaTime, hit.point, ForceMode2D.Force);

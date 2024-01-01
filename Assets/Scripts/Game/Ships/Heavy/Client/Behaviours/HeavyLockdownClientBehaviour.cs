@@ -43,17 +43,19 @@ namespace Game.Ships.Heavy.Client.Behaviours
             }
             if (heavyFire.IsDisabled)
                 return;
-            _animator.SetTrigger("OnLockdown");
+            AnimatorStateInfo state = _animator.GetCurrentAnimatorStateInfo(_animator.GetLayerIndex("LockdownLayer"));
+            if (state.IsName("NotLockdown") || state.IsName("HeavyLockdown"))
+                _animator.SetTrigger("OnLockdown");
             if (!executing)
             {
-                ///*_coroutine = */shipManager.StartCoroutine(ClientSideStart());
-                ///
+                /*_coroutine = */shipManager.StartCoroutine(ClientSideStart());
+                
                 executing = true;
                 //_lockdownVFX ??= Instantiate(_lockdownVFXPrefab, _representative.transform.GetChild(0));
             }
             else
             {
-                ///*_coroutine = */shipManager.StartCoroutine(ClientSideStop());
+                /*_coroutine = */shipManager.StartCoroutine(ClientSideStop());
             }
         }
 
@@ -69,7 +71,7 @@ namespace Game.Ships.Heavy.Client.Behaviours
         // Winds up and activates the lockdown.
         private IEnumerator ClientSideStart()
         {
-            print("Coroutine start starting.");
+            //print("Coroutine start starting.");
             heavyFire.IsDisabled = true;
             yield return new WaitForSeconds(Ability.WindUpTime);
             heavyFire.IsDisabled = false;
@@ -83,9 +85,9 @@ namespace Game.Ships.Heavy.Client.Behaviours
             heavyFire.IsDisabled = true;
             yield return new WaitForSeconds(Ability.WindDownTime);
             heavyFire.IsDisabled = false;
-            Destroy(_lockdownVFX.gameObject);
-            _lockdownVFX = null;
-            print("Lockdown animation destroyed/reset.");
+            //Destroy(_lockdownVFX.gameObject);
+            //_lockdownVFX = null;
+            //print("Lockdown animation destroyed/reset.");
             executing = false;
             _coroutine = null;
         }

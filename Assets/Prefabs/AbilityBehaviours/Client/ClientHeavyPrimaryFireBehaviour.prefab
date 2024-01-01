@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7922589147683848013}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7539325072796016328
 MonoBehaviour:
@@ -49,6 +49,7 @@ MonoBehaviour:
   executing: 0
   oooCounter: 0
   _shootVFXPrefab: {fileID: 2639041772876449090, guid: 7a1b4472c24710b4aaba632bfa6032cd, type: 3}
+  _scale: 0.0625
 --- !u!114 &3682275116106452425
 MonoBehaviour:
   m_ObjectHideFlags: 0
