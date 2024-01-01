@@ -87,9 +87,6 @@ namespace Game.Ships.Heavy.Client.Behaviours
                 else
                 {
                     _time += Time.deltaTime;
-                    print(_representative.transform.GetChild(0).name);
-                    print(_representative.transform.GetChild(0).GetChild(0).name);
-                    print(_representative.transform.GetChild(0).GetChild(0).GetChild(0).name);
                     _representative.transform.GetChild(0).GetChild(0).GetChild(0).localScale = new Vector3(0, 1, 1) * (1 + _scale * Mathf.Clamp(_time, 0, Ability.RampTime)) + Vector3.right;
                     //ShipRenderer.Beam();
                 }
